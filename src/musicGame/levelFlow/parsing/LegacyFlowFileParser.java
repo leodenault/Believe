@@ -20,7 +20,7 @@ import org.newdawn.slick.SlickException;
 /**
  * An object that parses LevelFlow files.
  */
-public class FlowFileParser {
+public class LegacyFlowFileParser {
 
 	private final String commentRegex = "//.*";
 	private final Image defaultTopBarImage;
@@ -48,7 +48,7 @@ public class FlowFileParser {
 	 * @param reader		The reader of the flow file to parse.
 	 * @throws IOException	Thrown if an error occurs while reading the file.
 	 */
-	public FlowFileParser(GameContainer container, BufferedReader reader) throws IOException, SlickException {
+	public LegacyFlowFileParser(GameContainer container, BufferedReader reader) throws IOException, SlickException {
 		int[] alphaColours = {0xFFFF00FF};
 		Image[] loadedSubImages = new Image[3];
 		this.defaultTopBarImage = new Image("res/graphics/sprites/testScoreBar.png");

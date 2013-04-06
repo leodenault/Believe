@@ -11,7 +11,7 @@ import java.util.List;
 import musicGame.GUI.GraphicsUtils;
 import musicGame.levelFlow.FlowComponent;
 import musicGame.levelFlow.IFlowComponentListener;
-import musicGame.levelFlow.parsing.FlowFileParser;
+import musicGame.levelFlow.parsing.LegacyFlowFileParser;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.AppGameContainer;
@@ -143,13 +143,13 @@ public class TestGame extends BasicGame implements IFlowComponentListener, Compo
 		}
 		else if (this.currentState == State.PLAYING) {
 			if (this.scoreBar == null) {
-				FlowFileParser parser = null;
+				LegacyFlowFileParser parser = null;
 				try {
 					if (this.readLocal) {
-						parser = new FlowFileParser(container, new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/levelFlowFiles/test.lfl"))));
+						parser = new LegacyFlowFileParser(container, new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/levelFlowFiles/test.lfl"))));
 					}
 					else {
-						parser = new FlowFileParser(container, new BufferedReader(new FileReader(this.file)));
+						parser = new LegacyFlowFileParser(container, new BufferedReader(new FileReader(this.file)));
 					}
 				}
 				catch (Exception e) {
