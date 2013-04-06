@@ -1,0 +1,10 @@
+#Eclipse files
+.project
+.classpath
+
+#Binary directories
+bin
+bin-*
+
+#Reports
+testReports

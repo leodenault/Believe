@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="BuildMusicGame" default="buildGame" basedir="..">
+	<description>
+            Build script for setting up the game and its dependencies.
+    </description>
+
+	<property name="jarName" value="MusicGame.jar"/>
+	<property name="outDir" value="bin-release" />
+	<property name="binaries" value="bin" />
+	<property name="testClasses" value="bin-test" />
+	<property name="testReportsDir" value="testReports" />
+
+	<path id="jmock-classpath">
+		<fileset dir="lib/jmock-2.6.0">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	<path id="junit-classpath">
+		<fileset dir="lib/junit">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	<path id="externalLibs-classpath">
+		<fileset dir="lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="clean"
+		description="Cleans the project of binaries and test reports.">
+		<delete quiet="true" includeemptydirs="true">
+			<fileset dir="${binaries}" />
+			<fileset dir="${testClasses}" />
+			<fileset dir="${testReportsDir}" />
+		</delete>
+	</target>
+
+	<target name="cleanRelease"
+		description="Cleans the release directory and recreates it.">
+		<delete quiet="true" includeemptydirs="true">
+			<fileset dir="${outDir}" />
+		</delete>
+		<mkdir dir="${outDir}" />
+	</target>
+
+	<target name="compile"
+		description="Compiles the main binaries.">
+		<mkdir dir="${binaries}" />
+		<javac srcdir="src" destdir="${binaries}" extdirs="lib" />
+	</target>
+
+	<target name="compileTests" depends="compile"
+		description="Compiles the tests.">
+		<mkdir dir="${testClasses}" />
+		<javac srcdir="test" destdir="${testClasses}" extdirs="lib">
+			<classpath refid="jmock-classpath" />
+			<classpath refid="junit-classpath" />
+			<classpath path="${binaries}" />
+		</javac>
+	</target>
+
+	<target name="makeJAR" depends="cleanRelease, compile"
+			description="Creates a runnable jar for the application.">
+		<jar destfile="${outDir}/${jarName}">
+			<fileset dir="${binaries}" />
+			<fileset dir="." includes="res/** levelFlowFiles/**" />
+			<restrict>
+				<archives>
+					<zips>
+						<fileset dir="lib" includes="*.jar" />
+					</zips>
+				</archives>
+			</restrict>
+			<manifest>
+				<attribute name="Main-Class" value="musicGame.Main" />
+				<attribute name="Class-Path" value=". customFlowFiles customGraphics customSongs" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="buildGame" depends="makeJAR"
+		description="Builds the application into the output directory.">
+		<mkdir dir="${outDir}/native" />
+		<mkdir dir="${outDir}/customFlowFiles" />
+		<mkdir dir="${outDir}/customGraphics" />
+		<mkdir dir="${outDir}/customSongs" />
+		<copy todir="${outDir}/native">
+			<fileset dir="lib/native" excludes="OpenAL32.dll OpenAL64.dll libopenal.so libopenal64.so" />
+		</copy>
+		<copy todir="${outDir}/">
+			<fileset file="lib/native/OpenAL32.dll" />
+			<fileset file="lib/native/OpenAL64.dll" />
+			<fileset file="lib/native/libopenal.so" />
+			<fileset file="lib/native/libopenal64.so" />
+		</copy>
+	</target>
+
+	<target name="runTests" depends="clean, compileTests"
+		description="Runs all tests.">
+		<mkdir dir="${testReportsDir}" />
+		<junit printsummary="true">
+
+			<classpath path="${testClasses}" />
+			<classpath refid="jmock-classpath" />
+			<classpath refid="junit-classpath" />
+			<classpath refid="externalLibs-classpath" />
+			<classpath path="${binaries}" />
+
+			<formatter type="plain" />
+
+			<batchtest todir="${testReportsDir}">
+				<fileset dir="${testClasses}">
+					<include name="**/*Test.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+</project>
