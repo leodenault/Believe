@@ -1,14 +1,16 @@
 package musicGame.levelFlow.parsing;
 
+import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isIn;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 import java.io.StringReader;
 
-import musicGame.levelFlow.parsing.FlowFileTokenizer.FlowFileToken;
-import musicGame.levelFlow.parsing.FlowFileTokenizer.FlowFileTokenType;
+import musicGame.levelFlow.parsing.FlowFileToken.FlowFileTokenType;
 
+import org.hamcrest.Matchers;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.jmock.lib.concurrent.Synchroniser;
 import org.jmock.lib.legacy.ClassImposteriser;
@@ -29,13 +31,6 @@ public class FlowFileTokenizerTest {
 	@After
 	public void tearDown() throws IOException {
 		this.tokenizer.close();
-	}
-	
-	private FlowFileTokenType skipUntil(FlowFileTokenType type) throws Exception {
-		FlowFileToken current;
-		while ((current = this.tokenizer.next()).tokenType() != type
-				&& current.tokenType() != FlowFileTokenType.EOF) {}
-		return current.tokenType();
 	}
 	
 	@Test
@@ -99,12 +94,6 @@ public class FlowFileTokenizerTest {
 	}
 	
 	@Test
-	public void nextShouldReturnCommaTokenWhenGivenAsInput() throws Exception {
-		this.tokenizer = new FlowFileTokenizer(new StringReader(","));
-		assertThat(this.tokenizer.next().tokenType(), is(FlowFileTokenType.COMMA));
-	}
-	
-	@Test
 	public void nextShouldReturnArgTokenWhenGivenAsInput() throws Exception {
 		this.tokenizer = new FlowFileTokenizer(new StringReader("some/arg/thing.png"));
 		assertThat(this.tokenizer.next().tokenType(), is(FlowFileTokenType.ARG));
@@ -129,10 +118,47 @@ public class FlowFileTokenizerTest {
 	}
 	
 	@Test
-	public void nextShouldSetTokenTextForArg() throws Exception {
+	public void nextShouldSetTokenTextForArgToInputText() throws Exception {
 		String tokenText = "blou/bli/bla.png";
 		this.tokenizer = new FlowFileTokenizer(new StringReader(tokenText));
 		assertThat(this.tokenizer.next().text(), is(tokenText));
+	}
+	
+	@Test
+	public void nextShouldSetTokenTextForEqualsToEqualsWord() throws Exception {
+		String tokenText = "=";
+		this.tokenizer = new FlowFileTokenizer(new StringReader(tokenText));
+		assertThat(this.tokenizer.next().text(), is(FlowFileTokenizer.EQUALS_WORD));
+	}
+	
+	@Test
+	public void nextShouldSetTokenTextForLineToInputText() throws Exception {
+		String tokenText = "--x-";
+		this.tokenizer = new FlowFileTokenizer(new StringReader(tokenText));
+		assertThat(this.tokenizer.next().text(), is(tokenText));
+	}
+	
+	@Test
+	public void nextShouldSetTokenTextForConfigValueToEnumName() throws Exception {
+		StringBuilder builder = new StringBuilder();
+		String[] tokens = new String[] { FlowFileTokenizer.TOP_BAR_IMAGE_WORD, FlowFileTokenizer.BEGIN_WORD,
+				FlowFileTokenizer.END_WORD, FlowFileTokenizer.KEYS_WORD, FlowFileTokenizer.OFFSET_WORD,
+				FlowFileTokenizer.SONG_WORD, FlowFileTokenizer.SUBDIVISION_IMAGES_WORD, FlowFileTokenizer.TEMPO_WORD };
+		for (String token : tokens) {
+			builder.append(token);
+			builder.append(" ");
+		}
+		String tokenText = builder.toString();
+		this.tokenizer = new FlowFileTokenizer(new StringReader(tokenText));
+		FlowFileToken currentToken;
+		FlowFileTokenType[] tokenTypes = FlowFileTokenType.values();
+		String[] typeNames = new String[tokenTypes.length];
+		for (int i = 0; i < tokenTypes.length; i++) {
+			typeNames[i] = tokenTypes[i].toString();
+		}
+		while ((currentToken = this.tokenizer.next()).tokenType() != FlowFileTokenType.EOF) {
+			assertThat(currentToken.text(), isIn(typeNames));
+		}
 	}
 	
 	@Test
@@ -140,16 +166,5 @@ public class FlowFileTokenizerTest {
 		String tokenText = "-x--x";
 		this.tokenizer = new FlowFileTokenizer(new StringReader(tokenText));
 		assertThat(this.tokenizer.next().text(), is(tokenText));
-	}
-	
-	public void nextShouldResadfturnMarkTokenWhenGivenAsInput() throws Exception {
-		String input = "\ntopbarimage = poor/man/steak hoover/l.poo" +
-				"\nkeys = k o p u" +
-				"\n---x x--- -x--";
-		this.tokenizer = new FlowFileTokenizer(new StringReader(input));
-		FlowFileToken token;
-		while ((token = this.tokenizer.next()).tokenType() != FlowFileTokenType.EOF) {
-			System.out.print("[" + token.tokenType().name()+ "]");
-		}
 	}
 }

@@ -4,18 +4,19 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.regex.Pattern;
 
+import musicGame.levelFlow.parsing.FlowFileToken.FlowFileTokenType;
+
 public class FlowFileTokenizer {
 	
-	private static final String TOP_BAR_IMAGE_WORD = "topbarimage";
-	private static final String SONG_WORD = "song";
-	private static final String KEYS_WORD = "keys";
-	private static final String TEMPO_WORD = "tempo";
-	private static final String OFFSET_WORD = "offset";
-	private static final String SUBDIVISION_IMAGES_WORD = "subdivisionimages";
-	private static final String EQUALS_WORD = "=";
-	private static final String COMMA_WORD = ",";
-	private static final String BEGIN_WORD = "begin";
-	private static final String END_WORD = "end";
+	public static final String TOP_BAR_IMAGE_WORD = "topbarimage";
+	public static final String SONG_WORD = "song";
+	public static final String KEYS_WORD = "keys";
+	public static final String TEMPO_WORD = "tempo";
+	public static final String OFFSET_WORD = "offset";
+	public static final String SUBDIVISION_IMAGES_WORD = "subdivisionimages";
+	public static final String EQUALS_WORD = "=";
+	public static final String BEGIN_WORD = "begin";
+	public static final String END_WORD = "end";
 	
 	private static final Pattern LINE = Pattern.compile("(-|x)+");
 	
@@ -67,34 +68,31 @@ public class FlowFileTokenizer {
 	private FlowFileToken createToken(String word) {
 		word = word.toLowerCase();
 		if (word.equals(TOP_BAR_IMAGE_WORD)) {
-			return new FlowFileToken(FlowFileTokenType.TOP_BAR_IMAGE);
+			return new FlowFileToken(FlowFileTokenType.TOP_BAR_IMAGE, FlowFileTokenType.TOP_BAR_IMAGE.toString());
 		}
 		else if (word.equals(SONG_WORD)) {
-			return new FlowFileToken(FlowFileTokenType.SONG);
+			return new FlowFileToken(FlowFileTokenType.SONG, FlowFileTokenType.SONG.toString());
 		}
 		else if (word.equals(KEYS_WORD)) {
-			return new FlowFileToken(FlowFileTokenType.KEYS);
+			return new FlowFileToken(FlowFileTokenType.KEYS, FlowFileTokenType.KEYS.toString());
 		}
 		else if (word.equals(TEMPO_WORD)) {
-			return new FlowFileToken(FlowFileTokenType.TEMPO);
+			return new FlowFileToken(FlowFileTokenType.TEMPO, FlowFileTokenType.TEMPO.toString());
 		}
 		else if (word.equals(OFFSET_WORD)) {
-			return new FlowFileToken(FlowFileTokenType.OFFSET);
+			return new FlowFileToken(FlowFileTokenType.OFFSET, FlowFileTokenType.OFFSET.toString());
 		}
 		else if (word.equals(SUBDIVISION_IMAGES_WORD)) {
-			return new FlowFileToken(FlowFileTokenType.SUBDIVISION_IMAGES);
+			return new FlowFileToken(FlowFileTokenType.SUBDIVISION_IMAGES, FlowFileTokenType.SUBDIVISION_IMAGES.toString());
 		}
 		else if (word.equals(EQUALS_WORD)) {
-			return new FlowFileToken(FlowFileTokenType.EQUALS);
-		}
-		else if (word.equals(COMMA_WORD)) {
-			return new FlowFileToken(FlowFileTokenType.COMMA);
+			return new FlowFileToken(FlowFileTokenType.EQUALS, EQUALS_WORD);
 		}
 		else if (word.equals(BEGIN_WORD)) {
-			return new FlowFileToken(FlowFileTokenType.BEGIN);
+			return new FlowFileToken(FlowFileTokenType.BEGIN, FlowFileTokenType.BEGIN.toString());
 		}
 		else if (word.equals(END_WORD)) {
-			return new FlowFileToken(FlowFileTokenType.END);
+			return new FlowFileToken(FlowFileTokenType.END, FlowFileTokenType.END.toString());
 		}
 		else if (LINE.matcher(word).matches()) {
 			return new FlowFileToken(FlowFileTokenType.LINE, word);
@@ -106,44 +104,5 @@ public class FlowFileTokenizer {
 	
 	public void close() throws IOException {
 		this.reader.close();
-	}
-	
-	public enum FlowFileTokenType {
-		TOP_BAR_IMAGE,
-		SONG,
-		KEYS,
-		TEMPO,
-		OFFSET,
-		SUBDIVISION_IMAGES,
-		EQUALS,
-		COMMA,
-		ARG,
-		BEGIN,
-		END,
-		LINE,
-		EOF
-	}
-	
-	public class FlowFileToken {
-		
-		private FlowFileTokenType tokenType;
-		private String text;
-		
-		private FlowFileToken(FlowFileTokenType tokenType) {
-			this(tokenType, "");
-		}
-		
-		private FlowFileToken(FlowFileTokenType tokenType, String text) {
-			this.tokenType = tokenType;
-			this.text = text;
-		}
-		
-		public FlowFileTokenType tokenType() {
-			return this.tokenType;
-		}
-		
-		public String text() {
-			return this.text;
-		}
 	}
 }
