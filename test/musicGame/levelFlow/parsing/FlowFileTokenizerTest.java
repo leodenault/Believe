@@ -167,4 +167,11 @@ public class FlowFileTokenizerTest {
 		this.tokenizer = new FlowFileTokenizer(new StringReader(tokenText));
 		assertThat(this.tokenizer.next().text(), is(tokenText));
 	}
+	
+	@Test
+	public void nextShouldNotNormalizeArg() throws Exception {
+		String tokenText = "tEsT.pNg";
+		this.tokenizer = new FlowFileTokenizer(new StringReader(tokenText));
+		assertThat(this.tokenizer.next().text(), is(tokenText));
+	}
 }

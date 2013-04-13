@@ -66,35 +66,35 @@ public class FlowFileTokenizer {
 	}
 	
 	private FlowFileToken createToken(String word) {
-		word = word.toLowerCase();
-		if (word.equals(TOP_BAR_IMAGE_WORD)) {
+		String normalizedWord = word.toLowerCase();
+		if (normalizedWord.equals(TOP_BAR_IMAGE_WORD)) {
 			return new FlowFileToken(FlowFileTokenType.TOP_BAR_IMAGE, FlowFileTokenType.TOP_BAR_IMAGE.toString());
 		}
-		else if (word.equals(SONG_WORD)) {
+		else if (normalizedWord.equals(SONG_WORD)) {
 			return new FlowFileToken(FlowFileTokenType.SONG, FlowFileTokenType.SONG.toString());
 		}
-		else if (word.equals(KEYS_WORD)) {
+		else if (normalizedWord.equals(KEYS_WORD)) {
 			return new FlowFileToken(FlowFileTokenType.KEYS, FlowFileTokenType.KEYS.toString());
 		}
-		else if (word.equals(TEMPO_WORD)) {
+		else if (normalizedWord.equals(TEMPO_WORD)) {
 			return new FlowFileToken(FlowFileTokenType.TEMPO, FlowFileTokenType.TEMPO.toString());
 		}
-		else if (word.equals(OFFSET_WORD)) {
+		else if (normalizedWord.equals(OFFSET_WORD)) {
 			return new FlowFileToken(FlowFileTokenType.OFFSET, FlowFileTokenType.OFFSET.toString());
 		}
-		else if (word.equals(SUBDIVISION_IMAGES_WORD)) {
+		else if (normalizedWord.equals(SUBDIVISION_IMAGES_WORD)) {
 			return new FlowFileToken(FlowFileTokenType.SUBDIVISION_IMAGES, FlowFileTokenType.SUBDIVISION_IMAGES.toString());
 		}
-		else if (word.equals(EQUALS_WORD)) {
+		else if (normalizedWord.equals(EQUALS_WORD)) {
 			return new FlowFileToken(FlowFileTokenType.EQUALS, EQUALS_WORD);
 		}
-		else if (word.equals(BEGIN_WORD)) {
+		else if (normalizedWord.equals(BEGIN_WORD)) {
 			return new FlowFileToken(FlowFileTokenType.BEGIN, FlowFileTokenType.BEGIN.toString());
 		}
-		else if (word.equals(END_WORD)) {
+		else if (normalizedWord.equals(END_WORD)) {
 			return new FlowFileToken(FlowFileTokenType.END, FlowFileTokenType.END.toString());
 		}
-		else if (LINE.matcher(word).matches()) {
+		else if (LINE.matcher(normalizedWord).matches()) {
 			return new FlowFileToken(FlowFileTokenType.LINE, word);
 		}
 		else {
