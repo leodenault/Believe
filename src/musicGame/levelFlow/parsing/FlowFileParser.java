@@ -40,13 +40,16 @@ public class FlowFileParser {
 	
 	protected void parseKVPair(FlowFileToken configValue)
 			throws IOException, FlowFileParserException, SlickException, FlowComponentBuilderException {
+		int line = this.tokenizer.getLineNumber();
 		this.currentToken = this.tokenizer.next();
 		if (this.currentToken.tokenType() != FlowFileTokenType.EQUALS) {
-			throw new FlowFileParserException(String.format("Was expecting [%s] after [%s]", "=", configValue.text()));
+			throw new FlowFileParserException(String.format("Was expecting [%s] after [%s] at line %d",
+					"=", configValue.text(), line));
 		}
 		List<String> arguments = this.parseArguments();
 		if (arguments.isEmpty()) {
-			throw new FlowFileParserException(String.format("Was expecting %s after [%s]", "arguments", "="));
+			throw new FlowFileParserException(String.format("Was expecting %s after [%s] at line %d",
+					"arguments", "=", line));
 		}
 		this.setConfigurationValue(configValue, arguments);
 	}

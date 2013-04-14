@@ -13,7 +13,6 @@ import java.util.List;
 import musicGame.levelFlow.parsing.FlowFileToken.FlowFileTokenType;
 import musicGame.levelFlow.parsing.exceptions.FlowFileParserException;
 
-import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -80,6 +79,7 @@ public class FlowFileParserTest {
 		mockery.checking(new Expectations() {{
 			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.BEGIN)));
 			oneOf(token).text(); will(returnValue(FlowFileTokenType.TOP_BAR_IMAGE.toString()));
+			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
 		}});
 		this.parser.parseKVPair(token);
 	}
@@ -89,6 +89,7 @@ public class FlowFileParserTest {
 		mockery.checking(new Expectations() {{
 			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.EQUALS)));
 			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.BEGIN)));
+			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
 		}});
 		this.parser.parseKVPair(token);
 	}
@@ -99,6 +100,7 @@ public class FlowFileParserTest {
 		this.checkingKVBuilding(FlowFileTokenType.TOP_BAR_IMAGE, image);
 		mockery.checking(new Expectations() {{
 			oneOf(builder).topBarImage(image);
+			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
 		}});
 		this.parser.parseKVPair(token);
 	}
@@ -109,6 +111,7 @@ public class FlowFileParserTest {
 		this.checkingKVBuilding(FlowFileTokenType.TEMPO, bpm);
 		mockery.checking(new Expectations() {{
 			oneOf(builder).tempo(bpm);
+			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
 		}});
 		this.parser.parseKVPair(token);
 	}
@@ -119,6 +122,7 @@ public class FlowFileParserTest {
 		this.checkingKVBuilding(FlowFileTokenType.KEYS, keys);
 		mockery.checking(new Expectations() {{
 			oneOf(builder).inputKeys(keys);
+			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
 		}});
 		this.parser.parseKVPair(token);
 	}
@@ -129,6 +133,7 @@ public class FlowFileParserTest {
 		this.checkingKVBuilding(FlowFileTokenType.OFFSET, offset);
 		mockery.checking(new Expectations() {{
 			oneOf(builder).offset(offset);
+			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
 		}});
 		this.parser.parseKVPair(token);
 	}
@@ -139,6 +144,7 @@ public class FlowFileParserTest {
 		this.checkingKVBuilding(FlowFileTokenType.SONG, song);
 		mockery.checking(new Expectations() {{
 			oneOf(builder).song(song);
+			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
 		}});
 		this.parser.parseKVPair(token);
 	}

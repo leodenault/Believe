@@ -1,6 +1,5 @@
 package musicGame.levelFlow.parsing;
 
-import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isIn;
 import static org.junit.Assert.assertThat;
@@ -10,7 +9,6 @@ import java.io.StringReader;
 
 import musicGame.levelFlow.parsing.FlowFileToken.FlowFileTokenType;
 
-import org.hamcrest.Matchers;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.jmock.lib.concurrent.Synchroniser;
 import org.jmock.lib.legacy.ClassImposteriser;
@@ -173,5 +171,20 @@ public class FlowFileTokenizerTest {
 		String tokenText = "tEsT.pNg";
 		this.tokenizer = new FlowFileTokenizer(new StringReader(tokenText));
 		assertThat(this.tokenizer.next().text(), is(tokenText));
+	}
+	
+	@Test
+	public void getLineNumberShouldReturnCorrectLineNumber() throws Exception {
+		String tokenText = "token\ntoken\ntoken \n token";
+		this.tokenizer = new FlowFileTokenizer(new StringReader(tokenText));
+		assertThat(this.tokenizer.getLineNumber(), is(1));
+		this.tokenizer.next();
+		assertThat(this.tokenizer.getLineNumber(), is(1));
+		this.tokenizer.next();
+		assertThat(this.tokenizer.getLineNumber(), is(2));
+		this.tokenizer.next();
+		assertThat(this.tokenizer.getLineNumber(), is(3));
+		this.tokenizer.next();
+		assertThat(this.tokenizer.getLineNumber(), is(4));
 	}
 }

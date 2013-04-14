@@ -23,9 +23,11 @@ public class FlowFileTokenizer {
 	private static final int EOF = -1;
 
 	private int currentCode;
+	private int lineNumber;
 	private Reader reader;
 	
 	public FlowFileTokenizer(Reader reader) {
+		this.lineNumber = 1;
 		this.reader = reader;
 	}
 	
@@ -47,6 +49,9 @@ public class FlowFileTokenizer {
 	
 	private void skipWhitespace() throws IOException {
 		do {
+			if ((char)this.currentCode == '\n') {
+				this.lineNumber++;
+			}
 			this.currentCode = this.reader.read();
 		}
 		while (Character.isWhitespace(this.currentCode));
@@ -54,7 +59,7 @@ public class FlowFileTokenizer {
 	
 	private String readWord() throws IOException {
 		StringBuilder wordBuilder = new StringBuilder();
-		while (!atEndOfWord()) {
+		while (!this.atEndOfWord()) {
 			wordBuilder.append((char)this.currentCode);
 			this.currentCode = this.reader.read();
 		}
@@ -100,6 +105,10 @@ public class FlowFileTokenizer {
 		else {
 			return new FlowFileToken(FlowFileTokenType.ARG, word);
 		}
+	}
+	
+	public int getLineNumber() {
+		return this.lineNumber;
 	}
 	
 	public void close() throws IOException {
