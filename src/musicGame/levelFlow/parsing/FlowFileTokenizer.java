@@ -17,8 +17,12 @@ public class FlowFileTokenizer {
 	public static final String EQUALS_WORD = "=";
 	public static final String BEGIN_WORD = "begin";
 	public static final String END_WORD = "end";
+	public static final char DASH_CHAR = '-';
+	public static final char MARK_CHAR = 'x';
+	public static final String DASH = String.valueOf(DASH_CHAR);
+	public static final String MARK = String.valueOf(MARK_CHAR);
 	
-	private static final Pattern LINE = Pattern.compile("(-|x)+");
+	private static final Pattern LINE = Pattern.compile("("+DASH+"|"+MARK+")+");
 	
 	private static final int EOF = -1;
 
