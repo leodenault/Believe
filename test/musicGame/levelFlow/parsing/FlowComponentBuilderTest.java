@@ -12,6 +12,7 @@ import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.gui.GUIContext;
 
 public class FlowComponentBuilderTest {
@@ -25,6 +26,7 @@ public class FlowComponentBuilderTest {
 	private FlowComponentBuilder builder;
 	
 	@Mock private GUIContext container;
+	@Mock private Animation animation;
 	
 	@Before
 	public void setUp() {
@@ -85,5 +87,22 @@ public class FlowComponentBuilderTest {
 	@Test(expected=NumberFormatException.class)
 	public void offsetShouldThrowNumberFormatExceptionIfValueIsNotANumber() throws Exception {
 		this.builder.tempo(Arrays.asList("sd"));
+	}
+	
+	@Test(expected=FlowComponentBuilderException.class)
+	public void addBeatLineShouldThrowFlowComponentBuilderExceptionWhenKeysNotYetSet() throws Exception {
+		this.builder.addBeatLine("--", this.animation, 1);
+	}
+	
+	@Test(expected=FlowComponentBuilderException.class)
+	public void addBeatLineShouldThrowFlowComponentBuilderExceptionWhenLessBeatsThanKeys() throws Exception {
+		this.builder.inputKeys(Arrays.asList("p", "q"));
+		this.builder.addBeatLine("-", this.animation, 1);
+	}
+	
+	@Test(expected=FlowComponentBuilderException.class)
+	public void addBeatLineShouldThrowFlowComponentBuilderExceptionWhenMoreBeatsThanKeys() throws Exception {
+		this.builder.inputKeys(Arrays.asList("p", "q"));
+		this.builder.addBeatLine("---", this.animation, 1);
 	}
 }

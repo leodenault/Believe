@@ -18,7 +18,7 @@ public class LineParser {
 		this.next = this.reader.read();
 	}
 	
-	public boolean next() throws IOException, FlowFileParserException, NoSuchElementException {
+	public boolean next() throws IOException, FlowFileParserException {
 		if (this.next == EOF) {
 			throw new NoSuchElementException();
 		}

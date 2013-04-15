@@ -1,15 +1,20 @@
 package musicGame.levelFlow.parsing;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.LinkedList;
 import java.util.List;
 
+import musicGame.levelFlow.Beat;
+import musicGame.levelFlow.FlowComponent;
+import musicGame.levelFlow.parsing.exceptions.FlowComponentBuilderException;
+import musicGame.levelFlow.parsing.exceptions.FlowFileParserException;
+
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
-
-import musicGame.levelFlow.FlowComponent;
-import musicGame.levelFlow.parsing.exceptions.FlowComponentBuilderException;
 
 public class FlowComponentBuilder {
 	
@@ -20,6 +25,7 @@ public class FlowComponentBuilder {
 	private GUIContext container;
 	private Image topBarImage;
 	private Music song;
+	private List<Beat>[] beats;
 	private char[] inputKeys;
 	private int laneWidth;
 	private int bpm;
@@ -53,6 +59,7 @@ public class FlowComponentBuilder {
 		return this;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public FlowComponentBuilder inputKeys(List<String> values) throws FlowComponentBuilderException {
 		if (values.isEmpty()) {
 			throw new FlowComponentBuilderException("Expected at least one value for keys, got none");
@@ -65,6 +72,10 @@ public class FlowComponentBuilder {
 						String.format("Key value [%s] is not a character", values.get(i)));
 			}
 			this.inputKeys[i] = current[0];
+		}
+		this.beats = new List[this.inputKeys.length];
+		for (int i = 0; i < this.beats.length; i++) {
+			this.beats[i] = new LinkedList<Beat>();
 		}
 		return this;
 	}
@@ -92,13 +103,47 @@ public class FlowComponentBuilder {
 		return this;
 	}
 	
+	public void addBeatLine(String line, Animation animation, int position)
+			throws IOException, FlowFileParserException, FlowComponentBuilderException {
+		if (this.beats == null) {
+			throw new FlowComponentBuilderException("The keys were not set, and therefore beats cannot be added");
+		}
+		
+		LineParser parser = new LineParser(new StringReader(line));
+		int counter = 0;
+		while (counter < this.beats.length && parser.hasNext()) {
+			if (parser.next()) {
+				this.beats[counter].add(new Beat(this.container, animation, position));
+			}
+			counter++;
+		}
+		if (parser.hasNext()) {
+			throw new FlowComponentBuilderException("The number of beats in a line cannot be less than the" +
+					"number of keys specified in the configuration");
+		}
+		else if (counter < this.beats.length) {
+			throw new FlowComponentBuilderException("The number of beats in a line cannot be greater than the" +
+					"number of keys specified in the configuration");
+		}
+	}
+	
 	public FlowComponent buildFlowComponent() throws FlowComponentBuilderException {
 		List<String> missingFields = this.getMissingFields();
 		if (missingFields.size() > 0) {
 			this.generateError(missingFields);
 		}
-		return new FlowComponent(this.container, this.topBarImage, this.song, this.inputKeys,
+		FlowComponent component = new FlowComponent(this.container, this.topBarImage, this.song, this.inputKeys,
 				this.inputKeys.length, this.laneWidth, this.subdivisions, this.bpm, this.offset);
+		component.addBeats(this.convertBeats());
+		return component;
+	}
+	
+	private Beat[][] convertBeats() {
+		Beat[][] converted = new Beat[this.beats.length][];
+		for (int i = 0; i < converted.length; i++) {
+			converted[i] = this.beats[i].toArray(new Beat[this.beats[i].size()]);
+		}
+		return converted;
 	}
 	
 	private List<String> getMissingFields() {
