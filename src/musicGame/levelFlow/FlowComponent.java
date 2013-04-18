@@ -202,6 +202,14 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 			lane.setBuffer(value);
 		}
 	}
+	
+	@Override
+	public void setHeight(int height) {
+		super.setHeight(height);
+		for (Lane lane : this.lanes) {
+			lane.setHeight(height);
+		}
+	}
 
 	@Override
 	public void addChild(AbstractComponent child) {
