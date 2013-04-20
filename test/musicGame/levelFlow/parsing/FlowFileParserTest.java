@@ -22,6 +22,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.newdawn.slick.Animation;
 
 public class FlowFileParserTest {
 
@@ -36,6 +37,7 @@ public class FlowFileParserTest {
 	@Mock private FlowFileTokenizer tokenizer;
 	@Mock private FlowComponentBuilder builder;
 	@Mock private FlowFileToken token;
+	@Mock private Animation animation;
 	
 	@Before
 	public void setupParser() {
@@ -181,5 +183,47 @@ public class FlowFileParserTest {
 		assertThat(this.parser.isConfigurationValue(token), is(false));
 		assertThat(this.parser.isConfigurationValue(token), is(false));
 		assertThat(this.parser.isConfigurationValue(token), is(false));
+	}
+	
+	@Test(expected=FlowFileParserException.class)
+	public void parseShouldThrowFlowFileParserExceptionWhenBeginNotPresent() throws Exception {
+		mockery.checking(new Expectations() {{
+			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.EQUALS, "=")));
+			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
+		}});
+		this.parser.parse();
+	}
+	
+	@Test(expected=FlowFileParserException.class)
+	public void parseLevelShouldThrowFlowFileParserExceptionWhenEndNotPresent() throws Exception {
+		mockery.checking(new Expectations() {{
+			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.BEGIN, "BEGIN")));
+			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.EOF, "EOF")));
+			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
+		}});
+		this.parser.parse();
+	}
+	
+	@Test
+	public void parseLinesSetsBeatsOnBuilderForEachLineRead() throws Exception {
+		mockery.checking(new Expectations() {{
+			exactly(3).of(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.LINE, "-x-")));
+			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.EOF, "EOF")));
+			oneOf(builder).addBeatLine("-x-", 0);
+			oneOf(builder).addBeatLine("-x-", 1);
+			oneOf(builder).addBeatLine("-x-", 2);
+		}});
+		this.parser.parseLines();
+	}
+	
+	@Test(expected=FlowFileParserException.class)
+	public void parseThrowsFlowFileParserExceptionWhenEOFReachedButTokensAreLeft() throws Exception {
+		mockery.checking(new Expectations() {{
+			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.BEGIN, "BEGIN")));
+			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.END, "END")));
+			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.LINE, "--x-")));
+			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
+		}});
+		this.parser.parse();
 	}
 }

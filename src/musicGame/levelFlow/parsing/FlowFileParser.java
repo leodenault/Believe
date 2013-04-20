@@ -29,12 +29,29 @@ public class FlowFileParser {
 	public void parse() throws IOException, FlowFileParserException, SlickException, FlowComponentBuilderException {
 		this.currentToken = this.tokenizer.next();
 		this.parseConfig();
+		this.parseLevel();
+		if (this.tokenizer.next().tokenType() != FlowFileTokenType.EOF) {
+			throw new FlowFileParserException(
+					String.format("Unreachable lines found at line %d", this.tokenizer.getLineNumber()));
+		}
 	}
 	
 	protected void parseConfig()
 			throws IOException, FlowFileParserException, SlickException, FlowComponentBuilderException {
 		while (this.isConfigurationValue(this.currentToken)) {
 			this.parseKVPair(this.currentToken);
+		}
+	}
+	
+	protected void parseLevel() throws FlowFileParserException, IOException, FlowComponentBuilderException {
+		if (this.currentToken.tokenType() != FlowFileTokenType.BEGIN) {
+			throw new FlowFileParserException(String.format("Was expecting [%s] but got [%s] at line %d",
+					FlowFileTokenType.BEGIN, this.currentToken.text(), this.tokenizer.getLineNumber()));
+		}
+		this.parseLines();
+		if (this.currentToken.tokenType() != FlowFileTokenType.END) {
+			throw new FlowFileParserException(String.format("Was expecting [%s] but got [%s] at line %d",
+					FlowFileTokenType.END, this.currentToken.text(), this.tokenizer.getLineNumber()));
 		}
 	}
 	
@@ -62,9 +79,19 @@ public class FlowFileParser {
 		return args;
 	}
 	
+	protected void parseLines()
+			throws IOException, FlowFileParserException, FlowComponentBuilderException {
+		int flowLineNumber = 0; // The index of the beat line. Doesn't matter how the lines are placed.
+		while ((this.currentToken = this.tokenizer.next()).tokenType() == FlowFileTokenType.LINE) {
+			this.builder.addBeatLine(this.currentToken.text(), flowLineNumber);
+			flowLineNumber++;
+		}
+	}
+	
 	protected boolean isConfigurationValue(FlowFileToken token) {
 		switch (token.tokenType()) {
 			case TOP_BAR_IMAGE:
+			case SUBDIVISION_IMAGES:
 			case TEMPO:
 			case KEYS:
 			case OFFSET:
@@ -80,6 +107,9 @@ public class FlowFileParser {
 		switch(key.tokenType()) {
 			case TOP_BAR_IMAGE:
 				this.builder.topBarImage(value);
+				return;
+			case SUBDIVISION_IMAGES:
+				this.builder.subdivisionImages(value);
 				return;
 			case TEMPO:
 				this.builder.tempo(value);

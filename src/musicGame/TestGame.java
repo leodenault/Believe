@@ -1,7 +1,6 @@
 package musicGame;
 
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.InputStreamReader;
@@ -11,7 +10,8 @@ import java.util.List;
 import musicGame.GUI.GraphicsUtils;
 import musicGame.levelFlow.FlowComponent;
 import musicGame.levelFlow.IFlowComponentListener;
-import musicGame.levelFlow.parsing.LegacyFlowFileParser;
+import musicGame.levelFlow.parsing.FlowComponentBuilder;
+import musicGame.levelFlow.parsing.FlowFileParser;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.AppGameContainer;
@@ -143,25 +143,29 @@ public class TestGame extends BasicGame implements IFlowComponentListener, Compo
 		}
 		else if (this.currentState == State.PLAYING) {
 			if (this.scoreBar == null) {
-				LegacyFlowFileParser parser = null;
+				FlowFileParser parser;
+				FlowComponentBuilder builder = new FlowComponentBuilder(container, 32);
 				try {
 					if (this.readLocal) {
-						parser = new LegacyFlowFileParser(container, new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/levelFlowFiles/test.lfl"))));
+						parser = new FlowFileParser(new InputStreamReader(this.getClass().getResourceAsStream("/levelFlowFiles/test.lfl")), builder);
 					}
 					else {
-						parser = new LegacyFlowFileParser(container, new BufferedReader(new FileReader(this.file)));
+						parser = new FlowFileParser(new FileReader(this.file), builder);
+					}
+					parser.parse();
+
+					if (parser != null) {
+						this.scoreBar = builder.buildFlowComponent();
+						this.scoreBar.setSpeedMultiplier(4);
+						this.scoreBar.setLocation((screenWidth - 128)/ 2, 32);
+						this.scoreBar.setHeight(screenHeight);
+						this.scoreBar.addListener(this);
 					}
 				}
 				catch (Exception e) {
 					System.out.println(e.getMessage());
 					e.printStackTrace();
 					container.exit();
-				}
-
-				if (parser != null) {
-					this.scoreBar = parser.createFlowComponent(true, 32, (screenWidth - 128)/ 2, 30, 128, screenHeight);
-					this.scoreBar.setSpeedMultiplier(4);
-					this.scoreBar.addListener(this);
 				}
 			}
 			else {
