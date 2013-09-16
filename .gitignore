@@ -11,3 +11,6 @@ testReports
 
 #Temporary files
 *~
+
+#Javadoc
+javadoc
