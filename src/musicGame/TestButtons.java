@@ -66,11 +66,14 @@ public class TestButtons extends BasicGame {
 
 	@Override
 	public void update(GameContainer container, int arg1) throws SlickException {
-		Input i = container.getInput();
-		
-		if (i.isKeyPressed(Input.KEY_DOWN)) {
+	}
+
+	@Override
+	public void keyPressed(int key, char c) {
+		super.keyPressed(key, c);
+		if (key == Input.KEY_DOWN) {
 			this.selections.selectNext();
-		} else if (i.isKeyPressed(Input.KEY_UP)) {
+		} else if (key == Input.KEY_UP) {
 			this.selections.selectPrevious();
 		}
 	}
