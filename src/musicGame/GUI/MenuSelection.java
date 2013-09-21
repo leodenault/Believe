@@ -1,4 +1,4 @@
-package musicGame;
+package musicGame.GUI;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
@@ -34,6 +34,7 @@ public class MenuSelection extends AbstractComponent {
 	private int y;
 	private int width;
 	private int height;
+	private boolean playSound;
 	
 	public MenuSelection(GUIContext container, int x, int y) throws SlickException {
 		this(container, "", x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -46,6 +47,7 @@ public class MenuSelection extends AbstractComponent {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		this.playSound = false;
 		this.inactiveTextColor = DEFAULT_TEXT_COLOR;
 		this.inactiveBackgroundColor = DEFAULT_BACKGROUND_COLOR;
 		this.activeTextColor = DEFAULT_TEXT_COLOR;
@@ -63,7 +65,9 @@ public class MenuSelection extends AbstractComponent {
 	}
 
 	public void select() {
-		this.selectionSound.play();
+		if (this.playSound) {
+			this.selectionSound.play();
+		}
 		this.currentBackgroundColor = this.activeBackgroundColor;
 		this.currentTextColor = this.activeTextColor;
 	}
@@ -95,6 +99,10 @@ public class MenuSelection extends AbstractComponent {
 	@Override
 	public int getY() {
 		return this.y;
+	}
+	
+	public void setPlaySound(boolean playSound) {
+		this.playSound = playSound;
 	}
 	
 	public String getText() {
