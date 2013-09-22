@@ -1,4 +1,4 @@
-package musicGame.GUI;
+package musicGame.gui;
 
 import java.util.LinkedList;
 import java.util.List;

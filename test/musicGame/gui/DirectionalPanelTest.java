@@ -1,7 +1,8 @@
-package musicGame.GUI;
+package musicGame.gui;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import musicGame.gui.DirectionalPanel;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;

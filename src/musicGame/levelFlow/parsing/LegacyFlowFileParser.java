@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.regex.Pattern;
 
-import musicGame.GUI.GraphicsUtils;
+import musicGame.gui.GraphicsUtils;
 import musicGame.levelFlow.Beat;
 import musicGame.levelFlow.FlowComponent;
 

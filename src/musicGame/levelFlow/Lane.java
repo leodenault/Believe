@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import musicGame.GUI.AbstractContainer;
+import musicGame.gui.AbstractContainer;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;

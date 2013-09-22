@@ -1,6 +1,6 @@
 package musicGame.levelFlow;
 
-import musicGame.GUI.AbstractContainer;
+import musicGame.gui.AbstractContainer;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;

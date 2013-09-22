@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 
-import musicGame.GUI.GraphicsUtils;
+import musicGame.gui.GraphicsUtils;
 import musicGame.levelFlow.FlowComponent;
 import musicGame.levelFlow.IFlowComponentListener;
 import musicGame.levelFlow.parsing.FlowComponentBuilder;

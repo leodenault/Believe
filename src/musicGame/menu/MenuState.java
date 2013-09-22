@@ -1,9 +1,9 @@
 package musicGame.menu;
 
-import musicGame.GUI.DirectionalPanel;
-import musicGame.GUI.MenuSelection;
-import musicGame.GUI.MenuSelectionGroup;
 import musicGame.core.GameStateBase;
+import musicGame.gui.DirectionalPanel;
+import musicGame.gui.MenuSelection;
+import musicGame.gui.MenuSelectionGroup;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;

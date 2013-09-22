@@ -1,4 +1,4 @@
-package musicGame.GUI;
+package musicGame.gui;
 
 import musicGame.menu.action.MenuAction;
 

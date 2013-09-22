@@ -1,10 +1,12 @@
-package musicGame.GUI;
+package musicGame.gui;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
+import musicGame.gui.MenuSelection;
+import musicGame.gui.MenuSelectionGroup;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;

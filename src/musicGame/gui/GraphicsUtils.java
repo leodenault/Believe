@@ -1,4 +1,4 @@
-package musicGame.GUI;
+package musicGame.gui;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;

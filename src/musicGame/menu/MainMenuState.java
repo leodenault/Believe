@@ -1,8 +1,8 @@
 package musicGame.menu;
 
-import musicGame.GUI.DirectionalPanel;
-import musicGame.GUI.MenuSelection;
-import musicGame.GUI.MenuSelectionGroup;
+import musicGame.gui.DirectionalPanel;
+import musicGame.gui.MenuSelection;
+import musicGame.gui.MenuSelectionGroup;
 import musicGame.menu.action.ExitGameAction;
 
 import org.newdawn.slick.Color;
