@@ -1,5 +1,7 @@
 package musicGame.GUI;
 
+import musicGame.menu.action.MenuAction;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
@@ -29,6 +31,7 @@ public class MenuSelection extends AbstractComponent {
 	private Color activeBackgroundColor;
 	
 	private Sound selectionSound;
+	private MenuAction action;
 	
 	private int x;
 	private int y;
@@ -78,7 +81,9 @@ public class MenuSelection extends AbstractComponent {
 	}
 	
 	public void activate() {
-		
+		if (this.action != null) {
+			this.action.performAction();
+		}
 	}
 
 	@Override
@@ -111,6 +116,10 @@ public class MenuSelection extends AbstractComponent {
 
 	public void setText(String text) {
 		this.text = text;
+	}
+	
+	public void setMenuAction(MenuAction action) {
+		this.action = action;
 	}
 	
 	public Color getInactiveTextColor() {

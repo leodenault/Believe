@@ -3,6 +3,7 @@ package musicGame.menu;
 import musicGame.GUI.DirectionalPanel;
 import musicGame.GUI.MenuSelection;
 import musicGame.GUI.MenuSelectionGroup;
+import musicGame.menu.action.ExitGameAction;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -28,6 +29,8 @@ public class MainMenuState extends MenuState {
 		MenuSelection playDefaultLevel = new MenuSelection(container, "Play Default Level", 0, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
 		MenuSelection selectCustomLevel = new MenuSelection(container, "Play Custom Level", 0, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
 		MenuSelection exit = new MenuSelection(container, "Exit", 0, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
+		exit.setMenuAction(new ExitGameAction(container));
+		
 		this.selections.add(playDefaultLevel);
 		this.selections.add(selectCustomLevel);
 		this.selections.add(exit);
@@ -36,7 +39,7 @@ public class MainMenuState extends MenuState {
 			selection.setActiveBackgroundColor(new Color(0xFF0000));
 			selection.setActiveTextColor(new Color(0xFFFFFF));
 		}
-		
+
 		this.selectionPanel.setLocation(
 				(container.getWidth() - this.selectionPanel.getWidth()) / 2,
 				(container.getHeight() - this.selectionPanel.getHeight()) / 2);
@@ -64,6 +67,8 @@ public class MainMenuState extends MenuState {
 			this.selections.selectNext();
 		} else if (key == Input.KEY_UP) {
 			this.selections.selectPrevious();
+		} else if (key == Input.KEY_ENTER) {
+			this.selections.getCurrentSelection().activate();
 		}
 	}
 }
