@@ -10,10 +10,7 @@ public class MenuSelectionGroup implements Iterable<MenuSelection> {
 	private LinkedList<MenuSelection> selections;
 	private MenuSelection currentSelection;
 	
-	private boolean playSound;
-	
 	public MenuSelectionGroup() {
-		this.playSound = false;
 		this.selections = new LinkedList<MenuSelection>();
 	}
 	
