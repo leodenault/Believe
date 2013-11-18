@@ -1,8 +1,8 @@
 package musicGame.menu;
 
+import musicGame.core.action.ChangeStateAction;
 import musicGame.gui.MenuSelection;
 import musicGame.menu.action.ExitGameAction;
-import musicGame.menu.action.MenuChangeAction;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -25,7 +25,7 @@ public class MainMenuState extends MenuState {
 		MenuSelection playDefaultLevel = new MenuSelection(container, "Play Default Level", BUTTON_WIDTH, BUTTON_HEIGHT);
 		MenuSelection selectCustomLevel = new MenuSelection(container, "Play Custom Level", BUTTON_WIDTH, BUTTON_HEIGHT);
 		MenuSelection exit = new MenuSelection(container, "Exit", BUTTON_WIDTH, BUTTON_HEIGHT);
-		selectCustomLevel.setMenuAction(new MenuChangeAction(FlowFilePickerMenuState.class, game));
+		selectCustomLevel.setMenuAction(new ChangeStateAction(FlowFilePickerMenuState.class, game));
 		exit.setMenuAction(new ExitGameAction(container));
 		
 		this.selections.add(playDefaultLevel);

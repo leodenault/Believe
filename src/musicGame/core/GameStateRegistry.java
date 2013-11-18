@@ -23,8 +23,13 @@ public class GameStateRegistry {
 		return registry;
 	}
 	
-	public void addEntry(Class<?> entry) {
-		this.entries.put(entry, currentId++);
+	public int addEntry(Class<?> entry) {
+		Integer id = this.entries.get(entry);
+		if (id == null) {
+			id = currentId++;
+			this.entries.put(entry, id);
+		}
+		return id;
 	}
 	
 	public int getEntry(Class<?> entry) {

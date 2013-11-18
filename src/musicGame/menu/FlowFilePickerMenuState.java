@@ -2,7 +2,9 @@ package musicGame.menu;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 
+import musicGame.core.action.LoadGameAction;
 import musicGame.gui.MenuSelection;
 
 import org.newdawn.slick.GameContainer;
@@ -22,6 +24,8 @@ public class FlowFilePickerMenuState extends MenuState {
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		super.enter(container, game);
+		// TODO: Add exit button.
+		// TODO: Handle exception gracefully if file not found.
 		File parent = new File(DEFAULT_DIRECTORY);
 		files = parent.listFiles(new FileFilter() {
 			@Override
@@ -30,11 +34,16 @@ public class FlowFilePickerMenuState extends MenuState {
 			}
 		});
 		
-		for (File file : files) {
-			MenuSelection selection =
-					new MenuSelection(container, file.getName(), container.getWidth(), DEFAULT_HEIGHT);
-			this.selections.add(selection);
-			this.selectionPanel.add(selection);
+		try {
+			for (File file : files) {
+				MenuSelection selection =
+						new MenuSelection(container, file.getName(), container.getWidth(), DEFAULT_HEIGHT);
+				this.selections.add(selection);
+				this.selectionPanel.add(selection);
+				selection.setMenuAction(new LoadGameAction(file.getCanonicalPath(), game));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		this.selectionPanel.setSpacing(10);
 		this.selections.select(0);
