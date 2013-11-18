@@ -1,5 +1,6 @@
 package musicGame.gui;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -27,6 +28,10 @@ public class DirectionalPanel<T extends AbstractComponent> extends AbstractCompo
 	public void add(T item) {
 		this.items.add(item);
 		this.resetItemLocations();
+	}
+	
+	public void addAll(Collection<? extends T> items) {
+		this.items.addAll(items);
 	}
 	
 	@Override

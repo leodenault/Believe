@@ -10,10 +10,10 @@ public class GameStateRegistry {
 	private static GameStateRegistry registry;
 	private static int currentId = 0;
 	
-	private HashMap<Integer, Integer> entries;
+	private HashMap<Class<?>, Integer> entries;
 	
 	private GameStateRegistry() {
-		entries = new HashMap<Integer, Integer>();
+		entries = new HashMap<Class<?>, Integer>();
 	}
 	
 	public static GameStateRegistry getInstance() {
@@ -23,11 +23,11 @@ public class GameStateRegistry {
 		return registry;
 	}
 	
-	public void addEntry(int entry) {
+	public void addEntry(Class<?> entry) {
 		this.entries.put(entry, currentId++);
 	}
 	
-	public int getEntry(int entry) {
+	public int getEntry(Class<?> entry) {
 		return this.entries.get(entry);
 	}
 }

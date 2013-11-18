@@ -1,5 +1,7 @@
 package musicGame;
 
+import musicGame.core.GameStateRegistry;
+import musicGame.menu.FlowFilePickerMenuState;
 import musicGame.menu.MainMenuState;
 
 import org.newdawn.slick.AppGameContainer;
@@ -33,8 +35,8 @@ public class BelieveGame extends StateBasedGame {
 
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
-		MainMenuState mainMenu = new MainMenuState();
-		this.addState(mainMenu);
-		this.enterState(mainMenu.getID());
+		this.addState(new MainMenuState());
+		this.addState(new FlowFilePickerMenuState());
+		this.enterState(GameStateRegistry.getInstance().getEntry(MainMenuState.class));
 	}
 }

@@ -18,7 +18,10 @@ public class MenuSelection extends AbstractComponent {
 	private static final int DEFAULT_LINE_WIDTH = 5;
 	private static final Color DEFAULT_TEXT_COLOR = new Color(0xCF0498);
 	private static final Color DEFAULT_BACKGROUND_COLOR = new Color(0x0CFFB2);
+	private static final Color DEFAULT_ACTIVE_TEXT_COLOR = new Color(0xFFFFFF);
+	private static final Color DEFAULT_ACTIVE_BACKGROUND_COLOR = new Color(0xFF0000);
 	private static final String DEFAULT_SELECTION_SOUND = "res/sfx/selection.ogg";
+	private static final String DEFAULT_ACTIVATION_SOUND = "res/sfx/selection_picked.ogg";
 		
 	private String text;
 	private Rectangle rect;
@@ -31,6 +34,7 @@ public class MenuSelection extends AbstractComponent {
 	private Color activeBackgroundColor;
 	
 	private Sound selectionSound;
+	private Sound activationSound;
 	private MenuAction action;
 	
 	private int x;
@@ -39,11 +43,20 @@ public class MenuSelection extends AbstractComponent {
 	private int height;
 	private boolean playSound;
 	
+	public MenuSelection(GUIContext container, String text) throws SlickException {
+		this(container, text, 0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+	}
+	
+	public MenuSelection(GUIContext container, String text, int width, int height) throws SlickException {
+		this(container, text, 0, 0, width, height);
+	}
+	
 	public MenuSelection(GUIContext container, int x, int y) throws SlickException {
 		this(container, "", x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	}
 	
-	public MenuSelection(GUIContext container, String text, int x, int y, int width, int height) throws SlickException {
+	public MenuSelection(GUIContext container, String text, int x, int y, int width, int height)
+			throws SlickException {
 		super(container);
 		this.text = text;
 		this.x = x;
@@ -53,11 +66,12 @@ public class MenuSelection extends AbstractComponent {
 		this.playSound = false;
 		this.inactiveTextColor = DEFAULT_TEXT_COLOR;
 		this.inactiveBackgroundColor = DEFAULT_BACKGROUND_COLOR;
-		this.activeTextColor = DEFAULT_TEXT_COLOR;
-		this.activeBackgroundColor = DEFAULT_BACKGROUND_COLOR;
+		this.activeTextColor = DEFAULT_ACTIVE_TEXT_COLOR;
+		this.activeBackgroundColor = DEFAULT_ACTIVE_BACKGROUND_COLOR;
 		this.currentTextColor = this.inactiveTextColor;
 		this.currentBackgroundColor = this.inactiveBackgroundColor;
 		this.selectionSound = new Sound(DEFAULT_SELECTION_SOUND);
+		this.activationSound = new Sound(DEFAULT_ACTIVATION_SOUND);
 		/*
 		 * This needs to be called for two reasons. First because the super constructor
 		 * calls it before any values can be set. Second because the location simply
@@ -81,21 +95,30 @@ public class MenuSelection extends AbstractComponent {
 	}
 	
 	public void activate() {
+		this.activationSound.play();
 		if (this.action != null) {
 			this.action.performAction();
 		}
+	}
+	
+	public void setHeight(int height) {
+		this.height = height;
 	}
 
 	@Override
 	public int getHeight() {
 		return this.height;
 	}
+	
+	public void setWidth(int width) {
+		this.width = width;
+	}
 
 	@Override
 	public int getWidth() {
 		return this.width;
 	}
-
+	
 	@Override
 	public int getX() {
 		return this.x;
@@ -156,15 +179,16 @@ public class MenuSelection extends AbstractComponent {
 
 	@Override
 	public void render(GUIContext context, Graphics g) throws SlickException {
+		Font currentFont = g.getFont();
+		int textWidth = currentFont.getWidth(this.text);
+		int textHeight = currentFont.getHeight(this.text);
 		g.setColor(this.currentBackgroundColor);
 		g.fill(this.rect);
 		g.setColor(this.currentTextColor);
 		g.setLineWidth(DEFAULT_LINE_WIDTH);
 		g.draw(this.rect);
-		Font currentFont = g.getFont();
-		int textWidth = currentFont.getWidth(this.text);
-		int textHeight = currentFont.getHeight(this.text);
-		g.drawString(this.text, this.x + ((this.width - textWidth) / 2), this.y + ((this.height - textHeight) / 2));
+		g.drawString(this.text, this.x + ((this.width - textWidth) / 2),
+				this.y + ((this.height - textHeight) / 2));
 	}
 
 	@Override

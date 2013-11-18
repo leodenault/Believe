@@ -2,6 +2,7 @@ package musicGame.gui;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 public class MenuSelectionGroup implements Iterable<MenuSelection> {
 
@@ -14,7 +15,7 @@ public class MenuSelectionGroup implements Iterable<MenuSelection> {
 		this.selections = new LinkedList<MenuSelection>();
 	}
 	
-	protected LinkedList<MenuSelection> getSelections() {
+	public List<MenuSelection> getSelections() {
 		return this.selections;
 	}
 	

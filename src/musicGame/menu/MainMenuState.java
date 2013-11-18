@@ -1,11 +1,9 @@
 package musicGame.menu;
 
-import musicGame.gui.DirectionalPanel;
 import musicGame.gui.MenuSelection;
-import musicGame.gui.MenuSelectionGroup;
 import musicGame.menu.action.ExitGameAction;
+import musicGame.menu.action.MenuChangeAction;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -22,23 +20,18 @@ public class MainMenuState extends MenuState {
 			throws SlickException {
 		super.init(container, game);
 		
-		this.selections = new MenuSelectionGroup();
-		this.selectionPanel = new DirectionalPanel<MenuSelection>(container);
 		this.selectionPanel.setSpacing(75);
 		
-		MenuSelection playDefaultLevel = new MenuSelection(container, "Play Default Level", 0, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
-		MenuSelection selectCustomLevel = new MenuSelection(container, "Play Custom Level", 0, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
-		MenuSelection exit = new MenuSelection(container, "Exit", 0, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
+		MenuSelection playDefaultLevel = new MenuSelection(container, "Play Default Level", BUTTON_WIDTH, BUTTON_HEIGHT);
+		MenuSelection selectCustomLevel = new MenuSelection(container, "Play Custom Level", BUTTON_WIDTH, BUTTON_HEIGHT);
+		MenuSelection exit = new MenuSelection(container, "Exit", BUTTON_WIDTH, BUTTON_HEIGHT);
+		selectCustomLevel.setMenuAction(new MenuChangeAction(FlowFilePickerMenuState.class, game));
 		exit.setMenuAction(new ExitGameAction(container));
 		
 		this.selections.add(playDefaultLevel);
 		this.selections.add(selectCustomLevel);
 		this.selections.add(exit);
-		for (MenuSelection selection : this.selections) {
-			this.selectionPanel.add(selection);
-			selection.setActiveBackgroundColor(new Color(0xFF0000));
-			selection.setActiveTextColor(new Color(0xFFFFFF));
-		}
+		this.selectionPanel.addAll(this.selections.getSelections());
 
 		this.selectionPanel.setLocation(
 				(container.getWidth() - this.selectionPanel.getWidth()) / 2,
