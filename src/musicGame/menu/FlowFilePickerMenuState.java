@@ -26,6 +26,8 @@ public class FlowFilePickerMenuState extends MenuState {
 		super.enter(container, game);
 		// TODO: Add exit button.
 		// TODO: Handle exception gracefully if file not found.
+		// TODO: Enable scrolling
+		// TODO: Take care of really long file names.
 		File parent = new File(DEFAULT_DIRECTORY);
 		files = parent.listFiles(new FileFilter() {
 			@Override
