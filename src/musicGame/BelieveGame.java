@@ -7,9 +7,10 @@ import musicGame.menu.MainMenuState;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.StateBasedGame;
 
-public class BelieveGame extends StateBasedGame {
+import de.lessvoid.nifty.slick2d.NiftyStateBasedGame;
+
+public class BelieveGame extends NiftyStateBasedGame {
 	
 	private static final int SCREEN_WIDTH = 800;
 	private static final int SCREEN_HEIGHT = 600;
@@ -39,4 +40,6 @@ public class BelieveGame extends StateBasedGame {
 		this.addState(new FlowFilePickerMenuState());
 		this.enterState(GameStateRegistry.getInstance().getEntry(MainMenuState.class));
 	}
+	
+	
 }

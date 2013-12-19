@@ -2,16 +2,14 @@ package musicGame.menu;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.IOException;
-
-import musicGame.core.action.LoadGameAction;
-import musicGame.gui.MenuSelection;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+
+import de.lessvoid.nifty.Nifty;
 
 public class FlowFilePickerMenuState extends MenuState {
 
@@ -21,9 +19,33 @@ public class FlowFilePickerMenuState extends MenuState {
 	private File[] files;
 	
 	@Override
-	public void enter(GameContainer container, StateBasedGame game)
+	public void keyPressed(int key, char c) {
+		super.keyPressed(key, c);
+		if (key == Input.KEY_DOWN) {
+			this.selections.selectNext();
+		} else if (key == Input.KEY_UP) {
+			this.selections.selectPrevious();
+		} else if (key == Input.KEY_ENTER) {
+			this.selections.getCurrentSelection().activate();
+		}
+	}
+
+	@Override
+	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void initGameAndGUI(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		super.enter(container, game);
+		super.initGameAndGUI(container, game);
+	}
+
+	@Override
+	protected void enterState(GameContainer container, StateBasedGame game)
+			throws SlickException {
+		super.enterState(container, game);
 		// TODO: Add exit button.
 		// TODO: Handle exception gracefully if file not found.
 		// TODO: Enable scrolling
@@ -36,7 +58,7 @@ public class FlowFilePickerMenuState extends MenuState {
 			}
 		});
 		
-		try {
+		/*try {
 			for (File file : files) {
 				MenuSelection selection =
 						new MenuSelection(container, file.getName(), container.getWidth(), DEFAULT_HEIGHT);
@@ -46,33 +68,22 @@ public class FlowFilePickerMenuState extends MenuState {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 		this.selectionPanel.setSpacing(10);
 		this.selections.select(0);
 		this.selections.setPlaySound(true);
 	}
 
 	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g)
-			throws SlickException {
+	protected void renderGame(GameContainer container, StateBasedGame game,
+			Graphics g) throws SlickException {
 		this.selectionPanel.render(container, g);
 	}
 
 	@Override
-	public void update(GameContainer container, StateBasedGame game, int delta)
-			throws SlickException {
-	}
-	
-	@Override
-	public void keyPressed(int key, char c) {
-		super.keyPressed(key, c);
-		if (key == Input.KEY_DOWN) {
-			this.selections.selectNext();
-		} else if (key == Input.KEY_UP) {
-			this.selections.selectPrevious();
-		} else if (key == Input.KEY_ENTER) {
-			this.selections.getCurrentSelection().activate();
-		}
+	protected void updateGame(GameContainer container, StateBasedGame game,
+			int delta) throws SlickException {
+		
 	}
 
 }

@@ -16,6 +16,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import de.lessvoid.nifty.Nifty;
+
 public class PlayGameState extends GameStateBase {
 	
 	private String flowFile;
@@ -27,9 +29,31 @@ public class PlayGameState extends GameStateBase {
 	}
 
 	@Override
-	public void enter(GameContainer container, StateBasedGame game)
+	public void keyPressed(int key, char c) {
+		super.keyPressed(key, c);
+		if (this.component != null) {
+			if (key == Input.KEY_ENTER) {
+				if (this.component.isPlaying()) {
+					this.component.pause();
+				} else {
+					this.component.play();
+				}
+			} else if (key == Input.KEY_SPACE) {
+				this.component.stop();
+			}
+		}
+	}
+
+	@Override
+	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void initGameAndGUI(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		super.enter(container, game);
+super.enter(container, game);
 		
 		FlowComponentBuilder builder = new FlowComponentBuilder(container, 32);
 		try {
@@ -49,39 +73,18 @@ public class PlayGameState extends GameStateBase {
 	}
 
 	@Override
-	public void init(GameContainer container, StateBasedGame game)
-			throws SlickException {
-	}
-
-	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g)
-			throws SlickException {
+	protected void renderGame(GameContainer container, StateBasedGame game,
+			Graphics g) throws SlickException {
 		if (component != null) {
 			component.render(container, g);
 		}
 	}
 
 	@Override
-	public void update(GameContainer container, StateBasedGame game, int delta)
-			throws SlickException {
+	protected void updateGame(GameContainer container, StateBasedGame game,
+			int delta) throws SlickException {
 		if (component != null) {
 			component.update();
-		}
-	}
-
-	@Override
-	public void keyPressed(int key, char c) {
-		super.keyPressed(key, c);
-		if (this.component != null) {
-			if (key == Input.KEY_ENTER) {
-				if (this.component.isPlaying()) {
-					this.component.pause();
-				} else {
-					this.component.play();
-				}
-			} else if (key == Input.KEY_SPACE) {
-				this.component.stop();
-			}
 		}
 	}
 }

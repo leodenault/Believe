@@ -20,6 +20,11 @@
 			<include name="*.jar" />
 		</fileset>
 	</path>
+	<path id="nifty-classpath">
+		<fileset dir="lib/nifty">
+			<include name="*.jar" />
+		</fileset>
+	</path>
 	<path id="externalLibs-classpath">
 		<fileset dir="lib">
 			<include name="*.jar" />
@@ -46,7 +51,9 @@
 	<target name="compile"
 		description="Compiles the main binaries.">
 		<mkdir dir="${binaries}" />
-		<javac srcdir="src" destdir="${binaries}" extdirs="lib" />
+		<javac srcdir="src" destdir="${binaries}" extdirs="lib">
+			<classpath refid="nifty-classpath"/>
+		</javac>
 	</target>
 
 	<target name="compileTests" depends="compile"
@@ -55,6 +62,7 @@
 		<javac srcdir="test" destdir="${testClasses}" extdirs="lib">
 			<classpath refid="jmock-classpath" />
 			<classpath refid="junit-classpath" />
+			<classpath refid="nifty-classpath"/>
 			<classpath path="${binaries}" />
 		</javac>
 	</target>
@@ -103,6 +111,7 @@
 			<classpath path="${testClasses}" />
 			<classpath refid="jmock-classpath" />
 			<classpath refid="junit-classpath" />
+			<classpath refid="nifty-classpath" />
 			<classpath refid="externalLibs-classpath" />
 			<classpath path="${binaries}" />
 

@@ -1,0 +1,24 @@
+<nifty 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../../../config/nifty-1.3.xsd">
+	
+	<useStyles filename="nifty-default-styles.xml"/>
+	<useStyles filename="musicGame/gui/MenuSelectionStyle.xml"/>
+	<useControls filename="musicGame/gui/MenuSelection.xml"/>
+	
+	<style id="emptyPanel">
+		<attributes height="50px" width="0px"/>
+	</style>
+				
+	<screen id="MainMenuState" controller="musicGame.menu.MainMenuState">
+		<layer id="layer" childLayout="center">
+			<panel childLayout="vertical">
+				<control id="playDefaultLevel" name="menuSelection" label="Play Default Level"/>
+				<panel style="emptyPanel"/>
+				<control id="playCustomLevel" name="menuSelection" label="Play Custom Level"/>
+				<panel style="emptyPanel"/>
+				<control id="exit" name="menuSelection" label="Exit"/>
+			</panel>
+		</layer>
+	</screen>
+</nifty>
