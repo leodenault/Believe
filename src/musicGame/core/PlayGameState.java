@@ -14,17 +14,17 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import de.lessvoid.nifty.Nifty;
-
-public class PlayGameState extends GameStateBase {
+public class PlayGameState extends BasicGameState {
 	
 	private String flowFile;
 	private FlowComponent component;
 	
 	public PlayGameState(String flowFile) {
 		super();
+		GameStateRegistry.getInstance().addEntry(this.getClass());
 		this.flowFile = flowFile;
 	}
 
@@ -45,15 +45,19 @@ public class PlayGameState extends GameStateBase {
 	}
 
 	@Override
-	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
-		// TODO Auto-generated method stub
-		
+	public int getID() {
+		return GameStateRegistry.getInstance().getEntry(this.getClass());
 	}
 
 	@Override
-	protected void initGameAndGUI(GameContainer container, StateBasedGame game)
+	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-super.enter(container, game);
+	}
+
+	@Override
+	public void enter(GameContainer container, StateBasedGame game)
+			throws SlickException {
+		super.enter(container, game);
 		
 		FlowComponentBuilder builder = new FlowComponentBuilder(container, 32);
 		try {
@@ -73,16 +77,16 @@ super.enter(container, game);
 	}
 
 	@Override
-	protected void renderGame(GameContainer container, StateBasedGame game,
-			Graphics g) throws SlickException {
+	public void render(GameContainer container, StateBasedGame game, Graphics g)
+			throws SlickException {
 		if (component != null) {
 			component.render(container, g);
 		}
 	}
 
 	@Override
-	protected void updateGame(GameContainer container, StateBasedGame game,
-			int delta) throws SlickException {
+	public void update(GameContainer container, StateBasedGame game, int delta)
+			throws SlickException {
 		if (component != null) {
 			component.update();
 		}
