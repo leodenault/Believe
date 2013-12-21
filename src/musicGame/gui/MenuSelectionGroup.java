@@ -60,13 +60,17 @@ public class MenuSelectionGroup implements Iterable<MenuSelection> {
 		this.currentSelection.select();
 	}
 	
+	public void clear() {
+		this.selections.clear();
+	}
+	
 	@Override
 	public Iterator<MenuSelection> iterator() {
 		return selections.iterator();
 	}
 	
 	private void checkIfEmpty() {
-		if (this.currentSelection == EMPTY) {
+		if (this.selections.isEmpty()) {
 			throw new IndexOutOfBoundsException("Cannot select from empty group");
 		}
 	}

@@ -160,4 +160,20 @@ public class MenuSelectionGroupTest {
 		}});
 		this.group.setPlaySound(true);
 	}
+	
+	@Test
+	public void clearShouldRemoveAllSelections() {
+		this.group.add(selection);
+		this.group.add(selection);
+		assertThat(this.group.getSelections(), hasSize(2));
+		this.group.clear();
+		assertThat(this.group.getSelections(), is(empty()));
+	}
+	
+	@Test
+	public void clearShouldDoNothingWhenSelectionListEmpty() {
+		assertThat(this.group.getSelections(), is(empty()));
+		this.group.clear();
+		assertThat(this.group.getSelections(), is(empty()));
+	}
 }

@@ -16,6 +16,8 @@ import de.lessvoid.nifty.screen.ScreenController;
 
 public class MainMenuState extends MenuState implements ScreenController {
 
+	private static final String SCREEN_ID = "MainMenuState";
+	
 	private MenuSelection playDefaultLevel;
 	private MenuSelection playCustomLevel;
 	private MenuSelection exit;
@@ -34,7 +36,7 @@ public class MainMenuState extends MenuState implements ScreenController {
 	
 	@Override
 	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
-		nifty.fromXml("src/musicGame/menu/MainMenuState.xml", "MainMenuState");
+		nifty.fromXml("src/musicGame/menu/MainMenuState.xml", SCREEN_ID);
 	}
 
 	@Override
@@ -42,9 +44,10 @@ public class MainMenuState extends MenuState implements ScreenController {
 			throws SlickException {
 		super.initGameAndGUI(container, game);
 
-		this.playDefaultLevel = this.getNifty().getScreen("MainMenuState").findControl("playDefaultLevel", MenuSelection.class);
-		this.playCustomLevel = this.getNifty().getScreen("MainMenuState").findControl("playCustomLevel", MenuSelection.class);
-		this.exit = this.getNifty().getScreen("MainMenuState").findControl("exit", MenuSelection.class);
+		Screen screen = this.getNifty().getScreen(SCREEN_ID);
+		this.playDefaultLevel = screen.findControl("playDefaultLevel", MenuSelection.class);
+		this.playCustomLevel = screen.findControl("playCustomLevel", MenuSelection.class);
+		this.exit = screen.findControl("exit", MenuSelection.class);
 		
 		this.playCustomLevel.setMenuAction(new ChangeStateAction(FlowFilePickerMenuState.class, game));
 		this.exit.setMenuAction(new ExitGameAction(container));
@@ -68,9 +71,6 @@ public class MainMenuState extends MenuState implements ScreenController {
 
 	@Override
 	public void bind(Nifty nifty, Screen screen) {
-		this.playDefaultLevel = screen.findControl("playDefaultLevel", MenuSelection.class);
-		this.playCustomLevel = screen.findControl("playCustomLevel", MenuSelection.class);
-		this.exit = screen.findControl("exit", MenuSelection.class);
 	}
 
 	@Override

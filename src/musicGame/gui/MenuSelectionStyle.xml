@@ -21,4 +21,11 @@
 	<style id="menuSelection-active-text">
 		<attributes color="#ffffff" font="aurulent-sans-16.fnt"/>
 	</style>
+	
+	<style id="menuSelectionFlowFile-border">
+		<attributes backgroundColor="#cf0498" childLayout="center" width="100%" height="50px" padding="5px"/>
+	</style>
+	<style id="menuSelectionFlowFile-active-border">
+		<attributes backgroundColor="#ffffff" childLayout="center" width="100%" height="50px" padding="5px"/>
+	</style>
 </nifty-styles>

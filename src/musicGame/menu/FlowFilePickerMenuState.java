@@ -1,7 +1,11 @@
 package musicGame.menu;
 
 import java.io.File;
-import java.io.FileFilter;
+
+import musicGame.core.Util;
+import musicGame.core.action.ChangeStateAction;
+import musicGame.core.action.LoadGameAction;
+import musicGame.gui.MenuSelection;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -10,30 +14,56 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.builder.ControlBuilder;
+import de.lessvoid.nifty.builder.PanelBuilder;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.screen.ScreenController;
 
-public class FlowFilePickerMenuState extends MenuState {
+public class FlowFilePickerMenuState extends MenuState implements ScreenController {
 
-	private static final int DEFAULT_HEIGHT = 30;
-	private static final String DEFAULT_DIRECTORY = "customFlowFiles";
-	private static final String FILE_EXTENSION = ".lfl";
-	private File[] files;
+	private static final String SCREEN_ID = "FlowFilePickerMenuState";
+
+	private MenuSelection back;
+	private Element fileListPanel;
 	
 	@Override
 	public void keyPressed(int key, char c) {
 		super.keyPressed(key, c);
-		if (key == Input.KEY_DOWN) {
-			this.selections.selectNext();
-		} else if (key == Input.KEY_UP) {
-			this.selections.selectPrevious();
-		} else if (key == Input.KEY_ENTER) {
-			this.selections.getCurrentSelection().activate();
+		switch (key) {
+			case Input.KEY_DOWN:
+				if (!this.back.isSelected()) {
+					this.selections.selectNext();
+				}
+				break;
+			case Input.KEY_UP:
+				if (!this.back.isSelected()) {
+					this.selections.selectPrevious();
+				}
+				break;
+			case Input.KEY_LEFT:
+			case Input.KEY_RIGHT:
+				if (this.back.isSelected()) {
+					this.selections.getCurrentSelection().select();
+					this.back.deselect();
+				} else {
+					this.selections.getCurrentSelection().deselect();
+					this.back.select();
+				}
+				break;
+			case Input.KEY_ENTER:
+				if (this.back.isSelected()) {
+					this.back.activate();
+				} else {
+					this.selections.getCurrentSelection().activate();
+				}
+				break;
 		}
 	}
 
 	@Override
 	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
-		// TODO Auto-generated method stub
-		
+		nifty.fromXml("src/musicGame/menu/FlowFilePickerMenuState.xml", SCREEN_ID);
 	}
 
 	@Override
@@ -46,38 +76,47 @@ public class FlowFilePickerMenuState extends MenuState {
 	protected void enterState(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		super.enterState(container, game);
-		// TODO: Add exit button.
-		// TODO: Handle exception gracefully if file not found.
 		// TODO: Enable scrolling
 		// TODO: Take care of really long file names.
-		File parent = new File(DEFAULT_DIRECTORY);
-		files = parent.listFiles(new FileFilter() {
-			@Override
-			public boolean accept(File pathname) {
-				return pathname.getName().toLowerCase().endsWith(FILE_EXTENSION);
-			}
-		});
+		Screen screen = this.getNifty().getScreen(SCREEN_ID);
+		resetUi(screen);
 		
-		/*try {
-			for (File file : files) {
-				MenuSelection selection =
-						new MenuSelection(container, file.getName(), container.getWidth(), DEFAULT_HEIGHT);
+		try {
+			File[] files = Util.getFlowFiles();
+			for (final File file : files) {
+				final String name = file.getName().substring(0, file.getName().lastIndexOf("."));
+				
+				ControlBuilder builder = new ControlBuilder(name, "menuSelection") {{
+					parameter("label", name);
+					style("menuSelectionFlowFile-border");
+				}};
+				new PanelBuilder() {{
+					height("10px");
+				}}.build(this.getNifty(), screen, this.fileListPanel);
+				
+				MenuSelection selection = builder.build(this.getNifty(), screen, this.fileListPanel)
+						.getControl(MenuSelection.class);
 				this.selections.add(selection);
-				this.selectionPanel.add(selection);
 				selection.setMenuAction(new LoadGameAction(file.getCanonicalPath(), game));
+				selection.setStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-border");
+				selection.setActiveStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-active-border");
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
-		this.selectionPanel.setSpacing(10);
-		this.selections.select(0);
+		} catch (Exception e) {
+			// TODO: Handle exception gracefully if file not found.
+		}
+		
+		if (!this.selections.getSelections().isEmpty()) {
+			this.selections.select(0);
+		} else {
+			this.back.select();
+		}
 		this.selections.setPlaySound(true);
+		this.back.setMenuAction(new ChangeStateAction(MainMenuState.class, game));
 	}
 
 	@Override
 	protected void renderGame(GameContainer container, StateBasedGame game,
 			Graphics g) throws SlickException {
-		this.selectionPanel.render(container, g);
 	}
 
 	@Override
@@ -86,4 +125,27 @@ public class FlowFilePickerMenuState extends MenuState {
 		
 	}
 
+	@Override
+	public void bind(Nifty nifty, Screen screen) {
+	}
+
+	@Override
+	public void onEndScreen() {
+	}
+
+	@Override
+	public void onStartScreen() {
+	}
+	
+	private void resetUi(Screen screen) {
+		this.fileListPanel = screen.findElementByName("fileListPanel");
+		this.back = screen.findControl("back", MenuSelection.class);
+		this.back.setPlaySound(true);
+		
+		this.back.deselect();
+		this.selections.clear();
+		for (Element element : fileListPanel.getElements()) {
+			element.markForRemoval();
+		}
+	}
 }

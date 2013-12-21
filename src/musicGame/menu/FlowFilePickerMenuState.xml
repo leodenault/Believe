@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../../../config/nifty-1.3.xsd">
+	
+	<useControls filename="musicGame/gui/MenuSelection.xml"/>
+	<useStyles filename="musicGame/gui/MenuSelectionStyle.xml"/>
+		
+	<screen id="FlowFilePickerMenuState" controller="musicGame.menu.FlowFilePickerMenuState">
+		<layer childLayout="vertical" padding="10px">
+			<panel align="left" childLayout="center">
+				<control id="back" name="menuSelection" label="Back" width="200px" height="50px"/>
+			</panel>
+			<panel height="10px"/>
+			<panel align="center" childLayout="center" paddingLeft="50px">
+				<panel align="center" id="fileListPanel" childLayout="vertical"/>
+			</panel>
+		</layer>
+	</screen>
+</nifty>
