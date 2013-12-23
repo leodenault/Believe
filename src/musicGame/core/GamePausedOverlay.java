@@ -1,7 +1,9 @@
 package musicGame.core;
 
+import musicGame.core.action.ChangeStateAction;
 import musicGame.gui.MenuSelection;
 import musicGame.gui.MenuSelectionGroup;
+import musicGame.menu.MainMenuState;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
@@ -19,11 +21,12 @@ public class GamePausedOverlay implements ScreenController {
 	private Element layer;
 	private MenuSelection exitLevel;
 	
-	public void init(Nifty nifty) {
+	public void init(Nifty nifty, StateBasedGame game) {
 		Screen screen = nifty.getScreen(SCREEN_NAME);
 		this.layer = screen.findElementByName("layer");
 		
 		this.exitLevel = screen.findControl("exitLevel", MenuSelection.class);
+		this.exitLevel.setMenuAction(new ChangeStateAction(MainMenuState.class, game));
 		
 		this.selections = new MenuSelectionGroup();
 		this.selections.add(this.exitLevel);
@@ -38,10 +41,9 @@ public class GamePausedOverlay implements ScreenController {
 	
 	public void keyPressed(int key) {
 		switch (key) {
-			case Input.KEY_ESCAPE:
-				this.layer.setVisible(!this.layer.isVisible());
+			case Input.KEY_ENTER:
 				if (this.layer.isVisible()) {
-					this.reset();
+					this.selections.getCurrentSelection().activate();
 				}
 				break;
 		}
@@ -49,6 +51,16 @@ public class GamePausedOverlay implements ScreenController {
 	
 	public boolean isVisible() {
 		return this.layer.isVisible();
+	}
+	
+	public void setVisible(boolean visible) {
+		this.layer.setVisible(visible);
+	}
+	
+	public void reset() {
+		this.selections.setPlaySound(false);
+		this.selections.select(0);
+		this.selections.setPlaySound(true);
 	}
 	
 	@Override
@@ -61,11 +73,5 @@ public class GamePausedOverlay implements ScreenController {
 
 	@Override
 	public void onStartScreen() {
-	}
-
-	private void reset() {
-		this.selections.setPlaySound(false);
-		this.selections.select(0);
-		this.selections.setPlaySound(true);
 	}
 }

@@ -44,7 +44,10 @@ public class PlayGameState extends GameStateBase {
 			if (this.component != null) {
 				if (this.component.isPlaying()) {
 					this.component.pause();
+					this.pauseOverlay.setVisible(true);
 				} else if (this.component.isPaused()) {
+					this.pauseOverlay.setVisible(false);
+					this.pauseOverlay.reset();
 					this.component.play();
 				}
 			}
@@ -56,13 +59,14 @@ public class PlayGameState extends GameStateBase {
 	public void initGameAndGUI(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		super.initGameAndGUI(container, game);
-		this.pauseOverlay.init(this.getNifty());
+		this.pauseOverlay.init(this.getNifty(), game);
 	}
 
 	@Override
 	public void enterState(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		super.enterState(container, game);
+		this.pauseOverlay.setVisible(false);
 		
 		FlowComponentBuilder builder = new FlowComponentBuilder(container, 32);
 		try {
