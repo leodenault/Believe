@@ -9,7 +9,8 @@
 	<screen id="GamePausedOverlay" controller="musicGame.core.GamePausedOverlay">
 		<layer id="layer" childLayout="center" visible="false" backgroundColor="#000000AA">
 			<panel childLayout="vertical">
-				<control id="exitLevel" name="menuSelection" label="Exit Level"/>
+				<control id="exitLevel" name="menuSelection" label="Exit Level" marginBottom="50px"/>
+				<control id="restart" name="menuSelection" label="Restart"/>
 			</panel>
 		</layer>
 	</screen>

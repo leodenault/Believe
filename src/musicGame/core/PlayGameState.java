@@ -25,11 +25,20 @@ public class PlayGameState extends GameStateBase {
 	private GamePausedOverlay pauseOverlay;
 	
 	public PlayGameState() {
-		this.pauseOverlay = new GamePausedOverlay();
+		this.pauseOverlay = new GamePausedOverlay(this);
 	}
 	
 	public void setFlowFile(String flowFile) {
 		this.flowFile = flowFile;
+	}
+	
+	public void restart() {
+		this.pauseOverlay.setVisible(false);
+		this.pauseOverlay.reset();
+		if (this.component != null) {
+			this.component.stop();
+			this.component.play();
+		}
 	}
 
 	@Override

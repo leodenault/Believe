@@ -4,6 +4,7 @@ import musicGame.core.action.ChangeStateAction;
 import musicGame.gui.MenuSelection;
 import musicGame.gui.MenuSelectionGroup;
 import musicGame.menu.MainMenuState;
+import musicGame.menu.action.MenuAction;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
@@ -14,22 +15,37 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
 public class GamePausedOverlay implements ScreenController {
-
+	
 	private static final String SCREEN_NAME = "GamePausedOverlay";
 	
+	private PlayGameState containingState;
 	private MenuSelectionGroup selections;
 	private Element layer;
 	private MenuSelection exitLevel;
+	private MenuSelection restart;
+
+	public GamePausedOverlay(PlayGameState containingState) {
+		this.containingState = containingState;
+	}
 	
 	public void init(Nifty nifty, StateBasedGame game) {
 		Screen screen = nifty.getScreen(SCREEN_NAME);
 		this.layer = screen.findElementByName("layer");
 		
 		this.exitLevel = screen.findControl("exitLevel", MenuSelection.class);
+		this.restart = screen.findControl("restart", MenuSelection.class);
+		
 		this.exitLevel.setMenuAction(new ChangeStateAction(MainMenuState.class, game));
+		this.restart.setMenuAction(new MenuAction() {
+			@Override
+			public void performAction() {
+				containingState.restart();
+			}
+		});
 		
 		this.selections = new MenuSelectionGroup();
 		this.selections.add(this.exitLevel);
+		this.selections.add(this.restart);
 		
 		this.selections.select(0);
 		this.selections.setPlaySound(true);
@@ -40,12 +56,18 @@ public class GamePausedOverlay implements ScreenController {
 	}
 	
 	public void keyPressed(int key) {
-		switch (key) {
-			case Input.KEY_ENTER:
-				if (this.layer.isVisible()) {
+		if (this.layer.isVisible()) {
+			switch (key) {
+				case Input.KEY_ENTER:
 					this.selections.getCurrentSelection().activate();
-				}
-				break;
+					break;
+				case Input.KEY_UP:
+					this.selections.selectNext();
+					break;
+				case Input.KEY_DOWN:
+					this.selections.selectPrevious();
+					break;
+			}
 		}
 	}
 	
