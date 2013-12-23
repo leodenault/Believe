@@ -15,7 +15,6 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
-import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -88,11 +87,9 @@ public class FlowFilePickerMenuState extends MenuState implements ScreenControll
 				
 				ControlBuilder builder = new ControlBuilder(name, "menuSelection") {{
 					parameter("label", name);
+					marginBottom("10px");
 					style("menuSelectionFlowFile-border");
 				}};
-				new PanelBuilder() {{
-					height("10px");
-				}}.build(this.getNifty(), screen, this.fileListPanel);
 				
 				MenuSelection selection = builder.build(this.getNifty(), screen, this.fileListPanel)
 						.getControl(MenuSelection.class);

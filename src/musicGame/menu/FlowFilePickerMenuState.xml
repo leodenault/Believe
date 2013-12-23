@@ -8,10 +8,9 @@
 		
 	<screen id="FlowFilePickerMenuState" controller="musicGame.menu.FlowFilePickerMenuState">
 		<layer childLayout="vertical" padding="10px">
-			<panel align="left" childLayout="center">
+			<panel align="left" childLayout="center" marginBottom="10px">
 				<control id="back" name="menuSelection" label="Back" width="200px" height="50px"/>
 			</panel>
-			<panel height="10px"/>
 			<panel align="center" childLayout="center" paddingLeft="50px">
 				<panel align="center" id="fileListPanel" childLayout="vertical"/>
 			</panel>

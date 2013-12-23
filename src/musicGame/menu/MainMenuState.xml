@@ -6,17 +6,15 @@
 	<useStyles filename="musicGame/gui/MenuSelectionStyle.xml"/>
 	<useControls filename="musicGame/gui/MenuSelection.xml"/>
 	
-	<style id="emptyPanel">
-		<attributes height="50px" width="0px"/>
+	<style id="marginPanel">
+		<attributes marginBottom="50px"/>
 	</style>
 				
 	<screen id="MainMenuState" controller="musicGame.menu.MainMenuState">
 		<layer id="layer" childLayout="center">
 			<panel childLayout="vertical">
-				<control id="playDefaultLevel" name="menuSelection" label="Play Default Level"/>
-				<panel style="emptyPanel"/>
-				<control id="playCustomLevel" name="menuSelection" label="Play Custom Level"/>
-				<panel style="emptyPanel"/>
+				<control id="playDefaultLevel" name="menuSelection" label="Play Default Level" style="marginPanel"/>
+				<control id="playCustomLevel" name="menuSelection" label="Play Custom Level" style="marginPanel"/>
 				<control id="exit" name="menuSelection" label="Exit"/>
 			</panel>
 		</layer>
