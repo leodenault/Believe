@@ -59,6 +59,14 @@ public class MainMenuState extends MenuState implements ScreenController {
 		this.selections.select(0);
 		this.selections.setPlaySound(true);
 	}
+	
+	@Override
+	protected void enterState(GameContainer container, StateBasedGame game) throws SlickException {
+		super.enterState(container, game);
+		this.selections.setPlaySound(false);
+		this.selections.select(0);
+		this.selections.setPlaySound(true);
+	}
 
 	@Override
 	protected void renderGame(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {

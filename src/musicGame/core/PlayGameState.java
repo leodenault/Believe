@@ -14,17 +14,21 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class PlayGameState extends BasicGameState {
+import de.lessvoid.nifty.Nifty;
+
+public class PlayGameState extends GameStateBase {
 	
 	private String flowFile;
 	private FlowComponent component;
+	private GamePausedOverlay pauseOverlay;
 	
-	public PlayGameState(String flowFile) {
-		super();
-		GameStateRegistry.getInstance().addEntry(this.getClass());
+	public PlayGameState() {
+		this.pauseOverlay = new GamePausedOverlay();
+	}
+	
+	public void setFlowFile(String flowFile) {
 		this.flowFile = flowFile;
 	}
 
@@ -32,32 +36,33 @@ public class PlayGameState extends BasicGameState {
 	public void keyPressed(int key, char c) {
 		super.keyPressed(key, c);
 		if (this.component != null) {
-			if (key == Input.KEY_ENTER) {
-				if (this.component.isPlaying()) {
-					this.component.pause();
-				} else {
-					this.component.play();
-				}
-			} else if (key == Input.KEY_SPACE) {
+			if (key == Input.KEY_SPACE) {
 				this.component.stop();
 			}
 		}
+		if (key == Input.KEY_ESCAPE) {
+			if (this.component != null) {
+				if (this.component.isPlaying()) {
+					this.component.pause();
+				} else if (this.component.isPaused()) {
+					this.component.play();
+				}
+			}
+		}
+		this.pauseOverlay.keyPressed(key);
 	}
 
 	@Override
-	public int getID() {
-		return GameStateRegistry.getInstance().getEntry(this.getClass());
-	}
-
-	@Override
-	public void init(GameContainer container, StateBasedGame game)
+	public void initGameAndGUI(GameContainer container, StateBasedGame game)
 			throws SlickException {
+		super.initGameAndGUI(container, game);
+		this.pauseOverlay.init(this.getNifty());
 	}
 
 	@Override
-	public void enter(GameContainer container, StateBasedGame game)
+	public void enterState(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		super.enter(container, game);
+		super.enterState(container, game);
 		
 		FlowComponentBuilder builder = new FlowComponentBuilder(container, 32);
 		try {
@@ -69,6 +74,7 @@ public class PlayGameState extends BasicGameState {
 			this.component.setLocation((container.getWidth() - component.getWidth())/ 2, 32);
 			this.component.setHeight(container.getHeight());
 //			component.addListener(this);
+			this.component.play();
 		} catch (IOException | FlowFileParserException
 				| FlowComponentBuilderException e) {
 			e.printStackTrace();
@@ -77,7 +83,7 @@ public class PlayGameState extends BasicGameState {
 	}
 
 	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g)
+	public void renderGame(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
 		if (component != null) {
 			component.render(container, g);
@@ -85,10 +91,15 @@ public class PlayGameState extends BasicGameState {
 	}
 
 	@Override
-	public void update(GameContainer container, StateBasedGame game, int delta)
+	public void updateGame(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		if (component != null) {
 			component.update();
 		}
+	}
+
+	@Override
+	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
+		this.pauseOverlay.prepareNifty(nifty, game);
 	}
 }

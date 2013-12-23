@@ -113,6 +113,8 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 			this.lanes[i] = lane;
 			lane.addListener(this);
 		}
+		
+		this.setWidth(laneWidth * this.lanes.length);
 	}
 	
 	private void notifyLanes(char key) {
@@ -308,12 +310,30 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 
 
 	/**
-	 * Whether this FLowComponent is playing or not.
+	 * Whether this FlowComponent is playing or not.
 	 * 
 	 * @return	Whether this FlowComponent is playing or not.
 	 */
 	public boolean isPlaying() {
 		return this.status == PlayStatus.PLAYING;
+	}
+	
+	/**
+	 * Whether this FlowComponent is paused or not.
+	 * 
+	 * @return	Whether this FlowComponent is paused or not.
+	 */
+	public boolean isPaused() {
+		return this.status == PlayStatus.PAUSED;
+	}
+	
+	/**
+	 * Whether this FlowComponent is stopped or not.
+	 * 
+	 * @return	Whether this FlowComponent is stopped or not.
+	 */
+	public boolean isStopped() {
+		return this.status == PlayStatus.STOPPED;
 	}
 
 	/**

@@ -19,7 +19,7 @@ public abstract class GameStateBase extends NiftyOverlayBasicGameState {
 	}
 	
 	@Override
-	protected void initGameAndGUI(GameContainer container, StateBasedGame game)
+	protected void initGameAndGUI(GameContainer container, final StateBasedGame game)
 			throws SlickException {
 		initNifty(container, game, new PlainSlickInputSystem());
 	}

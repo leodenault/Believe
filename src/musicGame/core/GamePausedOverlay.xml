@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../../../config/nifty-1.3.xsd">
+	
+	<useStyles filename="src/musicGame/gui/MenuSelectionStyle.xml"/>
+	<useControls filename="src/musicGame/gui/MenuSelection.xml"/>
+	
+	<screen id="GamePausedOverlay" controller="musicGame.core.GamePausedOverlay">
+		<layer id="layer" childLayout="center" visible="false" backgroundColor="#000000AA">
+			<panel childLayout="vertical">
+				<control id="exitLevel" name="menuSelection" label="Exit Level"/>
+			</panel>
+		</layer>
+	</screen>
+</nifty>

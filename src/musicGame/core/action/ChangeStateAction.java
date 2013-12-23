@@ -9,7 +9,8 @@ import musicGame.menu.action.MenuAction;
 public class ChangeStateAction implements MenuAction {
 
 	private Class<? extends GameStateBase> state;
-	private StateBasedGame game;
+	
+	protected StateBasedGame game;
 	
 	public ChangeStateAction(Class<? extends GameStateBase> state, StateBasedGame game) {
 		this.state = state;
