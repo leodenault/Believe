@@ -11,9 +11,9 @@ import org.newdawn.slick.gui.GUIContext;
 
 public class DirectionalPanel<T extends AbstractComponent> extends AbstractComponent implements Iterable<T> {
 
-	private LinkedList<T> items;
+	protected LinkedList<T> items;
+	protected int spacing;
 	
-	private int spacing;
 	private int x;
 	private int y;
 	

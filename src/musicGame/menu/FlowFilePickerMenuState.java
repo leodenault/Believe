@@ -1,6 +1,7 @@
 package musicGame.menu;
 
 import java.io.File;
+import java.io.IOException;
 
 import musicGame.core.Util;
 import musicGame.core.action.ChangeStateAction;
@@ -98,7 +99,7 @@ public class FlowFilePickerMenuState extends MenuState implements ScreenControll
 				selection.setStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-border");
 				selection.setActiveStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-active-border");
 			}
-		} catch (Exception e) {
+		} catch (SecurityException | IOException e) {
 			// TODO: Handle exception gracefully if file not found.
 		}
 		

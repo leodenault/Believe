@@ -2,7 +2,6 @@ package musicGame.gui;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import musicGame.gui.DirectionalPanel;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -47,6 +46,7 @@ public class DirectionalPanelTest {
 		assertThat(this.panel.getX(), is(0));
 		assertThat(this.panel.getY(), is(0));
 		assertThat(this.panel.iterator().hasNext(), is(false));
+		assertThat(true, is(false));
 	}
 	
 	@Test
