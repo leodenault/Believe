@@ -36,7 +36,7 @@ public class MainMenuState extends MenuState implements ScreenController {
 	
 	@Override
 	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
-		nifty.fromXml("src/musicGame/menu/MainMenuState.xml", SCREEN_ID);
+		nifty.fromXml("musicGame/menu/MainMenuState.xml", SCREEN_ID);
 	}
 
 	@Override

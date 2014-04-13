@@ -62,7 +62,7 @@ public class FlowFilePickerMenuState extends MenuState implements ScreenControll
 
 	@Override
 	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
-		nifty.fromXml("src/musicGame/menu/FlowFilePickerMenuState.xml", SCREEN_ID);
+		nifty.fromXml("musicGame/menu/FlowFilePickerMenuState.xml", SCREEN_ID);
 	}
 
 	@Override

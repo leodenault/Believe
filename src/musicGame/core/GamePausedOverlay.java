@@ -52,7 +52,7 @@ public class GamePausedOverlay implements ScreenController {
 	}
 	
 	public void prepareNifty(Nifty nifty, StateBasedGame game) {
-		nifty.fromXml("src/musicGame/core/GamePausedOverlay.xml", SCREEN_NAME);
+		nifty.fromXml("musicGame/core/GamePausedOverlay.xml", SCREEN_NAME);
 	}
 	
 	public void keyPressed(int key) {
