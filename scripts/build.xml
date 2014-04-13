@@ -3,6 +3,9 @@
 	<description>
             Build script for setting up the game and its dependencies.
     </description>
+	
+	<!-- Import extra Ant task definitions -->
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
 
 	<property name="jarName" value="MusicGame.jar"/>
 	<property name="outDir" value="bin-release" />
@@ -69,32 +72,48 @@
 
 	<target name="makeJAR" depends="cleanRelease, compile"
 			description="Creates a runnable jar for the application.">
+		<!-- Build the classpath -->
+		<var name="classpath" value=". customFlowFiles customGraphics customSongs"/>
+		<for param="file">
+			<path>
+				<fileset dir="lib" includes="*.jar"/>
+				<fileset dir="lib/nifty" excludes="*javadoc.jar"/>
+			</path>
+			<sequential>
+				<propertyregex override="yes"
+				      property="program"  input="@{file}"
+				      regexp=".*/(.*\.jar)" replace="\1"/>
+				<echo message="Rename @{file} to ${program}"/>
+				<var name="temp" value="${classpath} lib/${program}"/>
+				<var name="classpath" value="${temp}"/>
+			</sequential>
+		</for>
+		<!-- Build the JAR file -->
 		<jar destfile="${outDir}/${jarName}">
 			<fileset dir="${binaries}" />
 			<fileset dir="." includes="res/** levelFlowFiles/**" />
-			<restrict>
-				<archives>
-					<zips>
-						<fileset dir="lib" includes="*.jar" />
-					</zips>
-				</archives>
-			</restrict>
 			<manifest>
 				<attribute name="Main-Class" value="musicGame.Main" />
-				<attribute name="Class-Path" value=". customFlowFiles customGraphics customSongs" />
+				<attribute name="Class-Path" value="${classpath}" />
 			</manifest>
 		</jar>
 	</target>
 
 	<target name="buildGame" depends="makeJAR"
 		description="Builds the application into the output directory.">
-		<mkdir dir="${outDir}/native" />
+		<mkdir dir="${outDir}/lib/native" />
 		<mkdir dir="${outDir}/customFlowFiles" />
 		<mkdir dir="${outDir}/customGraphics" />
 		<mkdir dir="${outDir}/customSongs" />
-		<copy todir="${outDir}/native">
+		<mkdir dir="${outDir}/lib"/>
+		<copy todir="${outDir}/lib/native">
 			<fileset dir="lib/native" excludes="OpenAL32.dll OpenAL64.dll libopenal.so libopenal64.so" />
 		</copy>
+		<copy todir="${outDir}/lib">
+			<fileset dir="lib" includes="*.jar"/>
+			<fileset dir="lib/nifty" excludes="*javadoc.jar"/>
+		</copy>
+		<fileset dir="lib" includes="*.jar"/>
 		<copy todir="${outDir}/">
 			<fileset file="lib/native/OpenAL32.dll" />
 			<fileset file="lib/native/OpenAL64.dll" />
@@ -115,13 +134,21 @@
 			<classpath refid="externalLibs-classpath" />
 			<classpath path="${binaries}" />
 
-			<formatter type="plain" />
+			<formatter type="xml" />
 
 			<batchtest todir="${testReportsDir}">
 				<fileset dir="${testClasses}">
 					<include name="**/*Test.class" />
 				</fileset>
 			</batchtest>
+			
 		</junit>
+		<mkdir dir="${testReportsDir}/html"/>
+		<junitreport todir="${testReportsDir}">
+			<fileset dir="${testReportsDir}">
+				<include name="TEST-*.xml"/>
+			</fileset>
+			<report todir="${testReportsDir}/html"/>
+		</junitreport>
 	</target>
 </project>

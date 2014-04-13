@@ -1,12 +1,19 @@
 package musicGame;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.lang.reflect.Field;
+import java.net.URLClassLoader;
 import java.util.Arrays;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
 
 public class Main {
 
-	private static final String PATH = "native";
+	private static final String PATH = "lib/native";
 	
 	public static void main(String[] args) {
 
@@ -31,9 +38,10 @@ public class Main {
 			newPaths[newPaths.length-1] = PATH;
 			System.out.println("Resetting java.library.path to contain natives");
 			usrPathsField.set(null, newPaths);
-
-			TestGame t = new TestGame("Test", 800, 600);
-			t.run();
+			
+			BelieveGame b = new BelieveGame("Believe");
+			
+			b.run();
 		}
 		catch (Exception e) {
 			System.out.println("Failed to add natives path to java.library.path: " + e.getMessage());
