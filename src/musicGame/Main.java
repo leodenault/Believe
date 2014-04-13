@@ -1,14 +1,7 @@
 package musicGame;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
 import java.lang.reflect.Field;
-import java.net.URLClassLoader;
 import java.util.Arrays;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 
 
 public class Main {
@@ -40,7 +33,6 @@ public class Main {
 			usrPathsField.set(null, newPaths);
 			
 			BelieveGame b = new BelieveGame("Believe");
-			
 			b.run();
 		}
 		catch (Exception e) {
