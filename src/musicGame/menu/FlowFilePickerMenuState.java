@@ -43,12 +43,15 @@ public class FlowFilePickerMenuState extends MenuState implements ScreenControll
 				break;
 			case Input.KEY_LEFT:
 			case Input.KEY_RIGHT:
-				if (this.back.isSelected()) {
-					this.selections.getCurrentSelection().select();
-					this.back.deselect();
-				} else {
-					this.selections.getCurrentSelection().deselect();
-					this.back.select();
+				MenuSelection selection;
+				if ((selection = this.selections.getCurrentSelection()) != null) {
+					if (this.back.isSelected()) {
+						selection.select();
+						this.back.deselect();
+					} else {
+						selection.deselect();
+						this.back.select();
+					}
 				}
 				break;
 			case Input.KEY_ENTER:

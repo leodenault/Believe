@@ -36,7 +36,7 @@ public class Main {
 			b.run();
 		}
 		catch (Exception e) {
-			System.out.println("Failed to add natives path to java.library.path: " + e.getMessage());
+			System.out.println("An error was caught and unfortunately, it was not graceful: " + e.getMessage());
 		}
 	}
 }

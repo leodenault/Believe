@@ -32,7 +32,9 @@ public class BelieveGame extends NiftyStateBasedGame {
 			game.setDisplayMode(SCREEN_WIDTH, SCREEN_HEIGHT, false);
 			game.start();
 		}
-		catch (SlickException e) {}
+		catch (SlickException e) {
+			System.out.println("A Slick Exception! Here's the message: " + e.getMessage());
+		}
 	}
 
 	@Override
