@@ -57,6 +57,9 @@
 		<javac srcdir="src" destdir="${binaries}" extdirs="lib">
 			<classpath refid="nifty-classpath"/>
 		</javac>
+		<copy todir="${binaries}">
+			<fileset dir="src" includes="**/*.xml"/>
+		</copy>
 	</target>
 
 	<target name="compileTests" depends="compile"

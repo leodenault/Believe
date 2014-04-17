@@ -37,6 +37,7 @@ public class Main {
 		}
 		catch (Exception e) {
 			System.out.println("An error was caught and unfortunately, it was not graceful: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 }

@@ -46,7 +46,6 @@ public class DirectionalPanelTest {
 		assertThat(this.panel.getX(), is(0));
 		assertThat(this.panel.getY(), is(0));
 		assertThat(this.panel.iterator().hasNext(), is(false));
-		assertThat(true, is(false));
 	}
 	
 	@Test

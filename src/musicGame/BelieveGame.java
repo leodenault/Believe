@@ -34,6 +34,7 @@ public class BelieveGame extends NiftyStateBasedGame {
 		}
 		catch (SlickException e) {
 			System.out.println("A Slick Exception! Here's the message: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
