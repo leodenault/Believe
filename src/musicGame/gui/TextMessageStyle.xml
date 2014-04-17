@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../../../config/nifty-styles-1.3.xsd">
+	
+	<style id="textMessage-border">
+		<attributes backgroundColor="#898989" childLayout="center" width="500px" height="100px"
+			padding="5px"/>
+	</style>
+	<style id="textMessage-background">
+		<attributes backgroundColor="#000000" childLayout="center" width="100%" height="100%"/>
+	</style>
+	<style id="textMessage-text">
+		<attributes color="#ffffff" font="aurulent-sans-16.fnt"/>
+	</style>
+</nifty-styles>

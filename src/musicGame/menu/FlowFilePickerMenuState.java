@@ -17,6 +17,8 @@ import org.newdawn.slick.state.StateBasedGame;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.layout.manager.CenterLayout;
+import de.lessvoid.nifty.layout.manager.VerticalLayout;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -25,7 +27,7 @@ public class FlowFilePickerMenuState extends MenuState implements ScreenControll
 	private static final String SCREEN_ID = "FlowFilePickerMenuState";
 
 	private MenuSelection back;
-	private Element fileListPanel;
+	private Element contentPanel;
 	
 	@Override
 	public void keyPressed(int key, char c) {
@@ -86,24 +88,30 @@ public class FlowFilePickerMenuState extends MenuState implements ScreenControll
 		
 		try {
 			File[] files = Util.getFlowFiles();
-			for (final File file : files) {
-				final String name = file.getName().substring(0, file.getName().lastIndexOf("."));
-				
-				ControlBuilder builder = new ControlBuilder(name, "menuSelection") {{
-					parameter("label", name);
-					marginBottom("10px");
-					style("menuSelectionFlowFile-border");
-				}};
-				
-				MenuSelection selection = builder.build(this.getNifty(), screen, this.fileListPanel)
-						.getControl(MenuSelection.class);
-				this.selections.add(selection);
-				selection.setMenuAction(new LoadGameAction(file.getCanonicalPath(), game));
-				selection.setStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-border");
-				selection.setActiveStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-active-border");
+			
+			if (files == null || files.length == 0) {
+				this.showMessage("Looks like there aren't any flow files to load!", screen);
+			} else {
+				for (final File file : files) {
+					final String name = file.getName().substring(0, file.getName().lastIndexOf("."));
+
+					ControlBuilder builder = new ControlBuilder(name, "menuSelection") {{
+						parameter("label", name);
+						marginBottom("10px");
+						style("menuSelectionFlowFile-border");
+					}};
+
+					this.contentPanel.setLayoutManager(new VerticalLayout());
+					MenuSelection selection = builder.build(this.getNifty(), screen, this.contentPanel)
+							.getControl(MenuSelection.class);
+					this.selections.add(selection);
+					selection.setMenuAction(new LoadGameAction(file.getCanonicalPath(), game));
+					selection.setStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-border");
+					selection.setActiveStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-active-border");
+				}
 			}
 		} catch (SecurityException | IOException e) {
-			// TODO: Handle exception gracefully if file not found.
+			this.showMessage("Something went wrong when trying to find the flow files!", screen);
 		}
 		
 		if (!this.selections.getSelections().isEmpty()) {
@@ -139,14 +147,23 @@ public class FlowFilePickerMenuState extends MenuState implements ScreenControll
 	}
 	
 	private void resetUi(Screen screen) {
-		this.fileListPanel = screen.findElementByName("fileListPanel");
+		this.contentPanel = screen.findElementByName("contentPanel");
 		this.back = screen.findControl("back", MenuSelection.class);
 		this.back.setPlaySound(true);
 		
 		this.back.deselect();
 		this.selections.clear();
-		for (Element element : fileListPanel.getElements()) {
+		for (Element element : contentPanel.getElements()) {
 			element.markForRemoval();
 		}
+	}
+	
+	private void showMessage(final String message, Screen screen) {
+		ControlBuilder builder = new ControlBuilder("textMessage") {{
+			parameter("label", message);
+		}};
+		
+		this.contentPanel.setLayoutManager(new CenterLayout());
+		builder.build(this.getNifty(), screen, this.contentPanel);
 	}
 }
