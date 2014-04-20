@@ -3,10 +3,12 @@ package musicGame.menu;
 import java.io.File;
 import java.io.IOException;
 
+import musicGame.core.GameStateBase;
 import musicGame.core.Util;
 import musicGame.core.action.ChangeStateAction;
 import musicGame.core.action.LoadGameAction;
 import musicGame.gui.MenuSelection;
+import musicGame.gui.VerticalKeyboardScrollpanel;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -22,45 +24,31 @@ import de.lessvoid.nifty.layout.manager.VerticalLayout;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class FlowFilePickerMenuState extends MenuState implements ScreenController {
+public class FlowFilePickerMenuState extends GameStateBase implements ScreenController {
 
 	private static final String SCREEN_ID = "FlowFilePickerMenuState";
 
 	private MenuSelection back;
 	private Element contentPanel;
+	private VerticalKeyboardScrollpanel scrollPanel;
 	
 	@Override
 	public void keyPressed(int key, char c) {
 		super.keyPressed(key, c);
 		switch (key) {
-			case Input.KEY_DOWN:
-				if (!this.back.isSelected()) {
-					this.selections.selectNext();
-				}
-				break;
-			case Input.KEY_UP:
-				if (!this.back.isSelected()) {
-					this.selections.selectPrevious();
-				}
-				break;
 			case Input.KEY_LEFT:
 			case Input.KEY_RIGHT:
-				MenuSelection selection;
-				if ((selection = this.selections.getCurrentSelection()) != null) {
-					if (this.back.isSelected()) {
-						selection.select();
-						this.back.deselect();
-					} else {
-						selection.deselect();
-						this.back.select();
-					}
+				if (this.back.isSelected()) {
+					this.scrollPanel.onFocus(true);
+					this.back.deselect();
+				} else {
+					this.scrollPanel.onFocus(false);
+					this.back.select();
 				}
 				break;
 			case Input.KEY_ENTER:
 				if (this.back.isSelected()) {
 					this.back.activate();
-				} else {
-					this.selections.getCurrentSelection().activate();
 				}
 				break;
 		}
@@ -84,13 +72,14 @@ public class FlowFilePickerMenuState extends MenuState implements ScreenControll
 		// TODO: Enable scrolling
 		// TODO: Take care of really long file names.
 		Screen screen = this.getNifty().getScreen(SCREEN_ID);
-		resetUi(screen);
+		this.resetUi(screen);
 		
 		try {
 			File[] files = Util.getFlowFiles();
 			
 			if (files == null || files.length == 0) {
 				this.showMessage("Looks like there aren't any flow files to load!", screen);
+				this.back.select();
 			} else {
 				for (final File file : files) {
 					final String name = file.getName().substring(0, file.getName().lastIndexOf("."));
@@ -102,25 +91,15 @@ public class FlowFilePickerMenuState extends MenuState implements ScreenControll
 					}};
 
 					this.contentPanel.setLayoutManager(new VerticalLayout());
-					MenuSelection selection = builder.build(this.getNifty(), screen, this.contentPanel)
-							.getControl(MenuSelection.class);
-					this.selections.add(selection);
-					selection.setMenuAction(new LoadGameAction(file.getCanonicalPath(), game));
-					selection.setStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-border");
-					selection.setActiveStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-active-border");
+					this.scrollPanel.add(builder, new LoadGameAction(file.getCanonicalPath(), game));
 				}
+				this.scrollPanel.onFocus(true);
 			}
 		} catch (SecurityException | IOException e) {
 			this.showMessage("Something went wrong when trying to find the flow files!", screen);
 		}
-		
-		if (!this.selections.getSelections().isEmpty()) {
-			this.selections.select(0);
-		} else {
-			this.back.select();
-		}
-		this.selections.setPlaySound(true);
 		this.back.setMenuAction(new ChangeStateAction(MainMenuState.class, game));
+		this.scrollPanel.setPlaySound(true);
 	}
 
 	@Override
@@ -147,15 +126,14 @@ public class FlowFilePickerMenuState extends MenuState implements ScreenControll
 	}
 	
 	private void resetUi(Screen screen) {
+		this.scrollPanel = screen.findControl("contentPanel", VerticalKeyboardScrollpanel.class);
+		this.scrollPanel.onFocus(true);
 		this.contentPanel = screen.findElementByName("contentPanel");
 		this.back = screen.findControl("back", MenuSelection.class);
 		this.back.setPlaySound(true);
 		
 		this.back.deselect();
-		this.selections.clear();
-		for (Element element : contentPanel.getElements()) {
-			element.markForRemoval();
-		}
+		this.scrollPanel.clear();
 	}
 	
 	private void showMessage(final String message, Screen screen) {

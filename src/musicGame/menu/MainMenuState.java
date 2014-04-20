@@ -1,7 +1,9 @@
 package musicGame.menu;
 
+import musicGame.core.GameStateBase;
 import musicGame.core.action.ChangeStateAction;
 import musicGame.gui.MenuSelection;
+import musicGame.gui.MenuSelectionGroup;
 import musicGame.menu.action.ExitGameAction;
 
 import org.newdawn.slick.GameContainer;
@@ -14,10 +16,11 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class MainMenuState extends MenuState implements ScreenController {
+public class MainMenuState extends GameStateBase implements ScreenController {
 
 	private static final String SCREEN_ID = "MainMenuState";
 	
+	private MenuSelectionGroup selections;
 	private MenuSelection playDefaultLevel;
 	private MenuSelection playCustomLevel;
 	private MenuSelection exit;
@@ -52,6 +55,7 @@ public class MainMenuState extends MenuState implements ScreenController {
 		this.playCustomLevel.setMenuAction(new ChangeStateAction(FlowFilePickerMenuState.class, game));
 		this.exit.setMenuAction(new ExitGameAction(container));
 		
+		this.selections = new MenuSelectionGroup();
 		this.selections.add(this.playDefaultLevel);
 		this.selections.add(this.playCustomLevel);
 		this.selections.add(this.exit);

@@ -13,6 +13,7 @@ public class MenuSelectionGroup implements Iterable<MenuSelection> {
 		public void previousSelected(AbstractComponent previous);
 	}
 	
+	private boolean playSound;
 	private LinkedList<MenuSelection> selections;
 	private MenuSelection currentSelection;
 	private List<Listener> listeners;
@@ -35,6 +36,7 @@ public class MenuSelectionGroup implements Iterable<MenuSelection> {
 	}
 	
 	public void setPlaySound(boolean playSound) {
+		this.playSound = playSound;
 		for (MenuSelection selection : this.selections) {
 			selection.setPlaySound(playSound);
 		}
@@ -42,6 +44,7 @@ public class MenuSelectionGroup implements Iterable<MenuSelection> {
 
 	public void add(MenuSelection selection) {
 		this.selections.add(selection);
+		selection.setPlaySound(this.playSound);
 		if (this.selections.size() == 1) {
 			this.currentSelection = selection;
 		}

@@ -5,8 +5,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-import musicGame.gui.MenuSelection;
-import musicGame.gui.MenuSelectionGroup;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -43,6 +41,7 @@ public class MenuSelectionGroupTest {
 	
 	@Test
 	public void groupShouldContainOneElementWhenAddingInEmptyGroup() {
+		mockery.checking(new Expectations() {{ ignoring(selection).setPlaySound(false); }});
 		this.group.add(selection);
 		assertThat(this.group.getSelections(), hasSize(1));
 		assertThat(this.group.getCurrentSelection(), is(selection));
@@ -55,6 +54,10 @@ public class MenuSelectionGroupTest {
 	
 	@Test
 	public void currentSelectionShouldUpdateWhenSelectingDifferentItem() {
+		mockery.checking(new Expectations() {{
+			ignoring(selection).setPlaySound(false);
+			ignoring(selection2).setPlaySound(false);
+		}});
 		this.group.add(selection);
 		this.group.add(selection2);
 		mockery.checking(new Expectations() {{
@@ -77,6 +80,7 @@ public class MenuSelectionGroupTest {
 	
 	@Test
 	public void selectNextShouldSelectSameElementWhenGroupContainsSingleElement() {
+		mockery.checking(new Expectations() {{ ignoring(selection).setPlaySound(false); }});
 		this.group.add(selection);
 		mockery.checking(new Expectations() {{
 			oneOf(selection).deselect();
@@ -88,6 +92,7 @@ public class MenuSelectionGroupTest {
 	
 	@Test
 	public void selectPreviousShouldSelectSameElementWhenGroupContainsSingleElement() {
+		mockery.checking(new Expectations() {{ ignoring(selection).setPlaySound(false); }});
 		this.group.add(selection);
 		mockery.checking(new Expectations() {{
 			oneOf(selection).deselect();
@@ -99,6 +104,10 @@ public class MenuSelectionGroupTest {
 	
 	@Test
 	public void selectNextShouldSelectNextItemInGroup() {
+		mockery.checking(new Expectations() {{
+			ignoring(selection).setPlaySound(false);
+			ignoring(selection2).setPlaySound(false);
+		}});
 		this.group.add(selection);
 		this.group.add(selection2);
 		mockery.checking(new Expectations() {{
@@ -111,6 +120,10 @@ public class MenuSelectionGroupTest {
 	
 	@Test
 	public void selectPreviousShouldSelectNextItemInGroup() {
+		mockery.checking(new Expectations() {{
+			ignoring(selection).setPlaySound(false);
+			ignoring(selection2).setPlaySound(false);
+		}});
 		this.group.add(selection);
 		this.group.add(selection2);
 		mockery.checking(new Expectations() {{
@@ -126,6 +139,10 @@ public class MenuSelectionGroupTest {
 
 	@Test
 	public void selectNextShouldSelectFirstItemWhenAtEndOfGroup() {
+		mockery.checking(new Expectations() {{
+			ignoring(selection).setPlaySound(false);
+			ignoring(selection2).setPlaySound(false);
+		}});
 		this.group.add(selection);
 		this.group.add(selection2);
 		mockery.checking(new Expectations() {{
@@ -141,6 +158,10 @@ public class MenuSelectionGroupTest {
 	
 	@Test
 	public void selectPreviousShouldSelectLastItemWhenAtBeginningOfGroup() {
+		mockery.checking(new Expectations() {{
+			ignoring(selection).setPlaySound(false);
+			ignoring(selection2).setPlaySound(false);
+		}});
 		this.group.add(selection);
 		this.group.add(selection2);
 		mockery.checking(new Expectations() {{
@@ -153,6 +174,9 @@ public class MenuSelectionGroupTest {
 	
 	@Test
 	public void setPlaySoundShouldSetPlaySoundOnEachMenuSelection() {
+		mockery.checking(new Expectations() {{
+			ignoring(selection).setPlaySound(false);
+		}});
 		this.group.add(selection);
 		this.group.add(selection);
 		mockery.checking(new Expectations() {{
@@ -163,6 +187,7 @@ public class MenuSelectionGroupTest {
 	
 	@Test
 	public void clearShouldRemoveAllSelections() {
+		mockery.checking(new Expectations() {{ ignoring(selection).setPlaySound(false); }});
 		this.group.add(selection);
 		this.group.add(selection);
 		assertThat(this.group.getSelections(), hasSize(2));
@@ -175,5 +200,22 @@ public class MenuSelectionGroupTest {
 		assertThat(this.group.getSelections(), is(empty()));
 		this.group.clear();
 		assertThat(this.group.getSelections(), is(empty()));
+	}
+	
+	@Test
+	public void addShouldSetPlaySoundToFalseIfNotNeeded() {
+		mockery.checking(new Expectations() {{
+			oneOf(selection).setPlaySound(false);
+		}});
+		this.group.add(selection);
+	}
+	
+	@Test
+	public void addShouldSetPlaySoundToTrueIfNeeded() {
+		mockery.checking(new Expectations() {{
+			oneOf(selection).setPlaySound(true);
+		}});
+		this.group.setPlaySound(true);
+		this.group.add(selection);
 	}
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="../../..config/nifty-1.3.xsd">
+	xsi:noNamespaceSchemaLocation="../../../config/nifty-1.3.xsd">
 	
 	<controlDefinition name="textMessage" controller="musicGame.gui.TextMessage">
 		<panel id="#border" style="textMessage-border">

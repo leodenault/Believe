@@ -95,6 +95,10 @@ public class MenuSelection implements Controller {
 	public boolean isSelected() {
 		return this.isSelected;
 	}
+	
+	public boolean isPlayingSound() {
+		return playSound;
+	}
 
 	@Override
 	public void bind(Nifty nifty, Screen screen, Element element,
