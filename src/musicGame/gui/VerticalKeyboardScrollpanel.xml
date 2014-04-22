@@ -11,7 +11,7 @@
 					<panel id="#childRoot" style="verticalKeyboardScrollpanel-childRoot"/>
 				</panel>
 				<panel id="#scrollArea" style="verticalKeyboardScrollpanel-scrollArea">
-					<panel id="scroller" style="verticalKeyboardScrollpanel-scroller"/>
+					<panel id="#scroller" style="verticalKeyboardScrollpanel-scroller"/>
 				</panel>
 			</panel>
 		</panel>

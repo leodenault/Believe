@@ -17,9 +17,9 @@
 		<attributes childLayout="vertical" width="100%" height="100%" x="0" y="0"/>
 	</style>
 	<style id="verticalKeyboardScrollpanel-scrollArea">
-		<attributes backgroundColor="#000057" childLayout="center" padding="2px" width="3%" height="100%"/>
+		<attributes backgroundColor="#000057" childLayout="absolute" padding="2px" width="3%" height="100%"/>
 	</style>
 	<style id="verticalKeyboardScrollpanel-scroller">
-		<attributes backgroundColor="#00ff00" childLayout="center" width="100%" height="70px"/>
+		<attributes backgroundColor="#00ff00" childLayout="center" x="0" y="0" width="100%" height="70px"/>
 	</style>
 </nifty-styles>

@@ -199,9 +199,10 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 		int newPosition;
 		
 		// Check if we're wrapping
-		if (selection.equals(this.firstSelection)) {
-			newPosition = this.childRoot.getHeight() + this.childRoot.getY()
-					- (this.lastSelection.getHeight() + this.lastSelection.getY());
+		int lastSelectionBottom = this.lastSelection.getHeight() + this.lastSelection.getY();
+		int containerWindowBottom = this.childRoot.getHeight() + this.childRoot.getY();
+		if (selection.equals(this.firstSelection) && lastSelectionBottom > containerWindowBottom) {
+			newPosition = containerWindowBottom - lastSelectionBottom;
 			this.layoutElements(newPosition);
 		} else if (this.shouldScrollUp()) {
 			int distance = this.getScrollDistance();
