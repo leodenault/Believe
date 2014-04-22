@@ -86,12 +86,14 @@ public class FlowFilePickerMenuState extends GameStateBase implements ScreenCont
 
 					ControlBuilder builder = new ControlBuilder(name, "menuSelection") {{
 						parameter("label", name);
-						marginBottom("10px");
 						style("menuSelectionFlowFile-border");
 					}};
 
 					this.contentPanel.setLayoutManager(new VerticalLayout());
-					this.scrollPanel.add(builder, new LoadGameAction(file.getCanonicalPath(), game));
+					MenuSelection selection = this.scrollPanel.add(builder);
+					selection.setMenuAction(new LoadGameAction(file.getCanonicalPath(), game));
+					selection.setStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-border");
+					selection.setActiveStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-active-border");
 				}
 				this.scrollPanel.onFocus(true);
 			}

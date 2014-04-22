@@ -9,9 +9,12 @@
 	<style id="verticalKeyboardScrollpanel-background">
 		<attributes backgroundColor="#000000" childLayout="horizontal" width="100%" height="100%"/>
 	</style>
+	<style id="verticalKeyboardScrollpanel-childContainer">
+		<attributes childLayout="absolute" marginLeft="1%" marginRight="1%" width="95%" height="100%"
+			childClip="true"/>
+	</style>
 	<style id="verticalKeyboardScrollpanel-childRoot">
-		<attributes childLayout="vertical" width="95%" height="100%" childClip="true"
-			marginLeft="1%" marginRight="1%"/>
+		<attributes childLayout="vertical" width="100%" height="100%" x="0" y="0"/>
 	</style>
 	<style id="verticalKeyboardScrollpanel-scrollArea">
 		<attributes backgroundColor="#000057" childLayout="center" padding="2px" width="3%" height="100%"/>
