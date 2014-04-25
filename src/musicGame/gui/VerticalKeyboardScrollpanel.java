@@ -29,6 +29,7 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 	private MenuSelectionGroup selections;
 	private Element lastSelection;
 	private Element firstSelection;
+	private Element scroller;
 	private Map<MenuSelection, Element> selectionElementMap;
 	
 	@Override
@@ -37,6 +38,8 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 		this.nifty = nifty;
 		this.screen = screen;
 		this.childRoot = element.findElementByName("#childRoot");
+		this.scroller = element.findElementByName("#scroller");
+		this.scroller.hide();
 		
 		screen.addKeyboardInputHandler(new NiftyInputMapping() {
 			@Override
@@ -130,6 +133,15 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 		if (this.firstSelection == null) {
 			this.firstSelection = menuSelection;
 		}
+		
+		// Show the scroller if the elements exceed the height of the container
+		int lastSelectionBottom = this.lastSelection.getHeight() + this.lastSelection.getY();
+		Element container = this.childRoot.getParent();
+		int containerY = container.getY();
+		int containerHeight = container.getHeight();
+		if (lastSelectionBottom - containerY > containerHeight) {
+			this.scroller.show();
+		}
 		return selection;
 	}
 	
@@ -140,6 +152,7 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 		this.selections.clear();
 		this.lastSelection = null;
 		this.firstSelection = null;
+		this.scroller.hide();
 	}
 	
 	public void setPlaySound(boolean playSound) {
@@ -203,6 +216,7 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 		int containerWindowBottom = this.childRoot.getHeight() + this.childRoot.getY();
 		if (selection.equals(this.firstSelection) && lastSelectionBottom > containerWindowBottom) {
 			newPosition = containerWindowBottom - lastSelectionBottom;
+			this.setScroller(1);
 			this.layoutElements(newPosition);
 		} else if (this.shouldScrollUp()) {
 			int distance = this.getScrollDistance();
@@ -210,9 +224,16 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 			// Clip to top of first selection if needed
 			if (this.firstSelection.getY() + distance >= 0) {
 				newPosition = 0;
+				this.setScroller(0);
 			} else {
 				int position = this.childRoot.getConstraintY().getValueAsInt(0);
 				newPosition = position + distance;
+				// Set the scroller
+				float newScrollerPosition = this.childRoot.getParent().getY() -
+						this.firstSelection.getY() - distance;
+				float scrollableDistance = this.lastSelection.getY() - this.firstSelection.getY() +
+						this.lastSelection.getHeight() - this.childRoot.getHeight();
+				this.setScroller(newScrollerPosition / scrollableDistance);
 			}
 			this.layoutElements(newPosition);
 		}
@@ -224,6 +245,7 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 		
 		// Check if we're wrapping
 		if (selection.equals(this.lastSelection)) {
+			this.setScroller(0);
 			this.layoutElements(newPosition);
 		} else if (this.shouldScrollDown()) {
 			int distance = this.getScrollDistance();
@@ -233,16 +255,29 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 					<= this.childRoot.getHeight() + this.childRoot.getParent().getY()) {
 				newPosition = this.childRoot.getHeight() + this.childRoot.getY()
 						- (this.lastSelection.getHeight() + this.lastSelection.getY());
+				this.setScroller(1);
 			} else {
 				int position = this.childRoot.getConstraintY().getValueAsInt(0);
 				newPosition = position - distance;
+				// Set the scroller
+				float newScrollerPosition = this.childRoot.getParent().getY() -
+						this.firstSelection.getY() + distance;
+				float scrollableDistance = this.lastSelection.getY() - this.firstSelection.getY() +
+						this.lastSelection.getHeight() - this.childRoot.getHeight();
+				this.setScroller(newScrollerPosition / scrollableDistance);
 			}
 			this.layoutElements(newPosition);
 		}
+	}
+
+	private void setScroller(float percentage) {
+		int position = (int)Math.floor((this.childRoot.getHeight() - this.scroller.getHeight()) * percentage);
+		this.scroller.setConstraintY(SizeValue.px(position));
 	}
 	
 	private void layoutElements(int childRootPosition) {
 		this.childRoot.setConstraintY(SizeValue.px(childRootPosition));
 		this.childRoot.getParent().layoutElements();
+		this.scroller.getParent().layoutElements();
 	}
 }
