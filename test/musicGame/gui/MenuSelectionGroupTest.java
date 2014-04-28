@@ -68,36 +68,18 @@ public class MenuSelectionGroupTest {
 		assertThat(this.group.getCurrentSelection(), is(selection2));
 	}
 	
-	@Test(expected=IndexOutOfBoundsException.class)
-	public void selectNextShouldThrowIndexOutOfBOundsExceptionWhenEmpty() {
-		this.group.selectNext();
-	}
-	
-	@Test(expected=IndexOutOfBoundsException.class)
-	public void selectPreviousShouldThrowIndexOutOfBOundsExceptionWhenEmpty() {
-		this.group.selectPrevious();
-	}
-	
 	@Test
-	public void selectNextShouldSelectSameElementWhenGroupContainsSingleElement() {
+	public void selectNextShouldDoNothingWhenGroupContainsSingleElement() {
 		mockery.checking(new Expectations() {{ ignoring(selection).setPlaySound(false); }});
 		this.group.add(selection);
-		mockery.checking(new Expectations() {{
-			oneOf(selection).deselect();
-			oneOf(selection).select();
-		}});
 		this.group.selectNext();
 		assertThat(this.group.getCurrentSelection(), is(selection));
 	}
 	
 	@Test
-	public void selectPreviousShouldSelectSameElementWhenGroupContainsSingleElement() {
+	public void selectPreviousShouldDoNothingWhenGroupContainsSingleElement() {
 		mockery.checking(new Expectations() {{ ignoring(selection).setPlaySound(false); }});
 		this.group.add(selection);
-		mockery.checking(new Expectations() {{
-			oneOf(selection).deselect();
-			oneOf(selection).select();
-		}});
 		this.group.selectPrevious();
 		assertThat(this.group.getCurrentSelection(), is(selection));
 	}

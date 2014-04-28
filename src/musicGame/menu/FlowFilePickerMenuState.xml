@@ -17,8 +17,8 @@
 			<panel align="left" childLayout="center" marginBottom="10px">
 				<control id="back" name="menuSelection" label="Back" width="200px" height="50px"/>
 			</panel>
-			<panel align="center" childLayout="center" paddingLeft="50px">
-				<control id="contentPanel" name="verticalKeyboardScrollpanel" height="500px" gap="10px"/>
+			<panel id="contentPanel" align="center" childLayout="center" paddingLeft="50px">
+				<control id="scrollPanel" name="verticalKeyboardScrollpanel" height="500px" gap="10px"/>
 			</panel>
 		</layer>
 	</screen>

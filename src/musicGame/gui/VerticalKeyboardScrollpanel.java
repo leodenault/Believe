@@ -162,6 +162,10 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 		this.selections.setPlaySound(playSound);
 	}
 	
+	public boolean isEmpty() {
+		return this.selections.isEmpty();
+	}
+	
 	// Used for testing
 	protected void setScroller(Element scroller) {
 		this.scroller = scroller;
@@ -219,31 +223,33 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 		Element selection = this.selectionElementMap.get(this.selections.getCurrentSelection());
 		int newPosition;
 		
-		// Check if we're wrapping
-		int lastSelectionBottom = this.lastSelection.getHeight() + this.lastSelection.getY();
-		int containerWindowBottom = this.childRoot.getHeight() + this.childRoot.getY();
-		if (selection.equals(this.firstSelection) && lastSelectionBottom > containerWindowBottom) {
-			newPosition = containerWindowBottom - lastSelectionBottom;
-			this.setScroller(1);
-			this.layoutElements(newPosition);
-		} else if (this.shouldScrollUp()) {
-			int distance = this.getScrollDistance();
-			
-			// Clip to top of first selection if needed
-			if (this.firstSelection.getY() + distance >= 0) {
-				newPosition = 0;
-				this.setScroller(0);
-			} else {
-				int position = this.childRoot.getConstraintY().getValueAsInt(0);
-				newPosition = position + distance;
-				// Set the scroller
-				float newScrollerPosition = this.childRoot.getParent().getY() -
-						this.firstSelection.getY() - distance;
-				float scrollableDistance = this.lastSelection.getY() - this.firstSelection.getY() +
-						this.lastSelection.getHeight() - this.childRoot.getHeight();
-				this.setScroller(newScrollerPosition / scrollableDistance);
+		if (selection != null && this.lastSelection != null) {
+			// Check if we're wrapping
+			int lastSelectionBottom = this.lastSelection.getHeight() + this.lastSelection.getY();
+			int containerWindowBottom = this.childRoot.getHeight() + this.childRoot.getY();
+			if (selection.equals(this.firstSelection) && lastSelectionBottom > containerWindowBottom) {
+				newPosition = containerWindowBottom - lastSelectionBottom;
+				this.setScroller(1);
+				this.layoutElements(newPosition);
+			} else if (this.shouldScrollUp()) {
+				int distance = this.getScrollDistance();
+
+				// Clip to top of first selection if needed
+				if (this.firstSelection.getY() + distance >= 0) {
+					newPosition = 0;
+					this.setScroller(0);
+				} else {
+					int position = this.childRoot.getConstraintY().getValueAsInt(0);
+					newPosition = position + distance;
+					// Set the scroller
+					float newScrollerPosition = this.childRoot.getParent().getY() -
+							this.firstSelection.getY() - distance;
+					float scrollableDistance = this.lastSelection.getY() - this.firstSelection.getY() +
+							this.lastSelection.getHeight() - this.childRoot.getHeight();
+					this.setScroller(newScrollerPosition / scrollableDistance);
+				}
+				this.layoutElements(newPosition);
 			}
-			this.layoutElements(newPosition);
 		}
 	}
 	
@@ -252,7 +258,7 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 		int newPosition = 0;
 		
 		// Check if we're wrapping
-		if (selection.equals(this.lastSelection)) {
+		if (selection != null && selection.equals(this.lastSelection)) {
 			this.setScroller(0);
 			this.layoutElements(newPosition);
 		} else if (this.shouldScrollDown()) {

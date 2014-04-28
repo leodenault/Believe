@@ -177,4 +177,18 @@ public class VerticalKeyboardScrollpanelTest {
 	public void isPastMiddleShouldReturnTrueWhenPastMiddleGoingUp() {
 		assertThat(this.scrollPanel.isPastMiddle(false, 300, 9, 654), is(true));
 	}
+	
+	@Test
+	public void scrollerShouldBeVisibleWhenLastSelectionOutsideOfWindow() {
+		this.expectationsForAdd(selectionBuilder, selection, menuSelection);
+		this.scrollPanel.setScroller(this.scroller);
+		mockery.checking(new Expectations() {{
+			oneOf(selection).getHeight(); will(returnValue(500));
+			oneOf(selection).getY(); will(returnValue(0));
+			oneOf(parentContainer).getY(); will(returnValue(0));
+			oneOf(parentContainer).getHeight(); will(returnValue(250));
+			oneOf(scroller).show();
+		}});
+		this.scrollPanel.add(selectionBuilder);
+	}
 }

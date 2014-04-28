@@ -19,8 +19,6 @@ import org.newdawn.slick.state.StateBasedGame;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.layout.manager.CenterLayout;
-import de.lessvoid.nifty.layout.manager.VerticalLayout;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -29,7 +27,8 @@ public class FlowFilePickerMenuState extends GameStateBase implements ScreenCont
 	private static final String SCREEN_ID = "FlowFilePickerMenuState";
 
 	private MenuSelection back;
-	private Element contentPanel;
+	private Element scrollPanelElement;
+	private Element noFilesMessage;
 	private VerticalKeyboardScrollpanel scrollPanel;
 	
 	@Override
@@ -38,12 +37,14 @@ public class FlowFilePickerMenuState extends GameStateBase implements ScreenCont
 		switch (key) {
 			case Input.KEY_LEFT:
 			case Input.KEY_RIGHT:
-				if (this.back.isSelected()) {
-					this.scrollPanel.onFocus(true);
-					this.back.deselect();
-				} else {
-					this.scrollPanel.onFocus(false);
-					this.back.select();
+				if (!this.scrollPanel.isEmpty()) {
+					if (this.back.isSelected()) {
+						this.scrollPanel.onFocus(true);
+						this.back.deselect();
+					} else {
+						this.scrollPanel.onFocus(false);
+						this.back.select();
+					}
 				}
 				break;
 			case Input.KEY_ENTER:
@@ -79,7 +80,11 @@ public class FlowFilePickerMenuState extends GameStateBase implements ScreenCont
 				this.showMessage("Looks like there aren't any flow files to load!", screen);
 				this.back.select();
 			} else {
-				for (final File file : files) {
+				if (this.noFilesMessage != null) {
+					this.noFilesMessage.markForRemoval();
+				}
+				
+				for (File file : files) {
 					final String name = file.getName().substring(0, file.getName().lastIndexOf("."));
 
 					ControlBuilder builder = new ControlBuilder(name, "menuSelection") {{
@@ -87,13 +92,12 @@ public class FlowFilePickerMenuState extends GameStateBase implements ScreenCont
 						style("menuSelectionFlowFile-border");
 					}};
 
-					this.contentPanel.setLayoutManager(new VerticalLayout());
 					MenuSelection selection = this.scrollPanel.add(builder);
 					selection.setMenuAction(new LoadGameAction(file.getCanonicalPath(), game));
 					selection.setStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-border");
 					selection.setActiveStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-active-border");
+					this.scrollPanel.onFocus(true);
 				}
-				this.scrollPanel.onFocus(true);
 			}
 		} catch (SecurityException | IOException e) {
 			this.showMessage("Something went wrong when trying to find the flow files!", screen);
@@ -128,7 +132,7 @@ public class FlowFilePickerMenuState extends GameStateBase implements ScreenCont
 	private void resetUi(Screen screen) {
 		this.scrollPanel = screen.findControl("contentPanel", VerticalKeyboardScrollpanel.class);
 		this.scrollPanel.onFocus(true);
-		this.contentPanel = screen.findElementByName("contentPanel");
+		this.scrollPanelElement = screen.findElementByName("scrollPanel");
 		this.back = screen.findControl("back", MenuSelection.class);
 		this.back.setPlaySound(true);
 		
@@ -141,7 +145,6 @@ public class FlowFilePickerMenuState extends GameStateBase implements ScreenCont
 			parameter("label", message);
 		}};
 		
-		this.contentPanel.setLayoutManager(new CenterLayout());
-		builder.build(this.getNifty(), screen, this.contentPanel);
+		this.noFilesMessage = builder.build(this.getNifty(), screen, this.scrollPanelElement);
 	}
 }
