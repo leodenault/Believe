@@ -69,7 +69,6 @@ public class FlowFilePickerMenuState extends GameStateBase implements ScreenCont
 	protected void enterState(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		super.enterState(container, game);
-		// TODO: Take care of really long file names.
 		Screen screen = this.getNifty().getScreen(SCREEN_ID);
 		this.resetUi(screen);
 		

@@ -10,16 +10,16 @@
 		<attributes backgroundColor="#ffffff" childLayout="center" width="500px" height="100px" padding="5px"/>
 	</style>
 	<style id="menuSelection-background">
-		<attributes backgroundColor="#0cffb2" childLayout="center" width="100%" height="100%"/>
+		<attributes backgroundColor="#0cffb2" childLayout="center" width="100%" height="100%" padding="5px"/>
 	</style>
 	<style id="menuSelection-active-background">
-		<attributes backgroundColor="#ff0000" childLayout="center" width="100%" height="100%"/>
+		<attributes backgroundColor="#ff0000" childLayout="center" width="100%" height="100%" padding="5px"/>
 	</style>
 	<style id="menuSelection-text">
-		<attributes color="#cf0498" font="aurulent-sans-16.fnt"/>
+		<attributes color="#cf0498" wrap="true" width="100%" height="100%" font="aurulent-sans-16.fnt"/>
 	</style>
 	<style id="menuSelection-active-text">
-		<attributes color="#ffffff" font="aurulent-sans-16.fnt"/>
+		<attributes color="#ffffff" wrap="true" width="100%" height="100%" font="aurulent-sans-16.fnt"/>
 	</style>
 	
 	<style id="menuSelectionFlowFile-border">
