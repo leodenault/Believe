@@ -77,7 +77,7 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 	
 	@Override
 	public boolean keyEvent(NiftyInputEvent inputEvent) {
-		if (inputEvent== null) {
+		if (inputEvent == null) {
 			return false;
 		}
 		
@@ -92,7 +92,10 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 					this.selections.selectPrevious();
 					break;
 				case Activate:
-					this.selections.getCurrentSelection().activate();
+					MenuSelection current;
+					if ((current = this.selections.getCurrentSelection()) != null) { 
+						current.activate();
+					}
 					break;
 				default:
 					break;
@@ -136,7 +139,7 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 		
 		// Show the scroller if the elements exceed the height of the container
 		int lastSelectionBottom = this.lastSelection.getHeight() + this.lastSelection.getY();
-		Element container = this.childRoot.getParent();
+		Element container = menuSelection.getParent().getParent();
 		int containerY = container.getY();
 		int containerHeight = container.getHeight();
 		if (lastSelectionBottom - containerY > containerHeight) {
@@ -157,6 +160,11 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 	
 	public void setPlaySound(boolean playSound) {
 		this.selections.setPlaySound(playSound);
+	}
+	
+	// Used for testing
+	protected void setScroller(Element scroller) {
+		this.scroller = scroller;
 	}
 	
 	protected boolean shouldScrollDown() {
