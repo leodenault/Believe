@@ -10,7 +10,7 @@
 		<attributes marginBottom="50px"/>
 	</style>
 				
-	<screen id="MainMenuState" controller="musicGame.menu.MainMenuState">
+	<screen id="MainMenuState" controller="musicGame.menu.MainMenuScreen">
 		<layer id="layer" childLayout="center">
 			<panel childLayout="vertical">
 				<control id="playDefaultLevel" name="menuSelection" label="Play Default Level" style="marginPanel"/>

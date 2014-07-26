@@ -1,20 +1,15 @@
 package musicGame.core;
 
-import musicGame.core.action.ChangeStateAction;
 import musicGame.gui.MenuSelection;
 import musicGame.gui.MenuSelectionGroup;
-import musicGame.menu.MainMenuState;
-import musicGame.menu.action.MenuAction;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.nifty.screen.ScreenController;
 
-public class GamePausedOverlay implements ScreenController {
+public class GamePausedOverlay {
 	
 	private static final String SCREEN_NAME = "GamePausedOverlay";
 	
@@ -29,7 +24,7 @@ public class GamePausedOverlay implements ScreenController {
 	}
 	
 	public void init(Nifty nifty, StateBasedGame game) {
-		Screen screen = nifty.getScreen(SCREEN_NAME);
+		/*Screen screen = nifty.getScreen(SCREEN_NAME);
 		this.layer = screen.findElementByName("layer");
 		
 		this.exitLevel = screen.findControl("exitLevel", MenuSelection.class);
@@ -48,7 +43,7 @@ public class GamePausedOverlay implements ScreenController {
 		this.selections.add(this.restart);
 		
 		this.selections.select(0);
-		this.selections.setPlaySound(true);
+		this.selections.setPlaySound(true);*/
 	}
 	
 	public void prepareNifty(Nifty nifty, StateBasedGame game) {
@@ -83,17 +78,5 @@ public class GamePausedOverlay implements ScreenController {
 		this.selections.setPlaySound(false);
 		this.selections.select(0);
 		this.selections.setPlaySound(true);
-	}
-	
-	@Override
-	public void bind(Nifty nifty, Screen screen) {
-	}
-
-	@Override
-	public void onEndScreen() {
-	}
-
-	@Override
-	public void onStartScreen() {
 	}
 }

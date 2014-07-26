@@ -20,9 +20,8 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.nifty.screen.ScreenController;
 
-public class FlowFilePickerMenuState extends GameStateBase implements ScreenController {
+public class FlowFilePickerMenuState extends GameStateBase {
 
 	private static final String SCREEN_ID = "FlowFilePickerMenuState";
 
@@ -117,17 +116,6 @@ public class FlowFilePickerMenuState extends GameStateBase implements ScreenCont
 		
 	}
 
-	@Override
-	public void bind(Nifty nifty, Screen screen) {
-	}
-
-	@Override
-	public void onEndScreen() {
-	}
-
-	@Override
-	public void onStartScreen() {
-	}
 	
 	private void resetUi(Screen screen) {
 		this.scrollPanel = screen.findControl("contentPanel", VerticalKeyboardScrollpanel.class);

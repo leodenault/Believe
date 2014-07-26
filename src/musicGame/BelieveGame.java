@@ -1,7 +1,6 @@
 package musicGame;
 
 import musicGame.core.GameStateRegistry;
-import musicGame.core.PlayGameState;
 import musicGame.menu.FlowFilePickerMenuState;
 import musicGame.menu.MainMenuState;
 
@@ -17,7 +16,7 @@ public class BelieveGame extends NiftyStateBasedGame {
 	private static final int SCREEN_HEIGHT = 600;
 	
 	public BelieveGame(String title) {
-		super(title);
+		super(title, true);
 	}
 	
 	public static void main(String args[]) {
@@ -42,7 +41,7 @@ public class BelieveGame extends NiftyStateBasedGame {
 	public void initStatesList(GameContainer container) throws SlickException {
 		this.addState(new MainMenuState());
 		this.addState(new FlowFilePickerMenuState());
-		this.addState(new PlayGameState());
+//		this.addState(new PlayGameState());
 		this.enterState(GameStateRegistry.getInstance().getEntry(MainMenuState.class));
 	}
 	
