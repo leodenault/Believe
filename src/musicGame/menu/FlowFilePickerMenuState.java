@@ -11,12 +11,10 @@ import musicGame.gui.MenuSelection;
 import musicGame.gui.VerticalKeyboardScrollpanel;
 
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
@@ -29,6 +27,10 @@ public class FlowFilePickerMenuState extends GameStateBase {
 	private Element scrollPanelElement;
 	private Element noFilesMessage;
 	private VerticalKeyboardScrollpanel scrollPanel;
+	
+	public FlowFilePickerMenuState(String niftyXmlFile) {
+		super(niftyXmlFile);
+	}
 	
 	@Override
 	public void keyPressed(int key, char c) {
@@ -55,20 +57,9 @@ public class FlowFilePickerMenuState extends GameStateBase {
 	}
 
 	@Override
-	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
-		nifty.fromXml("musicGame/menu/FlowFilePickerMenuState.xml", SCREEN_ID);
-	}
-
-	@Override
-	protected void initGameAndGUI(GameContainer container, StateBasedGame game)
-			throws SlickException {
-		super.initGameAndGUI(container, game);
-	}
-
-	@Override
 	protected void enterState(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		super.enterState(container, game);
+		this.updateScreen();
 		Screen screen = this.getNifty().getScreen(SCREEN_ID);
 		this.resetUi(screen);
 		
@@ -105,18 +96,6 @@ public class FlowFilePickerMenuState extends GameStateBase {
 		this.scrollPanel.setPlaySound(true);
 	}
 
-	@Override
-	protected void renderGame(GameContainer container, StateBasedGame game,
-			Graphics g) throws SlickException {
-	}
-
-	@Override
-	protected void updateGame(GameContainer container, StateBasedGame game,
-			int delta) throws SlickException {
-		
-	}
-
-	
 	private void resetUi(Screen screen) {
 		this.scrollPanel = screen.findControl("contentPanel", VerticalKeyboardScrollpanel.class);
 		this.scrollPanel.onFocus(true);

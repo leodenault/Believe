@@ -6,8 +6,8 @@
 	<useStyles filename="musicGame/gui/MenuSelectionStyle.xml"/>
 	<useControls filename="musicGame/gui/MenuSelection.xml"/>
 	
-	<screen id="GamePausedOverlay" controller="musicGame.core.GamePausedScreen">
-		<layer id="layer" childLayout="center" visible="false" backgroundColor="#000000AA">
+	<screen id="PausedPlayGameState" controller="musicGame.core.PausedPlayGameScreen">
+		<layer id="layer" childLayout="center" backgroundColor="#000000AA">
 			<panel childLayout="vertical">
 				<control id="exitLevel" name="menuSelection" label="Exit Level" marginBottom="50px"/>
 				<control id="restart" name="menuSelection" label="Restart"/>

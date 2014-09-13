@@ -1,6 +1,9 @@
 package musicGame;
 
+import musicGame.core.ActivePlayGameState;
 import musicGame.core.GameStateRegistry;
+import musicGame.core.PausedPlayGameState;
+import musicGame.core.PlayGameState;
 import musicGame.menu.FlowFilePickerMenuState;
 import musicGame.menu.MainMenuState;
 
@@ -39,9 +42,16 @@ public class BelieveGame extends NiftyStateBasedGame {
 
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
-		this.addState(new MainMenuState());
-		this.addState(new FlowFilePickerMenuState());
-//		this.addState(new PlayGameState());
+		this.addState(new MainMenuState("musicGame/menu/MainMenuState.xml"));
+		this.addState(new FlowFilePickerMenuState("musicGame/menu/FlowFilePickerMenuState.xml"));
+		PlayGameState playGame = new PlayGameState();
+		ActivePlayGameState activeGame = new ActivePlayGameState();
+		PausedPlayGameState pausedGame = new PausedPlayGameState("musicGame/core/PausedPlayGameState.xml");
+		playGame.setDefaultState(activeGame);
+		playGame.addState(pausedGame);
+		this.addState(playGame);
+		this.addState(activeGame);
+		this.addState(pausedGame);
 		this.enterState(GameStateRegistry.getInstance().getEntry(MainMenuState.class));
 	}
 	
