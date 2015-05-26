@@ -33,6 +33,10 @@ public class GameStateRegistry {
 	}
 	
 	public int getEntry(Class<?> entry) {
-		return this.entries.get(entry);
+		if (this.entries.containsKey(entry)) {
+			return this.entries.get(entry);
+		} else {
+			throw new IllegalArgumentException("The given state does not exist in the game");
+		}
 	}
 }
