@@ -4,6 +4,7 @@ import java.io.File;
 
 import musicGame.core.GameStateBase;
 import musicGame.core.Util;
+import musicGame.core.action.ChangeStateAction;
 import musicGame.gui.MenuSelection;
 import musicGame.gui.VerticalKeyboardScrollpanel;
 
@@ -46,6 +47,13 @@ public class FlowFilePickerMenuState extends GameStateBase {
 				break;
 		}
 	}
+	
+	@Override
+	public void init(GameContainer container, StateBasedGame game)
+			throws SlickException {
+		back = new MenuSelection(container, 10, 10, 200, 50, "Back");
+		back.addListener(new ChangeStateAction(MainMenuState.class, game));
+	}
 
 	@Override
 	public void enter(GameContainer container, StateBasedGame game)
@@ -58,7 +66,9 @@ public class FlowFilePickerMenuState extends GameStateBase {
 			
 			if (files == null || files.length == 0) {
 				this.showMessage("Looks like there aren't any flow files to load!");
-//				this.back.select();
+				if (!this.back.isSelected()) {
+					this.back.toggleSelect();
+				}
 			} else {
 				/*if (this.noFilesMessage != null) {
 					this.noFilesMessage.markForRemoval();
@@ -106,19 +116,13 @@ public class FlowFilePickerMenuState extends GameStateBase {
 	}
 
 	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1)
+	public void render(GameContainer context, StateBasedGame game, Graphics g)
 			throws SlickException {
-		
+		back.render(context, g);
 	}
 
 	@Override
-	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
-			throws SlickException {
-		
-	}
-
-	@Override
-	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
+	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		
 	}
