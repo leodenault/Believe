@@ -1,0 +1,85 @@
+package musicGame.gui;
+
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.gui.AbstractComponent;
+import org.newdawn.slick.gui.GUIContext;
+
+public abstract class ComponentBase extends AbstractComponent {
+
+	protected Rectangle rect;
+
+	/**
+	 * Creates a new ComponentBase.
+	 * 
+	 * @param container	The context in which this component will be created and rendered.
+	 */
+	public ComponentBase(GUIContext container) {
+		this(container, 0, 0, 0, 0);
+	}
+
+	/**
+	 * Creates a new ComponentBase.
+	 * 
+	 * @param container	The context in which this component will be created and rendered.
+	 * @param x			The x position of this component.
+	 * @param y			The y position of this component.
+	 */
+	public ComponentBase(GUIContext container, int x, int y) {
+		this(container, x, y, 0, 0);
+	}
+
+	/**
+	 * Creates a new ComponentBase.
+	 * 
+	 * @param container	The context in which this component will be created and rendered.
+	 * @param x			The x position of this component.
+	 * @param y			The y position of this component.
+	 * @param width		The width of this component.
+	 * @param height	The height of this component.
+	 */
+	public ComponentBase(GUIContext container, int x, int y, int width, int height) {
+		super(container);
+		this.rect = new Rectangle(x, y, width, height);
+	}
+	
+	@Override
+	public int getHeight() {
+		return (int)rect.getHeight();
+	}
+	
+	public void setHeight(int height) {
+		rect.setHeight(height);
+	}
+
+	@Override
+	public int getWidth() {
+		return (int)rect.getWidth();
+	}
+	
+	public void setWidth(int width) {
+		rect.setWidth(width);
+	}
+
+	@Override
+	public int getX() {
+		return (int)rect.getX();
+	}
+
+	@Override
+	public int getY() {
+		return (int)rect.getY();
+	}
+
+	@Override
+	public void setLocation(int x, int y) {
+		if (rect != null) {
+			rect.setLocation(x, y);
+			resetLayout();
+		}
+	}
+
+	/**
+	 * Resets the layout of the children of this component.
+	 */
+	protected abstract void resetLayout();
+}

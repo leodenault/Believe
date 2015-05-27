@@ -1,122 +1,72 @@
 package musicGame.gui;
 
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedList;
 
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.GUIContext;
 
-public class DirectionalPanel<T extends AbstractComponent> extends AbstractComponent implements Iterable<T> {
+public class DirectionalPanel extends AbstractContainer {
 
-	protected LinkedList<T> items;
 	protected int spacing;
 	
-	private int x;
-	private int y;
+	private boolean autoposition;
+	private int itemWidth;
+	private int itemHeight;
 	
-	public DirectionalPanel(GUIContext context) {
-		super(context);
-		this.spacing = 0;
-		this.x = 0;
-		this.y = 0;
-		this.items = new LinkedList<T>();
+	public DirectionalPanel(GUIContext container, int itemWidth, int itemHeight) {
+		this(container, itemWidth, itemHeight, 0);
 	}
 	
-	public void add(T item) {
-		this.items.add(item);
-		this.resetItemLocations();
+	public DirectionalPanel(GUIContext container, int itemWidth, int itemHeight, int spacing) {
+		this(container, 0, 0, itemWidth, itemHeight, spacing);
+		autoposition = true;
+		rect.setCenterX(container.getWidth() / 2);
+		rect.setCenterY(container.getHeight() / 2);
 	}
 	
-	public void addAll(Collection<? extends T> items) {
-		this.items.addAll(items);
+	public DirectionalPanel(GUIContext container, int x, int y, int itemWidth, int itemHeight) {
+		this(container, x, y, itemWidth, itemHeight, 0);
 	}
 	
-	@Override
-	public int getHeight() {
-		if (this.items == null) {
-			return 0;
-		}
-		
-		int itemHeight = 0;
-		for (AbstractComponent item : this.items) {
-			itemHeight += item.getHeight();
-		}
-		return itemHeight + ((this.items.size() - 1) * this.spacing);
-	}
-
-	@Override
-	public int getWidth() {
-		if (this.items == null) {
-			return 0;
-		}
-		
-		int maxWidth = 0;
-		for (AbstractComponent item : this.items) {
-			int itemWidth = item.getWidth();
-			maxWidth = (itemWidth > maxWidth) ? itemWidth : maxWidth;
-		}
-		return maxWidth;
-	}
-
-	@Override
-	public int getX() {
-		return this.x;
-	}
-
-	@Override
-	public int getY() {
-		return this.y;
-	}
-	
-	public void setSpacing(int spacing) {
+	public DirectionalPanel(GUIContext container, int x, int y, int itemWidth, int itemHeight, int spacing) {
+		super(container, x, y, itemWidth, 0);
 		this.spacing = spacing;
-		this.resetItemLocations();
+		this.itemWidth = itemWidth;
+		this.itemHeight = itemHeight;
+		this.autoposition = false;
 	}
 	
-	@Override
-	public void render(GUIContext container, Graphics g) throws SlickException {
-		for (AbstractComponent item : this.items) {
-			item.render(container, g);
+	public void addChild(ComponentBase child) {
+		this.children.add(child);
+		child.setWidth(itemWidth);
+		child.setHeight(itemHeight);
+		
+		int numChildren = this.children.size();
+		int totalSpace = (numChildren - 1) * spacing;
+		rect.setHeight(numChildren * itemHeight + totalSpace);
+		
+		if (autoposition) {
+			rect.setCenterX(container.getWidth() / 2);
+			rect.setCenterY(container.getHeight() / 2);
 		}
+
+		resetLayout();
 	}
 
 	@Override
-	public void setLocation(int x, int y) {
-		this.x = x;
-		this.y = y;
-		this.resetItemLocations();
+	public void removeChild(ComponentBase child) {
+		this.children.remove(child);
+		this.resetLayout();
 	}
-
+	
 	@Override
-	public Iterator<T> iterator() {
-		return this.items.iterator();
-	}
-	
-	public int size() {
-		return this.items.size();
-	}
-	
-	public T get(int index) {
-		return this.items.get(index);
-	}
-	
-	public int indexOf(T item) {
-		return this.items.indexOf(item);
-	}
-	
-	protected void resetItemLocations() {
-		if (this.items != null) {
-			int width = this.getWidth();
-			int currentHeight = 0;
-			for (AbstractComponent item : this.items) {
-				int x = this.x + (width - item.getWidth()) / 2;
-				int y = this.y + currentHeight;
-				currentHeight += item.getHeight() + this.spacing;
-				item.setLocation(x, y);
-			}
+	protected void resetLayout() {
+		int position = 0;
+		int parentY = (int)rect.getY();
+		
+		for (Iterator<ComponentBase> it = children.iterator(); it.hasNext(); position++) {
+			ComponentBase item = it.next();
+			int y = parentY + (position * (itemHeight + spacing));
+			item.setLocation((int)rect.getX(), y);
 		}
 	}
 }

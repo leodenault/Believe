@@ -13,7 +13,6 @@ public class MenuSelectionGroup implements Iterable<MenuSelection> {
 		public void previousSelected(AbstractComponent previous);
 	}
 
-	private boolean playSound;
 	private LinkedList<MenuSelection> selections;
 	private MenuSelection currentSelection;
 	private List<Listener> listeners;
@@ -35,18 +34,11 @@ public class MenuSelectionGroup implements Iterable<MenuSelection> {
 		listeners.add(listener);
 	}
 
-	public void setPlaySound(boolean playSound) {
-		this.playSound = playSound;
-		for (MenuSelection selection : this.selections) {
-			selection.setPlaySound(playSound);
-		}
-	}
-
 	public void add(MenuSelection selection) {
 		this.selections.add(selection);
-		selection.setPlaySound(this.playSound);
 		if (this.selections.size() == 1) {
 			this.currentSelection = selection;
+			this.currentSelection.toggleSelect(true);
 		}
 	}
 
@@ -54,28 +46,28 @@ public class MenuSelectionGroup implements Iterable<MenuSelection> {
 		if (this.selections.isEmpty()) {
 			throw new IndexOutOfBoundsException("Cannot select from empty group");
 		}
-		this.currentSelection.deselect();
+		this.currentSelection.toggleSelect();
 		this.currentSelection = this.selections.get(index);
-		this.currentSelection.select();
+		this.currentSelection.toggleSelect(true);
 	}
 
 	public void selectNext() {
 		if (this.selections.size() > 1) {
-			this.currentSelection.deselect();
+			this.currentSelection.toggleSelect();
 			int currentIndex = this.selections.indexOf(this.currentSelection);
 			this.currentSelection = this.selections.get((currentIndex + 1) % this.selections.size());
-			this.currentSelection.select();
+			this.currentSelection.toggleSelect();
 			this.notifyListenersNext();
 		}
 	}
 
 	public void selectPrevious() {
 		if (this.selections.size() > 1) {
-			this.currentSelection.deselect();
+			this.currentSelection.toggleSelect();
 			int currentIndex = this.selections.indexOf(this.currentSelection);
 			this.currentSelection = this.selections.get(
 					(currentIndex == 0) ? this.selections.size() - 1 : currentIndex - 1);
-			this.currentSelection.select();
+			this.currentSelection.toggleSelect();
 			this.notifyListenersPrevious();
 		}
 	}

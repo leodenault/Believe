@@ -1,20 +1,19 @@
 package musicGame.levelFlow;
 
+import musicGame.gui.ComponentBase;
+
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.GUIContext;
 
 /**
  * An image representation of a beat that a player must tap to.
  */
-public class Beat extends AbstractComponent {
+public class Beat extends ComponentBase {
 
 	private Animation animation;
 	private Animation copy;
-	private int x;
-	private int y;
 	private int position;
 	private boolean tapped;
 	private boolean active;
@@ -27,8 +26,7 @@ public class Beat extends AbstractComponent {
 	 * @param position	The index of this beats position in the song.
 	 */
 	public Beat(GUIContext container, Animation animation, int position) {
-		super(container);
-		this.init(animation, position, 0, 0);
+		this(container, animation, position, 0, 0);
 	}
 	
 	/**
@@ -41,58 +39,26 @@ public class Beat extends AbstractComponent {
 	 * @param y			The y location of the component.
 	 */
 	public Beat(GUIContext container, Animation animation, int position, int x, int y) {
-		super(container);
-		this.init(animation, position, x, y);
-	}
-	
-	private void init(Animation animation, int position, int x, int y) {
+		super(container, x, y, animation.getWidth(), animation.getHeight());
 		this.animation = animation;
 		this.animation.setCurrentFrame(0);
 		this.animation.setLooping(false);
 		this.animation.stop();
-		this.x = x;
-		this.y = y;
 		this.tapped = false;
 		this.active = true;
 		this.position = position;
-	}
-	
-	@Override
-	public int getHeight() {
-		return this.animation.getHeight();
-	}
-
-	@Override
-	public int getWidth() {
-		return this.animation.getWidth();
-	}
-
-	@Override
-	public int getX() {
-		return this.x;
-	}
-
-	@Override
-	public int getY() {
-		return this.y;
 	}
 
 	@Override
 	public void render(GUIContext container, Graphics g) throws SlickException {
 		if (this.isPlaying()) {
-			this.copy.draw(this.x, this.y);
+			this.copy.draw(rect.getX(), rect.getY());
 		}
 		else {
-			this.animation.draw(this.x, this.y);
+			this.animation.draw(rect.getX(), rect.getY());
 		}
 	}
 
-	@Override
-	public void setLocation(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-	
 	/**
 	 * Moves the component.
 	 * 
@@ -162,6 +128,9 @@ public class Beat extends AbstractComponent {
 	}
 
 	protected Beat clone() {
-		return new Beat(this.container, this.animation.copy(), this.position, this.x, this.y);
+		return new Beat(this.container, this.animation.copy(), this.position, (int)rect.getX(), (int)rect.getY());
 	}
+
+	@Override
+	protected void resetLayout() {}
 }

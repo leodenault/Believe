@@ -1,8 +1,7 @@
 package musicGame;
 
-import musicGame.core.ActivePlayGameState;
+import musicGame.core.GamePausedOverlay;
 import musicGame.core.GameStateRegistry;
-import musicGame.core.PausedPlayGameState;
 import musicGame.core.PlayGameState;
 import musicGame.menu.FlowFilePickerMenuState;
 import musicGame.menu.MainMenuState;
@@ -10,10 +9,9 @@ import musicGame.menu.MainMenuState;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
 
-import de.lessvoid.nifty.slick2d.NiftyStateBasedGame;
-
-public class BelieveGame extends NiftyStateBasedGame {
+public class BelieveGame extends StateBasedGame {
 	
 	private static final int SCREEN_WIDTH = 800;
 	private static final int SCREEN_HEIGHT = 600;
@@ -42,16 +40,10 @@ public class BelieveGame extends NiftyStateBasedGame {
 
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
-		this.addState(new MainMenuState("musicGame/menu/MainMenuState.xml"));
-		this.addState(new FlowFilePickerMenuState("musicGame/menu/FlowFilePickerMenuState.xml"));
-		PlayGameState playGame = new PlayGameState();
-		ActivePlayGameState activeGame = new ActivePlayGameState();
-		PausedPlayGameState pausedGame = new PausedPlayGameState("musicGame/core/PausedPlayGameState.xml");
-		playGame.setDefaultState(activeGame);
-		playGame.addState(pausedGame);
-		this.addState(playGame);
-		this.addState(activeGame);
-		this.addState(pausedGame);
+		this.addState(new MainMenuState());
+		this.addState(new FlowFilePickerMenuState());
+		this.addState(new PlayGameState());
+		this.addState(new GamePausedOverlay());
 		this.enterState(GameStateRegistry.getInstance().getEntry(MainMenuState.class));
 	}
 	

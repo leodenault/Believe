@@ -1,5 +1,6 @@
 package musicGame.gui;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,13 +12,9 @@ import org.newdawn.slick.gui.GUIContext;
 /**
  * A simple GUI container for holding components.
  */
-public abstract class AbstractContainer extends AbstractComponent {
+public abstract class AbstractContainer extends ComponentBase implements Iterable<ComponentBase> {
 
-	protected int x;
-	protected int y;
-	protected int width;
-	protected int height;
-	protected List<AbstractComponent> children;
+	protected List<ComponentBase> children;
 
 	/**
 	 * Creates a new AbstractContainer.
@@ -25,8 +22,7 @@ public abstract class AbstractContainer extends AbstractComponent {
 	 * @param container	The context in which this container will be created and rendered.
 	 */
 	public AbstractContainer(GUIContext container) {
-		super(container);
-		this.init(0, 0, 0, 0);
+		this(container, 0, 0, 0, 0);
 	}
 
 	/**
@@ -37,8 +33,7 @@ public abstract class AbstractContainer extends AbstractComponent {
 	 * @param y			The y position of this container.
 	 */
 	public AbstractContainer(GUIContext container, int x, int y) {
-		super(container);
-		this.init(x, y, 0, 0);
+		this(container, x, y, 0, 0);
 	}
 
 	/**
@@ -51,44 +46,8 @@ public abstract class AbstractContainer extends AbstractComponent {
 	 * @param height	The height of this container.
 	 */
 	public AbstractContainer(GUIContext container, int x, int y, int width, int height) {
-		super(container);
-		this.init(x, y, width, height);
-	}
-
-	private void init(int x, int y, int width, int height) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-		this.children = new LinkedList<AbstractComponent>();
-	}
-
-	@Override
-	public int getHeight() {
-		return this.height;
-	}
-	
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
-	@Override
-	public int getWidth() {
-		return this.width;
-	}
-	
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	@Override
-	public int getX() {
-		return this.x;
-	}
-
-	@Override
-	public int getY() {
-		return this.y;
+		super(container, x, y, width, height);
+		this.children = new LinkedList<ComponentBase>();
 	}
 
 	@Override
@@ -100,17 +59,23 @@ public abstract class AbstractContainer extends AbstractComponent {
 
 	@Override
 	public void setLocation(int x, int y) {
-		int deltaX = x - this.x;
-		int deltaY = y - this.y;
+		if (rect != null) {
+			int deltaX = x - (int)rect.getX();
+			int deltaY = y - (int)rect.getY();
 
-		if (this.children != null) {
-			for (AbstractComponent child : this.children) {
-				child.setLocation(child.getX() + deltaX, child.getY() + deltaY);
+			if (this.children != null) {
+				for (AbstractComponent child : this.children) {
+					child.setLocation(child.getX() + deltaX, child.getY() + deltaY);
+				}
 			}
-		}
 
-		this.x = x;
-		this.y = y;
+			rect.setLocation(x, y);
+		}
+	}
+	
+	@Override
+	public Iterator<ComponentBase> iterator() {
+		return children.iterator();
 	}
 
 	/**
@@ -118,12 +83,18 @@ public abstract class AbstractContainer extends AbstractComponent {
 	 * 
 	 * @param child	The component to be added.
 	 */
-	public abstract void addChild(AbstractComponent child);
+	public void addChild(ComponentBase child) {
+		this.children.add(child);
+		this.resetLayout();
+	}
+	
 	/**
 	 * Removes the child component from this container.
 	 * 
 	 * @param child	The component to be removed.
 	 */
-	public abstract void removeChild(AbstractComponent child);
-
+	public void removeChild(ComponentBase child) {
+		this.children.remove(child);
+		this.resetLayout();
+	}
 }

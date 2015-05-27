@@ -3,7 +3,6 @@ package musicGame.levelFlow;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
-import musicGame.levelFlow.Beat;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -39,6 +38,8 @@ public class BeatTest {
 			oneOf(animation).setCurrentFrame(0);
 			oneOf(animation).setLooping(false);
 			oneOf(animation).stop();
+			oneOf(animation).getWidth(); will(returnValue(0));
+			oneOf(animation).getHeight(); will(returnValue(0));
 		}});
 		this.beat = new Beat(context, animation, 0);
 	}

@@ -1,24 +1,10 @@
 package musicGame.gui;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.jmock.lib.concurrent.Synchroniser;
-import org.jmock.lib.legacy.ClassImposteriser;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
-import de.lessvoid.nifty.builder.ControlBuilder;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.xml.xpp3.Attributes;
 
 public class VerticalKeyboardScrollpanelTest {
 	
-	@Rule
+	/*@Rule
 	public JUnitRuleMockery mockery = new JUnitRuleMockery() {{
 		setImposteriser(ClassImposteriser.INSTANCE);
 		setThreadingPolicy(new Synchroniser());
@@ -190,5 +176,5 @@ public class VerticalKeyboardScrollpanelTest {
 			oneOf(scroller).show();
 		}});
 		this.scrollPanel.add(selectionBuilder);
-	}
+	}*/
 }

@@ -10,7 +10,6 @@ import musicGame.gui.AbstractContainer;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.GUIContext;
 
 /**
@@ -109,7 +108,7 @@ public class Lane extends AbstractContainer {
 		this.speed = (int)Math.round(value * DEFAULT_SPEED);
 		this.setBuffer(this.buffer);
 		for (Beat current : this.activeBeats) {
-			current.setLocation(this.x + ((this.getWidth() - current.getWidth()) / 2), this.calculatePosition(current));
+			current.setLocation(this.rect.getX() + ((this.getWidth() - current.getWidth()) / 2), this.calculatePosition(current));
 		}
 	}
 
@@ -156,11 +155,6 @@ public class Lane extends AbstractContainer {
 		this.bufferDistance = (int)((value / 1000.0) * this.speed);
 	}
 
-	@Override
-	public void addChild(AbstractComponent child) {
-		this.children.add(child);
-	}
-
 	/**
 	 * Adds a beat to this lane.
 	 * 
@@ -169,7 +163,7 @@ public class Lane extends AbstractContainer {
 	private void addBeat(Beat beat) {
 		this.addChild(beat);
 		this.activeBeats.add(beat);
-		beat.setLocation(this.x + ((this.getWidth() - beat.getWidth()) / 2), this.calculatePosition(beat));
+		beat.setLocation(this.rect.getX() + ((this.getWidth() - beat.getWidth()) / 2), this.calculatePosition(beat));
 	}
 
 	/**
@@ -188,15 +182,10 @@ public class Lane extends AbstractContainer {
 	}
 
 	@Override
-	public void removeChild(AbstractComponent child) {
-		this.children.remove(child);
-	}
-
-	@Override
 	public void render(GUIContext container, Graphics g) throws SlickException {
 		// Don't call super. We only want to render the active beats.
 		for (Beat beat : this.activeBeats) {
-			if (beat.getY() > this.height) {
+			if (beat.getY() > this.rect.getHeight()) {
 				break;
 			}
 			beat.render(container, g);
@@ -246,7 +235,7 @@ public class Lane extends AbstractContainer {
 				beat.setLocation(beat.getX(), this.calculatePosition(beat) - delta);
 			}
 
-			if (this.activeBeats.element().getY() < this.y - bufferDistance - (this.activeBeats.element().getHeight() / 2)) {
+			if (this.activeBeats.element().getY() < this.rect.getY() - bufferDistance - (this.activeBeats.element().getHeight() / 2)) {
 				this.discardBeat();
 				this.notifyListeners();
 			}
@@ -293,7 +282,7 @@ public class Lane extends AbstractContainer {
 	 * @return	True if a beat was succesfully consumed, false if none were in range. 
 	 */
 	public boolean consumeBeat() {
-		if (this.activeBeats.size() > 0 && (this.activeBeats.element().getY() + (this.activeBeats.element().getHeight() / 2)) >= this.y - bufferDistance && (this.activeBeats.element().getY() + (this.activeBeats.element().getHeight() / 2)) <= this.y + bufferDistance) {
+		if (this.activeBeats.size() > 0 && (this.activeBeats.element().getY() + (this.activeBeats.element().getHeight() / 2)) >= this.rect.getY() - bufferDistance && (this.activeBeats.element().getY() + (this.activeBeats.element().getHeight() / 2)) <= this.rect.getY() + bufferDistance) {
 			Beat temp = this.activeBeats.element();
 			temp.consume();
 			this.animations.add(temp);
@@ -313,7 +302,7 @@ public class Lane extends AbstractContainer {
 		}
 
 		for (Beat beat : this.activeBeats) {
-			beat.setLocation(this.x + ((this.getWidth() - beat.getWidth()) / 2), this.calculatePosition(beat));
+			beat.setLocation(this.rect.getX() + ((this.getWidth() - beat.getWidth()) / 2), this.calculatePosition(beat));
 			beat.reset();
 		}
 	}
@@ -325,6 +314,9 @@ public class Lane extends AbstractContainer {
 	}
 
 	private double calculatePosition(Beat beat) {
-		return beat.getPosition() * ((this.speed * 60) / (this.bpm * this.subdivision)) + this.y + (this.offset / 1000) * this.speed;
+		return beat.getPosition() * ((this.speed * 60) / (this.bpm * this.subdivision)) + this.rect.getY() + (this.offset / 1000) * this.speed;
 	}
+
+	@Override
+	protected void resetLayout() {}
 }

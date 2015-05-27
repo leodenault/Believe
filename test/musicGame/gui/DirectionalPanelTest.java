@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.GUIContext;
 
 public class DirectionalPanelTest {
@@ -23,12 +22,18 @@ public class DirectionalPanelTest {
 		setThreadingPolicy(new Synchroniser());
 	}};
 	
-	private DirectionalPanel<AbstractComponent> panel;
+	private static final int X = 400;
+	private static final int Y = 500;
+	private static final int COMPONENT_HEIGHT = 12;
+	private static final int COMPONENT_WIDTH = 10;
+	private static final int SPACING = 30;
+
+	private DirectionalPanel panel;
 	
 	@Mock private GUIContext context;
 	@Mock private Input input;
-	@Mock private AbstractComponent component;
-	@Mock private AbstractComponent component2;
+	@Mock private ComponentBase component;
+	@Mock private ComponentBase component2;
 	
 	@Before
 	public void setUp() {
@@ -36,82 +41,69 @@ public class DirectionalPanelTest {
 			oneOf(context).getInput(); will(returnValue(input));
 			oneOf(input).addPrimaryListener(with(any(DirectionalPanel.class)));
 		}});
-		this.panel = new DirectionalPanel<AbstractComponent>(context);
+		this.panel = new DirectionalPanel(context, X, Y, COMPONENT_WIDTH, COMPONENT_HEIGHT, SPACING);
 	}
 	
 	@Test
 	public void constructionShouldHaveEmptyPanelWithDefaultPositioning() {
 		assertThat(this.panel.getHeight(), is(0));
-		assertThat(this.panel.getWidth(), is(0));
-		assertThat(this.panel.getX(), is(0));
-		assertThat(this.panel.getY(), is(0));
+		assertThat(this.panel.getWidth(), is(COMPONENT_WIDTH));
+		assertThat(this.panel.getX(), is(X));
+		assertThat(this.panel.getY(), is(Y));
 		assertThat(this.panel.iterator().hasNext(), is(false));
 	}
 	
 	@Test
 	public void getHeightShouldReturnTotalHeightOfVisibleItems() {
-		final int componentHeight = 100;
 		mockery.checking(new Expectations() {{
-			ignoring(component).getWidth();
-			ignoring(component).setLocation(0, 0);
-			ignoring(component2).getWidth();
-			ignoring(component2).setLocation(0, 50);
-			exactly(2).of(component).getHeight(); will(returnValue(0));
-			oneOf(component2).getHeight(); will(returnValue(0));
-			oneOf(component).getHeight(); will(returnValue(componentHeight));
-			oneOf(component2).getHeight(); will(returnValue(componentHeight));
+			exactly(2).of(component).setWidth(COMPONENT_WIDTH);
+			exactly(2).of(component).setHeight(COMPONENT_HEIGHT);
+			exactly(3).of(component).setLocation(with(any(Integer.class)), with(any(Integer.class)));
 		}});
-		int spacing = 50;
-		this.panel.setSpacing(50);
-		this.panel.add(component);
-		this.panel.add(component2);
-		assertThat(this.panel.getHeight(), is((componentHeight * 2) + spacing));
+		this.panel.addChild(component);
+		this.panel.addChild(component);
+		assertThat(this.panel.getHeight(), is((COMPONENT_HEIGHT * 2) + SPACING));
 	}
 	
 	@Test
-	public void getWidthShouldReturnMaximumWidthOfVisibleItems() {
-		final int largest = 300;
+	public void removingItemShouldRepeatItemLayout() {
 		mockery.checking(new Expectations() {{
-			ignoring(component).getHeight();
-			ignoring(component2).getHeight();
-			exactly(4).of(component).getWidth(); will(returnValue(0));
-			exactly(2).of(component).setLocation(0, 0);
-			exactly(2).of(component2).getWidth(); will(returnValue(0));
-			oneOf(component2).setLocation(0, 0);
-			oneOf(component).getWidth(); will(returnValue(100));
-			oneOf(component2).getWidth(); will(returnValue(largest));
+			// Adding elements
+			exactly(3).of(component).setWidth(COMPONENT_WIDTH);
+			exactly(3).of(component).setHeight(COMPONENT_HEIGHT);
+			exactly(6).of(component).setLocation(with(any(Integer.class)), with(any(Integer.class)));
+			
+			// Removing one element
+			oneOf(component).setLocation(X, Y);
+			oneOf(component).setLocation(X, Y + COMPONENT_HEIGHT + SPACING);
 		}});
-		this.panel.add(component);
-		this.panel.add(component2);
-		assertThat(this.panel.getWidth(), is(largest));
+		this.panel.addChild(component);
+		this.panel.addChild(component);
+		this.panel.addChild(component);
+		this.panel.removeChild(component);
 	}
 	
 	@Test
-	public void resetItemLocationsShouldProperlyPlaceEachItem() {
-		this.panel.setLocation(10, 10);
-		this.panel.setSpacing(20);
+	public void constructionWithoutXYShouldBuildIntoMiddleOfScreen() {
+		final int screenWidth = 1000;
+		final int screenHeight = 500;
 		
-		final int width1 = 10;
-		final int height1 = 20;
-		final int width2 = 20;
-		final int height2 = 10;
 		mockery.checking(new Expectations() {{
-			exactly(2).of(component).getWidth(); will(returnValue(width1));
-			oneOf(component).getHeight(); will(returnValue(height1));
-			oneOf(component).setLocation(10, 10);
+			oneOf(context).getInput(); will(returnValue(input));
+			oneOf(input).addPrimaryListener(with(any(DirectionalPanel.class)));
+			exactly(2).of(context).getWidth(); will(returnValue(screenWidth));
+			exactly(2).of(context).getHeight(); will(returnValue(screenHeight));
 			
-			oneOf(component).getWidth(); will(returnValue(width1));
-			oneOf(component).getWidth(); will(returnValue(width2));
-			
-			oneOf(component).getWidth(); will(returnValue(width1));
-			oneOf(component).getHeight(); will(returnValue(height1));
-			oneOf(component).setLocation(15, 10);
-			
-			oneOf(component).getWidth(); will(returnValue(width2));
-			oneOf(component).getHeight(); will(returnValue(height2));
-			oneOf(component).setLocation(10, 50);
+			oneOf(component).setWidth(COMPONENT_WIDTH);
+			oneOf(component).setHeight(COMPONENT_HEIGHT);
+			oneOf(component).setLocation((screenWidth - COMPONENT_WIDTH) / 2, (screenHeight - COMPONENT_HEIGHT) / 2);
 		}});
-		this.panel.add(component);
-		this.panel.add(component);
+		DirectionalPanel panel = new DirectionalPanel(context, COMPONENT_WIDTH, COMPONENT_HEIGHT);
+		assertThat(panel.getX(), is((screenWidth - COMPONENT_WIDTH) / 2));
+		assertThat(panel.getY(), is(screenHeight / 2));
+		
+		panel.addChild(component);
+		assertThat(panel.getX(), is((screenWidth - COMPONENT_WIDTH) / 2));
+		assertThat(panel.getY(), is((screenHeight - COMPONENT_HEIGHT) / 2));
 	}
 }

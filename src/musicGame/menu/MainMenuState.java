@@ -2,25 +2,22 @@ package musicGame.menu;
 
 import musicGame.core.GameStateBase;
 import musicGame.core.action.ChangeStateAction;
+import musicGame.core.action.LoadGameAction;
+import musicGame.gui.DirectionalPanel;
 import musicGame.gui.MenuSelection;
 import musicGame.gui.MenuSelectionGroup;
-import musicGame.menu.action.ExitGameAction;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.gui.AbstractComponent;
+import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.state.StateBasedGame;
-
-import de.lessvoid.nifty.screen.Screen;
 
 public class MainMenuState extends GameStateBase {
 
-	private static final String SCREEN_ID = "MainMenuState";
-	
+	private DirectionalPanel panel;
 	private MenuSelectionGroup selections;
-	private MenuSelection playDefaultLevel;
-	private MenuSelection playCustomLevel;
-	private MenuSelection exit;
 	
 	public MainMenuState(String niftyXmlFile) {
 		super(niftyXmlFile);
@@ -28,7 +25,6 @@ public class MainMenuState extends GameStateBase {
 	
 	@Override
 	public void keyPressed(int key, char c) {
-		super.keyPressed(key, c);
 		switch (key) {
 			case Input.KEY_DOWN:
 				this.selections.selectNext();
@@ -41,31 +37,47 @@ public class MainMenuState extends GameStateBase {
 				break;
 		}
 	}
-	
-	@Override
-	protected void initGameAndGUI(GameContainer container, StateBasedGame game)
-			throws SlickException {
-		super.initGameAndGUI(container, game);
 
-		Screen screen = this.getNifty().getScreen(SCREEN_ID);
-		this.playDefaultLevel = screen.findControl("playDefaultLevel", MenuSelection.class);
-		this.playCustomLevel = screen.findControl("playCustomLevel", MenuSelection.class);
-		this.exit = screen.findControl("exit", MenuSelection.class);
+	@Override
+	public void init(final GameContainer container, StateBasedGame game)
+			throws SlickException {
+		MenuSelection playDefaultLevel = new MenuSelection(container, /*300, 100, 200, 100,*/ "Play Default Level");
+		MenuSelection playCustomLevel = new MenuSelection(container, /*300, 250, 200, 100,*/ "Play Custom Level");
+		MenuSelection exit = new MenuSelection(container, /*300, 400, 200, 100,*/ "Exit");
+		panel = new DirectionalPanel(container, 400, 100, 75);
+		panel.addChild(playDefaultLevel);
+		panel.addChild(playCustomLevel);
+		panel.addChild(exit);
 		
-		this.playCustomLevel.setMenuAction(new ChangeStateAction(FlowFilePickerMenuState.class, game));
-		this.exit.setMenuAction(new ExitGameAction(container));
+		playDefaultLevel.addListener(new LoadGameAction("levelFlowFiles/test.lfl", game));
+		playCustomLevel.addListener(new ChangeStateAction(FlowFilePickerMenuState.class, game));
+		exit.addListener(new ComponentListener() {
+			@Override
+			public void componentActivated(AbstractComponent component) {
+				container.exit();
+			}
+		});
 		
 		this.selections = new MenuSelectionGroup();
-		this.selections.add(this.playDefaultLevel);
-		this.selections.add(this.playCustomLevel);
-		this.selections.add(this.exit);
+		this.selections.add(playDefaultLevel);
+		this.selections.add(playCustomLevel);
+		this.selections.add(exit);
 	}
-	
+
 	@Override
-	protected void enterState(GameContainer container, StateBasedGame game) throws SlickException {
-		this.updateScreen();
-		this.selections.setPlaySound(false);
-		this.selections.select(0);
-		this.selections.setPlaySound(true);
+	public void render(GameContainer container, StateBasedGame game, Graphics g)
+			throws SlickException {
+		panel.render(container, g);
+	}
+
+	@Override
+	public void update(GameContainer container, StateBasedGame game, int delta)
+			throws SlickException {
+	}
+
+	@Override
+	public void enter(GameContainer container, StateBasedGame game)
+			throws SlickException {
+		super.enter(container, game);
 	}
 }

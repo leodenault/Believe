@@ -33,6 +33,12 @@ public class MenuSelectionGroupTest {
 		this.group = new MenuSelectionGroup();
 	}
 	
+	private void expectInitialToggle() {
+		mockery.checking(new Expectations() {{
+			oneOf(selection).toggleSelect(true);
+		}});
+	}
+	
 	@Test
 	public void constructorShouldCreateEmptyGroup() {
 		assertThat(this.group.getSelections(), is(empty()));
@@ -41,7 +47,7 @@ public class MenuSelectionGroupTest {
 	
 	@Test
 	public void groupShouldContainOneElementWhenAddingInEmptyGroup() {
-		mockery.checking(new Expectations() {{ ignoring(selection).setPlaySound(false); }});
+		expectInitialToggle();
 		this.group.add(selection);
 		assertThat(this.group.getSelections(), hasSize(1));
 		assertThat(this.group.getCurrentSelection(), is(selection));
@@ -54,15 +60,12 @@ public class MenuSelectionGroupTest {
 	
 	@Test
 	public void currentSelectionShouldUpdateWhenSelectingDifferentItem() {
-		mockery.checking(new Expectations() {{
-			ignoring(selection).setPlaySound(false);
-			ignoring(selection2).setPlaySound(false);
-		}});
+		expectInitialToggle();
 		this.group.add(selection);
 		this.group.add(selection2);
 		mockery.checking(new Expectations() {{
-			oneOf(selection).deselect();
-			oneOf(selection2).select();
+			oneOf(selection).toggleSelect();
+			oneOf(selection2).toggleSelect(true);
 		}});
 		this.group.select(1);
 		assertThat(this.group.getCurrentSelection(), is(selection2));
@@ -70,7 +73,7 @@ public class MenuSelectionGroupTest {
 	
 	@Test
 	public void selectNextShouldDoNothingWhenGroupContainsSingleElement() {
-		mockery.checking(new Expectations() {{ ignoring(selection).setPlaySound(false); }});
+		expectInitialToggle();
 		this.group.add(selection);
 		this.group.selectNext();
 		assertThat(this.group.getCurrentSelection(), is(selection));
@@ -78,7 +81,7 @@ public class MenuSelectionGroupTest {
 	
 	@Test
 	public void selectPreviousShouldDoNothingWhenGroupContainsSingleElement() {
-		mockery.checking(new Expectations() {{ ignoring(selection).setPlaySound(false); }});
+		expectInitialToggle();
 		this.group.add(selection);
 		this.group.selectPrevious();
 		assertThat(this.group.getCurrentSelection(), is(selection));
@@ -86,33 +89,26 @@ public class MenuSelectionGroupTest {
 	
 	@Test
 	public void selectNextShouldSelectNextItemInGroup() {
-		mockery.checking(new Expectations() {{
-			ignoring(selection).setPlaySound(false);
-			ignoring(selection2).setPlaySound(false);
-		}});
+		expectInitialToggle();
 		this.group.add(selection);
 		this.group.add(selection2);
 		mockery.checking(new Expectations() {{
-			oneOf(selection).deselect();
-			oneOf(selection2).select();
+			oneOf(selection).toggleSelect();
+			oneOf(selection2).toggleSelect();
 		}});
 		this.group.selectNext();
 		assertThat(this.group.getCurrentSelection(), is(selection2));
 	}
 	
 	@Test
-	public void selectPreviousShouldSelectNextItemInGroup() {
-		mockery.checking(new Expectations() {{
-			ignoring(selection).setPlaySound(false);
-			ignoring(selection2).setPlaySound(false);
-		}});
+	public void selectPreviousShouldSelectPreviousItemInGroup() {
+		expectInitialToggle();
 		this.group.add(selection);
 		this.group.add(selection2);
 		mockery.checking(new Expectations() {{
-			oneOf(selection).deselect();
-			oneOf(selection).select();
-			oneOf(selection2).deselect();
-			oneOf(selection2).select();
+			exactly(2).of(selection).toggleSelect();
+			oneOf(selection2).toggleSelect(true);
+			oneOf(selection2).toggleSelect();
 		}});
 		this.group.select(1);
 		this.group.selectPrevious();
@@ -121,17 +117,13 @@ public class MenuSelectionGroupTest {
 
 	@Test
 	public void selectNextShouldSelectFirstItemWhenAtEndOfGroup() {
-		mockery.checking(new Expectations() {{
-			ignoring(selection).setPlaySound(false);
-			ignoring(selection2).setPlaySound(false);
-		}});
+		expectInitialToggle();
 		this.group.add(selection);
 		this.group.add(selection2);
 		mockery.checking(new Expectations() {{
-			oneOf(selection).deselect();
-			oneOf(selection).select();
-			oneOf(selection2).deselect();
-			oneOf(selection2).select();
+			exactly(2).of(selection).toggleSelect();
+			oneOf(selection2).toggleSelect(true);
+			oneOf(selection2).toggleSelect();
 		}});
 		this.group.select(1);
 		this.group.selectNext();
@@ -140,36 +132,20 @@ public class MenuSelectionGroupTest {
 	
 	@Test
 	public void selectPreviousShouldSelectLastItemWhenAtBeginningOfGroup() {
-		mockery.checking(new Expectations() {{
-			ignoring(selection).setPlaySound(false);
-			ignoring(selection2).setPlaySound(false);
-		}});
+		expectInitialToggle();
 		this.group.add(selection);
 		this.group.add(selection2);
 		mockery.checking(new Expectations() {{
-			oneOf(selection).deselect();
-			oneOf(selection2).select();
+			oneOf(selection).toggleSelect();
+			oneOf(selection2).toggleSelect();
 		}});
 		this.group.selectPrevious();
 		assertThat(this.group.getCurrentSelection(), is(selection2));
 	}
 	
 	@Test
-	public void setPlaySoundShouldSetPlaySoundOnEachMenuSelection() {
-		mockery.checking(new Expectations() {{
-			ignoring(selection).setPlaySound(false);
-		}});
-		this.group.add(selection);
-		this.group.add(selection);
-		mockery.checking(new Expectations() {{
-			exactly(2).of(selection).setPlaySound(true);
-		}});
-		this.group.setPlaySound(true);
-	}
-	
-	@Test
 	public void clearShouldRemoveAllSelections() {
-		mockery.checking(new Expectations() {{ ignoring(selection).setPlaySound(false); }});
+		expectInitialToggle();
 		this.group.add(selection);
 		this.group.add(selection);
 		assertThat(this.group.getSelections(), hasSize(2));
@@ -182,22 +158,5 @@ public class MenuSelectionGroupTest {
 		assertThat(this.group.getSelections(), is(empty()));
 		this.group.clear();
 		assertThat(this.group.getSelections(), is(empty()));
-	}
-	
-	@Test
-	public void addShouldSetPlaySoundToFalseIfNotNeeded() {
-		mockery.checking(new Expectations() {{
-			oneOf(selection).setPlaySound(false);
-		}});
-		this.group.add(selection);
-	}
-	
-	@Test
-	public void addShouldSetPlaySoundToTrueIfNeeded() {
-		mockery.checking(new Expectations() {{
-			oneOf(selection).setPlaySound(true);
-		}});
-		this.group.setPlaySound(true);
-		this.group.add(selection);
 	}
 }

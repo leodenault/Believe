@@ -1,38 +1,22 @@
 package musicGame.gui;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.ControlBuilder;
-import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.input.NiftyInputMapping;
-import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
-import de.lessvoid.nifty.screen.KeyInputHandler;
-import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.nifty.tools.SizeValue;
-import de.lessvoid.xml.xpp3.Attributes;
-
-public class VerticalKeyboardScrollpanel extends AbstractController implements Controller, KeyInputHandler {
+public class VerticalKeyboardScrollpanel {
 
 	private static final int DEFAULT_GAP = 10;
 	
 	private boolean focus;
-	private SizeValue gap = SizeValue.px(DEFAULT_GAP);
-	private Nifty nifty;
-	private Screen screen;
-	private Element childRoot;
+//	private SizeValue gap = SizeValue.px(DEFAULT_GAP);
+//	private Nifty nifty;
+//	private Screen screen;
+//	private Element childRoot;
 	private MenuSelectionGroup selections;
-	private Element lastSelection;
-	private Element firstSelection;
-	private Element scroller;
-	private Map<MenuSelection, Element> selectionElementMap;
+//	private Element lastSelection;
+//	private Element firstSelection;
+//	private Element scroller;
+//	private Map<MenuSelection, Element> selectionElementMap;
 	
-	@Override
+	/*@Override
 	public void bind(Nifty nifty, Screen screen, Element element,
 			Properties parameter, Attributes controlDefinitionAttributes) {
 		this.nifty = nifty;
@@ -57,9 +41,9 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 				return null;
 			}
 		}, this);
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public void init(Properties parameter, Attributes controlDefinitionAttributes) {
 		this.selections = new MenuSelectionGroup();
 		this.selectionElementMap = new HashMap<MenuSelection, Element>();
@@ -68,14 +52,9 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 		if (gap != null) {
 			this.gap = new SizeValue(gap);
 		}
-	}
+	}*/
 
-	@Override
-	public boolean inputEvent(NiftyInputEvent inputEvent) {
-		return false;
-	}
-	
-	@Override
+	/*@Override
 	public boolean keyEvent(NiftyInputEvent inputEvent) {
 		if (inputEvent == null) {
 			return false;
@@ -102,9 +81,9 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 			}
 		}
 		return true;
-	}
+	}*/
 	
-	@Override
+	/*@Override
 	public void onFocus(boolean getFocus) {
 		this.focus = getFocus;
 		if (this.selections.getCurrentSelection() != null) {
@@ -114,11 +93,7 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 				this.selections.getCurrentSelection().deselect();
 			}
 		}
-	}
-
-	@Override
-	public void onStartScreen() {
-	}
+	}*/
 	
 	/**
 	 * Builds the control as a {@link MenuSelection} and returns the built control
@@ -126,7 +101,7 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 	 * @param controlBuilder The builder to use to build the control
 	 * @return The associated {@link MenuSelection}
 	 */
-	public MenuSelection add(ControlBuilder controlBuilder) {
+	/*public MenuSelection add(ControlBuilder controlBuilder) {
 		controlBuilder.marginBottom(this.gap.toString());
 		Element menuSelection = controlBuilder.build(this.nifty, this.screen, this.childRoot);
 		MenuSelection selection = menuSelection.getControl(MenuSelection.class);
@@ -293,5 +268,5 @@ public class VerticalKeyboardScrollpanel extends AbstractController implements C
 		this.childRoot.setConstraintY(SizeValue.px(childRootPosition));
 		this.childRoot.getParent().layoutElements();
 		this.scroller.getParent().layoutElements();
-	}
+	}*/
 }

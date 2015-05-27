@@ -108,7 +108,7 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 		}
 			this.lanes = new Lane[numLanes];
 		for (int i = 0; i < numLanes; i++) {
-			Lane lane = new Lane(this.container, this.x + (i * laneWidth), this.y + this.image.getHeight() / 2, laneWidth, this.height, subdivision, bpm, offset);
+			Lane lane = new Lane(this.container, (int)this.rect.getX() + (i * laneWidth), (int)this.rect.getY() + this.image.getHeight() / 2, laneWidth, (int)this.rect.getHeight(), subdivision, bpm, offset);
 			this.addChild(lane);
 			this.lanes[i] = lane;
 			lane.addListener(this);
@@ -214,18 +214,8 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 	}
 
 	@Override
-	public void addChild(AbstractComponent child) {
-		this.children.add(child);
-	}
-
-	@Override
-	public void removeChild(AbstractComponent child) {
-		this.children.remove(child);
-	}
-
-	@Override
 	public void render(GUIContext container, Graphics g) throws SlickException {
-		g.drawImage(this.image, this.x, this.y);
+		g.drawImage(this.image, this.rect.getX(), this.getY());
 		super.render(container, g);
 	}
 
@@ -355,4 +345,7 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 			this.lanes[i].addBeats(beats[i]);
 		}
 	}
+
+	@Override
+	protected void resetLayout() {}
 }
