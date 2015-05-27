@@ -9,16 +9,19 @@ public abstract class GameStateBase extends BasicGameState {
 	private String niftyXmlFile;
 	
 	public GameStateBase() {
-		this(NO_XML_FILE);
+		GameStateRegistry.getInstance().addEntry(this);
 	}
 	
-	public GameStateBase(String niftyXmlFile) {
-		this.niftyXmlFile = niftyXmlFile;
-		GameStateRegistry.getInstance().addEntry(this.getClass());
+	public static int getStateID(Class<? extends GameStateBase> state) {
+		return GameStateRegistry.getInstance().getEntryID(state);
+	}
+	
+	public static <T extends GameStateBase> T getStateInstance(Class<T> state) {
+		return GameStateRegistry.getInstance().getEntryState(state);
 	}
 
 	@Override
 	public int getID() {
-		return GameStateRegistry.getInstance().getEntry(this.getClass());
+		return GameStateRegistry.getInstance().getEntryID(this.getClass());
 	}
 }

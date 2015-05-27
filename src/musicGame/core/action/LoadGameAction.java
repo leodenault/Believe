@@ -2,7 +2,7 @@ package musicGame.core.action;
 
 import java.io.IOException;
 
-import musicGame.core.GameStateRegistry;
+import musicGame.core.GameStateBase;
 import musicGame.core.PlayGameState;
 import musicGame.levelFlow.parsing.exceptions.FlowComponentBuilderException;
 import musicGame.levelFlow.parsing.exceptions.FlowFileParserException;
@@ -22,14 +22,13 @@ public class LoadGameAction extends ChangeStateAction {
 	
 	@Override
 	public void componentActivated(AbstractComponent component) {
-		int stateId = GameStateRegistry.getInstance().getEntry(PlayGameState.class);
 		try {
-			((PlayGameState)this.game.getState(stateId)).loadFile(this.flowFile);
+			GameStateBase.getStateInstance(PlayGameState.class).loadFile(this.flowFile);
 		} catch (IOException | FlowFileParserException | SlickException
 				| FlowComponentBuilderException e) {
 			// TODO Properly handle the exception
 			e.printStackTrace();
 		}
-		this.game.enterState(stateId);
+		this.game.enterState(GameStateBase.getStateID(PlayGameState.class));
 	}
 }

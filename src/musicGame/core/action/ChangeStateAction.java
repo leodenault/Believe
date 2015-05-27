@@ -1,7 +1,6 @@
 package musicGame.core.action;
 
 import musicGame.core.GameStateBase;
-import musicGame.core.GameStateRegistry;
 
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
@@ -20,7 +19,7 @@ public class ChangeStateAction implements ComponentListener {
 
 	@Override
 	public void componentActivated(AbstractComponent component) {
-		game.enterState(GameStateRegistry.getInstance().getEntry(this.state));
+		game.enterState(GameStateBase.getStateID(state));
 	}
 
 }

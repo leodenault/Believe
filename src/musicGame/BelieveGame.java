@@ -1,7 +1,7 @@
 package musicGame;
 
 import musicGame.core.GamePausedOverlay;
-import musicGame.core.GameStateRegistry;
+import musicGame.core.GameStateBase;
 import musicGame.core.PlayGameState;
 import musicGame.menu.FlowFilePickerMenuState;
 import musicGame.menu.MainMenuState;
@@ -44,7 +44,7 @@ public class BelieveGame extends StateBasedGame {
 		this.addState(new FlowFilePickerMenuState());
 		this.addState(new PlayGameState());
 		this.addState(new GamePausedOverlay());
-		this.enterState(GameStateRegistry.getInstance().getEntry(MainMenuState.class));
+		this.enterState(GameStateBase.getStateID(MainMenuState.class));
 	}
 	
 	
