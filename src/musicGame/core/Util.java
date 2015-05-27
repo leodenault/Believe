@@ -5,7 +5,7 @@ import java.io.FileFilter;
 
 public class Util {
 	
-	private static String DEFAULT_DIRECTORY = "customFlowFiles";
+	private static final String DEFAULT_DIRECTORY = "customFlowFiles";
 	private static final String FILE_EXTENSION = ".lfl";
 	
 	public static File[] getFlowFiles() throws SecurityException {
