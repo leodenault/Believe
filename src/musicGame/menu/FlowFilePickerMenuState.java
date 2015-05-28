@@ -53,6 +53,8 @@ public class FlowFilePickerMenuState extends GameStateBase {
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		back = new MenuSelection(container, 10, 10, 200, 50, "Back");
+		noFilesMessage = new TextComponent(container, 260, 10, 500, 100, "");
+		
 		back.addListener(new ChangeStateAction(MainMenuState.class, game));
 	}
 
@@ -66,14 +68,13 @@ public class FlowFilePickerMenuState extends GameStateBase {
 			File[] files = Util.getFlowFiles();
 			
 			if (files == null || files.length == 0) {
-				this.showMessage(container, "Looks like there aren't any flow files to load!");
+				this.noFilesMessage.setText("Looks like there aren't any flow files to load!");
+				this.noFilesMessage.setRendering(true);
 				if (!this.back.isSelected()) {
 					this.back.toggleSelect();
 				}
 			} else {
-				/*if (this.noFilesMessage != null) {
-					this.noFilesMessage.markForRemoval();
-				}*/
+				this.noFilesMessage.setRendering(false);
 				
 				for (File file : files) {
 					final String name = file.getName().substring(0, file.getName().lastIndexOf("."));
@@ -81,13 +82,13 @@ public class FlowFilePickerMenuState extends GameStateBase {
 					/*ControlBuilder builder = new ControlBuilder(name, "menuSelection") {{
 						parameter("label", name);
 						style("menuSelectionFlowFile-border");
-					}};*/
+					}};
 
-					/*MenuSelection selection = this.scrollPanel.add(builder);
+					MenuSelection selection = this.scrollPanel.add(builder);
 					selection.setMenuAction(new LoadGameAction(file.getCanonicalPath(), game));
 					selection.setStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-border");
-					selection.setActiveStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-active-border");*/
-					//this.scrollPanel.onFocus(true);
+					selection.setActiveStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-active-border");
+					this.scrollPanel.onFocus(true);*/
 				}
 			}
 		} catch (SecurityException/* | IOException */e) {
@@ -106,10 +107,6 @@ public class FlowFilePickerMenuState extends GameStateBase {
 //		
 //		this.back.deselect();
 		//this.scrollPanel.clear();
-	}
-	
-	private void showMessage(GameContainer container, String message) {
-		this.noFilesMessage = new TextComponent(container, 260, 10, 500, 100, message);
 	}
 
 	@Override

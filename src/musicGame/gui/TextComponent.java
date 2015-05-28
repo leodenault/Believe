@@ -2,7 +2,6 @@ package musicGame.gui;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.GUIContext;
 
@@ -43,8 +42,12 @@ public class TextComponent extends ComponentBase {
 		this.colorSet = set;
 	}
 	
+	public void setText(String text) {
+		this.text = text;
+	}
+
 	@Override
-	public void render(GUIContext context, Graphics g) throws SlickException {
+	protected void renderComponent(GUIContext context, Graphics g) {
 		Rectangle oldClip = g.getClip();
 		g.setClip(rect);
 		

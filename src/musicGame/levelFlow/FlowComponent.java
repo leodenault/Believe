@@ -5,7 +5,6 @@ import musicGame.gui.AbstractContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Music;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.GUIContext;
@@ -214,9 +213,9 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 	}
 
 	@Override
-	public void render(GUIContext container, Graphics g) throws SlickException {
+	protected void renderComponent(GUIContext context, Graphics g) {
 		g.drawImage(this.image, this.rect.getX(), this.getY());
-		super.render(container, g);
+		super.renderComponent(container, g);
 	}
 
 	@Override

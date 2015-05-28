@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.GUIContext;
 
@@ -51,9 +50,9 @@ public abstract class AbstractContainer extends ComponentBase implements Iterabl
 	}
 
 	@Override
-	public void render(GUIContext container, Graphics g) throws SlickException {
-		for (AbstractComponent child : this.children) {
-			child.render(container, g);
+	protected void renderComponent(GUIContext context, Graphics g) {
+		for (ComponentBase child : this.children) {
+			child.renderComponent(container, g);
 		}
 	}
 

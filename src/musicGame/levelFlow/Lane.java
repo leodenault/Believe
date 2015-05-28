@@ -9,7 +9,6 @@ import java.util.Queue;
 import musicGame.gui.AbstractContainer;
 
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
 
 /**
@@ -180,21 +179,20 @@ public class Lane extends AbstractContainer {
 			this.addBeat(beat);
 		}
 	}
-
 	@Override
-	public void render(GUIContext container, Graphics g) throws SlickException {
+	protected void renderComponent(GUIContext context, Graphics g) {
 		// Don't call super. We only want to render the active beats.
 		for (Beat beat : this.activeBeats) {
 			if (beat.getY() > this.rect.getHeight()) {
 				break;
 			}
-			beat.render(container, g);
+			beat.renderComponent(container, g);
 		}
 
 		try {
 			for (Beat beat : this.animations) {
 				if (beat.isPlaying()) {
-					beat.render(container, g);
+					beat.renderComponent(container, g);
 				}
 				else {
 					this.animations.remove(beat);

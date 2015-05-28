@@ -4,7 +4,6 @@ import musicGame.gui.ComponentBase;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
 
 /**
@@ -50,7 +49,7 @@ public class Beat extends ComponentBase {
 	}
 
 	@Override
-	public void render(GUIContext container, Graphics g) throws SlickException {
+	protected void renderComponent(GUIContext context, Graphics g) {
 		if (this.isPlaying()) {
 			this.copy.draw(rect.getX(), rect.getY());
 		}

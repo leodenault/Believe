@@ -1,11 +1,14 @@
 package musicGame.gui;
 
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.GUIContext;
 
 public abstract class ComponentBase extends AbstractComponent {
 
+	protected boolean rendering;
 	protected Rectangle rect;
 
 	/**
@@ -40,6 +43,7 @@ public abstract class ComponentBase extends AbstractComponent {
 	public ComponentBase(GUIContext container, int x, int y, int width, int height) {
 		super(container);
 		this.rect = new Rectangle(x, y, width, height);
+		this.rendering = true;
 	}
 	
 	@Override
@@ -77,9 +81,28 @@ public abstract class ComponentBase extends AbstractComponent {
 			resetLayout();
 		}
 	}
+	
+	public boolean isRendering() {
+		return rendering;
+	}
+	
+	public void setRendering(boolean rendering) {
+		this.rendering = rendering;
+	}
+
+	@Override
+	public final void render(GUIContext context, Graphics g) throws SlickException {
+		if (rendering){
+			renderComponent(context, g);
+		}
+	}
 
 	/**
 	 * Resets the layout of the children of this component.
 	 */
 	protected abstract void resetLayout();
+	/**
+	 * Renders the component within the context of a GUI component
+	 */
+	protected abstract void renderComponent(GUIContext context, Graphics g);
 }
