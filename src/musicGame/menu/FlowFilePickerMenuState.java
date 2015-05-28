@@ -6,6 +6,7 @@ import musicGame.core.GameStateBase;
 import musicGame.core.Util;
 import musicGame.core.action.ChangeStateAction;
 import musicGame.gui.MenuSelection;
+import musicGame.gui.TextComponent;
 import musicGame.gui.VerticalKeyboardScrollpanel;
 
 import org.newdawn.slick.GameContainer;
@@ -16,8 +17,8 @@ import org.newdawn.slick.state.StateBasedGame;
 public class FlowFilePickerMenuState extends GameStateBase {
 
 	private MenuSelection back;
-	/*private Element scrollPanelElement;
-	private Element noFilesMessage;*/
+//	private Element scrollPanelElement;
+	private TextComponent noFilesMessage;
 	private VerticalKeyboardScrollpanel scrollPanel;
 	
 	public FlowFilePickerMenuState(String niftyXmlFile) {
@@ -65,7 +66,7 @@ public class FlowFilePickerMenuState extends GameStateBase {
 			File[] files = Util.getFlowFiles();
 			
 			if (files == null || files.length == 0) {
-				this.showMessage("Looks like there aren't any flow files to load!");
+				this.showMessage(container, "Looks like there aren't any flow files to load!");
 				if (!this.back.isSelected()) {
 					this.back.toggleSelect();
 				}
@@ -107,18 +108,15 @@ public class FlowFilePickerMenuState extends GameStateBase {
 		//this.scrollPanel.clear();
 	}
 	
-	private void showMessage(final String message) {
-		/*ControlBuilder builder = new ControlBuilder("textMessage") {{
-			parameter("label", message);
-		}};
-		
-		this.noFilesMessage = builder.build(this.getNifty(), screen, this.scrollPanelElement);*/
+	private void showMessage(GameContainer container, String message) {
+		this.noFilesMessage = new TextComponent(container, 260, 10, 500, 100, message);
 	}
 
 	@Override
 	public void render(GameContainer context, StateBasedGame game, Graphics g)
 			throws SlickException {
 		back.render(context, g);
+		this.noFilesMessage.render(context, g);
 	}
 
 	@Override
