@@ -23,11 +23,6 @@
 			<include name="*.jar" />
 		</fileset>
 	</path>
-	<path id="nifty-classpath">
-		<fileset dir="lib/nifty">
-			<include name="*.jar" />
-		</fileset>
-	</path>
 	<path id="externalLibs-classpath">
 		<fileset dir="lib">
 			<include name="*.jar" />
@@ -55,7 +50,6 @@
 		description="Compiles the main binaries.">
 		<mkdir dir="${binaries}" />
 		<javac srcdir="src" destdir="${binaries}" extdirs="lib">
-			<classpath refid="nifty-classpath"/>
 		</javac>
 		<copy todir="${binaries}">
 			<fileset dir="src" includes="**/*.xml"/>
@@ -68,7 +62,6 @@
 		<javac srcdir="test" destdir="${testClasses}" extdirs="lib">
 			<classpath refid="jmock-classpath" />
 			<classpath refid="junit-classpath" />
-			<classpath refid="nifty-classpath"/>
 			<classpath path="${binaries}" />
 		</javac>
 	</target>
@@ -80,7 +73,6 @@
 		<for param="file">
 			<path>
 				<fileset dir="lib" includes="*.jar"/>
-				<fileset dir="lib/nifty" excludes="*javadoc.jar"/>
 			</path>
 			<sequential>
 				<propertyregex override="yes"
@@ -114,7 +106,6 @@
 		</copy>
 		<copy todir="${outDir}/lib">
 			<fileset dir="lib" includes="*.jar"/>
-			<fileset dir="lib/nifty" excludes="*javadoc.jar"/>
 		</copy>
 		<fileset dir="lib" includes="*.jar"/>
 		<copy todir="${outDir}/">
@@ -133,7 +124,6 @@
 			<classpath path="${testClasses}" />
 			<classpath refid="jmock-classpath" />
 			<classpath refid="junit-classpath" />
-			<classpath refid="nifty-classpath" />
 			<classpath refid="externalLibs-classpath" />
 			<classpath path="${binaries}" />
 
