@@ -3,6 +3,9 @@ package musicGame.core;
 import java.io.File;
 import java.io.FileFilter;
 
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Rectangle;
+
 public class Util {
 	
 	private static final String DEFAULT_DIRECTORY = "customFlowFiles";
@@ -16,5 +19,32 @@ public class Util {
 				return pathname.getName().toLowerCase().endsWith(FILE_EXTENSION);
 			}
 		});
+	}
+	
+	/**
+	 * Clips to the child clip in the context of the graphics object's current
+	 * clip. The result is the intersection of the two clips.
+	 * 
+	 * @param g The graphics object from which to fetch the current clip.
+	 * @param childClip The new clipping area to clip to.
+	 * @return The clipping context used before executing this operation.
+	 */
+	public static Rectangle changeClipContext(Graphics g, musicGame.geometry.Rectangle childClip) {
+		Rectangle gClip = g.getClip();
+		Rectangle oldClip = null;
+		Rectangle newRect = null;
+		if (gClip == null) {
+			newRect = childClip;
+		} else {
+			oldClip = new Rectangle(gClip.getX(), gClip.getY(), gClip.getWidth(), gClip.getHeight());
+			newRect = childClip.intersection(oldClip);
+		}
+		g.setClip(newRect);
+		
+		return oldClip;
+	}
+	
+	public static void resetClipContext(Graphics g, Rectangle oldClip) {
+		g.setClip(oldClip);
 	}
 }

@@ -41,9 +41,9 @@ public class MainMenuState extends GameStateBase {
 	@Override
 	public void init(final GameContainer container, StateBasedGame game)
 			throws SlickException {
-		MenuSelection playDefaultLevel = new MenuSelection(container, /*300, 100, 200, 100,*/ "Play Default Level");
-		MenuSelection playCustomLevel = new MenuSelection(container, /*300, 250, 200, 100,*/ "Play Custom Level");
-		MenuSelection exit = new MenuSelection(container, /*300, 400, 200, 100,*/ "Exit");
+		MenuSelection playDefaultLevel = new MenuSelection(container, "Play Default Level");
+		MenuSelection playCustomLevel = new MenuSelection(container, "Play Custom Level");
+		MenuSelection exit = new MenuSelection(container, "Exit");
 		panel = new DirectionalPanel(container, 400, 100, 75);
 		panel.addChild(playDefaultLevel);
 		panel.addChild(playCustomLevel);
@@ -79,5 +79,6 @@ public class MainMenuState extends GameStateBase {
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		super.enter(container, game);
+		this.selections.select(0);
 	}
 }

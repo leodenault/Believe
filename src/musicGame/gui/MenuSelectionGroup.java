@@ -41,6 +41,10 @@ public class MenuSelectionGroup implements Iterable<MenuSelection> {
 			this.currentSelection.toggleSelect(true);
 		}
 	}
+	
+	public void remove(MenuSelection selection) {
+		this.selections.remove(selection);
+	}
 
 	public void select(int index) {
 		if (this.selections.isEmpty()) {

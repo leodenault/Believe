@@ -1,161 +1,105 @@
 package musicGame.gui;
 
+import java.util.Iterator;
+import java.util.List;
 
-public class VerticalKeyboardScrollpanel {
+import musicGame.core.Util;
 
-	private static final int DEFAULT_GAP = 10;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.gui.GUIContext;
+
+
+public class VerticalKeyboardScrollpanel extends AbstractContainer {
 	
-	private boolean focus;
-//	private SizeValue gap = SizeValue.px(DEFAULT_GAP);
-//	private Nifty nifty;
-//	private Screen screen;
-//	private Element childRoot;
+	private static final int DEFAULT_SPACING = 10;
+	private static final int DEFAULT_BORDER_COLOR = 0x898989;
+	private static final int DEFAULT_SCROLLBAR_WIDTH = 20;
+	private static final float DEFAULT_BORDER_WIDTH = 5.0f;
+	
+	private int panelX;
+	private int panelY;
 	private MenuSelectionGroup selections;
-//	private Element lastSelection;
-//	private Element firstSelection;
-//	private Element scroller;
-//	private Map<MenuSelection, Element> selectionElementMap;
+	private DirectionalPanel panel;
+	private ScrollBar scrollBar;
 	
-	/*@Override
-	public void bind(Nifty nifty, Screen screen, Element element,
-			Properties parameter, Attributes controlDefinitionAttributes) {
-		this.nifty = nifty;
-		this.screen = screen;
-		this.childRoot = element.findElementByName("#childRoot");
-		this.scroller = element.findElementByName("#scroller");
-		this.scroller.hide();
-		
-		screen.addKeyboardInputHandler(new NiftyInputMapping() {
-			@Override
-			public NiftyInputEvent convert(KeyboardInputEvent inputEvent) {
-				if (inputEvent.isKeyDown()) {
-					switch (inputEvent.getKey()) {
-						case KeyboardInputEvent.KEY_DOWN:
-							return NiftyInputEvent.NextInputElement;
-						case KeyboardInputEvent.KEY_UP:
-							return NiftyInputEvent.PrevInputElement;
-						case KeyboardInputEvent.KEY_RETURN:
-							return NiftyInputEvent.Activate;
-					}
-				}
-				return null;
-			}
-		}, this);
-	}*/
-
-	/*@Override
-	public void init(Properties parameter, Attributes controlDefinitionAttributes) {
+	public VerticalKeyboardScrollpanel(GUIContext container, int x, int y, int width, int itemHeight, int height) {
+		super(container, x, y, width, height);
 		this.selections = new MenuSelectionGroup();
-		this.selectionElementMap = new HashMap<MenuSelection, Element>();
-		
-		String gap = controlDefinitionAttributes.get("gap");
-		if (gap != null) {
-			this.gap = new SizeValue(gap);
+		int borderWidth = (int)DEFAULT_BORDER_WIDTH;
+		panelX = x + borderWidth;
+		panelY = y + borderWidth;
+		this.scrollBar = new ScrollBar(container, x + width - DEFAULT_SCROLLBAR_WIDTH, y, DEFAULT_SCROLLBAR_WIDTH, height);
+		this.panel = new DirectionalPanel(container, panelX, panelY,
+				width - (borderWidth * 2) - DEFAULT_SCROLLBAR_WIDTH, itemHeight, DEFAULT_SPACING);
+		this.children.add(this.panel);
+		this.children.add(this.scrollBar);
+	}
+	
+	@Override
+	protected void resetLayout() {
+		for (ComponentBase child : children) {
+			child.resetLayout();
 		}
-	}*/
+		this.panel.setLocation(panelX, panelY);
+	}
 
-	/*@Override
-	public boolean keyEvent(NiftyInputEvent inputEvent) {
-		if (inputEvent == null) {
-			return false;
-		}
-		
-		if (this.focus) {
-			switch (inputEvent) {
-				case NextInputElement:
-					this.scrollDown();
-					this.selections.selectNext();
-					break;
-				case PrevInputElement:
-					this.scrollUp();
-					this.selections.selectPrevious();
-					break;
-				case Activate:
-					MenuSelection current;
-					if ((current = this.selections.getCurrentSelection()) != null) { 
-						current.activate();
-					}
-					break;
-				default:
-					break;
-			}
-		}
-		return true;
-	}*/
-	
-	/*@Override
-	public void onFocus(boolean getFocus) {
-		this.focus = getFocus;
-		if (this.selections.getCurrentSelection() != null) {
-			if (getFocus) {
-				this.selections.getCurrentSelection().select();
-			} else {
-				this.selections.getCurrentSelection().deselect();
-			}
-		}
-	}*/
-	
-	/**
-	 * Builds the control as a {@link MenuSelection} and returns the built control
-	 * 
-	 * @param controlBuilder The builder to use to build the control
-	 * @return The associated {@link MenuSelection}
-	 */
-	/*public MenuSelection add(ControlBuilder controlBuilder) {
-		controlBuilder.marginBottom(this.gap.toString());
-		Element menuSelection = controlBuilder.build(this.nifty, this.screen, this.childRoot);
-		MenuSelection selection = menuSelection.getControl(MenuSelection.class);
-		this.selections.add(selection);
-		this.selectionElementMap.put(selection, menuSelection);
-		this.lastSelection = menuSelection;
-		if (this.firstSelection == null) {
-			this.firstSelection = menuSelection;
-		}
-		
-		// Show the scroller if the elements exceed the height of the container
-		int lastSelectionBottom = this.lastSelection.getHeight() + this.lastSelection.getY();
-		Element container = menuSelection.getParent().getParent();
-		int containerY = container.getY();
-		int containerHeight = container.getHeight();
-		if (lastSelectionBottom - containerY > containerHeight) {
-			this.scroller.show();
-		}
-		return selection;
+	@Override
+	public Iterator<ComponentBase> iterator() {
+		return this.panel.iterator();
+	}
+
+	@Override
+	public void addChild(ComponentBase child) {
+		this.panel.addChild(child);
+		this.scrollBar.setViewingHeight(this.panel.getHeight());
+		this.selections.add((MenuSelection)child); // TODO: Fix the whole selectable hierarchy stuff
+	}
+
+	@Override
+	public void removeChild(ComponentBase child) {
+		this.panel.removeChild(child);
+		this.selections.remove((MenuSelection)child);
 	}
 	
 	public void clear() {
-		for (Element element : this.childRoot.getElements()) {
-			element.markForRemoval();
-		}
+		this.panel.children.clear();
 		this.selections.clear();
-		this.lastSelection = null;
-		this.firstSelection = null;
-		this.scroller.hide();
-	}
-	
-	public void setPlaySound(boolean playSound) {
-		this.selections.setPlaySound(playSound);
+		this.resetLayout();
 	}
 	
 	public boolean isEmpty() {
 		return this.selections.isEmpty();
 	}
 	
-	// Used for testing
-	protected void setScroller(Element scroller) {
-		this.scroller = scroller;
+	public void toggleFocus() {
+		this.selections.getCurrentSelection().toggleSelect();
 	}
 	
-	protected boolean shouldScrollDown() {
-		if (this.lastSelection == null) {
-			return false;
-		}
+	public void activateSelection() {
+		this.selections.getCurrentSelection().activate();
+	}
+
+	@Override
+	protected void renderComponent(GUIContext context, Graphics g) {
+		Rectangle oldClip = Util.changeClipContext(g, rect);
+		super.renderComponent(context, g);
+		Util.resetClipContext(g, oldClip);
 		
-		Element container = this.lastSelection.getParent().getParent();
-		Element selection = this.selectionElementMap.get(this.selections.getCurrentSelection());
-		int containerHeight = container.getHeight();
-		int containerY = container.getY();
-		int lastSelectionBottom = this.lastSelection.getY() + this.lastSelection.getHeight();
+		g.setColor(new Color(DEFAULT_BORDER_COLOR));
+		g.setLineWidth(DEFAULT_BORDER_WIDTH);
+		g.drawRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
+	}
+
+	protected boolean shouldScrollDown() {
+		MenuSelection selection = this.selections.getCurrentSelection();
+		List<MenuSelection> list = this.selections.getSelections();
+		MenuSelection lastSelection = list.get(list.size() - 1);
+		
+		int containerHeight = (int)rect.getHeight();
+		int containerY = (int)rect.getY();
+		int lastSelectionBottom = lastSelection.getY() + lastSelection.getHeight();
 		int selectionBottom = selection.getY() + selection.getHeight();
 		
 		return this.isPastMiddle(true, selectionBottom, containerY, containerHeight)
@@ -163,17 +107,13 @@ public class VerticalKeyboardScrollpanel {
 	}
 	
 	protected boolean shouldScrollUp() {
-		if (this.firstSelection == null) {
-			return false;
-		}
-
-		Element container = this.firstSelection.getParent().getParent();
-		Element selection = this.selectionElementMap.get(this.selections.getCurrentSelection());
-		int containerY = container.getY();
-		int selectionY = selection.getY();
+		MenuSelection selection = this.selections.getCurrentSelection();
+		List<MenuSelection> list = this.selections.getSelections();
+		MenuSelection firstSelection = list.get(0);
+		int containerY = (int)rect.getY();
 		
-		return this.isPastMiddle(false, selectionY, containerY, container.getHeight())
-				&& containerY > this.firstSelection.getY();
+		return this.isPastMiddle(false, selection.getY(), containerY, container.getHeight())
+				&& containerY > firstSelection.getY();
 	}
 	
 	protected boolean isPastMiddle(boolean goingDown, int selectionY, int parentY, int parentHeight) {
@@ -184,89 +124,47 @@ public class VerticalKeyboardScrollpanel {
 		return selectionY <= (parentY + (parentHeight / 2));
 	}
 	
-	protected int getScrollDistance() {
-		MenuSelection menuSelection = this.selections.getCurrentSelection();
-		if (menuSelection == null) {
-			return 0;
-		}
-		
-		Element selection = this.selectionElementMap.get(menuSelection);
-		return this.gap.getValueAsInt(selection.getParent().getHeight()) + selection.getHeight();
-	}
-	
-	private void scrollUp() {
-		Element selection = this.selectionElementMap.get(this.selections.getCurrentSelection());
-		int newPosition;
-		
-		if (selection != null && this.lastSelection != null) {
-			// Check if we're wrapping
-			int lastSelectionBottom = this.lastSelection.getHeight() + this.lastSelection.getY();
-			int containerWindowBottom = this.childRoot.getHeight() + this.childRoot.getY();
-			if (selection.equals(this.firstSelection) && lastSelectionBottom > containerWindowBottom) {
-				newPosition = containerWindowBottom - lastSelectionBottom;
-				this.setScroller(1);
-				this.layoutElements(newPosition);
-			} else if (this.shouldScrollUp()) {
-				int distance = this.getScrollDistance();
+	public void scrollUp() {
+		MenuSelection selection = selections.getCurrentSelection();
+		 List<MenuSelection> list = selections.getSelections();
+		 int selectionIndex = list.indexOf(selection);
 
-				// Clip to top of first selection if needed
-				if (this.firstSelection.getY() + distance >= 0) {
-					newPosition = 0;
-					this.setScroller(0);
-				} else {
-					int position = this.childRoot.getConstraintY().getValueAsInt(0);
-					newPosition = position + distance;
-					// Set the scroller
-					float newScrollerPosition = this.childRoot.getParent().getY() -
-							this.firstSelection.getY() - distance;
-					float scrollableDistance = this.lastSelection.getY() - this.firstSelection.getY() +
-							this.lastSelection.getHeight() - this.childRoot.getHeight();
-					this.setScroller(newScrollerPosition / scrollableDistance);
-				}
-				this.layoutElements(newPosition);
-			}
-		}
+		 if (selectionIndex == 0) {
+			 this.scrollBar.setScrollPosition(1);
+			 this.panel.setLocation(panelX, panelY - panel.getHeight() + (int)(rect.getHeight() - (DEFAULT_BORDER_WIDTH * 2)));
+		 } else {
+			 MenuSelection nextSelection = list.get(selectionIndex - 1);
+			 int start = selection.getY();
+			 int end = nextSelection.getY();
+			 int distance = end - start;
+			 
+			 if (this.shouldScrollUp()) {
+				 this.scrollBar.scrollBy(distance);
+				 this.panel.setLocation(panelX, panel.getY() - distance);
+			 }
+		 }
+		 selections.selectPrevious();
 	}
 	
-	private void scrollDown() {
-		Element selection = this.selectionElementMap.get(this.selections.getCurrentSelection());
-		int newPosition = 0;
-		
-		// Check if we're wrapping
-		if (selection != null && selection.equals(this.lastSelection)) {
-			this.setScroller(0);
-			this.layoutElements(newPosition);
-		} else if (this.shouldScrollDown()) {
-			int distance = this.getScrollDistance();
-			
-			// Clip to bottom of last selection if needed
-			if (this.lastSelection.getY() + this.lastSelection.getHeight() - distance
-					<= this.childRoot.getHeight() + this.childRoot.getParent().getY()) {
-				newPosition = this.childRoot.getHeight() + this.childRoot.getY()
-						- (this.lastSelection.getHeight() + this.lastSelection.getY());
-				this.setScroller(1);
-			} else {
-				int position = this.childRoot.getConstraintY().getValueAsInt(0);
-				newPosition = position - distance;
-				// Set the scroller
-				float newScrollerPosition = this.childRoot.getParent().getY() -
-						this.firstSelection.getY() + distance;
-				float scrollableDistance = this.lastSelection.getY() - this.firstSelection.getY() +
-						this.lastSelection.getHeight() - this.childRoot.getHeight();
-				this.setScroller(newScrollerPosition / scrollableDistance);
-			}
-			this.layoutElements(newPosition);
-		}
-	}
+	 public void scrollDown() {
+		 MenuSelection selection = selections.getCurrentSelection();
+		 List<MenuSelection> list = selections.getSelections();
+		 int selectionIndex = list.indexOf(selection);
 
-	private void setScroller(float percentage) {
-		int position = (int)Math.floor((this.childRoot.getHeight() - this.scroller.getHeight()) * percentage);
-		this.scroller.setConstraintY(SizeValue.px(position));
+		 if (selectionIndex == list.size() - 1) {
+			 this.scrollBar.setScrollPosition(0);
+			 this.panel.setLocation(panelX, panelY);
+		 } else {
+			 MenuSelection nextSelection = list.get(selectionIndex + 1);
+			 int start = selection.getY();
+			 int end = nextSelection.getY();
+			 int distance = end - start;
+
+			 if (this.shouldScrollDown()) {
+				 this.scrollBar.scrollBy(distance);
+				 this.panel.setLocation(panelX, panel.getY() - distance);
+			 }
+		 }
+		 selections.selectNext();
 	}
-	
-	private void layoutElements(int childRootPosition) {
-		this.childRoot.setConstraintY(SizeValue.px(childRootPosition));
-		this.childRoot.getParent().layoutElements();
-		this.scroller.getParent().layoutElements();
-	}*/
 }

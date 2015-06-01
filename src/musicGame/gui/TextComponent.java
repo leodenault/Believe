@@ -1,5 +1,7 @@
 package musicGame.gui;
 
+import musicGame.core.Util;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
@@ -22,7 +24,6 @@ public class TextComponent extends ComponentBase {
 	private static final int PADDING = 5;
 	private static final ColorSet DEFAULT = new ColorSet(0x000000, 0x898989, 0xffffff);
 	
-	private Rectangle innerRect;
 	private String text;
 
 	protected ColorSet colorSet;
@@ -35,7 +36,6 @@ public class TextComponent extends ComponentBase {
 		super(container, x, y, width, height);
 		this.text = text;
 		this.colorSet = DEFAULT;
-		setupInnerRect();
 	}
 	
 	public void setColorSet(ColorSet set) {
@@ -48,16 +48,16 @@ public class TextComponent extends ComponentBase {
 
 	@Override
 	protected void renderComponent(GUIContext context, Graphics g) {
-		Rectangle oldClip = g.getClip();
-		g.setClip(rect);
+		// Colour the button
+		g.setColor(new Color(colorSet.color));
+		g.fill(rect);
 		
 		// Colour the border
 		g.setColor(new Color(colorSet.borderColor));
-		g.fill(rect);
-		
-		// Colour the button
-		g.setColor(new Color(colorSet.color));
-		g.fill(innerRect);
+		g.setLineWidth(PADDING);
+		g.drawRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
+
+		Rectangle oldClip = Util.changeClipContext(g, rect);
 		
 		// Draw the text
 		g.setColor(new Color(colorSet.textColor));
@@ -67,18 +67,9 @@ public class TextComponent extends ComponentBase {
 		g.drawString(text, rect.getCenterX(), rect.getCenterY());
 		g.translate(textWidth/2, textHeight/2);
 		
-		g.setClip(oldClip);
+		Util.resetClipContext(g, oldClip);
 	}
 
 	@Override
-	protected void resetLayout() {
-		setupInnerRect();
-	}
-	
-	private void setupInnerRect() {
-		this.innerRect = new Rectangle(rect.getX() + PADDING,
-				rect.getY() + PADDING,
-				rect.getWidth() - (PADDING * 2),
-				rect.getHeight() - (PADDING * 2));
-	}
+	protected void resetLayout() {}
 }

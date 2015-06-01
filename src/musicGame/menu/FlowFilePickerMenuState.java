@@ -1,10 +1,12 @@
 package musicGame.menu;
 
 import java.io.File;
+import java.io.IOException;
 
 import musicGame.core.GameStateBase;
 import musicGame.core.Util;
 import musicGame.core.action.ChangeStateAction;
+import musicGame.core.action.LoadGameAction;
 import musicGame.gui.MenuSelection;
 import musicGame.gui.TextComponent;
 import musicGame.gui.VerticalKeyboardScrollpanel;
@@ -17,7 +19,6 @@ import org.newdawn.slick.state.StateBasedGame;
 public class FlowFilePickerMenuState extends GameStateBase {
 
 	private MenuSelection back;
-//	private Element scrollPanelElement;
 	private TextComponent noFilesMessage;
 	private VerticalKeyboardScrollpanel scrollPanel;
 	
@@ -31,19 +32,26 @@ public class FlowFilePickerMenuState extends GameStateBase {
 		switch (key) {
 			case Input.KEY_LEFT:
 			case Input.KEY_RIGHT:
-				/*if (!this.scrollPanel.isEmpty()) {
-					if (this.back.isSelected()) {
-						this.scrollPanel.onFocus(true);
-						this.back.deselect();
-					} else {
-						this.scrollPanel.onFocus(false);
-						this.back.select();
-					}
-				}*/
+				if (this.scrollPanel.isRendering()) {
+					this.back.toggleSelect();
+					this.scrollPanel.toggleFocus();
+				}
 				break;
 			case Input.KEY_ENTER:
 				if (this.back.isSelected()) {
 					this.back.activate();
+				} else {
+					this.scrollPanel.activateSelection();
+				}
+				break;
+			case Input.KEY_UP:
+				if (!this.back.isSelected()) {
+					this.scrollPanel.scrollUp();
+				}
+				break;
+			case Input.KEY_DOWN:
+				if (!this.back.isSelected()) {
+					this.scrollPanel.scrollDown();
 				}
 				break;
 		}
@@ -54,6 +62,7 @@ public class FlowFilePickerMenuState extends GameStateBase {
 			throws SlickException {
 		back = new MenuSelection(container, 10, 10, 200, 50, "Back");
 		noFilesMessage = new TextComponent(container, 260, 10, 500, 100, "");
+		scrollPanel = new VerticalKeyboardScrollpanel(container, 260, 10, 500, 100, 580);
 		
 		back.addListener(new ChangeStateAction(MainMenuState.class, game));
 	}
@@ -62,7 +71,6 @@ public class FlowFilePickerMenuState extends GameStateBase {
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		super.enter(container, game);
-		this.resetUi();
 		
 		try {
 			File[] files = Util.getFlowFiles();
@@ -70,50 +78,41 @@ public class FlowFilePickerMenuState extends GameStateBase {
 			if (files == null || files.length == 0) {
 				this.noFilesMessage.setText("Looks like there aren't any flow files to load!");
 				this.noFilesMessage.setRendering(true);
+				this.scrollPanel.setRendering(false);
 				if (!this.back.isSelected()) {
 					this.back.toggleSelect();
 				}
 			} else {
 				this.noFilesMessage.setRendering(false);
+				this.scrollPanel.setRendering(true);
+				this.scrollPanel.clear();
+				if (this.back.isSelected()) {
+					this.back.toggleSelect();
+				}
 				
 				for (File file : files) {
 					final String name = file.getName().substring(0, file.getName().lastIndexOf("."));
 
-					/*ControlBuilder builder = new ControlBuilder(name, "menuSelection") {{
-						parameter("label", name);
-						style("menuSelectionFlowFile-border");
-					}};
-
-					MenuSelection selection = this.scrollPanel.add(builder);
-					selection.setMenuAction(new LoadGameAction(file.getCanonicalPath(), game));
-					selection.setStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-border");
-					selection.setActiveStyle(MenuSelection.Style.BORDER, "menuSelectionFlowFile-active-border");
-					this.scrollPanel.onFocus(true);*/
+					MenuSelection selection = new MenuSelection(container, name);
+					selection.addListener(new LoadGameAction(file.getCanonicalPath(), game));
+					scrollPanel.addChild(selection);
 				}
 			}
-		} catch (SecurityException/* | IOException */e) {
-			//this.showMessage("Something went wrong when trying to find the flow files!", screen);
+		} catch (SecurityException | IOException e) {
+			this.noFilesMessage.setText("Something went wrong when trying to find the flow files!");
+			this.noFilesMessage.setRendering(true);
+			this.scrollPanel.setRendering(false);
+			this.scrollPanel.clear();
+			this.back.toggleSelect(); // We know it's not selected, so we select it here
 		}
-//		this.back.setMenuAction(new ChangeStateAction(MainMenuState.class, game));
-		//this.scrollPanel.setPlaySound(true);
-	}
-
-	private void resetUi() {
-		/*this.scrollPanel = screen.findControl("contentPanel", VerticalKeyboardScrollpanel.class);
-		this.scrollPanel.onFocus(true);
-		this.scrollPanelElement = screen.findElementByName("scrollPanel");
-		this.back = screen.findControl("back", MenuSelection.class);*/
-//		this.back.setPlaySound(true);
-//		
-//		this.back.deselect();
-		//this.scrollPanel.clear();
 	}
 
 	@Override
 	public void render(GameContainer context, StateBasedGame game, Graphics g)
 			throws SlickException {
 		back.render(context, g);
-		this.noFilesMessage.render(context, g);
+		noFilesMessage.render(context, g);
+		scrollPanel.render(context, g);
 	}
 
 	@Override
