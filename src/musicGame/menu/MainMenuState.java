@@ -8,6 +8,7 @@ import musicGame.gui.MenuSelection;
 import musicGame.gui.MenuSelectionGroup;
 
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
@@ -18,10 +19,6 @@ public class MainMenuState extends GameStateBase {
 
 	private DirectionalPanel panel;
 	private MenuSelectionGroup selections;
-	
-	public MainMenuState(String niftyXmlFile) {
-		super(niftyXmlFile);
-	}
 	
 	@Override
 	public void keyPressed(int key, char c) {

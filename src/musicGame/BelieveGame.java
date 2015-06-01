@@ -17,7 +17,7 @@ public class BelieveGame extends StateBasedGame {
 	private static final int SCREEN_HEIGHT = 600;
 	
 	public BelieveGame(String title) {
-		super(title, true);
+		super(title);
 	}
 	
 	public static void main(String args[]) {

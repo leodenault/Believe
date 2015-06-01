@@ -12,6 +12,7 @@ import musicGame.gui.TextComponent;
 import musicGame.gui.VerticalKeyboardScrollpanel;
 
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
@@ -21,10 +22,6 @@ public class FlowFilePickerMenuState extends GameStateBase {
 	private MenuSelection back;
 	private TextComponent noFilesMessage;
 	private VerticalKeyboardScrollpanel scrollPanel;
-	
-	public FlowFilePickerMenuState(String niftyXmlFile) {
-		super(niftyXmlFile);
-	}
 	
 	@Override
 	public void keyPressed(int key, char c) {
