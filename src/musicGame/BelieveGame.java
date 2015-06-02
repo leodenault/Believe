@@ -1,10 +1,10 @@
 package musicGame;
 
-import musicGame.core.GamePausedOverlay;
-import musicGame.core.GameStateBase;
-import musicGame.core.PlayGameState;
-import musicGame.menu.FlowFilePickerMenuState;
-import musicGame.menu.MainMenuState;
+import musicGame.state.FlowFilePickerMenuState;
+import musicGame.state.GamePausedOverlay;
+import musicGame.state.GameStateBase;
+import musicGame.state.MainMenuState;
+import musicGame.state.PlayGameState;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;

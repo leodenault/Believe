@@ -1,6 +1,5 @@
-package musicGame.menu;
+package musicGame.state;
 
-import musicGame.core.GameStateBase;
 import musicGame.core.action.ChangeStateAction;
 import musicGame.core.action.LoadGameAction;
 import musicGame.gui.DirectionalPanel;

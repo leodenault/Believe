@@ -1,10 +1,9 @@
-package musicGame.core;
+package musicGame.state;
 
 import musicGame.core.action.ChangeStateAction;
 import musicGame.gui.DirectionalPanel;
 import musicGame.gui.MenuSelection;
 import musicGame.gui.MenuSelectionGroup;
-import musicGame.menu.MainMenuState;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;

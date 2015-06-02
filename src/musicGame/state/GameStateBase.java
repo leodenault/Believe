@@ -1,4 +1,6 @@
-package musicGame.core;
+package musicGame.state;
+
+import musicGame.core.GameStateRegistry;
 
 import org.newdawn.slick.state.BasicGameState;
 

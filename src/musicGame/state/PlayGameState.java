@@ -1,4 +1,4 @@
-package musicGame.core;
+package musicGame.state;
 
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -2,6 +2,8 @@ package musicGame.core;
 
 import java.util.HashMap;
 
+import musicGame.state.GameStateBase;
+
 /**
  * Keeps track of GameState ids to avoid collisions.
  */

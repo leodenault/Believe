@@ -1,9 +1,8 @@
-package musicGame.menu;
+package musicGame.state;
 
 import java.io.File;
 import java.io.IOException;
 
-import musicGame.core.GameStateBase;
 import musicGame.core.Util;
 import musicGame.core.action.ChangeStateAction;
 import musicGame.core.action.LoadGameAction;
