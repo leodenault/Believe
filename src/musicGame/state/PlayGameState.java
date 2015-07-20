@@ -2,6 +2,7 @@ package musicGame.state;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import musicGame.core.action.ChangeStateAction;
@@ -24,10 +25,19 @@ public class PlayGameState extends GameStateBase {
 	
 	public void loadFile(String flowFile) throws IOException, FlowFileParserException,
 		SlickException, FlowComponentBuilderException {
-		
+		initializeComponent(this.getClass().getResourceAsStream(flowFile));
+	}
+
+	public void loadExternalFile(String flowFile) throws IOException, FlowFileParserException,
+	SlickException, FlowComponentBuilderException {
+		initializeComponent(new FileInputStream(flowFile));
+	}
+	
+	private void initializeComponent(InputStream stream) throws IOException, FlowFileParserException,
+	SlickException, FlowComponentBuilderException {
 		GameContainer container = game.getContainer();
 		FlowComponentBuilder builder = new FlowComponentBuilder(container, 32);
-		InputStreamReader reader = new InputStreamReader(new FileInputStream(flowFile));
+		InputStreamReader reader = new InputStreamReader(stream);
 		FlowFileParser parser = new FlowFileParser(reader, builder);
 		parser.parse();
 		this.component = builder.buildFlowComponent();

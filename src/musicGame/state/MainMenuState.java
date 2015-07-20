@@ -1,7 +1,7 @@
 package musicGame.state;
 
 import musicGame.core.action.ChangeStateAction;
-import musicGame.core.action.LoadGameAction;
+import musicGame.core.action.LocalLoadGameAction;
 import musicGame.gui.DirectionalPanel;
 import musicGame.gui.MenuSelection;
 import musicGame.gui.MenuSelectionGroup;
@@ -45,7 +45,7 @@ public class MainMenuState extends GameStateBase {
 		panel.addChild(playCustomLevel);
 		panel.addChild(exit);
 		
-		playDefaultLevel.addListener(new LoadGameAction("levelFlowFiles/test.lfl", game));
+		playDefaultLevel.addListener(new LocalLoadGameAction("/levelFlowFiles/test.lfl", game));
 		playCustomLevel.addListener(new ChangeStateAction(FlowFilePickerMenuState.class, game));
 		exit.addListener(new ComponentListener() {
 			@Override

@@ -11,11 +11,11 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class LoadGameAction extends ChangeStateAction {
+public class ExternalLoadGameAction extends ChangeStateAction {
 
 	private String flowFile;
 	
-	public LoadGameAction(String flowFile, StateBasedGame game) {
+	public ExternalLoadGameAction(String flowFile, StateBasedGame game) {
 		super(PlayGameState.class, game);
 		this.flowFile = flowFile;
 	}
@@ -23,7 +23,7 @@ public class LoadGameAction extends ChangeStateAction {
 	@Override
 	public void componentActivated(AbstractComponent component) {
 		try {
-			GameStateBase.getStateInstance(PlayGameState.class).loadFile(this.flowFile);
+			GameStateBase.getStateInstance(PlayGameState.class).loadExternalFile(this.flowFile);
 		} catch (IOException | FlowFileParserException | SlickException
 				| FlowComponentBuilderException e) {
 			// TODO Properly handle the exception
@@ -31,4 +31,5 @@ public class LoadGameAction extends ChangeStateAction {
 		}
 		this.game.enterState(GameStateBase.getStateID(PlayGameState.class));
 	}
+
 }
