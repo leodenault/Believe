@@ -6,10 +6,6 @@ import org.newdawn.slick.state.BasicGameState;
 
 public abstract class GameStateBase extends BasicGameState {
 
-	protected static final String NO_XML_FILE = "";
-	
-	private String niftyXmlFile;
-	
 	public GameStateBase() {
 		GameStateRegistry.getInstance().addEntry(this);
 	}
