@@ -107,12 +107,17 @@
 		<copy todir="${outDir}/lib">
 			<fileset dir="lib" includes="*.jar"/>
 		</copy>
-		<fileset dir="lib" includes="*.jar"/>
 		<copy todir="${outDir}/">
 			<fileset file="lib/native/OpenAL32.dll" />
 			<fileset file="lib/native/OpenAL64.dll" />
 			<fileset file="lib/native/libopenal.so" />
 			<fileset file="lib/native/libopenal64.so" />
+		</copy>
+		<copy todir="${outDir}/customFlowFiles">
+			<fileset dir="customFlowFiles" includes="*.lfl"/>
+		</copy>
+		<copy todir="${outDir}/customSongs">
+			<fileset dir="customSongs" includes="*.ogg"/>
 		</copy>
 	</target>
 
