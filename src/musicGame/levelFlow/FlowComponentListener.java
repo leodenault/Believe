@@ -7,7 +7,7 @@ import org.newdawn.slick.gui.ComponentListener;
  * 
  * @see musicGame.levelFlow.FlowComponent
  */
-public interface IFlowComponentListener extends ComponentListener {
+public interface FlowComponentListener extends ComponentListener {
 	
 	/**
 	 * Invoked when a beat was successfully consumed.
@@ -26,4 +26,9 @@ public interface IFlowComponentListener extends ComponentListener {
 	 * Invoked when a beat was discarded without being consumed.
 	 */
 	void beatMissed();
+	
+	/**
+	 * Invoked when the song has reached its end and no more beats are scrolling
+	 */
+	void songEnded();
 }

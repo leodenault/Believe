@@ -29,7 +29,7 @@ public class FlowComponentTest {
 	@Mock private Image image;
 	@Mock private Music song;
 	@Mock private Input input;
-	@Mock private IFlowComponentListener listener;
+	@Mock private FlowComponentListener listener;
 	@Mock private AbstractComponent abstractComponent;
 	
 	private FlowComponent flowComponent;

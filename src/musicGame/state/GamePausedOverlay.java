@@ -32,7 +32,7 @@ public class GamePausedOverlay extends GameStateBase {
 		restart.addListener(new ComponentListener() {
 			@Override
 			public void componentActivated(AbstractComponent component) {
-				GameStateBase.getStateInstance(PlayGameState.class).stop();
+				GameStateBase.getStateInstance(PlayGameState.class).reset();
 				game.enterState(GameStateBase.getStateID(PlayGameState.class));
 			}
 		});

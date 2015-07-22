@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 
 import musicGame.core.action.ChangeStateAction;
 import musicGame.levelFlow.FlowComponent;
+import musicGame.levelFlow.FlowComponentListener;
 import musicGame.levelFlow.parsing.FlowComponentBuilder;
 import musicGame.levelFlow.parsing.FlowFileParser;
 import musicGame.levelFlow.parsing.exceptions.FlowComponentBuilderException;
@@ -16,9 +17,10 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class PlayGameState extends GameStateBase {
+public class PlayGameState extends GameStateBase implements FlowComponentListener {
 	
 	private FlowComponent component;
 	private StateBasedGame game;
@@ -44,11 +46,12 @@ public class PlayGameState extends GameStateBase {
 		this.component.setSpeedMultiplier(4);
 		this.component.setLocation((container.getWidth() - component.getWidth())/ 2, 32);
 		this.component.setHeight(container.getHeight());
+		this.component.addListener(this);
 	}
 	
-	public void stop() {
+	public void reset() {
 		if (this.component != null) {
-			this.component.stop();
+			this.component.reset();
 		}
 	}
 
@@ -95,4 +98,21 @@ public class PlayGameState extends GameStateBase {
 		super.leave(container, game);
 		this.component.pause();
 	}
+
+	@Override
+	public void beatSuccess(int index) {}
+
+	@Override
+	public void beatFailed() {}
+
+	@Override
+	public void beatMissed() {}
+
+	@Override
+	public void songEnded() {
+		new ChangeStateAction(MainMenuState.class, game).componentActivated(null);
+	}
+
+	@Override
+	public void componentActivated(AbstractComponent source) {}
 }

@@ -5,6 +5,7 @@ import musicGame.gui.AbstractContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Music;
+import org.newdawn.slick.MusicListener;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.GUIContext;
@@ -13,7 +14,7 @@ import org.newdawn.slick.gui.GUIContext;
  * Contains lanes with beats. The main component for creating musical games
  * where the user must tap beats to play.
  */
-public class FlowComponent extends AbstractContainer implements ComponentListener {
+public class FlowComponent extends AbstractContainer implements ComponentListener, MusicListener {
 
 	private Image image;
 	private Lane[] lanes;
@@ -98,6 +99,7 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 		this.inputKeys = inputKeys;
 		this.status = PlayStatus.STOPPED;
 		this.song = song;
+		this.song.addListener(this);
 		this.createLanes(numLanes, laneWidth, subdivision, bpm, offset);
 	}
 
@@ -121,16 +123,16 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 			if (key == this.inputKeys[i]) {
 				if (this.lanes[i].consumeBeat()) {
 					for (Object listener : this.listeners) {
-						if (listener instanceof IFlowComponentListener) {
-							IFlowComponentListener child = (IFlowComponentListener)listener;
+						if (listener instanceof FlowComponentListener) {
+							FlowComponentListener child = (FlowComponentListener)listener;
 							child.beatSuccess(i);
 						}
 					}
 				}
 				else {
 					for (Object listener : this.listeners) {
-						if (listener instanceof IFlowComponentListener) {
-							IFlowComponentListener child = (IFlowComponentListener)listener;
+						if (listener instanceof FlowComponentListener) {
+							FlowComponentListener child = (FlowComponentListener)listener;
 							child.beatFailed();
 						}
 					}
@@ -230,8 +232,8 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 	@Override
 	public void componentActivated(AbstractComponent source) {
 		for (Object listener : this.listeners) {
-			if (listener instanceof IFlowComponentListener) {
-				IFlowComponentListener child = (IFlowComponentListener)listener;
+			if (listener instanceof FlowComponentListener) {
+				FlowComponentListener child = (FlowComponentListener)listener;
 				child.beatMissed();
 			}
 		}
@@ -285,6 +287,15 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 			lane.stop();
 		}
 		this.song.stop();
+		this.status = PlayStatus.STOPPED;
+	}
+	
+	public void reset() {
+		for (Lane lane : this.lanes) {
+			lane.stop();
+		}
+		this.song.pause();
+		this.song.setPosition(0.0f);
 		this.status = PlayStatus.STOPPED;
 	}
 
@@ -347,4 +358,18 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 
 	@Override
 	protected void resetLayout() {}
+
+	@Override
+	public void musicEnded(Music music) {
+		for (Object listener : this.listeners) {
+			if (listener instanceof FlowComponentListener) {
+				((FlowComponentListener)listener).songEnded();
+			}
+		}
+	}
+
+	@Override
+	public void musicSwapped(Music music, Music newMusic) {
+		// This shouldn't be happening.
+	}
 }
