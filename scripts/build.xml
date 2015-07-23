@@ -98,7 +98,6 @@
 		description="Builds the application into the output directory.">
 		<mkdir dir="${outDir}/lib/native" />
 		<mkdir dir="${outDir}/customFlowFiles" />
-		<mkdir dir="${outDir}/customGraphics" />
 		<mkdir dir="${outDir}/customSongs" />
 		<mkdir dir="${outDir}/lib"/>
 		<copy todir="${outDir}/lib/native">
