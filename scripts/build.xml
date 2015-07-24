@@ -69,7 +69,7 @@
 	<target name="makeJAR" depends="cleanRelease, compile"
 			description="Creates a runnable jar for the application.">
 		<!-- Build the classpath -->
-		<var name="classpath" value=". customFlowFiles customGraphics customSongs"/>
+		<var name="classpath" value=". customFlowFiles customSongs"/>
 		<for param="file">
 			<path>
 				<fileset dir="lib" includes="*.jar"/>
