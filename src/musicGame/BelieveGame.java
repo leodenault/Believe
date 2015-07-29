@@ -4,6 +4,7 @@ import musicGame.state.FlowFilePickerMenuState;
 import musicGame.state.GamePausedOverlay;
 import musicGame.state.GameStateBase;
 import musicGame.state.MainMenuState;
+import musicGame.state.OptionsMenuState;
 import musicGame.state.PlayGameState;
 
 import org.newdawn.slick.AppGameContainer;
@@ -12,9 +13,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class BelieveGame extends StateBasedGame {
-	
-	private static final int SCREEN_WIDTH = 800;
-	private static final int SCREEN_HEIGHT = 600;
 	
 	public BelieveGame(String title) {
 		super(title);
@@ -41,6 +39,7 @@ public class BelieveGame extends StateBasedGame {
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
 		this.addState(new MainMenuState());
+		this.addState(new OptionsMenuState());
 		this.addState(new FlowFilePickerMenuState());
 		this.addState(new PlayGameState());
 		this.addState(new GamePausedOverlay());

@@ -39,14 +39,17 @@ public class MainMenuState extends GameStateBase {
 			throws SlickException {
 		MenuSelection playDefaultLevel = new MenuSelection(container, "Play Default Level");
 		MenuSelection playCustomLevel = new MenuSelection(container, "Play Custom Level");
+		MenuSelection options = new MenuSelection(container, "Options");
 		MenuSelection exit = new MenuSelection(container, "Exit");
 		panel = new DirectionalPanel(container, container.getWidth() / 2, (container.getHeight() - 250) / 4, 50);
 		panel.addChild(playDefaultLevel);
 		panel.addChild(playCustomLevel);
+		panel.addChild(options);
 		panel.addChild(exit);
 		
 		playDefaultLevel.addListener(new LocalLoadGameAction("/levelFlowFiles/test.lfl", game));
 		playCustomLevel.addListener(new ChangeStateAction(FlowFilePickerMenuState.class, game));
+		options.addListener(new ChangeStateAction(OptionsMenuState.class, game));
 		exit.addListener(new ComponentListener() {
 			@Override
 			public void componentActivated(AbstractComponent component) {
@@ -57,6 +60,7 @@ public class MainMenuState extends GameStateBase {
 		this.selections = new MenuSelectionGroup();
 		this.selections.add(playDefaultLevel);
 		this.selections.add(playCustomLevel);
+		this.selections.add(options);
 		this.selections.add(exit);
 	}
 

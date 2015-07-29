@@ -21,11 +21,11 @@ public class TextComponent extends ComponentBase {
 		}
 	}
 	
-	private static final int PADDING = 5;
-	private static final ColorSet DEFAULT = new ColorSet(0x000000, 0x898989, 0xffffff);
+	private static final int DEFAULT_PADDING = 5;
+	private static final ColorSet DEFAULT_COLOR_SET = new ColorSet(0x000000, 0x898989, 0xffffff);
 	
-	private String text;
-
+	protected int padding;
+	protected String text;
 	protected ColorSet colorSet;
 	
 	public TextComponent(GUIContext container, String text) {
@@ -35,7 +35,8 @@ public class TextComponent extends ComponentBase {
 	public TextComponent(GUIContext container, int x, int y, int width, int height, String text) {
 		super(container, x, y, width, height);
 		this.text = text;
-		this.colorSet = DEFAULT;
+		this.colorSet = DEFAULT_COLOR_SET;
+		this.padding = DEFAULT_PADDING;
 	}
 	
 	public void setColorSet(ColorSet set) {
@@ -48,24 +49,32 @@ public class TextComponent extends ComponentBase {
 
 	@Override
 	protected void renderComponent(GUIContext context, Graphics g) {
+		drawButton(context, g);
+		drawText(context, g);
+	}
+	
+	private void drawButton(GUIContext context, Graphics g) {
 		// Colour the button
 		g.setColor(new Color(colorSet.color));
 		g.fill(rect);
 		
 		// Colour the border
 		g.setColor(new Color(colorSet.borderColor));
-		g.setLineWidth(PADDING);
+		g.setLineWidth(padding);
 		g.drawRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
-
+	}
+	
+	protected void drawText(GUIContext context, Graphics g) {
 		Rectangle oldClip = Util.changeClipContext(g, rect);
 		
 		// Draw the text
 		g.setColor(new Color(colorSet.textColor));
 		int textWidth = g.getFont().getWidth(text);
 		int textHeight = g.getFont().getHeight(text);
+		g.pushTransform();
 		g.translate(-textWidth/2, -textHeight/2);
 		g.drawString(text, rect.getCenterX(), rect.getCenterY());
-		g.translate(textWidth/2, textHeight/2);
+		g.popTransform();
 		
 		Util.resetClipContext(g, oldClip);
 	}

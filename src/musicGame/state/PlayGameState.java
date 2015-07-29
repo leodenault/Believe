@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import musicGame.core.Options;
 import musicGame.core.action.ChangeStateAction;
 import musicGame.levelFlow.FlowComponent;
 import musicGame.levelFlow.FlowComponentListener;
@@ -43,7 +44,7 @@ public class PlayGameState extends GameStateBase implements FlowComponentListene
 		FlowFileParser parser = new FlowFileParser(reader, builder);
 		parser.parse();
 		this.component = builder.buildFlowComponent();
-		this.component.setSpeedMultiplier(4);
+		this.component.setSpeedMultiplier(Options.getInstance().flowSpeed);
 		this.component.setLocation((container.getWidth() - component.getWidth())/ 2, 32);
 		this.component.setHeight(container.getHeight());
 		this.component.addListener(this);

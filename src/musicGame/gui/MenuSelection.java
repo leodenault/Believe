@@ -13,7 +13,8 @@ public class MenuSelection extends TextComponent {
 	private static final String DEFAULT_ACTIVATION_SOUND = "res/sfx/selection_picked.ogg";
 	
 	private Sound selectionSound;
-	private Sound activationSound;
+	
+	protected Sound activationSound;
 	
 	public MenuSelection(GUIContext container, String text) throws SlickException {
 		this(container, 0, 0, 0, 0, text);
