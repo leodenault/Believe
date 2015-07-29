@@ -23,7 +23,7 @@ public class GamePausedOverlay extends GameStateBase {
 	public void init(GameContainer container, final StateBasedGame game)
 			throws SlickException {
 		this.game = game;
-		panel = new DirectionalPanel(container, 400, 100, 75);
+		panel = new DirectionalPanel(container, container.getWidth() / 2, (container.getHeight() - 200) / 3, 50);
 		MenuSelection resume = new MenuSelection(container, "Resume");
 		MenuSelection restart = new MenuSelection(container, "Restart");
 		MenuSelection exitLevel = new MenuSelection(container, "Exit Level");

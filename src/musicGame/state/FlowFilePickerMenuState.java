@@ -56,9 +56,13 @@ public class FlowFilePickerMenuState extends GameStateBase {
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		back = new MenuSelection(container, 10, 10, 200, 50, "Back");
-		noFilesMessage = new TextComponent(container, 260, 10, 500, 100, "");
-		scrollPanel = new VerticalKeyboardScrollpanel(container, 260, 10, 500, 100, 580);
+		int cWidth = container.getWidth();
+		int cHeight = container.getHeight();
+		
+		back = new MenuSelection(container, cWidth / 80, cHeight / 80, cWidth / 4, cHeight / 12, "Back");
+		noFilesMessage = new TextComponent(container, (int)(cWidth * 0.37), cHeight / 80, (int)(cWidth * 0.6), cHeight / 8, "");
+		scrollPanel = new VerticalKeyboardScrollpanel(container, (int)(cWidth * 0.37), cHeight / 80,
+				(int)(cWidth * 0.6), cHeight / 8, (int)(cHeight * 0.95));
 		
 		back.addListener(new ChangeStateAction(MainMenuState.class, game));
 	}

@@ -40,7 +40,7 @@ public class MainMenuState extends GameStateBase {
 		MenuSelection playDefaultLevel = new MenuSelection(container, "Play Default Level");
 		MenuSelection playCustomLevel = new MenuSelection(container, "Play Custom Level");
 		MenuSelection exit = new MenuSelection(container, "Exit");
-		panel = new DirectionalPanel(container, 400, 100, 75);
+		panel = new DirectionalPanel(container, container.getWidth() / 2, (container.getHeight() - 250) / 4, 50);
 		panel.addChild(playDefaultLevel);
 		panel.addChild(playCustomLevel);
 		panel.addChild(exit);

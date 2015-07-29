@@ -29,7 +29,7 @@ public class BelieveGame extends StateBasedGame {
 		try {
 			AppGameContainer game = new AppGameContainer(this);
 			game.setShowFPS(false);
-			game.setDisplayMode(SCREEN_WIDTH, SCREEN_HEIGHT, false);
+			game.setDisplayMode(game.getScreenWidth(), game.getScreenHeight(), true);
 			game.start();
 		}
 		catch (SlickException e) {
