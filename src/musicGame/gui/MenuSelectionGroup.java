@@ -50,9 +50,16 @@ public class MenuSelectionGroup implements Iterable<MenuSelection> {
 		if (this.selections.isEmpty()) {
 			throw new IndexOutOfBoundsException("Cannot select from empty group");
 		}
-		this.currentSelection.toggleSelect();
-		this.currentSelection = this.selections.get(index);
-		this.currentSelection.toggleSelect(true);
+		
+		MenuSelection newSelection = this.selections.get(index);
+		
+		if (!newSelection.isSelected()) {
+			if (!this.currentSelection.equals(newSelection)) {
+				this.currentSelection.toggleSelect();
+				this.currentSelection = newSelection;
+			}
+			this.currentSelection.toggleSelect(true);
+		}
 	}
 
 	public void selectNext() {

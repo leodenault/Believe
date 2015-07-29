@@ -7,9 +7,12 @@ import musicGame.levelFlow.parsing.exceptions.FlowFileParserException;
 import musicGame.state.GameStateBase;
 import musicGame.state.PlayGameState;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
 public class LocalLoadGameAction extends ChangeStateAction {
 
@@ -29,6 +32,7 @@ public class LocalLoadGameAction extends ChangeStateAction {
 			// TODO Properly handle the exception
 			e.printStackTrace();
 		}
-		this.game.enterState(GameStateBase.getStateID(PlayGameState.class));
+		this.game.enterState(GameStateBase.getStateID(PlayGameState.class),
+				new FadeOutTransition(Color.black, transitionLength), new FadeInTransition(Color.black, transitionLength));
 	}
 }

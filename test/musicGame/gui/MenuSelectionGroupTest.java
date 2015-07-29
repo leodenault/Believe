@@ -66,6 +66,7 @@ public class MenuSelectionGroupTest {
 		mockery.checking(new Expectations() {{
 			oneOf(selection).toggleSelect();
 			oneOf(selection2).toggleSelect(true);
+			oneOf(selection2).isSelected();
 		}});
 		this.group.select(1);
 		assertThat(this.group.getCurrentSelection(), is(selection2));
@@ -109,6 +110,7 @@ public class MenuSelectionGroupTest {
 			exactly(2).of(selection).toggleSelect();
 			oneOf(selection2).toggleSelect(true);
 			oneOf(selection2).toggleSelect();
+			oneOf(selection2).isSelected();
 		}});
 		this.group.select(1);
 		this.group.selectPrevious();
@@ -124,6 +126,7 @@ public class MenuSelectionGroupTest {
 			exactly(2).of(selection).toggleSelect();
 			oneOf(selection2).toggleSelect(true);
 			oneOf(selection2).toggleSelect();
+			oneOf(selection2).isSelected();
 		}});
 		this.group.select(1);
 		this.group.selectNext();
@@ -158,5 +161,26 @@ public class MenuSelectionGroupTest {
 		assertThat(this.group.getSelections(), is(empty()));
 		this.group.clear();
 		assertThat(this.group.getSelections(), is(empty()));
+	}
+	
+	@Test
+	public void selectShouldOnlyBeExecutedIfSelectionNotAlreadySelected() {
+		mockery.checking(new Expectations() {{
+			oneOf(selection).toggleSelect(true);
+			oneOf(selection).isSelected(); will(returnValue(true));
+		}});
+		this.group.add(selection);
+		this.group.select(0);
+	}
+	
+	@Test
+	public void selectShouldNotDeselectCurrentSelectionIfSameAsSelected() {
+		mockery.checking(new Expectations() {{
+			oneOf(selection).toggleSelect(true);
+			oneOf(selection).isSelected(); will(returnValue(false));
+			oneOf(selection).toggleSelect(true);
+		}});
+		this.group.add(selection);
+		this.group.select(0);
 	}
 }

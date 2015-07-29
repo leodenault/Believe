@@ -59,6 +59,7 @@ public class PlayGameState extends GameStateBase implements FlowComponentListene
 	public void keyPressed(int key, char c) {
 		super.keyPressed(key, c);
 		if (key == Input.KEY_ESCAPE) {
+			this.component.pause();
 			new ChangeStateAction(GamePausedOverlay.class, game).componentActivated(null);
 		}
 	}
@@ -80,6 +81,10 @@ public class PlayGameState extends GameStateBase implements FlowComponentListene
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
+		if (!component.isPlaying()) {
+			component.play();
+		}
+		
 		if (component != null) {
 			component.update();
 		}
@@ -89,7 +94,6 @@ public class PlayGameState extends GameStateBase implements FlowComponentListene
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		super.enter(container, game);
-		this.component.play();
 	}
 
 	@Override

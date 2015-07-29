@@ -77,6 +77,12 @@ public class VerticalKeyboardScrollpanel extends AbstractContainer {
 		this.selections.getCurrentSelection().toggleSelect();
 	}
 	
+	public void reset() {
+		if (!this.selections.isEmpty()) {
+			this.selections.select(0);
+		}
+	}
+	
 	public void activateSelection() {
 		this.selections.getCurrentSelection().activate();
 	}
