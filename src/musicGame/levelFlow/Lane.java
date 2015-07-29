@@ -201,13 +201,18 @@ public class Lane extends AbstractContainer {
 		}
 		catch (ConcurrentModificationException e) {}
 
-		/*g.setColor(new Color(0xFF00FF00));
-		g.drawLine(this.x, this.y, this.x, this.y + this.height);
-		g.drawLine(this.x + this.width, this.y, this.x + this.width, this.y + this.height);
+/*		g.setColor(new Color(0xFF00FF00));
+		g.drawLine(this.getX(), this.getY(), this.getX(), this.getY() + this.getHeight());
+		g.drawLine(this.getX() + this.getWidth(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight());
 
-		for (int i = 0; i < this.height; i += ((this.speed * 60) / this.bpm)) {
-			g.drawLine(this.x, this.y + i, this.x + this.width, this.y + i);
+		for (int i = 0; i < this.getHeight(); i += ((this.speed * 60) / this.bpm)) {
+			g.drawLine(this.getX(), this.getY() + i, this.getX() + this.getWidth(), this.getY() + i);
 		}*/
+		
+		/*g.setColor(Color.blue);
+		g.drawLine(this.getX(), this.bufferDistance + this.getY(), this.getX() + this.getWidth(), this.bufferDistance + this.getY());
+		g.drawLine(this.getX(), -this.bufferDistance + this.getY(), this.getX() + this.getWidth(), -this.bufferDistance + this.getY());
+		g.drawLine(this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY());*/
 	}
 
 	/**
@@ -312,7 +317,7 @@ public class Lane extends AbstractContainer {
 	}
 
 	private double calculatePosition(Beat beat) {
-		return beat.getPosition() * ((this.speed * 60) / (this.bpm * this.subdivision)) + this.rect.getY() + (this.offset / 1000) * this.speed;
+		return beat.getPosition() * ((this.speed * 60) / (this.bpm * this.subdivision)) + this.rect.getY() + (this.offset / 1000) * this.speed - this.bufferDistance/2;
 	}
 
 	@Override
