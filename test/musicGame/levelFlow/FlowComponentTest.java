@@ -48,6 +48,7 @@ public class FlowComponentTest {
 			oneOf(input).addPrimaryListener(with(any(FlowComponent.class)));
 			atLeast(4).of(input).addPrimaryListener(with(any(Lane.class)));
 			atLeast(1).of(image).getHeight(); will(returnValue(123));
+			oneOf(song).addListener(with(any(FlowComponent.class)));
 		}});
 		this.flowComponent = new FlowComponent(context, image, song, INPUT_KEYS, NUM_LANES, LANE_WIDTH, SUBDIVISION, BPM, OFFSET);
 	}

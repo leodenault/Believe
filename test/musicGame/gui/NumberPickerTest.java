@@ -13,6 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.gui.GUIContext;
 
 public class NumberPickerTest {
@@ -27,6 +28,7 @@ public class NumberPickerTest {
 	
 	@Mock private GUIContext container;
 	@Mock private Input input;
+	@Mock private Sound sound;
 	
 	@Before
 	public void setUp() throws SlickException {
@@ -35,7 +37,7 @@ public class NumberPickerTest {
 			oneOf(input).addPrimaryListener(with(any(NumberPicker.class)));
 		}});
 		
-		picker = new NumberPicker(container, "", 3, 1, 5);
+		picker = new NumberPicker(container, 0, 0, 0, 0, "", 3, 1, 5, sound, sound);
 	}
 	
 	@Test
@@ -49,6 +51,10 @@ public class NumberPickerTest {
 	
 	@Test
 	public void pressingLeftShouldDecreaseValue() {
+		mockery.checking(new Expectations() {{
+			oneOf(sound).play();
+		}});
+
 		assertThat(picker.getValue(), is(3));
 		picker.activate();
 		picker.keyPressed(Input.KEY_LEFT, '`');
@@ -57,6 +63,10 @@ public class NumberPickerTest {
 	
 	@Test
 	public void pressingRightShouldDecreaseValue() {
+		mockery.checking(new Expectations() {{
+			oneOf(sound).play();
+		}});
+
 		assertThat(picker.getValue(), is(3));
 		picker.activate();
 		picker.keyPressed(Input.KEY_RIGHT, '`');
@@ -65,6 +75,10 @@ public class NumberPickerTest {
 	
 	@Test
 	public void valueShouldNotDecreaseBelowMinimum() {
+		mockery.checking(new Expectations() {{
+			oneOf(sound).play();
+		}});
+		
 		assertThat(picker.getValue(), is(3));
 		picker.activate();
 		picker.keyPressed(Input.KEY_LEFT, '`');
@@ -76,6 +90,10 @@ public class NumberPickerTest {
 	
 	@Test
 	public void valueShouldNotIncreaseBeyondMaximum() {
+		mockery.checking(new Expectations() {{
+			oneOf(sound).play();
+		}});
+		
 		assertThat(picker.getValue(), is(3));
 		picker.activate();
 		picker.keyPressed(Input.KEY_RIGHT, '`');

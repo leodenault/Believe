@@ -6,6 +6,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
@@ -43,6 +44,18 @@ public class NumberPicker extends MenuSelection {
 	public NumberPicker(GUIContext container, int x, int y, int width,
 			int height, String text, int value, int min, int max) throws SlickException {
 		super(container, x, y, width, height, text);
+		this.value = value;
+		this.activated = false;
+		this.min = min;
+		this.max = max;
+	}
+	
+	/**
+	 * Used for testing.
+	 */
+	protected NumberPicker(GUIContext container, int x, int y, int width,
+			int height, String text, int value, int min, int max, Sound selectionSound,  Sound activationSound) throws SlickException {
+		super(container, x, y, width, height, text, selectionSound, activationSound);
 		this.value = value;
 		this.activated = false;
 		this.min = min;

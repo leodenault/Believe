@@ -22,10 +22,19 @@ public class MenuSelection extends TextComponent {
 	
 	public MenuSelection(GUIContext container, int x, int y, int width, int height, String text)
 		throws SlickException {
+		this(container, x, y, width, height, text, new Sound(DEFAULT_SELECTION_SOUND), new Sound(DEFAULT_ACTIVATION_SOUND));
+	}
+	
+	/**
+	 * Used for testing.
+	 */
+	protected MenuSelection(GUIContext container, int x, int y, int width, int height,
+			String text, Sound selectionSound, Sound activationSound)
+			throws SlickException {
 		super(container, x, y, width, height, text);
 		this.colorSet = INACTIVE;
-		this.selectionSound = new Sound(DEFAULT_SELECTION_SOUND);
-		this.activationSound = new Sound(DEFAULT_ACTIVATION_SOUND);
+		this.selectionSound = selectionSound;
+		this.activationSound = activationSound;
 	}
 	
 	public void toggleSelect() {
