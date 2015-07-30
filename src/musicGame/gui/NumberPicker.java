@@ -28,6 +28,7 @@ public class NumberPicker extends MenuSelection {
 	private static final Color ARROW_DEPRESSED = Color.white;
 	private static final Color ARROW_PRESSED = new Color(0x999999);
 	private static final int PRESS_DELAY = 100;
+	private static final String DEFAULT_PRESS_SOUND = "res/sfx/tick.ogg";
 	
 	private boolean activated;
 	private boolean leftPressed;
@@ -35,6 +36,7 @@ public class NumberPicker extends MenuSelection {
 	private int value;
 	private int min;
 	private int max;
+	private Sound pressSound;
 
 	public NumberPicker(GUIContext container, String text, int value) throws SlickException {
 		this(container, text, value, Integer.MIN_VALUE, Integer.MAX_VALUE);
@@ -56,18 +58,21 @@ public class NumberPicker extends MenuSelection {
 		this.activated = false;
 		this.min = min;
 		this.max = max;
+		this.pressSound = new Sound(DEFAULT_PRESS_SOUND);
 	}
 	
 	/**
 	 * Used for testing.
 	 */
 	protected NumberPicker(GUIContext container, int x, int y, int width,
-			int height, String text, int value, int min, int max, Sound selectionSound,  Sound activationSound) throws SlickException {
+			int height, String text, int value, int min, int max,
+			Sound selectionSound,  Sound activationSound, Sound pressSound) throws SlickException {
 		super(container, x, y, width, height, text, selectionSound, activationSound);
 		this.value = value;
 		this.activated = false;
 		this.min = min;
 		this.max = max;
+		this.pressSound = pressSound;
 	}
 	
 	public int getValue() {
@@ -87,9 +92,11 @@ public class NumberPicker extends MenuSelection {
 		if (activated) {
 			if (key == Input.KEY_LEFT && value > min) {
 				value--;
+				pressSound.play();
 				schedulePressTimer(true, leftPressed);
 			} else if (key == Input.KEY_RIGHT && value < max) {
 				value++;
+				pressSound.play();
 				schedulePressTimer(false, rightPressed);
 			}
 		}

@@ -37,7 +37,7 @@ public class NumberPickerTest {
 			oneOf(input).addPrimaryListener(with(any(NumberPicker.class)));
 		}});
 		
-		picker = new NumberPicker(container, 0, 0, 0, 0, "", 3, 1, 5, sound, sound);
+		picker = new NumberPicker(container, 0, 0, 0, 0, "", 3, 1, 5, sound, sound, sound);
 	}
 	
 	@Test
