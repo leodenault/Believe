@@ -28,6 +28,7 @@ public class BelieveGame extends StateBasedGame {
 			AppGameContainer game = new AppGameContainer(this);
 			game.setShowFPS(false);
 			game.setDisplayMode(game.getScreenWidth(), game.getScreenHeight(), true);
+			game.setMouseGrabbed(true);
 			game.start();
 		}
 		catch (SlickException e) {
