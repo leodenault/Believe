@@ -54,10 +54,10 @@ public class MenuSelectionGroup implements Iterable<MenuSelection> {
 		MenuSelection newSelection = this.selections.get(index);
 		
 		if (!newSelection.isSelected()) {
-			if (!this.currentSelection.equals(newSelection)) {
+			if (this.currentSelection.isSelected()) {
 				this.currentSelection.toggleSelect();
-				this.currentSelection = newSelection;
 			}
+			this.currentSelection = newSelection;
 			this.currentSelection.toggleSelect(true);
 		}
 	}
