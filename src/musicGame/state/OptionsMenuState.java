@@ -58,18 +58,18 @@ public class OptionsMenuState extends GameStateBase {
 			throws SlickException {
 		int cWidth = container.getWidth();
 		int cHeight = container.getHeight();
+		final Options options = Options.getInstance();
 		
 		acceptingInput = true;
 		back = new MenuSelection(container, cWidth / 80, cHeight / 80, cWidth / 4, cHeight / 12, "Back");
 		scrollPanel = new VerticalKeyboardScrollpanel(container, (int)(cWidth * 0.37), cHeight / 80,
 				(int)(cWidth * 0.6), cHeight / 8, (int)(cHeight * 0.95));
 		
-		final NumberPicker flowSpeed = new NumberPicker(container, "Flow Speed", 4, 1, 20);
+		final NumberPicker flowSpeed = new NumberPicker(container, "Flow Speed", options.flowSpeed, 1, 20);
 		flowSpeed.addListener(new ComponentListener() {
 			@Override
 			public void componentActivated(AbstractComponent source) {
 				if (!acceptingInput) {
-					Options options = Options.getInstance();
 					options.flowSpeed = flowSpeed.getValue();
 				}
 				
@@ -78,7 +78,13 @@ public class OptionsMenuState extends GameStateBase {
 		} );
 		
 		scrollPanel.addChild(flowSpeed);
-		back.addListener(new ChangeStateAction(MainMenuState.class, game));
+		back.addListener(new ComponentListener() {
+			@Override
+			public void componentActivated(AbstractComponent source) {
+				options.save();
+				new ChangeStateAction(MainMenuState.class, game).componentActivated(source);
+			}
+		});
 	}
 
 	@Override
