@@ -2,6 +2,8 @@ package musicGame;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Main {
@@ -9,6 +11,7 @@ public class Main {
 	private static final String PATH = "lib/native";
 	
 	public static void main(String[] args) {
+		Logger logger = Logger.getLogger("believe");
 
 		try {
 			
@@ -29,14 +32,14 @@ public class Main {
 			//add the new path
 			final String[] newPaths = Arrays.copyOf(paths, paths.length + 1);
 			newPaths[newPaths.length-1] = PATH;
-			System.out.println("Resetting java.library.path to contain natives");
+			logger.log(Level.INFO, "Resetting java.library.path to contain natives");
 			usrPathsField.set(null, newPaths);
 			
 			BelieveGame b = new BelieveGame("Believe");
 			b.run();
 		}
 		catch (Exception e) {
-			System.out.println("An error was caught and unfortunately, it was not graceful: " + e.getMessage());
+			logger.log(Level.SEVERE, String.format("An error was caught and unfortunately, it was not graceful: %s", e.getMessage()));
 			e.printStackTrace();
 		}
 	}
