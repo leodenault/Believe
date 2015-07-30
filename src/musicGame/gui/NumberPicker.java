@@ -1,5 +1,8 @@
 package musicGame.gui;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import musicGame.core.Util;
 
 import org.newdawn.slick.Color;
@@ -22,8 +25,13 @@ public class NumberPicker extends MenuSelection {
 		addPoint(0.5f, -1);
 		addPoint(0.5f, 1);
 	}};
+	private static final Color ARROW_DEPRESSED = Color.white;
+	private static final Color ARROW_PRESSED = new Color(0x999999);
+	private static final int PRESS_DELAY = 100;
 	
 	private boolean activated;
+	private boolean leftPressed;
+	private boolean rightPressed;
 	private int value;
 	private int min;
 	private int max;
@@ -79,8 +87,10 @@ public class NumberPicker extends MenuSelection {
 		if (activated) {
 			if (key == Input.KEY_LEFT && value > min) {
 				value--;
+				schedulePressTimer(true, leftPressed);
 			} else if (key == Input.KEY_RIGHT && value < max) {
 				value++;
+				schedulePressTimer(false, rightPressed);
 			}
 		}
 	}
@@ -111,15 +121,46 @@ public class NumberPicker extends MenuSelection {
 			
 			// Draw the plus and minus signs if the component is active
 			if (activated) {
-				Shape left = ARROW.transform(Transform.createScaleTransform(rect.getWidth() / 20, rect.getHeight() * 0.75f / ARROW.getHeight()))
-						.transform(Transform.createTranslateTransform(rect.getX() + rect.getWidth() / 10, rect.getCenterY()));
-				Shape right = ARROW.transform(Transform.createScaleTransform(-rect.getWidth() / 20, rect.getHeight() * 0.75f / ARROW.getHeight()))
-						.transform(Transform.createTranslateTransform(rect.getMaxX() - rect.getWidth() / 10, rect.getCenterY()));
 				
-				g.fill(left);
-				g.fill(right);
+				if (value > min) {
+					g.setColor(arrowColor(leftPressed));
+					Shape left = ARROW.transform(Transform.createScaleTransform(rect.getWidth() / 20, rect.getHeight() * 0.75f / ARROW.getHeight()))
+							.transform(Transform.createTranslateTransform(rect.getX() + rect.getWidth() / 10, rect.getCenterY()));
+					g.fill(left);
+				}
+
+				if (value < max) {
+					g.setColor(arrowColor(rightPressed));
+					Shape right = ARROW.transform(Transform.createScaleTransform(-rect.getWidth() / 20, rect.getHeight() * 0.75f / ARROW.getHeight()))
+							.transform(Transform.createTranslateTransform(rect.getMaxX() - rect.getWidth() / 10, rect.getCenterY()));
+					g.fill(right);
+				}
 			}
 			
 			Util.resetClipContext(g, oldClip);
+	}
+	
+	private void schedulePressTimer(final boolean left, boolean pressed) {
+		if (!pressed) {
+			if (left) {
+				leftPressed = true;
+			} else {
+				rightPressed = true;
+			}
+			new Timer().schedule(new TimerTask() {
+				@Override
+				public void run() {
+					if (left) {
+						leftPressed = false;
+					} else {
+						rightPressed = false;
+					}
+				}
+			}, PRESS_DELAY);
+		}
+	}
+	
+	private Color arrowColor(boolean pressed) {
+		return pressed ? ARROW_PRESSED : ARROW_DEPRESSED;
 	}
 }
