@@ -52,7 +52,7 @@ public class NumberPickerTest {
 	@Test
 	public void pressingLeftShouldDecreaseValue() {
 		mockery.checking(new Expectations() {{
-			oneOf(sound).play();
+			exactly(2).of(sound).play();
 		}});
 
 		assertThat(picker.getValue(), is(3));
@@ -64,7 +64,7 @@ public class NumberPickerTest {
 	@Test
 	public void pressingRightShouldDecreaseValue() {
 		mockery.checking(new Expectations() {{
-			oneOf(sound).play();
+			exactly(2).of(sound).play();
 		}});
 
 		assertThat(picker.getValue(), is(3));
@@ -76,7 +76,7 @@ public class NumberPickerTest {
 	@Test
 	public void valueShouldNotDecreaseBelowMinimum() {
 		mockery.checking(new Expectations() {{
-			oneOf(sound).play();
+			exactly(3).of(sound).play();
 		}});
 		
 		assertThat(picker.getValue(), is(3));
@@ -91,7 +91,7 @@ public class NumberPickerTest {
 	@Test
 	public void valueShouldNotIncreaseBeyondMaximum() {
 		mockery.checking(new Expectations() {{
-			oneOf(sound).play();
+			exactly(3).of(sound).play();
 		}});
 		
 		assertThat(picker.getValue(), is(3));

@@ -18,8 +18,10 @@ import org.newdawn.slick.gui.GUIContext;
  */
 public class Lane extends AbstractContainer {
 
-	private static final int DEFAULT_BUFFER = 90; // Time allowed to be off the beat, in milliseconds.
-	private static int DEFAULT_SPEED = 100; // Pixels per second.
+	private static final int DEFAULT_BUFFER = 300; // Time allowed to be off the beat, in milliseconds.
+	private static final int DEFAULT_SPEED = 100; // Pixels per second.
+	private static final int MIN_BANNER = 25; // Minimum banner height
+	private static final double BANNER_CONSTANT = 0.219298246; // Constant for scaling banner size depending on speed
 
 	private int speed;
 	private int subdivision;
@@ -143,7 +145,7 @@ public class Lane extends AbstractContainer {
 	 * The time in milliseconds allotted for missing a beat.
 	 */
 	public int getBuffer() {
-		return (this.bufferDistance / this.speed) * 1000;
+		return (int)((double)this.bufferDistance / this.speed) * 1000;
 	}
 
 	/**
@@ -151,7 +153,16 @@ public class Lane extends AbstractContainer {
 	 */
 	public void setBuffer(int value) {
 		this.buffer = value;
-		this.bufferDistance = (int)((value / 1000.0) * this.speed);
+		double seconds = value / 1000.0;
+		this.bufferDistance = (int)(MIN_BANNER + (speed - DEFAULT_SPEED) * seconds * BANNER_CONSTANT);
+	}
+	
+	public int getBufferStart() {
+		return (int)(this.rect.getY());
+	}
+	
+	public int getBufferEnd() {
+		return (int)(this.rect.getY() + this.bufferDistance);
 	}
 
 	/**
@@ -209,7 +220,7 @@ public class Lane extends AbstractContainer {
 			g.drawLine(this.getX(), this.getY() + i, this.getX() + this.getWidth(), this.getY() + i);
 		}*/
 		
-		/*g.setColor(Color.blue);
+		/*g.setColor(Color.orange);
 		g.drawLine(this.getX(), this.bufferDistance + this.getY(), this.getX() + this.getWidth(), this.bufferDistance + this.getY());
 		g.drawLine(this.getX(), -this.bufferDistance + this.getY(), this.getX() + this.getWidth(), -this.bufferDistance + this.getY());
 		g.drawLine(this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY());*/
@@ -238,7 +249,8 @@ public class Lane extends AbstractContainer {
 				beat.setLocation(beat.getX(), this.calculatePosition(beat) - delta);
 			}
 
-			if (this.activeBeats.element().getY() < this.rect.getY() - bufferDistance - (this.activeBeats.element().getHeight() / 2)) {
+			Beat first = this.activeBeats.element(); 
+			if (first.getY() + first.getHeight() < this.rect.getY()) {
 				this.discardBeat();
 				this.notifyListeners();
 			}
@@ -285,12 +297,17 @@ public class Lane extends AbstractContainer {
 	 * @return	True if a beat was succesfully consumed, false if none were in range. 
 	 */
 	public boolean consumeBeat() {
-		if (this.activeBeats.size() > 0 && (this.activeBeats.element().getY() + (this.activeBeats.element().getHeight() / 2)) >= this.rect.getY() - bufferDistance && (this.activeBeats.element().getY() + (this.activeBeats.element().getHeight() / 2)) <= this.rect.getY() + bufferDistance) {
-			Beat temp = this.activeBeats.element();
-			temp.consume();
-			this.animations.add(temp);
-			this.discardBeat();
-			return true;
+		if (this.activeBeats.size() > 0) {
+			Beat first = this.activeBeats.element();
+			int firstCenterY = first.getY() + first.getHeight() / 2;
+			if (firstCenterY >= this.rect.getY()
+					&& firstCenterY <= this.rect.getY() + bufferDistance) {
+				Beat temp = this.activeBeats.element();
+				temp.consume();
+				this.animations.add(temp);
+				this.discardBeat();
+				return true;
+			}
 		}
 		return false;
 	}
@@ -317,7 +334,11 @@ public class Lane extends AbstractContainer {
 	}
 
 	private double calculatePosition(Beat beat) {
-		return beat.getPosition() * ((this.speed * 60) / (this.bpm * this.subdivision)) + this.rect.getY() + (this.offset / 1000) * this.speed - this.bufferDistance/2;
+		return beat.getPosition() * ((this.speed * 60) / (this.bpm * this.subdivision))
+				+ this.rect.getY()
+				+ (this.offset / 1000) * this.speed
+				- beat.getHeight() / 2
+				+ this.bufferDistance / 2;
 	}
 
 	@Override

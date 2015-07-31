@@ -1,11 +1,14 @@
 package musicGame.levelFlow;
 
+import java.awt.Font;
+
 import musicGame.gui.AbstractContainer;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.MusicListener;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.GUIContext;
@@ -16,7 +19,8 @@ import org.newdawn.slick.gui.GUIContext;
  */
 public class FlowComponent extends AbstractContainer implements ComponentListener, MusicListener {
 
-	private Image image;
+	private final TrueTypeFont KEY_FONT;
+	
 	private Lane[] lanes;
 	private Music song;
 	private char[] inputKeys;
@@ -38,9 +42,8 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 	 * 
 	 * @see org.newdawn.slick.Input
 	 */
-	public FlowComponent(GUIContext container, Image image, Music song, char[] inputKeys, int numLanes, int laneWidth, int subdivision, double bpm, double offset) {
-		super(container);
-		this.init(image, song, inputKeys, numLanes, laneWidth, subdivision, bpm, offset);
+	public FlowComponent(GUIContext container, Music song, char[] inputKeys, int numLanes, int width, int subdivision, double bpm, double offset) {
+		this(container, song, inputKeys, numLanes, width, subdivision, bpm, offset, 0, 0);
 	}
 
 	/**
@@ -61,9 +64,8 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 	 * 
 	 * @see org.newdawn.slick.Input
 	 */
-	public FlowComponent(GUIContext container, Image image, Music song, char[] inputKeys, int numLanes, int laneWidth, int subdivision, double bpm, double offset, int x, int y) {
-		super(container, x, y);
-		this.init(image, song, inputKeys, numLanes, laneWidth, subdivision, bpm, offset);
+	public FlowComponent(GUIContext container, Music song, char[] inputKeys, int numLanes, int width, int subdivision, double bpm, double offset, int x, int y) {
+		this(container, song, inputKeys, numLanes, width, subdivision, bpm, offset, x, y, 0);
 	}
 
 	/**
@@ -86,21 +88,27 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 	 * 
 	 * @see org.newdawn.slick.Input
 	 */
-	public FlowComponent(GUIContext container, Image image, Music song, char[] inputKeys, int numLanes, int laneWidth, int subdivision, double bpm, double offset, int x, int y, int width, int height) {
-		super(container, x, y, width, height);
-		this.init(image, song, inputKeys, numLanes, laneWidth, subdivision, bpm, offset);
+	public FlowComponent(GUIContext container, Music song, char[] inputKeys, int numLanes, int width, int subdivision, double bpm, double offset, int x, int y, int height) {
+		this(container, song, inputKeys, numLanes, width, subdivision, bpm, offset, x, y, height, new TrueTypeFont(new Font("Verdana", Font.PLAIN, 50), true));
 	}
+	
+	/**
+	 * Used for testing
+	 */
+	protected FlowComponent(GUIContext container, Music song, char[] inputKeys, int numLanes, int width,
+			int subdivision, double bpm, double offset, int x, int y, int height, TrueTypeFont keyFont) {
+		super(container, 0, 0, 0, 0);
 
-	private void init(Image image, Music song, char[] inputKeys, int numLanes, int laneWidth, int subdivision, double bpm, double offset) {
 		if (inputKeys.length != numLanes) {
 			throw new RuntimeException("Number of keys must be equal to number of lanes.");
 		}
-		this.image = image;
 		this.inputKeys = inputKeys;
 		this.status = PlayStatus.STOPPED;
 		this.song = song;
 		this.song.addListener(this);
-		this.createLanes(numLanes, laneWidth, subdivision, bpm, offset);
+		this.rect.setWidth(0);
+		this.createLanes(numLanes, width / numLanes, subdivision, bpm, offset);
+		KEY_FONT = keyFont;
 	}
 
 	private void createLanes(int numLanes, int laneWidth, int subdivision, double bpm, double offset) {
@@ -109,7 +117,7 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 		}
 			this.lanes = new Lane[numLanes];
 		for (int i = 0; i < numLanes; i++) {
-			Lane lane = new Lane(this.container, (int)this.rect.getX() + (i * laneWidth), (int)this.rect.getY() + this.image.getHeight() / 2, laneWidth, (int)this.rect.getHeight(), subdivision, bpm, offset);
+			Lane lane = new Lane(this.container, (int)this.rect.getX() + (i * laneWidth), (int)this.rect.getY(), laneWidth, (int)this.rect.getHeight(), subdivision, bpm, offset);
 			this.addChild(lane);
 			this.lanes[i] = lane;
 			lane.addListener(this);
@@ -216,7 +224,34 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 
 	@Override
 	protected void renderComponent(GUIContext context, Graphics g) {
-		g.drawImage(this.image, this.rect.getX(), this.getY());
+		// Render the bar at the top
+		g.setColor(new Color(0x6e00b8));
+		g.setLineWidth(2.0f);
+		int start = lanes[0].getBufferStart();
+		int end = lanes[0].getBufferEnd();
+		int middle = (end + start) / 2;
+		for (int i = start; i <= end; i += (end - start) / 5) {
+			g.drawLine(this.getX(), i, this.getX() + this.getWidth(), i);
+		}
+		
+		// Render the middle line for help with precision
+		g.setColor(Color.blue);
+		g.drawLine(this.getX(), middle, this.getX() + this.getWidth(), middle);
+		
+		// Render the letters
+		g.setColor(Color.white);
+		g.setFont(KEY_FONT);
+		
+		int bufferY = (lanes[0].getBufferEnd() + lanes[0].getBufferStart()) / 2;
+
+		for (int i = 0; i < inputKeys.length; i++) {
+			String key = String.valueOf(Character.toUpperCase(inputKeys[i]));
+			int width = g.getFont().getWidth(key);
+			int height = g.getFont().getHeight(key);
+			
+			g.drawString(key, lanes[i].getX() + (lanes[i].getWidth() - width) / 2, bufferY - height / 2);
+		}
+		
 		super.renderComponent(container, g);
 	}
 

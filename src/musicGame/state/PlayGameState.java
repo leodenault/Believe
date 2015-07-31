@@ -39,13 +39,13 @@ public class PlayGameState extends GameStateBase implements FlowComponentListene
 	private void initializeComponent(InputStream stream) throws IOException, FlowFileParserException,
 	SlickException, FlowComponentBuilderException {
 		GameContainer container = game.getContainer();
-		FlowComponentBuilder builder = new FlowComponentBuilder(container, 32);
+		FlowComponentBuilder builder = new FlowComponentBuilder(container, container.getWidth() / 3);
 		InputStreamReader reader = new InputStreamReader(stream);
 		FlowFileParser parser = new FlowFileParser(reader, builder);
 		parser.parse();
 		this.component = builder.buildFlowComponent();
 		this.component.setSpeedMultiplier(Options.getInstance().flowSpeed);
-		this.component.setLocation((container.getWidth() - component.getWidth())/ 2, 32);
+		this.component.setLocation((container.getWidth() - component.getWidth())/ 2, container.getHeight() / 15);
 		this.component.setHeight(container.getHeight());
 		this.component.addListener(this);
 	}

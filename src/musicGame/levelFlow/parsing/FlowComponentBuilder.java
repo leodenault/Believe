@@ -163,7 +163,7 @@ public class FlowComponentBuilder {
 		if (missingFields.size() > 0) {
 			this.generateError(missingFields);
 		}
-		FlowComponent component = new FlowComponent(this.container, this.topBarImage, this.song, this.inputKeys,
+		FlowComponent component = new FlowComponent(this.container, this.song, this.inputKeys,
 				this.inputKeys.length, this.laneWidth, this.subdivisions, this.bpm, this.offset);
 		component.addBeats(this.convertBeats());
 		return component;
