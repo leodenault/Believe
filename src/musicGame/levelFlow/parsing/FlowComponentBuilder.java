@@ -12,7 +12,6 @@ import musicGame.levelFlow.parsing.exceptions.FlowComponentBuilderException;
 import musicGame.levelFlow.parsing.exceptions.FlowFileParserException;
 
 import org.newdawn.slick.Animation;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
@@ -27,7 +26,6 @@ public class FlowComponentBuilder {
 	private static final int DEFAULT_FRAME_DURATION = 40;
 
 	private GUIContext container;
-	private Image topBarImage;
 	private Music song;
 	private List<Beat>[] beats;
 	private Animation[] beatAnimations;
@@ -43,16 +41,6 @@ public class FlowComponentBuilder {
 		this.laneWidth = laneWidth;
 		this.bpm = INVALID_BPM;
 		this.offset = DEFAULT_OFFSET;
-	}
-	
-	public FlowComponentBuilder topBarImage(List<String> values)
-			throws SlickException, FlowComponentBuilderException {
-		if (values.size() != 1) {
-			throw new FlowComponentBuilderException(
-					String.format("Expected one value for top bar image, got %d", values.size()));
-		}
-		this.topBarImage = new Image(values.get(0));
-		return this;
 	}
 	
 	public FlowComponentBuilder subdivisionImages(List<String> values)
@@ -179,9 +167,6 @@ public class FlowComponentBuilder {
 	
 	private List<String> getMissingFields() {
 		List<String> fields = new LinkedList<String>();
-		if (this.topBarImage == null) {
-			fields.add("TopBarImage");
-		}
 		if (this.beatAnimations == null) {
 			fields.add("SubdivisionImages");
 		}

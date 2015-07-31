@@ -41,13 +41,8 @@ public class FlowComponentBuilderTest {
 	}
 
 	@Test(expected=FlowComponentBuilderException.class)
-	public void topBarImageShouldThrowFlowComponentBuilderExceptionIfNotOneValue() throws Exception {
-		this.builder.topBarImage(Arrays.asList("", ""));
-	}
-	
-	@Test(expected=FlowComponentBuilderException.class)
 	public void subdivisionImagesShouldThrowFlowComponentBuilderExceptionIfEmptyValues() throws Exception {
-		this.builder.topBarImage(new ArrayList<String>());
+		this.builder.subdivisionImages(new ArrayList<String>());
 	}
 	
 	@Test(expected=FlowComponentBuilderException.class)

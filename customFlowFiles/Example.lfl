@@ -1,4 +1,3 @@
-TopBarImage = res/graphics/sprites/testScoreBar.png
 Song = customSongs/TimeOut.ogg
 Keys = a s k l
 Tempo = 160

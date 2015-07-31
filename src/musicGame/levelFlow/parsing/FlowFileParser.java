@@ -90,7 +90,6 @@ public class FlowFileParser {
 	
 	protected boolean isConfigurationValue(FlowFileToken token) {
 		switch (token.tokenType()) {
-			case TOP_BAR_IMAGE:
 			case SUBDIVISION_IMAGES:
 			case TEMPO:
 			case KEYS:
@@ -105,9 +104,6 @@ public class FlowFileParser {
 	private void setConfigurationValue(FlowFileToken key, List<String> value)
 			throws FlowFileParserException, SlickException, FlowComponentBuilderException {
 		switch(key.tokenType()) {
-			case TOP_BAR_IMAGE:
-				this.builder.topBarImage(value);
-				return;
 			case SUBDIVISION_IMAGES:
 				this.builder.subdivisionImages(value);
 				return;

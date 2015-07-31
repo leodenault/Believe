@@ -8,7 +8,6 @@ import musicGame.levelFlow.parsing.FlowFileToken.FlowFileTokenType;
 
 public class FlowFileTokenizer {
 	
-	public static final String TOP_BAR_IMAGE_WORD = "topbarimage";
 	public static final String SONG_WORD = "song";
 	public static final String KEYS_WORD = "keys";
 	public static final String TEMPO_WORD = "tempo";
@@ -76,10 +75,7 @@ public class FlowFileTokenizer {
 	
 	private FlowFileToken createToken(String word) {
 		String normalizedWord = word.toLowerCase();
-		if (normalizedWord.equals(TOP_BAR_IMAGE_WORD)) {
-			return new FlowFileToken(FlowFileTokenType.TOP_BAR_IMAGE, FlowFileTokenType.TOP_BAR_IMAGE.toString());
-		}
-		else if (normalizedWord.equals(SONG_WORD)) {
+		if (normalizedWord.equals(SONG_WORD)) {
 			return new FlowFileToken(FlowFileTokenType.SONG, FlowFileTokenType.SONG.toString());
 		}
 		else if (normalizedWord.equals(KEYS_WORD)) {

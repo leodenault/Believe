@@ -3,7 +3,6 @@ package musicGame.levelFlow.parsing;
 public class FlowFileToken {
 
 	public enum FlowFileTokenType {
-		TOP_BAR_IMAGE,
 		SONG,
 		KEYS,
 		TEMPO,

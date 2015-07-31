@@ -39,20 +39,14 @@ public class FlowFileTokenizerTest {
 	
 	@Test
 	public void nextShouldNormalizeInput() throws Exception {
-		this.tokenizer = new FlowFileTokenizer(new StringReader("tOpBaRiMaGe"));
-		assertThat(this.tokenizer.next().tokenType(), is(FlowFileTokenType.TOP_BAR_IMAGE));
+		this.tokenizer = new FlowFileTokenizer(new StringReader("sOnG"));
+		assertThat(this.tokenizer.next().tokenType(), is(FlowFileTokenType.SONG));
 	}
 	
 	@Test
 	public void nextShouldReturnEOFTokenWhenAtEndOfFile() throws Exception {
 		this.tokenizer = new FlowFileTokenizer(new StringReader(""));
 		assertThat(this.tokenizer.next().tokenType(), is(FlowFileTokenType.EOF));
-	}
-	
-	@Test
-	public void nextShouldReturnTopBarImageTokenWhenGivenAsInput() throws Exception {
-		this.tokenizer = new FlowFileTokenizer(new StringReader("topbarimage"));
-		assertThat(this.tokenizer.next().tokenType(), is(FlowFileTokenType.TOP_BAR_IMAGE));
 	}
 	
 	@Test
@@ -139,7 +133,7 @@ public class FlowFileTokenizerTest {
 	@Test
 	public void nextShouldSetTokenTextForConfigValueToEnumName() throws Exception {
 		StringBuilder builder = new StringBuilder();
-		String[] tokens = new String[] { FlowFileTokenizer.TOP_BAR_IMAGE_WORD, FlowFileTokenizer.BEGIN_WORD,
+		String[] tokens = new String[] { FlowFileTokenizer.BEGIN_WORD,
 				FlowFileTokenizer.END_WORD, FlowFileTokenizer.KEYS_WORD, FlowFileTokenizer.OFFSET_WORD,
 				FlowFileTokenizer.SONG_WORD, FlowFileTokenizer.SUBDIVISION_IMAGES_WORD, FlowFileTokenizer.TEMPO_WORD };
 		for (String token : tokens) {

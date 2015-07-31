@@ -58,7 +58,7 @@ public class FlowFileParserTest {
 			for (String value : values) {
 				oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.ARG, value)));
 			}
-			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.TOP_BAR_IMAGE)));
+			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.SONG)));
 			oneOf(token).tokenType(); will(returnValue(key));
 		}});
 	}
@@ -80,7 +80,7 @@ public class FlowFileParserTest {
 	public void parseKVPairShouldThrowFlowFileParserExceptionIfValueNotFollowedByEquals() throws Exception {
 		mockery.checking(new Expectations() {{
 			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.BEGIN)));
-			oneOf(token).text(); will(returnValue(FlowFileTokenType.TOP_BAR_IMAGE.toString()));
+			oneOf(token).text(); will(returnValue(FlowFileTokenType.SONG.toString()));
 			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
 		}});
 		this.parser.parseKVPair(token);
@@ -91,17 +91,6 @@ public class FlowFileParserTest {
 		mockery.checking(new Expectations() {{
 			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.EQUALS)));
 			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.BEGIN)));
-			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
-		}});
-		this.parser.parseKVPair(token);
-	}
-	
-	@Test
-	public void parseKVPairShouldSetTopBarImageOnBuilderWhenGivenOne() throws Exception {
-		final List<String> image = Arrays.asList("imageName.png");
-		this.checkingKVBuilding(FlowFileTokenType.TOP_BAR_IMAGE, image);
-		mockery.checking(new Expectations() {{
-			oneOf(builder).topBarImage(image);
 			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
 		}});
 		this.parser.parseKVPair(token);
@@ -154,13 +143,11 @@ public class FlowFileParserTest {
 	@Test
 	public void isConfigurationValueShouldReturnTrueWhenGivenAConfigurationValue() {
 		mockery.checking(new Expectations() {{
-			oneOf(token).tokenType(); will(returnValue(FlowFileTokenType.TOP_BAR_IMAGE));
 			oneOf(token).tokenType(); will(returnValue(FlowFileTokenType.TEMPO));
 			oneOf(token).tokenType(); will(returnValue(FlowFileTokenType.KEYS));
 			oneOf(token).tokenType(); will(returnValue(FlowFileTokenType.OFFSET));
 			oneOf(token).tokenType(); will(returnValue(FlowFileTokenType.SONG));
 		}});
-		assertThat(this.parser.isConfigurationValue(token), is(true));
 		assertThat(this.parser.isConfigurationValue(token), is(true));
 		assertThat(this.parser.isConfigurationValue(token), is(true));
 		assertThat(this.parser.isConfigurationValue(token), is(true));
