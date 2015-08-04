@@ -1,0 +1,9 @@
+Song = customSongs/Intensity.ogg
+Keys = a d v n k ;
+Tempo = 170
+Offset = 3500
+SubdivisionImages = res/graphics/sprites/qNoteSheet.png res/graphics/sprites/eNoteSheet.png
+
+BEGIN
+
+END
