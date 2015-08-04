@@ -20,7 +20,7 @@ public class Lane extends AbstractContainer {
 
 	private static final int DEFAULT_BUFFER = 300; // Time allowed to be off the beat, in milliseconds.
 	private static final int DEFAULT_SPEED = 100; // Pixels per second.
-	private static final int MIN_BANNER = 25; // Minimum banner height
+	private static final int MIN_BANNER = 45; // Minimum banner height
 	private static final double BANNER_CONSTANT = 0.219298246; // Constant for scaling banner size depending on speed
 
 	private int speed;
