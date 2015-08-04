@@ -7,8 +7,8 @@
 	<!-- Import extra Ant task definitions -->
 	<taskdef resource="net/sf/antcontrib/antlib.xml" />
 
-	<property name="jarName" value="MusicGame.jar"/>
-	<property name="outDir" value="bin-release" />
+	<property name="jarName" value="Believe.jar"/>
+	<property name="outDir" value="Believe" />
 	<property name="binaries" value="bin" />
 	<property name="testClasses" value="bin-test" />
 	<property name="testReportsDir" value="testReports" />

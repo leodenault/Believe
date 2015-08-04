@@ -23,3 +23,6 @@ slicksrc
 
 #Config files that don't need to be put into the build
 config.prop
+
+#Build Directory
+Believe
