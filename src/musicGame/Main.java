@@ -2,8 +2,8 @@ package musicGame;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.newdawn.slick.util.Log;
 
 
 public class Main {
@@ -11,8 +11,6 @@ public class Main {
 	private static final String PATH = "lib/native";
 	
 	public static void main(String[] args) {
-		Logger logger = Logger.getLogger("believe");
-
 		try {
 			
 			// IMPORTANT CODE FOR LOADING NATIVES!
@@ -32,14 +30,15 @@ public class Main {
 			//add the new path
 			final String[] newPaths = Arrays.copyOf(paths, paths.length + 1);
 			newPaths[newPaths.length-1] = PATH;
-			logger.log(Level.INFO, "Resetting java.library.path to contain natives");
+			Log.info("Resetting java.library.path to contain natives");
 			usrPathsField.set(null, newPaths);
 			
 			BelieveGame b = new BelieveGame("Believe");
+			b.setDebug(args.length > 0 && args[0].equals("debug"));
 			b.run();
 		}
 		catch (Exception e) {
-			logger.log(Level.SEVERE, String.format("An error was caught and unfortunately, it was not graceful: %s", e.getMessage()));
+			Log.info(String.format("An error was caught and unfortunately, it was not graceful: %s", e.getMessage()));
 			e.printStackTrace();
 		}
 	}

@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.newdawn.slick.util.Log;
 
 public class Options {
 	
@@ -17,13 +17,10 @@ public class Options {
 	
 	private static Options INSTANCE;
 	
-	private Logger logger;
-	
 	public int flowSpeed;
 	
 	private Options() {
 		flowSpeed = DEFAULT_FLOW_SPEED;
-		logger = Logger.getLogger("believe");
 	}
 	
 	public static Options getInstance() {
@@ -42,12 +39,12 @@ public class Options {
 				p.load(s);
 				flowSpeed = Integer.parseInt(p.getProperty("flowSpeed"));
 			} catch (FileNotFoundException e) {
-				logger.log(Level.WARNING, String.format("Missing %s file. Creating new one.", CONFIG_FILE));
+				Log.warn(String.format("Missing %s file. Creating new one.", CONFIG_FILE));
 				save();
 			} catch (NumberFormatException e) {
-				logger.log(Level.WARNING, String.format("Incorrectly formatted %s file. Using defaults.", CONFIG_FILE));
+				Log.warn(String.format("Incorrectly formatted %s file. Using defaults.", CONFIG_FILE));
 			} catch (IOException e) {
-				logger.log(Level.WARNING, String.format("Problem reading %s file. Using defaults.", CONFIG_FILE));
+				Log.warn(String.format("Problem reading %s file. Using defaults.", CONFIG_FILE));
 			}
 	}
 	
@@ -59,7 +56,7 @@ public class Options {
 			p.setProperty("flowSpeed", String.valueOf(flowSpeed));
 			p.store(o, null);
 		} catch (IOException e) {
-			logger.log(Level.WARNING, String.format("Could not access or create %s file. Save operation aborted.", CONFIG_FILE));
+			Log.warn(String.format("Could not access or create %s file. Save operation aborted.", CONFIG_FILE));
 		}
 	}
 }
