@@ -5,7 +5,8 @@ import musicGame.state.GamePausedOverlay;
 import musicGame.state.GameStateBase;
 import musicGame.state.MainMenuState;
 import musicGame.state.OptionsMenuState;
-import musicGame.state.PlayGameState;
+import musicGame.state.PlatformingState;
+import musicGame.state.PlayFlowFileState;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
@@ -14,21 +15,26 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class BelieveGame extends StateBasedGame {
 	
+	private static final int DEBUG_WIDTH = 800;
+	private static final int DEBUG_HEIGHT = 600;
+	
+	private boolean debug;
+	
 	public BelieveGame(String title) {
 		super(title);
-	}
-	
-	public static void main(String args[]) {
-		BelieveGame b = new BelieveGame("Believe");
-		b.run();
+		debug = false;
 	}
 	
 	public void run() {
 		try {
 			AppGameContainer game = new AppGameContainer(this);
 			game.setShowFPS(false);
-			game.setDisplayMode(game.getScreenWidth(), game.getScreenHeight(), true);
-			game.setMouseGrabbed(true);
+			
+			int width = debug ? DEBUG_WIDTH : game.getScreenWidth();
+			int height = debug ? DEBUG_HEIGHT : game.getScreenHeight();
+			
+			game.setDisplayMode(width, height, !debug);
+			game.setMouseGrabbed(!debug);
 			game.start();
 		}
 		catch (SlickException e) {
@@ -42,10 +48,13 @@ public class BelieveGame extends StateBasedGame {
 		this.addState(new MainMenuState());
 		this.addState(new OptionsMenuState());
 		this.addState(new FlowFilePickerMenuState());
-		this.addState(new PlayGameState());
+		this.addState(new PlayFlowFileState());
 		this.addState(new GamePausedOverlay());
+		this.addState(new PlatformingState());
 		this.enterState(GameStateBase.getStateID(MainMenuState.class));
 	}
 	
-	
+	public void setDebug(boolean debug) {
+		this.debug = debug;
+	}
 }

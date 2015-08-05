@@ -21,23 +21,14 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class PlayGameState extends GameStateBase implements FlowComponentListener {
+public class PlayFlowFileState extends GameStateBase implements FlowComponentListener {
 	
 	private FlowComponent component;
 	private StateBasedGame game;
 	
 	public void loadFile(String flowFile) throws IOException, FlowFileParserException,
-		SlickException, FlowComponentBuilderException {
-		initializeComponent(this.getClass().getResourceAsStream(flowFile));
-	}
-
-	public void loadExternalFile(String flowFile) throws IOException, FlowFileParserException,
 	SlickException, FlowComponentBuilderException {
-		initializeComponent(new FileInputStream(flowFile));
-	}
-	
-	private void initializeComponent(InputStream stream) throws IOException, FlowFileParserException,
-	SlickException, FlowComponentBuilderException {
+		InputStream stream = new FileInputStream(flowFile);
 		GameContainer container = game.getContainer();
 		FlowComponentBuilder builder = new FlowComponentBuilder(container, container.getWidth() / 3);
 		InputStreamReader reader = new InputStreamReader(stream);

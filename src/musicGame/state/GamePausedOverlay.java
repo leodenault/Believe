@@ -28,12 +28,12 @@ public class GamePausedOverlay extends GameStateBase {
 		MenuSelection restart = new MenuSelection(container, "Restart");
 		MenuSelection exitLevel = new MenuSelection(container, "Exit Level");
 		
-		resume.addListener(new ChangeStateAction(PlayGameState.class, game, 500));
+		resume.addListener(new ChangeStateAction(PlayFlowFileState.class, game, 500));
 		restart.addListener(new ComponentListener() {
 			@Override
 			public void componentActivated(AbstractComponent component) {
-				GameStateBase.getStateInstance(PlayGameState.class).reset();
-				new ChangeStateAction(PlayGameState.class, game).componentActivated(null);
+				GameStateBase.getStateInstance(PlayFlowFileState.class).reset();
+				new ChangeStateAction(PlayFlowFileState.class, game).componentActivated(null);
 			}
 		});
 		exitLevel.addListener(new ChangeStateAction(MainMenuState.class, game));
@@ -61,7 +61,7 @@ public class GamePausedOverlay extends GameStateBase {
 				this.selections.selectPrevious();
 				break;
 			case Input.KEY_ESCAPE:
-				new ChangeStateAction(PlayGameState.class, game, 500).componentActivated(null);
+				new ChangeStateAction(PlayFlowFileState.class, game, 500).componentActivated(null);
 				break;
 		}
 	}
