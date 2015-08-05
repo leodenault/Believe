@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 
 import musicGame.core.Options;
 import musicGame.core.action.ChangeStateAction;
+import musicGame.core.action.PauseGameAction;
 import musicGame.levelFlow.FlowComponent;
 import musicGame.levelFlow.FlowComponentListener;
 import musicGame.levelFlow.parsing.FlowComponentBuilder;
@@ -21,7 +22,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class PlayFlowFileState extends GameStateBase implements FlowComponentListener {
+public class PlayFlowFileState extends GameStateBase implements FlowComponentListener, PausableState {
 	
 	private FlowComponent component;
 	private StateBasedGame game;
@@ -41,6 +42,7 @@ public class PlayFlowFileState extends GameStateBase implements FlowComponentLis
 		this.component.addListener(this);
 	}
 	
+	@Override
 	public void reset() {
 		if (this.component != null) {
 			this.component.reset();
@@ -52,7 +54,7 @@ public class PlayFlowFileState extends GameStateBase implements FlowComponentLis
 		super.keyPressed(key, c);
 		if (key == Input.KEY_ESCAPE) {
 			this.component.pause();
-			new ChangeStateAction(GamePausedOverlay.class, game).componentActivated(null);
+			new PauseGameAction(this, game).componentActivated(null);
 		}
 	}
 

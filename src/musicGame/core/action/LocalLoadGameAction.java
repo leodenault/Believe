@@ -16,7 +16,7 @@ public class LocalLoadGameAction extends ChangeStateAction {
 	@Override
 	public void componentActivated(AbstractComponent component) {
 		try {
-			GameStateBase.getStateInstance(PlatformingState.class).reset();
+			GameStateBase.getStateInstance(PlatformingState.class).setUp();
 		} catch (SlickException e) {
 			// TODO: Properly handle the exception
 			e.printStackTrace();

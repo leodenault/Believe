@@ -50,4 +50,9 @@ public class LevelMap {
 			}
 		}
 	}
+	
+	public void reset() {
+		x = 0;
+		y = 0;
+	}
 }

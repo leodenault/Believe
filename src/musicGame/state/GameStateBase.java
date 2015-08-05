@@ -3,6 +3,7 @@ package musicGame.state;
 import musicGame.core.GameStateRegistry;
 
 import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.GameState;
 
 public abstract class GameStateBase extends BasicGameState {
 
@@ -10,11 +11,11 @@ public abstract class GameStateBase extends BasicGameState {
 		GameStateRegistry.getInstance().addEntry(this);
 	}
 	
-	public static int getStateID(Class<? extends GameStateBase> state) {
+	public static int getStateID(Class<? extends GameState> state) {
 		return GameStateRegistry.getInstance().getEntryID(state);
 	}
 	
-	public static <T extends GameStateBase> T getStateInstance(Class<T> state) {
+	public static <T extends GameState> T getStateInstance(Class<T> state) {
 		return GameStateRegistry.getInstance().getEntryState(state);
 	}
 

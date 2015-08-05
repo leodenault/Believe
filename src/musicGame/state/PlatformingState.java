@@ -1,19 +1,23 @@
 package musicGame.state;
 
+import musicGame.core.action.PauseGameAction;
 import musicGame.map.LevelMap;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class PlatformingState extends GameStateBase {
+public class PlatformingState extends GameStateBase implements PausableState {
 
+	private StateBasedGame game;
 	private LevelMap map;
 	
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
+		this.game = game;
 	}
 
 	@Override
@@ -38,6 +42,10 @@ public class PlatformingState extends GameStateBase {
 		if (map != null) {
 			map.scroll(key);
 		}
+		
+		if (key == Input.KEY_ESCAPE) {
+			new PauseGameAction(this, game).componentActivated(null);
+		}
 	}
 
 	@Override
@@ -47,8 +55,13 @@ public class PlatformingState extends GameStateBase {
 			map.stopScroll(key);
 		}
 	}
+	
+	@Override
+	public void reset() {
+		map.reset();
+	}
 
-	public void reset() throws SlickException {
+	public void setUp() throws SlickException {
 		map = new LevelMap("testMap");
 	}
 }

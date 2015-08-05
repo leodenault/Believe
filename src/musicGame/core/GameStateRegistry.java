@@ -2,14 +2,14 @@ package musicGame.core;
 
 import java.util.HashMap;
 
-import musicGame.state.GameStateBase;
+import org.newdawn.slick.state.GameState;
 
 /**
  * Keeps track of GameState ids to avoid collisions.
  */
 public class GameStateRegistry {
 	
-	private static final class Entry<T extends GameStateBase> {
+	private static final class Entry<T extends GameState> {
 		public Integer ID;
 		public T state;
 		
@@ -22,10 +22,10 @@ public class GameStateRegistry {
 	private static GameStateRegistry registry;
 	private static int currentId = 0;
 	
-	private HashMap<Class<? extends GameStateBase>, Entry<? extends GameStateBase>> entries;
+	private HashMap<Class<? extends GameState>, Entry<? extends GameState>> entries;
 	
 	private GameStateRegistry() {
-		entries = new HashMap<Class<? extends GameStateBase>, Entry<? extends GameStateBase>>();
+		entries = new HashMap<Class<? extends GameState>, Entry<? extends GameState>>();
 	}
 	
 	public static GameStateRegistry getInstance() {
@@ -35,25 +35,25 @@ public class GameStateRegistry {
 		return registry;
 	}
 	
-	public <T extends GameStateBase> int addEntry(T entry) {
-		Class<? extends GameStateBase> type = entry.getClass();
+	public <T extends GameState> int addEntry(T entry) {
+		Class<? extends GameState> type = entry.getClass();
 		
 		if (!this.entries.containsKey(type)) {
-			this.entries.put(type, new Entry<GameStateBase>(currentId++, entry));
+			this.entries.put(type, new Entry<GameState>(currentId++, entry));
 		}
 		return this.entries.get(type).ID;
 	}
 	
-	public int getEntryID(Class<? extends GameStateBase> entry) {
+	public int getEntryID(Class<? extends GameState> entry) {
 		return getEntry(entry).ID;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T extends GameStateBase> T getEntryState(Class<T> entry) {
+	public <T extends GameState> T getEntryState(Class<T> entry) {
 		return (T)getEntry(entry).state;
 	}
 	
-	private <T extends GameStateBase> Entry<? extends GameStateBase> getEntry(Class<T> entry) {
+	private <T extends GameState> Entry<? extends GameState> getEntry(Class<T> entry) {
 		if (this.entries.containsKey(entry)) {
 			return this.entries.get(entry);
 		} else {

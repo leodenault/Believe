@@ -18,24 +18,21 @@ public class GamePausedOverlay extends GameStateBase {
 	private MenuSelectionGroup selections;
 	private DirectionalPanel panel;
 	private StateBasedGame game;
+	private PausableState pausedState;
+	private MenuSelection resume;
+	private MenuSelection restart;
+	private ChangeStateAction resumeAction;
+	private ComponentListener restartAction;
 
 	@Override
 	public void init(GameContainer container, final StateBasedGame game)
 			throws SlickException {
 		this.game = game;
 		panel = new DirectionalPanel(container, container.getWidth() / 2, (container.getHeight() - 200) / 3, 50);
-		MenuSelection resume = new MenuSelection(container, "Resume");
-		MenuSelection restart = new MenuSelection(container, "Restart");
+		resume = new MenuSelection(container, "Resume");
+		restart = new MenuSelection(container, "Restart");
 		MenuSelection exitLevel = new MenuSelection(container, "Exit Level");
 		
-		resume.addListener(new ChangeStateAction(PlayFlowFileState.class, game, 500));
-		restart.addListener(new ComponentListener() {
-			@Override
-			public void componentActivated(AbstractComponent component) {
-				GameStateBase.getStateInstance(PlayFlowFileState.class).reset();
-				new ChangeStateAction(PlayFlowFileState.class, game).componentActivated(null);
-			}
-		});
 		exitLevel.addListener(new ChangeStateAction(MainMenuState.class, game));
 		
 		panel.addChild(resume);
@@ -80,9 +77,32 @@ public class GamePausedOverlay extends GameStateBase {
 	}
 
 	@Override
-	public void enter(GameContainer container, StateBasedGame game)
+	public void enter(GameContainer container, final StateBasedGame game)
 			throws SlickException {
 		super.enter(container, game);
 		this.selections.select(0);
+		
+		resumeAction = new ChangeStateAction(pausedState.getClass(), game, 500);
+		restartAction = new ComponentListener() {
+			@Override
+			public void componentActivated(AbstractComponent component) {
+				pausedState.reset();
+				new ChangeStateAction(pausedState.getClass(), game).componentActivated(null);
+			}
+		};
+		resume.addListener(resumeAction);
+		restart.addListener(restartAction);
+	}
+	
+	@Override
+	public void leave(GameContainer container, StateBasedGame game)
+			throws SlickException {
+		super.leave(container, game);
+		resume.removeListener(resumeAction);
+		restart.removeListener(restartAction);
+	}
+
+	public void setPausedState(PausableState state) {
+		this.pausedState = state;
 	}
 }
