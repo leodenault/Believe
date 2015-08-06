@@ -55,4 +55,16 @@ public class LevelMap {
 		x = 0;
 		y = 0;
 	}
+	
+	public int getPlayerStartX() {
+		// TODO: Handle a NumberFormatException
+		int tileX = Integer.parseInt(map.getMapProperty("playerStartX", "0"));
+		return tileX * map.getTileWidth();
+	}
+	
+	public int getPlayerStartY() {
+		// TODO: Handle a NumberFormatException
+		int tileY = Integer.parseInt(map.getMapProperty("playerStartY", "0"));
+		return tileY * map.getTileHeight();
+	}
 }

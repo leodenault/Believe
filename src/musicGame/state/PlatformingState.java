@@ -1,5 +1,6 @@
 package musicGame.state;
 
+import musicGame.character.Character;
 import musicGame.core.action.PauseGameAction;
 import musicGame.map.LevelMap;
 
@@ -13,6 +14,7 @@ public class PlatformingState extends GameStateBase implements PausableState {
 
 	private StateBasedGame game;
 	private LevelMap map;
+	private Character player;
 	
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
@@ -25,6 +27,7 @@ public class PlatformingState extends GameStateBase implements PausableState {
 			throws SlickException {
 		if (map != null) {
 			map.render();
+			player.render();
 		}
 	}
 
@@ -43,8 +46,14 @@ public class PlatformingState extends GameStateBase implements PausableState {
 			map.scroll(key);
 		}
 		
-		if (key == Input.KEY_ESCAPE) {
-			new PauseGameAction(this, game).componentActivated(null);
+		switch (key) {
+			case Input.KEY_ESCAPE:
+				new PauseGameAction(this, game).componentActivated(null);
+				break;
+			case Input.KEY_LEFT:
+			case Input.KEY_RIGHT:
+				player.move();
+				break;
 		}
 	}
 
@@ -53,6 +62,10 @@ public class PlatformingState extends GameStateBase implements PausableState {
 		super.keyReleased(key, c);
 		if (map != null) {
 			map.stopScroll(key);
+		}
+
+		if (key == Input.KEY_LEFT || key == Input.KEY_RIGHT) {
+			player.stop();
 		}
 	}
 	
@@ -63,5 +76,6 @@ public class PlatformingState extends GameStateBase implements PausableState {
 
 	public void setUp() throws SlickException {
 		map = new LevelMap("testMap");
+		player = new Character(map.getPlayerStartX(), map.getPlayerStartY());
 	}
 }
