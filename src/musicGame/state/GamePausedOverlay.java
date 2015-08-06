@@ -58,7 +58,7 @@ public class GamePausedOverlay extends GameStateBase {
 				this.selections.selectPrevious();
 				break;
 			case Input.KEY_ESCAPE:
-				new ChangeStateAction(PlayFlowFileState.class, game, 500).componentActivated(null);
+				new ChangeStateAction(pausedState.getClass(), game, 500).componentActivated(null);
 				break;
 		}
 	}
