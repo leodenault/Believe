@@ -1,6 +1,7 @@
 package musicGame.gui;
 
 import java.awt.Font;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -22,13 +23,16 @@ public class ComboSyncher extends ComponentBase {
 	private static final int HEIGHT = 40;
 	private static final int PIXELS_PER_SECOND = 100;
 	private static final float BUFFER_LENGTH = BUFFER_TIME * PIXELS_PER_SECOND;
-	private static final float ERROR_MARGIN = 0.5f; // In seconds
+	private static final float ERROR_MARGIN = 0.15f; // In seconds
 	private static final float ERROR_DISTANCE = ERROR_MARGIN * PIXELS_PER_SECOND;
+	private static final Color NOT_ACTIVATED = new Color(0xffffff);
+	private static final Color SUCCESS = new Color(0x00ff00);
+	private static final Color MISSED = new Color(0xff0000);
 	
 	private final TrueTypeFont font;
 	
 	private int bpm;
-	private int max;
+	private float max;
 	private float start;
 	private float length;
 	private float actionSectionLength;
@@ -38,6 +42,7 @@ public class ComboSyncher extends ComponentBase {
 	private Music music;
 	private List<TimeKeyPair> actions;
 	private Queue<TimeKeyPair> actionsLeft;
+	private HashMap<TimeKeyPair, Color> actionColors;
 	
 	public ComboSyncher(GUIContext container, SynchedComboPattern pattern, int bpm, int x, int y) {
 		this(container, pattern,new TrueTypeFont(new Font("Verdana", Font.PLAIN, 20), true),
@@ -53,6 +58,7 @@ public class ComboSyncher extends ComponentBase {
 		this.pattern = pattern;
 		this.tracker = new Line(x, y, x, y + HEIGHT);
 		this.font = font;
+		this.actionColors = new HashMap<SynchedComboPattern.TimeKeyPair, Color>();
 		setUpPattern();
 	}
 	
@@ -61,6 +67,10 @@ public class ComboSyncher extends ComponentBase {
 		actionsLeft = new LinkedList<TimeKeyPair>(actions);
 		max = actions.get(actions.size() - 1).time;
 		actionSectionLength = PIXELS_PER_SECOND * max * 60.0f / bpm;
+		
+		for (TimeKeyPair action : actions) {
+			actionColors.put(action, NOT_ACTIVATED);
+		}
 	}
 	
 	private float getActionLocation(TimeKeyPair action) {
@@ -71,6 +81,7 @@ public class ComboSyncher extends ComponentBase {
 		if (!actionsLeft.isEmpty()) {
 			TimeKeyPair current = actionsLeft.peek();
 			if (tracker.getX() - getActionLocation(current) > ERROR_DISTANCE) {
+				actionColors.put(current, MISSED);
 				actionsLeft.remove();
 				for (Object listener : listeners) {
 					if (listener instanceof FlowComponentListener) {
@@ -86,21 +97,24 @@ public class ComboSyncher extends ComponentBase {
 	
 	@Override
 	protected void renderComponent(GUIContext context, Graphics g) {
-		g.setLineWidth(2f);
-		g.setColor(new Color(0x00aaaa));
-		g.fill(rect);
-		g.setColor(new Color(0xff0000));
-		g.draw(tracker);
-		g.setColor(new Color(0xffffff));
-		g.drawRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
-
-		g.setFont(font);
-		for (TimeKeyPair action : actions) {
-			String key = String.valueOf(Character.toUpperCase(action.key));
-			int centerX = font.getWidth(String.valueOf(action.key)) / 2;
-			int centerY = g.getFont().getHeight(key) / 2;
-			g.drawString(key, getActionLocation(action) - centerX,
-					rect.getCenterY() - centerY);
+		if (music != null) {
+			g.setLineWidth(2f);
+			g.setColor(new Color(0x00aaaa));
+			g.fill(rect);
+			g.setColor(new Color(0xff0000));
+			g.draw(tracker);
+			g.setColor(new Color(0xffffff));
+			g.drawRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
+	
+			g.setFont(font);
+			for (TimeKeyPair action : actions) {
+				g.setColor(actionColors.get(action));
+				String key = String.valueOf(Character.toUpperCase(action.key));
+				int centerX = font.getWidth(String.valueOf(action.key)) / 2;
+				int centerY = g.getFont().getHeight(key) / 2;
+				g.drawString(key, getActionLocation(action) - centerX,
+						rect.getCenterY() - centerY);
+			}
 		}
 	}
 	
@@ -115,6 +129,7 @@ public class ComboSyncher extends ComponentBase {
 				if (current.key == c &&
 						Math.abs(tracker.getX() - getActionLocation(current)) < ERROR_DISTANCE) {
 					actionsLeft.remove();
+					actionColors.put(current, SUCCESS);
 					
 					for (Object listener : listeners) {
 						if (listener instanceof FlowComponentListener) {

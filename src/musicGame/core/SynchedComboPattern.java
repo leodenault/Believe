@@ -5,10 +5,10 @@ import java.util.List;
 
 public class SynchedComboPattern {
 	public class TimeKeyPair {
-		public int time;
+		public float time;
 		public char key;
 		
-		public TimeKeyPair(int time, char key) {
+		public TimeKeyPair(float time, char key) {
 			this.time = time;
 			this.key = key;
 		}
@@ -24,7 +24,7 @@ public class SynchedComboPattern {
 		return actions;
 	}
 	
-	public void addAction(int time, char key) {
+	public void addAction(float time, char key) {
 		actions.add(new TimeKeyPair(time, key));
 	}
 }

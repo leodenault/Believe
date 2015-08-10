@@ -28,12 +28,16 @@ public class PlatformingState extends GameStateBase implements PausableState {
 		this.game = game;
 		this.music = new Music("/res/music/TimeOut_loop.ogg");
 		SynchedComboPattern pattern = new SynchedComboPattern();
-		pattern.addAction(0, 'a');
-		pattern.addAction(1, 'a');
-		pattern.addAction(2, 'a');
-		pattern.addAction(3, 'a');
+		pattern.addAction(0, 's');
+		pattern.addAction(1, 's');
+		pattern.addAction(2, 's');
+		pattern.addAction(3, 's');
 		pattern.addAction(4, 'a');
+		pattern.addAction(4.5f, 'd');
 		pattern.addAction(5, 'a');
+		pattern.addAction(6, 'a');
+		pattern.addAction(6.5f, 'd');
+		pattern.addAction(7, 'a');
 		combo = new ComboSyncher(container, pattern, BPM, 120, 120);
 	}
 
