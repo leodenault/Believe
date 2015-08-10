@@ -277,9 +277,9 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 	/**
 	 * Updates the lanes in this FlowComponent.
 	 */
-	public void update() {
+	public void update(int delta) {
 		for (Lane lane : this.lanes) {
-			lane.updateBeats();
+			lane.updateBeats(delta);
 		}
 	}
 

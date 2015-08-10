@@ -3,8 +3,6 @@ package musicGame.levelFlow;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
-import musicGame.levelFlow.Beat;
-import musicGame.levelFlow.Lane;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -42,13 +40,6 @@ public class LaneTest {
 		}});
 		
 		this.lane = new Lane(context, 4, BPM, 0);
-	}
-	
-	// Because apparently we're not allowed to make the thread wait
-	private void killTime() {
-		for (int i = 0; i < 100; i++) {
-			this.lane.updateBeats();
-		}
 	}
 	
 	@Test
@@ -89,7 +80,7 @@ public class LaneTest {
 		this.lane.addBeats(beats);
 		int beatY = beats[0].getY();
 		this.lane.play();
-		this.killTime();
+		this.lane.updateBeats(500);
 		assertThat(beats[0].getY(), is(not(beatY)));
 		this.lane.stop();
 		assertThat(beats[0].getY(), is(beatY));

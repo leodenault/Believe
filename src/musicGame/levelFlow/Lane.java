@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import musicGame.core.Timer;
 import musicGame.gui.AbstractContainer;
 
 import org.newdawn.slick.Graphics;
@@ -30,12 +31,10 @@ public class Lane extends AbstractContainer {
 	private double bpm;
 	private double offset;
 	private PlayStatus status;
-	private long startTime;
-	private long endTime;
-	private long elapsedTime;
 	private Queue<Beat> activeBeats;
 	private Queue<Beat> inactiveBeats;
 	private List<Beat> animations;
+	private Timer timer;
 
 	/**
 	 * Creates a new Lane instance.
@@ -88,11 +87,11 @@ public class Lane extends AbstractContainer {
 		this.setBuffer(DEFAULT_BUFFER);
 		this.bpm = bpm;
 		this.offset = offset;
-		this.elapsedTime = 0;
 		this.activeBeats = new LinkedList<Beat>();
 		this.inactiveBeats = new LinkedList<Beat>();
 		this.animations = new LinkedList<Beat>();
 		this.status = PlayStatus.STOPPED;
+		this.timer = new Timer();
 	}
 
 	/**
@@ -234,19 +233,18 @@ public class Lane extends AbstractContainer {
 	public boolean isPlaying() {
 		return this.status == PlayStatus.PLAYING;
 	}
-
 	/**
 	 * Updates the positions of the beats in this lane, if it is playing.
 	 */
-	public void updateBeats() {
+	public void updateBeats(int delta) {
 		if (this.status == PlayStatus.PLAYING && this.activeBeats.size() > 0) {
-			this.endTime = System.currentTimeMillis();
-			double delta = ((this.endTime - this.startTime) / 1000.0) * this.speed;
+			timer.update(delta);
+			double distance = (timer.getElapsedTime() / 1000.0) * this.speed;
 			Iterator<Beat> beatIter = this.activeBeats.iterator();
 
 			while (beatIter.hasNext()) {
 				Beat beat = beatIter.next();
-				beat.setLocation(beat.getX(), this.calculatePosition(beat) - delta);
+				beat.setLocation(beat.getX(), this.calculatePosition(beat) - distance);
 			}
 
 			Beat first = this.activeBeats.element(); 
@@ -263,8 +261,7 @@ public class Lane extends AbstractContainer {
 	public void play() {
 		if (this.status != PlayStatus.PLAYING) {
 			this.status = PlayStatus.PLAYING;
-			this.startTime = System.currentTimeMillis() - this.elapsedTime;
-			this.elapsedTime = 0;
+			timer.play();
 		}
 	}
 
@@ -273,10 +270,8 @@ public class Lane extends AbstractContainer {
 	 */
 	public void pause() {
 		if (this.status == PlayStatus.PLAYING) {
+			timer.pause();
 			this.status = PlayStatus.PAUSED;
-			this.elapsedTime = this.endTime - this.startTime;
-			this.startTime = 0;
-			this.endTime = 0;
 		}
 	}
 
@@ -284,10 +279,8 @@ public class Lane extends AbstractContainer {
 	 * Stops counting the passing of time and resets this lane.
 	 */
 	public void stop() {
+		timer.stop();
 		this.status = PlayStatus.STOPPED;
-		this.startTime = 0;
-		this.endTime = 0;
-		this.elapsedTime = 0;
 		this.reset();
 	}
 

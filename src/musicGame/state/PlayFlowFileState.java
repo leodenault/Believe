@@ -75,12 +75,12 @@ public class PlayFlowFileState extends GameStateBase implements FlowComponentLis
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
+		if (component != null) {
+			component.update(delta);
+		}
+
 		if (!component.isPlaying()) {
 			component.play();
-		}
-		
-		if (component != null) {
-			component.update();
 		}
 	}
 
