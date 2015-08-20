@@ -1,25 +1,24 @@
 package musicGame.character;
 
+import musicGame.gui.ComponentBase;
+
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.gui.GUIContext;
 
-public class Character {
+public class Character extends ComponentBase {
 
-	private Rectangle rect;
 	private Animation anim;
 	
-	public Character(int x, int y) throws SlickException {
+	public Character(GUIContext container, int x, int y) throws SlickException {
+		super(container, x, y);
 		anim = new Animation(new SpriteSheet("/res/graphics/sprites/stickFigure.png", 64, 128), 100);
-		rect = new Rectangle(x, y - anim.getHeight(), anim.getWidth(), anim.getHeight());
+		rect = new musicGame.geometry.Rectangle(x, y - anim.getHeight(), anim.getWidth(), anim.getHeight());
 		anim.setLooping(true);
 		anim.stop();
 		anim.setCurrentFrame(0);
-	}
-	
-	public void render() {
-		anim.draw(rect.getX(), rect.getY());
 	}
 	
 	public void move() {
@@ -30,8 +29,12 @@ public class Character {
 		anim.stop();
 		anim.setCurrentFrame(0);
 	}
-	
-	public void setLocation(int x, int y) {
-		rect.setLocation(x, y);
+
+	@Override
+	protected void resetLayout() {}
+
+	@Override
+	protected void renderComponent(GUIContext context, Graphics g) {
+		anim.draw(rect.getX(), rect.getY());
 	}
 }

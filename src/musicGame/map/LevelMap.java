@@ -1,37 +1,38 @@
 package musicGame.map;
 
+import musicGame.gui.ComponentBase;
+
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.tiled.TiledMap;
 
-public class LevelMap {
+public class LevelMap extends ComponentBase {
 	private static final float SCROLL_SPEED = 0.1f; // Pixels per millisecond
 	private static final String MAP_DIRECTORY = "/res/maps/";
 	private static final String MAP_SUFFIX = ".tmx";
 	
+	public static final int TARGET_WIDTH = 1600;
+	public static final int TARGET_HEIGHT = 900;
+	
 	private boolean scrolling;
 	private boolean scrollDirection; // False is left, true is right
-	private float x;
-	private float y;
 	private TiledMap map;
 			
-	public LevelMap(String name) throws SlickException {
+	public LevelMap(GUIContext container, String name) throws SlickException {
+		super(container, 0, 0);
 		scrolling = false;
 		scrollDirection = false;
-		x = 0;
-		y = 0;
 		map = new TiledMap(String.format("%s%s%s", MAP_DIRECTORY, name, MAP_SUFFIX));
 	}
 	
 	public void update(int delta) {
 		if (scrolling) {
 			float distance = delta * SCROLL_SPEED;
-			x = scrollDirection ? x - distance : x + distance;
+			float x = rect.getX();
+			rect.setX(scrollDirection ? x - distance : x + distance);
 		}
-	}
-	
-	public void render() {
-		map.render((int)x, (int)y);
 	}
 	
 	public void scroll(int key) {
@@ -52,8 +53,7 @@ public class LevelMap {
 	}
 	
 	public void reset() {
-		x = 0;
-		y = 0;
+		setLocation(0, 0);
 	}
 	
 	public int getPlayerStartX() {
@@ -66,5 +66,13 @@ public class LevelMap {
 		// TODO: Handle a NumberFormatException
 		int tileY = Integer.parseInt(map.getMapProperty("playerStartY", "0"));
 		return tileY * map.getTileHeight();
+	}
+
+	@Override
+	protected void resetLayout() {}
+
+	@Override
+	protected void renderComponent(GUIContext context, Graphics g) {
+		map.render(getX(), getY());
 	}
 }

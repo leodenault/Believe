@@ -4,6 +4,7 @@ import musicGame.character.Character;
 import musicGame.core.SynchedComboPattern;
 import musicGame.core.action.PauseGameAction;
 import musicGame.gui.ComboSyncher;
+import musicGame.gui.PlayArea;
 import musicGame.map.LevelMap;
 
 import org.newdawn.slick.GameContainer;
@@ -16,8 +17,10 @@ import org.newdawn.slick.state.StateBasedGame;
 public class PlatformingState extends GameStateBase implements PausableState {
 	private static final int BPM = 160;
 
+	private GameContainer container;
 	private StateBasedGame game;
 	private LevelMap map;
+	private PlayArea mapContainer;
 	private Character player;
 	private Music music;
 	private ComboSyncher combo;
@@ -25,6 +28,7 @@ public class PlatformingState extends GameStateBase implements PausableState {
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
+		this.container = container;
 		this.game = game;
 		this.music = new Music("/res/music/TimeOut_loop.ogg");
 		SynchedComboPattern pattern = new SynchedComboPattern();
@@ -44,11 +48,9 @@ public class PlatformingState extends GameStateBase implements PausableState {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
-		if (map != null) {
-			map.render();
-			player.render();
+		if (mapContainer != null) {
+			mapContainer.render(container, g);
 		}
-		combo.render(container, g);
 	}
 
 	@Override
@@ -108,8 +110,12 @@ public class PlatformingState extends GameStateBase implements PausableState {
 	}
 
 	public void setUp() throws SlickException {
-		map = new LevelMap("testMap");
-		player = new Character(map.getPlayerStartX(), map.getPlayerStartY());
+		map = new LevelMap(container, "testMap");
+		player = new Character(container, map.getPlayerStartX(), map.getPlayerStartY());
+		mapContainer = new PlayArea(container, map);
+		mapContainer.addChild(map);
+		mapContainer.addChild(player);
+		mapContainer.addChild(combo);
 		music.stop();
 	}
 }
