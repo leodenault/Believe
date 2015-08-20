@@ -64,13 +64,8 @@ public class ComboSyncher extends ComponentBase {
 	
 	private void setUpPattern() {
 		actions = pattern.getActions();
-		actionsLeft = new LinkedList<TimeKeyPair>(actions);
 		max = actions.get(actions.size() - 1).time;
 		actionSectionLength = PIXELS_PER_SECOND * max * 60.0f / bpm;
-		
-		for (TimeKeyPair action : actions) {
-			actionColors.put(action, NOT_ACTIVATED);
-		}
 	}
 	
 	private float getActionLocation(TimeKeyPair action) {
@@ -93,7 +88,12 @@ public class ComboSyncher extends ComponentBase {
 	}
 
 	@Override
-	protected void resetLayout() {}
+	protected void resetLayout() {
+		for (TimeKeyPair action : actions) {
+			actionColors.put(action, NOT_ACTIVATED);
+			actionsLeft = new LinkedList<TimeKeyPair>(actions);
+		}
+	}
 	
 	@Override
 	protected void renderComponent(GUIContext context, Graphics g) {
@@ -101,6 +101,15 @@ public class ComboSyncher extends ComponentBase {
 			g.setLineWidth(2f);
 			g.setColor(new Color(0x00aaaa));
 			g.fill(rect);
+			
+			g.setLineWidth(1f);
+			g.setColor(new Color(0x0000ff));
+			for (int i = 0; i < actions.size(); i++) {
+				float x = (actionSectionLength * i / max) + startBuffer + rect.getX();
+				g.drawLine(x, rect.getY(), x, rect.getMaxY());
+			}
+			
+			g.setLineWidth(2f);
 			g.setColor(new Color(0xff0000));
 			g.draw(tracker);
 			g.setColor(new Color(0xffffff));
@@ -122,7 +131,7 @@ public class ComboSyncher extends ComponentBase {
 	public void keyPressed(int key, char c) {
 		super.keyPressed(key, c);
 		
-		if (!actionsLeft.isEmpty() && music != null) {
+		if (music != null && !actionsLeft.isEmpty()) {
 			TimeKeyPair current = actionsLeft.peek();
 				int index = actions.indexOf(current);
 	
@@ -148,6 +157,7 @@ public class ComboSyncher extends ComponentBase {
 	}
 
 	public void start(Music music) {
+		resetLayout();
 		this.music = music;
 		float secondsInBeat = 60.0f / bpm;
 		start = music.getPosition();
