@@ -19,12 +19,14 @@ public class LevelMap extends ComponentBase {
 	private boolean scrolling;
 	private boolean scrollDirection; // False is left, true is right
 	private TiledMap map;
+	private MapProperties properties;
 			
 	public LevelMap(GUIContext container, String name) throws SlickException {
 		super(container, 0, 0);
 		scrolling = false;
 		scrollDirection = false;
 		map = new TiledMap(String.format("%s%s%s", MAP_DIRECTORY, name, MAP_SUFFIX));
+		properties = MapProperties.create(map);
 	}
 	
 	public void update(int delta) {
@@ -57,15 +59,11 @@ public class LevelMap extends ComponentBase {
 	}
 	
 	public int getPlayerStartX() {
-		// TODO: Handle a NumberFormatException
-		int tileX = Integer.parseInt(map.getMapProperty("playerStartX", "0"));
-		return tileX * map.getTileWidth();
+		return properties.startX * map.getTileWidth();
 	}
 	
 	public int getPlayerStartY() {
-		// TODO: Handle a NumberFormatException
-		int tileY = Integer.parseInt(map.getMapProperty("playerStartY", "0"));
-		return tileY * map.getTileHeight();
+		return properties.startY * map.getTileHeight();
 	}
 
 	@Override
