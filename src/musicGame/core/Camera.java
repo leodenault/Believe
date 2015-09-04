@@ -3,26 +3,41 @@ package musicGame.core;
 import java.util.LinkedList;
 import java.util.List;
 
+import musicGame.geometry.Rectangle;
 import musicGame.gui.ComponentBase;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
-import org.newdawn.slick.util.InputAdapter;
 
-public class Camera extends InputAdapter {
-	public static final float SCROLL_SPEED = 0.1f; // Pixels per millisecond
+public class Camera {
+	public static final float SCROLL_SPEED = 0.2f; // Pixels per millisecond
 
-	private float x;
-	private float y;
-	MovementDirection direction;
+	private float scaleX;
+	private float scaleY;
+	private Rectangle rect;
 	private List<ComponentBase> children;
 	
-	public Camera() {
-		x = 0;
-		y = 0;
-		direction = MovementDirection.NONE;
+	public Camera(float width, float height) {
+		scaleX = 1;
+		scaleY = 1;
+		rect = new Rectangle(0, 0, width, height);
 		children = new LinkedList<ComponentBase>();
+	}
+	
+	public Rectangle getRect() {
+		return rect;
+	}
+	
+	public void center(float x, float y) {
+		rect.setCenterX(x);
+		rect.setCenterY(y);
+	}
+
+	public void scale(float x, float y) {
+		scaleX = x;
+		scaleY = y;
+		rect.setSize(rect.getWidth() * (1/x), rect.getHeight() * (1/y));
 	}
 	
 	public void addChild(ComponentBase child) {
@@ -31,36 +46,14 @@ public class Camera extends InputAdapter {
 	
 	public void render(GUIContext context, Graphics g) throws SlickException {
 		g.pushTransform();
-		g.translate(-x, -y);
+
+		g.scale(scaleX, scaleY);
+		g.translate(-rect.getX(), -rect.getY());
 		for (ComponentBase child : children) {
 			child.render(context, g);
 		}
+		
 		g.popTransform();
-	}
-	
-	public void update(int delta) {
-		if (direction != MovementDirection.NONE) {
-			float distance = delta * SCROLL_SPEED;
 
-			if (direction == MovementDirection.LEFT) {
-				distance = -distance;
-			}
-			
-			x += distance;
-		}
-	}
-	
-	@Override
-	public void keyPressed(int key, char c) {
-		super.keyPressed(key, c);
-		direction = MovementDirection.directionForKey(key);
-	}
-
-	@Override
-	public void keyReleased(int key, char c) {
-		super.keyReleased(key, c);
-		if (key == direction.getKey()) {
-			direction = MovementDirection.NONE;
-		}
 	}
 }

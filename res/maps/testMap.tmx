@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="75" height="30" tilewidth="32" tileheight="32" nextobjectid="1">
  <properties>
-  <property name="playerStartX" value="0"/>
+  <property name="playerStartX" value="1"/>
   <property name="playerStartY" value="13"/>
  </properties>
  <tileset firstgid="1" name="Test Set" tilewidth="32" tileheight="32">
@@ -18,7 +18,7 @@
    <property name="collision" value=""/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3QsQkAQAgEQROr/uZFbOAzDWZg8+MiAAAAYLzcXnBT/6K/AAAAAOCyApcnUGIoIwAA
+   H4sIAAAAAAAAA+3QMQoAIAwEwTS+2s+LhZUE0hlhBq4/NgIAAOhujtcP/rA7aVWTtdLvdlpZbQAAAADQ2QJ1N2Z0KCMAAA==
   </data>
  </layer>
  <layer name="Background" width="75" height="30">
@@ -28,12 +28,12 @@
  </layer>
  <layer name="Ground" width="75" height="30">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3OoQ0AAAgEMX7/pREsgAPRJuevCgAAAEauB56K1gEAAADAZw3E6dJcKCMAAA==
+   H4sIAAAAAAAAA+3QQQoAIAwDweb/n/YBIuipFWYg97BVAADAdOk+8ImUVrdOrfTbxZ4GAAAAAJMtehTtnSgjAAA=
   </data>
  </layer>
  <layer name="Foreground" width="75" height="30">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3POQoAIAwEwOD/H20taMh2FjOQKncVAAAAnNYl0v5p7jV/sjO5r6vr/k1/BwAAAAD+tQFyimcdKCMAAA==
+   H4sIAAAAAAAAA+3PSQoAIAgAQPH/j+4cWCidghnw5B4BAAAAuyxi2t/NneZ3dk7uu9W9/gsAAAAA/GEBr86ySCgjAAA=
   </data>
  </layer>
 </map>

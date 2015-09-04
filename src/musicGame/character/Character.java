@@ -40,8 +40,12 @@ public class Character extends ComponentBase {
 	@Override
 	public void keyPressed(int key, char c) {
 		super.keyPressed(key, c);
-		direction = MovementDirection.directionForKey(key);
-		anim.start();
+			MovementDirection newDirection = MovementDirection.directionForKey(key);
+			
+			if (direction == MovementDirection.NONE || newDirection != MovementDirection.NONE) {
+				direction = newDirection;
+				anim.start();
+			}
 	}
 
 	@Override

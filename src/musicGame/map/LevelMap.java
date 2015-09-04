@@ -23,6 +23,7 @@ public class LevelMap extends ComponentBase {
 		super(container, 0, 0);
 		map = new TiledMap(String.format("%s%s%s", MAP_DIRECTORY, name, MAP_SUFFIX));
 		properties = MapProperties.create(map);
+		rect.setSize(map.getWidth() * map.getTileWidth(), map.getHeight() * map.getTileHeight());
 	}
 	
 	public void reset() {

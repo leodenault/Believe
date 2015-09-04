@@ -15,12 +15,19 @@ public class PlayArea extends AbstractContainer {
 
 	private boolean border;
 	private Camera camera;
+	private LevelMap map;
+	private ComponentBase center;
 	
-	public PlayArea(GUIContext container, LevelMap map) {
+	public PlayArea(GUIContext container, LevelMap map, ComponentBase center) {
 		super(container, 0, 0, container.getWidth(), container.getHeight());
 		border = false;
-		camera = new Camera();
-		container.getInput().addKeyListener(camera);
+		camera = new Camera(getFloatWidth(), getFloatHeight());
+		this.map = map;
+		this.center = center;
+		camera.addChild(map);
+		camera.addChild(center);
+		camera.scale(rect.getWidth() / LevelMap.TARGET_WIDTH,
+				rect.getHeight() / LevelMap.TARGET_HEIGHT);
 	}
 	
 	public void setBorder(boolean border) {
@@ -49,10 +56,7 @@ public class PlayArea extends AbstractContainer {
 	protected void renderComponent(GUIContext context, Graphics g) {
 		g.pushTransform();
 		Rectangle oldClip = Util.changeClipContext(g, rect);
-		float sx = rect.getWidth() / LevelMap.TARGET_WIDTH;
-		float sy = rect.getHeight() / LevelMap.TARGET_HEIGHT;
 		g.translate(getX(), getY());
-		g.scale(sx, sy);
 		
 		// TODO: Find a good way to avoid this try/catch
 		try {
@@ -71,6 +75,14 @@ public class PlayArea extends AbstractContainer {
 	}
 	
 	public void update(int delta) {
-		camera.update(delta);
+		Rectangle rect = center.getRect();
+		camera.center(rect.getCenterX(), rect.getCenterY());
+		
+		Rectangle camRect = camera.getRect();
+		if (camRect.getX() < 0) {
+			camRect.setX(0);
+		} else if (camRect.getMaxX() > map.getFloatWidth()) {
+			camRect.setX(map.getFloatWidth() - camRect.getWidth());
+		}
 	}
 }

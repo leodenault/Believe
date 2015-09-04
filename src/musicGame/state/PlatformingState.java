@@ -101,9 +101,7 @@ public class PlatformingState extends GameStateBase implements PausableState {
 	public void setUp() throws SlickException {
 		map = new LevelMap(container, "testMap");
 		player = new Character(container, map.getPlayerStartX(), map.getPlayerStartY());
-		mapContainer = new PlayArea(container, map);
-		mapContainer.addChild(map);
-		mapContainer.addChild(player);
+		mapContainer = new PlayArea(container, map, player);
 		mapContainer.addChild(combo);
 		physics.addStaticCollidables(map.getCollidableTiles());
 		physics.addDynamicCollidable(player);
