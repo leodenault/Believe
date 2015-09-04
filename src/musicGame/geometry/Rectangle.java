@@ -1,5 +1,6 @@
 package musicGame.geometry;
 
+
 public class Rectangle extends org.newdawn.slick.geom.Rectangle {
 
 	private static final long serialVersionUID = -1114860881512242744L;
@@ -7,6 +8,22 @@ public class Rectangle extends org.newdawn.slick.geom.Rectangle {
 	public Rectangle(float x, float y, float width, float height) {
 		super(x, y, width, height);
 	}
+	
+	@Override
+	public boolean intersects(org.newdawn.slick.geom.Shape shape) {
+		if(shape instanceof Rectangle) {
+            Rectangle other = (Rectangle)shape;
+    		if ((x >= (other.x + other.width)) || ((x + width) <= other.x)) {
+    			return false;
+    		}
+    		if ((y >= (other.y + other.height)) || ((y + height) <= other.y)) {
+    			return false;
+    		}
+            return true;
+        }
+
+		return super.intersects(shape);
+	};
 
 	public Rectangle intersection(org.newdawn.slick.geom.Rectangle rect) {
 		float xmin = rect.getMinX();
@@ -14,6 +31,7 @@ public class Rectangle extends org.newdawn.slick.geom.Rectangle {
 		
 		float ymin = rect.getMinY();
 		float ymax = rect.getMaxY();
+		
 		
 		if (this.intersects(rect)) {
 			if (xmin >= minX && xmax <= maxX && ymin >= minY && ymax <= maxY) {
@@ -31,5 +49,21 @@ public class Rectangle extends org.newdawn.slick.geom.Rectangle {
 		}
 		
 		return new Rectangle(0, 0, 0, 0);
+	}
+	
+	/**
+	 * @rect The rectangle that must move
+	 * @return True if direction is right, otherwise false
+	 */
+	public boolean horizontalCollisionDirection(org.newdawn.slick.geom.Rectangle rect) {
+		return rect.getCenterX() > this.getCenterX();
+	}
+	
+	/**
+	 * @rect The rectangle that must move
+	 * @return True if direction is down, otherwise false
+	 */
+	public boolean verticalCollisionDirection(org.newdawn.slick.geom.Rectangle rect) {
+		return rect.getCenterY() > this.getCenterY();
 	}
 }

@@ -1,6 +1,7 @@
 package musicGame.state;
 
 import musicGame.character.Character;
+import musicGame.core.PhysicsManager;
 import musicGame.core.SynchedComboPattern;
 import musicGame.core.action.PauseGameAction;
 import musicGame.gui.ComboSyncher;
@@ -24,6 +25,7 @@ public class PlatformingState extends GameStateBase implements PausableState {
 	private Character player;
 	private Music music;
 	private ComboSyncher combo;
+	private PhysicsManager physics;
 	
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
@@ -43,6 +45,7 @@ public class PlatformingState extends GameStateBase implements PausableState {
 		pattern.addAction(6.5f, 'd');
 		pattern.addAction(7, 'a');
 		combo = new ComboSyncher(container, pattern, BPM, 120, 120);
+		physics = new PhysicsManager();
 	}
 
 	@Override
@@ -56,8 +59,12 @@ public class PlatformingState extends GameStateBase implements PausableState {
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
-		if (map != null) {
-			map.update(delta);
+		if (mapContainer != null) {
+			mapContainer.update(delta);
+		}
+		
+		if (player != null) {
+			player.update(delta);
 		}
 		
 		if (music.paused()) {
@@ -67,39 +74,21 @@ public class PlatformingState extends GameStateBase implements PausableState {
 		}
 		
 		combo.update();
+		physics.update(delta);
 	}
 
 	@Override
 	public void keyPressed(int key, char c) {
 		super.keyPressed(key, c);
-		if (map != null) {
-			map.scroll(key);
-		}
 		
 		switch (key) {
 			case Input.KEY_ESCAPE:
 				music.pause();
 				new PauseGameAction(this, game).componentActivated(null);
 				break;
-			case Input.KEY_LEFT:
-			case Input.KEY_RIGHT:
-				player.move();
-				break;
 			case Input.KEY_SPACE:
 				combo.start(music);
 				break;
-		}
-	}
-
-	@Override
-	public void keyReleased(int key, char c) {
-		super.keyReleased(key, c);
-		if (map != null) {
-			map.stopScroll(key);
-		}
-
-		if (key == Input.KEY_LEFT || key == Input.KEY_RIGHT) {
-			player.stop();
 		}
 	}
 	
@@ -116,6 +105,8 @@ public class PlatformingState extends GameStateBase implements PausableState {
 		mapContainer.addChild(map);
 		mapContainer.addChild(player);
 		mapContainer.addChild(combo);
+		physics.addStaticCollidables(map.getCollidableTiles());
+		physics.addDynamicCollidable(player);
 		music.stop();
 	}
 }

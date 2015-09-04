@@ -1,5 +1,6 @@
 package musicGame.gui;
 
+import musicGame.core.DynamicCollidable;
 import musicGame.geometry.Rectangle;
 
 import org.newdawn.slick.Graphics;
@@ -7,7 +8,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.GUIContext;
 
-public abstract class ComponentBase extends AbstractComponent {
+public abstract class ComponentBase extends AbstractComponent implements DynamicCollidable {
 
 	protected boolean rendering;
 	protected Rectangle rect;
@@ -49,7 +50,7 @@ public abstract class ComponentBase extends AbstractComponent {
 	
 	@Override
 	public int getHeight() {
-		return (int)rect.getHeight();
+		return (int)getFloatHeight();
 	}
 	
 	public void setHeight(int height) {
@@ -58,21 +59,45 @@ public abstract class ComponentBase extends AbstractComponent {
 
 	@Override
 	public int getWidth() {
-		return (int)rect.getWidth();
+		return (int)getFloatWidth();
 	}
 	
 	public void setWidth(int width) {
 		rect.setWidth(width);
 	}
+	
+	public float getFloatHeight() {
+		return rect.getHeight();
+	}
+	
+	public void setHeight(float height) {
+		rect.setHeight(height);
+	}
+	
+	public float getFloatWidth() {
+		return rect.getWidth();
+	}
+	
+	public void setWidth(float width) {
+		rect.setWidth(width);
+	}
 
 	@Override
 	public int getX() {
-		return (int)rect.getX();
+		return (int)getFloatX();
 	}
 
 	@Override
 	public int getY() {
-		return (int)rect.getY();
+		return (int)getFloatY();
+	}
+	
+	public float getFloatX() {
+		return rect.getX();
+	}
+	
+	public float getFloatY() {
+		return rect.getY();
 	}
 
 	@Override
@@ -81,6 +106,17 @@ public abstract class ComponentBase extends AbstractComponent {
 			rect.setLocation(x, y);
 			resetLayout();
 		}
+	}
+	
+	public void setLocation(float x, float y) {
+		if (rect != null) {
+			rect.setLocation(x, y);
+			resetLayout();
+		}
+	}
+	
+	public Rectangle getRect() {
+		return rect;
 	}
 	
 	public boolean isRendering() {

@@ -24,7 +24,7 @@ public class RectangleTest {
 	@Test
 	public void getIntersectionShouldReturnIntersectionOfTwoRectangles() {
 		testRectIntersectionWithParameters(10, 10, 50, 30, 0, 10, 20, 10, 10, 10, 10, 10);
-		testRectIntersectionWithParameters(10, 20, 50, 30, 60, 50, 100, 30, 60, 50, 0, 0);
+		testRectIntersectionWithParameters(10, 20, 50, 30, 5, 26, 100, 30, 10, 26, 50, 24);
 	}
 
 	@Test
@@ -42,5 +42,59 @@ public class RectangleTest {
 				0, 0, 10, 15,
 				100, 1000, 10, 15,
 				0, 0, 0, 0);
+		testRectIntersectionWithParameters(
+				0, 0, 10, 10,
+				10, 0, 10, 10,
+				0, 0, 0, 0);
+		testRectIntersectionWithParameters(
+				0, 0, 10, 10,
+				0, 10, 10, 10,
+				0, 0, 0, 0);
+	}
+	
+	@Test
+	public void horizontalCollisionDirectionShouldReturnTrueIfRightOfCenter() {
+		Rectangle rect1 = new Rectangle(0, 0, 20, 20);
+		Rectangle rect2 = new Rectangle(10, 0, 20, 20);
+		assertThat(rect1.horizontalCollisionDirection(rect2), is(true));
+		rect2 = new Rectangle(1, 20, 20, 20);
+		assertThat(rect1.horizontalCollisionDirection(rect2), is(true));
+	}
+	
+	@Test
+	public void horizontalCollisionDirectionShouldReturnFalseIfLeftOfCenter() {
+		Rectangle rect1 = new Rectangle(0, 0, 20, 20);
+		Rectangle rect2 = new Rectangle(-1, 0, 20, 20);
+		assertThat(rect1.horizontalCollisionDirection(rect2), is(false));
+		rect2 = new Rectangle(0, 20, 20, 20);
+		assertThat(rect1.horizontalCollisionDirection(rect2), is(false));
+	}
+	
+	@Test
+	public void verticalCollisionDirectionShouldReturnTrueIfBelowCenter() {
+		Rectangle rect1 = new Rectangle(0, 0, 20, 20);
+		Rectangle rect2 = new Rectangle(-1, 550, 20, 20);
+		assertThat(rect1.verticalCollisionDirection(rect2), is(true));
+		rect2 = new Rectangle(0, 1, 20, 20);
+		assertThat(rect1.verticalCollisionDirection(rect2), is(true));
+	}
+	
+	@Test
+	public void verticalCollisionDirectionShouldReturnFalseIfAboveCenter() {
+		Rectangle rect1 = new Rectangle(0, 0, 20, 20);
+		Rectangle rect2 = new Rectangle(-1, -42, 20, 20);
+		assertThat(rect1.verticalCollisionDirection(rect2), is(false));
+		rect2 = new Rectangle(0, 0, 20, 20);
+		assertThat(rect1.verticalCollisionDirection(rect2), is(false));
+	}
+	
+	@Test
+	public void intersectsShouldReturnFalseWhenTouchingSameLine() {
+		Rectangle rect1 = new Rectangle(0, 0, 20, 20);
+		Rectangle rect2 = new Rectangle(20, 0, 20, 20);
+		Rectangle rect3 = new Rectangle(0, 20, 20, 20);
+		
+		assertThat(rect1.intersects(rect2), is(false));
+		assertThat(rect1.intersects(rect3), is(false));
 	}
 }

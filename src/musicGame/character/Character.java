@@ -1,5 +1,7 @@
 package musicGame.character;
 
+import musicGame.core.Camera;
+import musicGame.core.MovementDirection;
 import musicGame.gui.ComponentBase;
 
 import org.newdawn.slick.Animation;
@@ -10,10 +12,12 @@ import org.newdawn.slick.gui.GUIContext;
 
 public class Character extends ComponentBase {
 
+	private MovementDirection direction;
 	private Animation anim;
 	
 	public Character(GUIContext container, int x, int y) throws SlickException {
 		super(container, x, y);
+		direction = MovementDirection.NONE;
 		anim = new Animation(new SpriteSheet("/res/graphics/sprites/stickFigure.png", 64, 128), 100);
 		rect = new musicGame.geometry.Rectangle(x, y - anim.getHeight(), anim.getWidth(), anim.getHeight());
 		anim.setLooping(true);
@@ -21,13 +25,33 @@ public class Character extends ComponentBase {
 		anim.setCurrentFrame(0);
 	}
 	
-	public void move() {
-		anim.start();
+	public void update(int delta) {
+		if (direction != MovementDirection.NONE) {
+			float distance = delta * Camera.SCROLL_SPEED;
+
+			if (direction == MovementDirection.LEFT) {
+				distance = -distance;
+			}
+			
+			setLocation(getFloatX() + distance, getFloatY());
+		}
 	}
 	
-	public void stop() {
-		anim.stop();
-		anim.setCurrentFrame(0);
+	@Override
+	public void keyPressed(int key, char c) {
+		super.keyPressed(key, c);
+		direction = MovementDirection.directionForKey(key);
+		anim.start();
+	}
+
+	@Override
+	public void keyReleased(int key, char c) {
+		super.keyReleased(key, c);
+		if (key == direction.getKey()) {
+			direction = MovementDirection.NONE;
+			anim.stop();
+			anim.setCurrentFrame(0);
+		}
 	}
 
 	@Override
