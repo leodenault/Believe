@@ -96,6 +96,8 @@ public class PlatformingState extends GameStateBase implements PausableState {
 	public void reset() {
 		map.reset();
 		music.stop();
+		player.setLocation(map.getPlayerStartX(), map.getPlayerStartY());
+		player.setVerticalSpeed(0);
 	}
 
 	public void setUp() throws SlickException {

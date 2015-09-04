@@ -10,6 +10,9 @@ import musicGame.geometry.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 public class PhysicsManager {
+	private static final float GRAVITY = 0.000625f; // Pixels per millisecond^2
+	private static final float NO_FALLING = Float.MIN_VALUE;
+	
 	private List<StaticCollidable> statics;
 	private List<DynamicCollidable> dynamics;
 	private HashMap<DynamicCollidable, Vector2f> coords;
@@ -42,8 +45,21 @@ public class PhysicsManager {
 	}
 	
 	public void update(int delta) {
+		applyGravity(delta);
 		checkCollisions();
 		updatePositions();
+	}
+	
+	private void applyGravity(int delta) {
+		for (DynamicCollidable child : dynamics) {
+			float speed = child.getVerticalSpeed();
+			
+			if (speed != NO_FALLING) {
+				speed += GRAVITY * delta;
+				child.setLocation(child.getFloatX(), child.getFloatY() + speed);
+				child.setVerticalSpeed(speed);
+			}
+		}
 	}
 	
 	// This might end up needing some spacial data structures
@@ -57,6 +73,7 @@ public class PhysicsManager {
 				if (r1.intersects(r2)) {
 					Vector2f c1Coords = coords.get(c1);
 					c1.setLocation(c1Coords.getX(), c1Coords.getY());
+					c1.setVerticalSpeed(NO_FALLING);
 				}
 			}
 		}

@@ -21,7 +21,7 @@ public class PlayArea extends AbstractContainer {
 	public PlayArea(GUIContext container, LevelMap map, ComponentBase center) {
 		super(container, 0, 0, container.getWidth(), container.getHeight());
 		border = false;
-		camera = new Camera(getFloatWidth(), getFloatHeight());
+		camera = new Camera(getWidth(), getHeight());
 		this.map = map;
 		this.center = center;
 		camera.addChild(map);
@@ -81,8 +81,8 @@ public class PlayArea extends AbstractContainer {
 		Rectangle camRect = camera.getRect();
 		if (camRect.getX() < 0) {
 			camRect.setX(0);
-		} else if (camRect.getMaxX() > map.getFloatWidth()) {
-			camRect.setX(map.getFloatWidth() - camRect.getWidth());
+		} else if (camRect.getMaxX() > map.getWidth()) {
+			camRect.setX(map.getWidth() - camRect.getWidth());
 		}
 	}
 }

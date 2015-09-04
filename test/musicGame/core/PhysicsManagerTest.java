@@ -45,6 +45,7 @@ public class PhysicsManagerTest {
 			oneOf(dC).getRect(); will(returnValue(new Rectangle(0, 50, 50, 50)));
 
 			exactly(2).of(dC).setLocation(-1000f, 0f);
+			exactly(2).of(dC).setVerticalSpeed(Float.MIN_VALUE);
 		}});
 		
 		manager.addStaticCollidable(sC);

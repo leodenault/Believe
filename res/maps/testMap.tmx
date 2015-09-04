@@ -2,7 +2,7 @@
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="75" height="30" tilewidth="32" tileheight="32" nextobjectid="1">
  <properties>
   <property name="playerStartX" value="1"/>
-  <property name="playerStartY" value="13"/>
+  <property name="playerStartY" value="2"/>
  </properties>
  <tileset firstgid="1" name="Test Set" tilewidth="32" tileheight="32">
   <image source="../graphics/tilesets/testSet.png" width="64" height="32"/>
@@ -18,7 +18,7 @@
    <property name="collision" value=""/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3QMQoAIAwEwTS+2s+LhZUE0hlhBq4/NgIAAOhujtcP/rA7aVWTtdLvdlpZbQAAAADQ2QJ1N2Z0KCMAAA==
+   H4sIAAAAAAAAA+3QIQ6AMADAwJm9ep9HLKiFUIFA3CX9QMeAb625451XnVedV51XnVedV51XnVedV93TK/9O9yu1AAAAAODPLgOt6iwoIwAA
   </data>
  </layer>
  <layer name="Background" width="75" height="30">
@@ -28,7 +28,7 @@
  </layer>
  <layer name="Ground" width="75" height="30">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3QQQoAIAwDweb/n/YBIuipFWYg97BVAADAdOk+8ImUVrdOrfTbxZ4GAAAAAJMtehTtnSgjAAA=
+   H4sIAAAAAAAAA+3QMQrAIADAQP3/p13cSjFChw53kA9kDPjW3HHmVedV51XnVedV51XnVedV51X39sq/p6mrAAAAAODPFpJSzZ8oIwAA
   </data>
  </layer>
  <layer name="Foreground" width="75" height="30">
