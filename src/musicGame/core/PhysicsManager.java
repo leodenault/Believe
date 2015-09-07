@@ -29,7 +29,7 @@ public class PhysicsManager {
 		}
 	}
 	
-	private static final float GRAVITY = 0.000625f; // Pixels per millisecond^2
+	private static final float GRAVITY = 0.00125f; // Pixels per millisecond^2
 	private static final float NO_FALLING = Float.MIN_VALUE;
 	
 	private List<StaticCollidable> statics;

@@ -13,7 +13,7 @@ import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.gui.GUIContext;
 
 public class Character extends ComponentBase implements DynamicCollidable {
-	private static final float JUMP_SPEED = -0.450f;
+	private static final float JUMP_SPEED = -0.5f;
 	
 	private boolean canJump;
 	private float verticalSpeed;
