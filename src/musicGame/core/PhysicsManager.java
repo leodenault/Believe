@@ -10,6 +10,25 @@ import musicGame.geometry.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 public class PhysicsManager {
+	
+	private class CollisionData {
+		public DynamicCollidable dynColl;
+		public Rectangle dynHitBox;
+		public Rectangle statHitBox;
+		public float interWidth;
+		public float interHeight;
+		
+		public CollisionData(DynamicCollidable dynColl, StaticCollidable statColl) {
+			this.dynColl = dynColl;
+			dynHitBox = dynColl.getRect();
+			statHitBox = statColl.getRect();
+			
+			Rectangle intersection = dynHitBox.intersection(statHitBox);
+			interWidth = intersection.getWidth();
+			interHeight = intersection.getHeight();
+		}
+	}
+	
 	private static final float GRAVITY = 0.000625f; // Pixels per millisecond^2
 	private static final float NO_FALLING = Float.MIN_VALUE;
 	
@@ -56,7 +75,7 @@ public class PhysicsManager {
 			
 			if (speed != NO_FALLING) {
 				speed += GRAVITY * delta;
-				child.setLocation(child.getFloatX(), child.getFloatY() + speed);
+				child.setLocation(child.getFloatX(), child.getFloatY() + speed * delta);
 				child.setVerticalSpeed(speed);
 			}
 		}
@@ -65,15 +84,52 @@ public class PhysicsManager {
 	// This might end up needing some spacial data structures
 	// for optimization, as it's currently not terribly efficient
 	protected void checkCollisions() {
+		// Separate collisions into vertical and horizontal resolutions
+		List<CollisionData> hCol = new LinkedList<CollisionData>();
+		List<CollisionData> vCol = new LinkedList<CollisionData>();
+
+		// Find all collisions and separate by horizontal and vertical
 		for (DynamicCollidable c1 : dynamics) {
 			for (StaticCollidable c2 : statics) {
-				Rectangle r1 = c1.getRect();
-				Rectangle r2 = c2.getRect();
+				CollisionData collision = new CollisionData(c1, c2);
+
+				if (collision.dynHitBox.intersects(collision.statHitBox)) {
+					if (collision.interWidth > collision.interHeight) {
+						vCol.add(collision);
+					} else {
+						hCol.add(collision);
+					}
+				}
+			}
+		}
+
+		// Resolve horizontal collisions first
+		for (CollisionData collision : hCol) {
+			if (collision.dynHitBox.intersects(collision.statHitBox)) {
+				float distance = collision.statHitBox
+						.horizontalCollisionDirection(collision.dynHitBox) ?
+								collision.interWidth : -collision.interWidth;
 				
-				if (r1.intersects(r2)) {
-					Vector2f c1Coords = coords.get(c1);
-					c1.setLocation(c1Coords.getX(), c1Coords.getY());
-					c1.setVerticalSpeed(NO_FALLING);
+				DynamicCollidable dyn = collision.dynColl;
+				dyn.setLocation(dyn.getFloatX() + distance, dyn.getFloatY());
+			}
+		}
+		
+		// Resolve vertical collisions second
+		for (CollisionData collision : vCol) {
+			if (collision.dynHitBox.intersects(collision.statHitBox)) {
+				DynamicCollidable dyn = collision.dynColl;
+				boolean down = collision.statHitBox.verticalCollisionDirection(collision.dynHitBox);
+				float speed = dyn.getVerticalSpeed();
+				
+				if (down && speed < 0 || !down && speed > 0) {
+					float distance = down ? collision.interHeight : -collision.interHeight;
+					dyn.setLocation(dyn.getFloatX(), dyn.getFloatY() + distance);
+					dyn.setVerticalSpeed(0);
+					
+					if (!down) {
+						dyn.setCanJump(true);
+					}
 				}
 			}
 		}

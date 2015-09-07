@@ -31,21 +31,29 @@ public class PhysicsManagerTest {
 	
 	@Test
 	public void checkCollisionsShouldMoveObjectsToAppropriateLocation() {
+		final float dcX = 26;
+		final float dcY = -30;
+		
 		mockery.checking(new Expectations() {{
-			oneOf(dC).getFloatX(); will(returnValue(-1000f));
-			oneOf(dC).getFloatY(); will(returnValue(0f));
-			
 			oneOf(sC).getRect(); will(returnValue(new Rectangle(0, 0, 50, 50)));
-			oneOf(dC).getRect(); will(returnValue(new Rectangle(26, -30, 50, 50)));
+			oneOf(dC).getRect(); will(returnValue(new Rectangle(dcX, dcY, 50, 50)));
+			oneOf(dC).getVerticalSpeed(); will(returnValue(2f));
+			exactly(2).of(dC).getFloatX(); will(returnValue(dcX));
+			exactly(2).of(dC).getFloatY(); will(returnValue(dcY));
+			oneOf(dC).setLocation(dcX, -50);
+			oneOf(dC).setVerticalSpeed(0);
+			oneOf(dC).setCanJump(true);
 			
 			oneOf(sC).getRect(); will(returnValue(new Rectangle(0, 0, 50, 50)));
 			oneOf(dC).getRect(); will(returnValue(new Rectangle(0, 26, 50, 50)));
+			oneOf(dC).getVerticalSpeed(); will(returnValue(-2f));
+			oneOf(dC).getFloatX(); will(returnValue(0f));
+			oneOf(dC).getFloatY(); will(returnValue(26f));
+			oneOf(dC).setLocation(0, 50);
+			oneOf(dC).setVerticalSpeed(0);
 			
 			oneOf(sC).getRect(); will(returnValue(new Rectangle(0, 0, 50, 50)));
 			oneOf(dC).getRect(); will(returnValue(new Rectangle(0, 50, 50, 50)));
-
-			exactly(2).of(dC).setLocation(-1000f, 0f);
-			exactly(2).of(dC).setVerticalSpeed(Float.MIN_VALUE);
 		}});
 		
 		manager.addStaticCollidable(sC);
@@ -53,6 +61,29 @@ public class PhysicsManagerTest {
 
 		manager.checkCollisions();
 		manager.checkCollisions();
+		manager.checkCollisions();
+	}
+	
+	@Test
+	public void checkCollisionsShouldRunHorizontalCollisionsFirst() {
+		mockery.checking(new Expectations() {{
+			oneOf(sC).getRect(); will(returnValue(new Rectangle(-49, 0, 50, 50)));
+			oneOf(sC).getRect(); will(returnValue(new Rectangle(0, 49, 50, 50)));
+			exactly(2).of(dC).getRect(); will(returnValue(new Rectangle(0, 0, 50, 50)));
+			oneOf(dC).getVerticalSpeed(); will(returnValue(2f));
+			exactly(2).of(dC).getFloatX(); will(returnValue(0f));
+			oneOf(dC).getFloatX(); will(returnValue(1f));
+			exactly(3).of(dC).getFloatY(); will(returnValue(0f));
+			oneOf(dC).setLocation(1, 0);
+			oneOf(dC).setLocation(1, -1);
+			oneOf(dC).setVerticalSpeed(0);
+			oneOf(dC).setCanJump(true);
+		}});
+
+		manager.addStaticCollidable(sC);
+		manager.addStaticCollidable(sC);
+		manager.addDynamicCollidable(dC);
+		
 		manager.checkCollisions();
 	}
 	

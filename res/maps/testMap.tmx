@@ -18,7 +18,7 @@
    <property name="collision" value=""/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3QIQ6AMADAwJm9ep9HLKiFUIFA3CX9QMeAb625451XnVedV51XnVedV51XnVedV93TK/9O9yu1AAAAAODPLgOt6iwoIwAA
+   H4sIAAAAAAAAA+3SMQqAMAAEwTS+2s+nCFYibpFCcAbuA8uNAXudxxrvtOq06rTqdrX6Q2+/6rTqtOq06rTqnlrpd3e1sjYAAAAA+LIJl/f30SgjAAA=
   </data>
  </layer>
  <layer name="Background" width="75" height="30">
@@ -28,7 +28,7 @@
  </layer>
  <layer name="Ground" width="75" height="30">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3QMQrAIADAQP3/p13cSjFChw53kA9kDPjW3HHmVedV51XnVedV51XnVedV51X39sq/p6mrAAAAAODPFpJSzZ8oIwAA
+   H4sIAAAAAAAAA+3SsQkAIBRDQf/+S9vYiRjBQvAOssAjrcFdNcaeVjmtclrlbrX6obdf5bTKaZXTKqdVbtVKv1nZ0QAAAADgZR3pM2nFKCMAAA==
   </data>
  </layer>
  <layer name="Foreground" width="75" height="30">

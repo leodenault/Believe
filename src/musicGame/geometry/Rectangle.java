@@ -52,7 +52,7 @@ public class Rectangle extends org.newdawn.slick.geom.Rectangle {
 	}
 	
 	/**
-	 * @rect The rectangle that must move
+	 * @param rect The rectangle that must move
 	 * @return True if direction is right, otherwise false
 	 */
 	public boolean horizontalCollisionDirection(org.newdawn.slick.geom.Rectangle rect) {
@@ -60,7 +60,7 @@ public class Rectangle extends org.newdawn.slick.geom.Rectangle {
 	}
 	
 	/**
-	 * @rect The rectangle that must move
+	 * @param rect The rectangle that must move
 	 * @return True if direction is down, otherwise false
 	 */
 	public boolean verticalCollisionDirection(org.newdawn.slick.geom.Rectangle rect) {

@@ -15,12 +15,14 @@ import org.newdawn.slick.gui.GUIContext;
 public class Character extends ComponentBase implements DynamicCollidable {
 	private static final float JUMP_SPEED = -0.450f;
 	
+	private boolean canJump;
 	private float verticalSpeed;
 	private MovementDirection direction;
 	private Animation anim;
 	
 	public Character(GUIContext container, int x, int y) throws SlickException {
 		super(container, x, y);
+		canJump = true;
 		verticalSpeed = 0;
 		direction = MovementDirection.NONE;
 		anim = new Animation(new SpriteSheet("/res/graphics/sprites/stickFigure.png", 64, 128), 100);
@@ -69,6 +71,11 @@ public class Character extends ComponentBase implements DynamicCollidable {
 	public void setVerticalSpeed(float speed) {
 		verticalSpeed = speed;
 	}
+	
+	@Override
+	public void setCanJump(boolean canJump) {
+		this.canJump = canJump;
+	}
 
 	@Override
 	public void keyPressed(int key, char c) {
@@ -80,7 +87,8 @@ public class Character extends ComponentBase implements DynamicCollidable {
 			anim.start();
 		}
 		
-		if (key == Input.KEY_Z) {
+		if (canJump && key == Input.KEY_Z) {
+			canJump = false;
 			verticalSpeed = JUMP_SPEED;
 		}
 	}
