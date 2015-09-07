@@ -18,6 +18,7 @@ public class LevelMap extends ComponentBase {
 	
 	private TiledMap map;
 	private MapProperties properties;
+	private ComponentBase focus;
 			
 	public LevelMap(GUIContext container, String name) throws SlickException {
 		super(container, 0, 0);
@@ -41,12 +42,32 @@ public class LevelMap extends ComponentBase {
 	public List<Tile> getCollidableTiles() {
 		return properties.collidableTiles;
 	}
+	
+	/**
+	 * Sets the object that should be centered on screen, like the player
+	 * 
+	 * @param focus The component to focus on
+	 */
+	public void setFocus(ComponentBase focus) {
+		this.focus = focus;
+	}
 
 	@Override
 	protected void resetLayout() {}
 
 	@Override
-	protected void renderComponent(GUIContext context, Graphics g) {
-		map.render(getX(), getY());
+	protected void renderComponent(GUIContext context, Graphics g)
+			throws SlickException {
+		for (Integer layer : properties.rearLayers) {
+			map.render(getX(), getY(), layer);
+		}
+		
+		if (focus != null) {
+			focus.render(context, g);
+		}
+		
+		for (Integer layer : properties.frontLayers) {
+			map.render(getX(), getY(), layer);
+		}
 	}
 }

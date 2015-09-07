@@ -9,19 +9,25 @@ import org.newdawn.slick.util.Log;
 public class MapProperties {
 	private static final int EMPTY_TILE = 0;
 	private static final String NUMBER_DEFAULT = "0";
-	private static final String COLLISION_DEFAULT = "nonexistent";
+	
+	protected static final String NO_PROP_DEFAULT = "nonexistent";
+	protected static final String FRONT = "front";
+	protected static final String COLLISION = "collision";
 	
 	public int startX;
 	public int startY;
 	public List<Tile> collidableTiles;
+	public List<Integer> rearLayers;
+	public List<Integer> frontLayers;
 	
-	private MapProperties() {}
+	protected MapProperties() {}
 	
 	public static MapProperties create(TiledMap map) {
 		MapProperties properties = new MapProperties();
 		properties.startX = fetchNumber(map, "playerStartX", NUMBER_DEFAULT);
 		properties.startY = fetchNumber(map, "playerStartY", NUMBER_DEFAULT);
 		properties.collidableTiles = fetchCollidableTiles(map);
+		fetchLayers(map, properties);
 		return properties;
 	}
 	
@@ -42,8 +48,8 @@ public class MapProperties {
 	private static List<Tile> fetchCollidableTiles(TiledMap map) {
 		List<Tile> tiles = new LinkedList<Tile>();
 		for (int i = 0; i < map.getLayerCount(); i++) {
-			String prop = map.getLayerProperty(i, "collision", COLLISION_DEFAULT);
-			if (!prop.equals(COLLISION_DEFAULT)) {
+			String prop = map.getLayerProperty(i, COLLISION, NO_PROP_DEFAULT);
+			if (!prop.equals(NO_PROP_DEFAULT)) {
 				int tileWidth = map.getTileWidth();
 				int tileHeight = map.getTileHeight();
 				
@@ -58,5 +64,25 @@ public class MapProperties {
 		
 		}
 		return tiles;
+	}
+	
+	public static void fetchLayers(TiledMap map, MapProperties properties) {
+		List<Integer> rearLayers = new LinkedList<Integer>();
+		List<Integer> frontLayers = new LinkedList<Integer>();
+		
+		for (int i = 0; i < map.getLayerCount(); i++) {
+			String collision = map.getLayerProperty(i, COLLISION, NO_PROP_DEFAULT);
+			if (collision.equals(NO_PROP_DEFAULT)) {
+				String prop = map.getLayerProperty(i, FRONT, NO_PROP_DEFAULT);
+				if (prop.equals(NO_PROP_DEFAULT)) {
+						rearLayers.add(i);
+				} else {
+					frontLayers.add(i);
+				}
+			}
+		}
+		
+		properties.rearLayers = rearLayers;
+		properties.frontLayers = frontLayers;
 	}
 }

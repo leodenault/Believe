@@ -8,6 +8,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.MusicListener;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
@@ -223,7 +224,7 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 	}
 
 	@Override
-	protected void renderComponent(GUIContext context, Graphics g) {
+	protected void renderComponent(GUIContext context, Graphics g) throws SlickException {
 		// Render the bar at the top
 		g.setColor(new Color(0x6e00b8));
 		g.setLineWidth(2.0f);

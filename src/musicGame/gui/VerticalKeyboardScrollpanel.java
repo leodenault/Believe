@@ -7,6 +7,7 @@ import musicGame.core.Util;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.GUIContext;
 
@@ -88,7 +89,7 @@ public class VerticalKeyboardScrollpanel extends AbstractContainer {
 	}
 
 	@Override
-	protected void renderComponent(GUIContext context, Graphics g) {
+	protected void renderComponent(GUIContext context, Graphics g) throws SlickException {
 		Rectangle oldClip = Util.changeClipContext(g, rect);
 		super.renderComponent(context, g);
 		Util.resetClipContext(g, oldClip);

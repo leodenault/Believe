@@ -9,23 +9,22 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.GUIContext;
-import org.newdawn.slick.util.Log;
 
 public class PlayArea extends AbstractContainer {
 
 	private boolean border;
 	private Camera camera;
 	private LevelMap map;
-	private ComponentBase center;
+	private ComponentBase focus;
 	
-	public PlayArea(GUIContext container, LevelMap map, ComponentBase center) {
+	public PlayArea(GUIContext container, LevelMap map, ComponentBase focus) {
 		super(container, 0, 0, container.getWidth(), container.getHeight());
 		border = false;
 		camera = new Camera(getWidth(), getHeight());
 		this.map = map;
-		this.center = center;
+		this.focus = focus;
 		camera.addChild(map);
-		camera.addChild(center);
+		map.setFocus(focus);
 		camera.scale(rect.getWidth() / LevelMap.TARGET_WIDTH,
 				rect.getHeight() / LevelMap.TARGET_HEIGHT);
 	}
@@ -53,17 +52,12 @@ public class PlayArea extends AbstractContainer {
 	}
 
 	@Override
-	protected void renderComponent(GUIContext context, Graphics g) {
+	protected void renderComponent(GUIContext context, Graphics g) throws SlickException {
 		g.pushTransform();
 		Rectangle oldClip = Util.changeClipContext(g, rect);
 		g.translate(getX(), getY());
 		
-		// TODO: Find a good way to avoid this try/catch
-		try {
-			camera.render(context, g);
-		} catch (SlickException e) {
-			Log.error("The camera encountered an error while rendering");
-		}
+		camera.render(context, g);
 		
 		Util.resetClipContext(g, oldClip);
 		g.popTransform();
@@ -75,7 +69,7 @@ public class PlayArea extends AbstractContainer {
 	}
 	
 	public void update(int delta) {
-		Rectangle rect = center.getRect();
+		Rectangle rect = focus.getRect();
 		camera.center(rect.getCenterX(), rect.getCenterY());
 		
 		Rectangle camRect = camera.getRect();

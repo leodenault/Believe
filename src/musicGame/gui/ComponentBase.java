@@ -109,5 +109,6 @@ public abstract class ComponentBase extends AbstractComponent {
 	/**
 	 * Renders the component within the context of a GUI component
 	 */
-	protected abstract void renderComponent(GUIContext context, Graphics g);
+	protected abstract void renderComponent(GUIContext context, Graphics g)
+			throws SlickException;
 }
