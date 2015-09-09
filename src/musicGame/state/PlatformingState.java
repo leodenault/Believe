@@ -1,6 +1,6 @@
 package musicGame.state;
 
-import musicGame.character.Character;
+import musicGame.character.PlayableCharacter;
 import musicGame.core.PhysicsManager;
 import musicGame.core.SynchedComboPattern;
 import musicGame.core.action.PauseGameAction;
@@ -23,7 +23,7 @@ public class PlatformingState extends GameStateBase implements PausableState {
 	private StateBasedGame game;
 	private LevelMap map;
 	private PlayArea mapContainer;
-	private Character player;
+	private PlayableCharacter player;
 	private Music music;
 	private ComboSyncher combo;
 	private PhysicsManager physics;
@@ -101,7 +101,7 @@ public class PlatformingState extends GameStateBase implements PausableState {
 
 	public void setUp() throws SlickException {
 		map = new LevelMap(container, "testMap");
-		player = new Character(container, map.getPlayerStartX(), map.getPlayerStartY());
+		player = new PlayableCharacter(container, map.getPlayerStartX(), map.getPlayerStartY());
 		mapContainer = new PlayArea(container, map, player);
 		initPhysics();
 		mapContainer.addChild(combo);

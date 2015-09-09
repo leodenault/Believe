@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import musicGame.character.Character;
+import musicGame.character.EnemyCharacter;
 import musicGame.geometry.Rectangle;
 import musicGame.gui.ComponentBase;
 
@@ -23,7 +24,7 @@ public class LevelMap extends ComponentBase {
 	private TiledMap map;
 	private MapProperties properties;
 	private ComponentBase focus;
-	private List<Character> enemies;
+	private List<EnemyCharacter> enemies;
 			
 	public LevelMap(GUIContext container, String name) throws SlickException {
 		super(container, 0, 0);
@@ -55,7 +56,7 @@ public class LevelMap extends ComponentBase {
 		return properties.collidableTiles;
 	}
 	
-	public List<Character> getEnemies() {
+	public List<EnemyCharacter> getEnemies() {
 		return enemies;
 	}
 	
@@ -69,7 +70,7 @@ public class LevelMap extends ComponentBase {
 	}
 	
 	public void update(int delta) {
-		for (Character enemy : enemies) {
+		for (EnemyCharacter enemy : enemies) {
 			enemy.update(delta);
 		}
 	}
@@ -97,12 +98,12 @@ public class LevelMap extends ComponentBase {
 		}
 	}
 	
-	private List<Character> generateEnemies(List<Tile> enemyTiles) throws SlickException {
-		List<Character> enemies = new LinkedList<Character>();
+	private List<EnemyCharacter> generateEnemies(List<Tile> enemyTiles) throws SlickException {
+		List<EnemyCharacter> enemies = new LinkedList<EnemyCharacter>();
 		
 		for (Tile enemyTile : enemyTiles) {
 			Rectangle rect = enemyTile.getRect();
-			enemies.add(new Character(container, (int)rect.getX(), (int)rect.getMaxY()));
+			enemies.add(new EnemyCharacter(container, (int)rect.getX(), (int)rect.getMaxY()));
 		}
 		
 		return enemies;

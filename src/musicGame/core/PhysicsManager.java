@@ -60,8 +60,8 @@ public class PhysicsManager {
 	private void applyGravity(int delta) {
 		for (DynamicCollidable child : dynamics) {
 			float speed = child.getVerticalSpeed();
-			speed += GRAVITY * delta;
 			child.setLocation(child.getFloatX(), child.getFloatY() + speed * delta);
+			speed += GRAVITY * delta;
 			child.setVerticalSpeed(speed);
 		}
 	}
