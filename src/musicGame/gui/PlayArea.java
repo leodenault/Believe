@@ -78,5 +78,11 @@ public class PlayArea extends AbstractContainer {
 		} else if (camRect.getMaxX() > map.getWidth()) {
 			camRect.setX(map.getWidth() - camRect.getWidth());
 		}
+		
+		if (camRect.getY() < 0) {
+			camRect.setY(0);
+		} else if (camRect.getMaxY() > map.getHeight()) {
+			camRect.setY(map.getHeight() - camRect.getHeight());
+		}
 	}
 }
