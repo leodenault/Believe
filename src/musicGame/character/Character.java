@@ -17,14 +17,13 @@ public class Character extends ComponentBase implements DynamicCollidable {
 	
 	private boolean canJump;
 	private float verticalSpeed;
-	private MovementDirection direction;
+	private float horizontalSpeed;
 	private Animation anim;
 	
 	public Character(GUIContext container, int x, int y) throws SlickException {
 		super(container, x, y);
 		canJump = true;
 		verticalSpeed = 0;
-		direction = MovementDirection.NONE;
 		anim = new Animation(new SpriteSheet("/res/graphics/sprites/stickFigure.png", 64, 128), 100);
 		rect = new musicGame.geometry.Rectangle(x, y - anim.getHeight(), anim.getWidth(), anim.getHeight());
 		anim.setLooping(true);
@@ -33,14 +32,15 @@ public class Character extends ComponentBase implements DynamicCollidable {
 	}
 	
 	public void update(int delta) {
-		if (direction != MovementDirection.NONE) {
-			float distance = delta * Camera.SCROLL_SPEED;
-
-			if (direction == MovementDirection.LEFT) {
-				distance = -distance;
-			}
-			
-			setLocation(getFloatX() + distance, getFloatY());
+		if (horizontalSpeed == 0 && !anim.isStopped()) {
+			anim.stop();
+			anim.setCurrentFrame(0);
+		} else if (horizontalSpeed != 0 && anim.isStopped()) {
+			anim.start();
+		}
+		
+		if (horizontalSpeed != 0) {
+			setLocation(getFloatX() + delta * horizontalSpeed, getFloatY());
 		}
 	}
 	
@@ -80,12 +80,7 @@ public class Character extends ComponentBase implements DynamicCollidable {
 	@Override
 	public void keyPressed(int key, char c) {
 		super.keyPressed(key, c);
-		MovementDirection newDirection = MovementDirection.directionForKey(key);
-		
-		if (newDirection != MovementDirection.NONE) {
-			direction = newDirection;
-			anim.start();
-		}
+		horizontalSpeed += MovementDirection.directionForKey(key).getValue() * Camera.SCROLL_SPEED;
 		
 		if (canJump && key == Input.KEY_Z) {
 			canJump = false;
@@ -96,11 +91,7 @@ public class Character extends ComponentBase implements DynamicCollidable {
 	@Override
 	public void keyReleased(int key, char c) {
 		super.keyReleased(key, c);
-		if (key == direction.getKey()) {
-			direction = MovementDirection.NONE;
-			anim.stop();
-			anim.setCurrentFrame(0);
-		}
+		horizontalSpeed -= MovementDirection.directionForKey(key).getValue() * Camera.SCROLL_SPEED;
 	}
 
 	@Override

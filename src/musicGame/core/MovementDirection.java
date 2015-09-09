@@ -3,12 +3,14 @@ package musicGame.core;
 import org.newdawn.slick.Input;
 
 public enum MovementDirection {
-	NONE(-1), LEFT(Input.KEY_LEFT), RIGHT(Input.KEY_RIGHT);
+	NONE(-1, 0), LEFT(Input.KEY_LEFT, -1), RIGHT(Input.KEY_RIGHT, 1);
 	
 	private int key;
+	private int value;
 	
-	private MovementDirection(int key) {
+	private MovementDirection(int key, int value) {
 		this.key = key;
+		this.value = value;
 	}
 	
 	public static MovementDirection directionForKey(int key) {
@@ -24,5 +26,9 @@ public enum MovementDirection {
 	
 	public int getKey() {
 		return key;
+	}
+	
+	public int getValue() {
+		return value;
 	}
 }
