@@ -30,7 +30,6 @@ public class PhysicsManager {
 	}
 	
 	private static final float GRAVITY = 0.00125f; // Pixels per millisecond^2
-	private static final float NO_FALLING = Float.MIN_VALUE;
 	
 	private List<StaticCollidable> statics;
 	private List<DynamicCollidable> dynamics;
@@ -72,12 +71,9 @@ public class PhysicsManager {
 	private void applyGravity(int delta) {
 		for (DynamicCollidable child : dynamics) {
 			float speed = child.getVerticalSpeed();
-			
-			if (speed != NO_FALLING) {
-				speed += GRAVITY * delta;
-				child.setLocation(child.getFloatX(), child.getFloatY() + speed * delta);
-				child.setVerticalSpeed(speed);
-			}
+			speed += GRAVITY * delta;
+			child.setLocation(child.getFloatX(), child.getFloatY() + speed * delta);
+			child.setVerticalSpeed(speed);
 		}
 	}
 	
