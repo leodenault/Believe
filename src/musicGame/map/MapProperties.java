@@ -1,5 +1,6 @@
 package musicGame.map;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,6 +14,9 @@ public class MapProperties {
 	protected static final String NO_PROP_DEFAULT = "nonexistent";
 	protected static final String FRONT = "front";
 	protected static final String COLLISION = "collision";
+	protected static final String ENEMIES = "enemies";
+	
+	private static final List<String> INVISIBLE_LAYERS = Arrays.asList(COLLISION, ENEMIES);
 	
 	public int startX;
 	public int startY;
@@ -71,8 +75,7 @@ public class MapProperties {
 		List<Integer> frontLayers = new LinkedList<Integer>();
 		
 		for (int i = 0; i < map.getLayerCount(); i++) {
-			String collision = map.getLayerProperty(i, COLLISION, NO_PROP_DEFAULT);
-			if (collision.equals(NO_PROP_DEFAULT)) {
+			if (!isInvisible(map, i)) {
 				String prop = map.getLayerProperty(i, FRONT, NO_PROP_DEFAULT);
 				if (prop.equals(NO_PROP_DEFAULT)) {
 						rearLayers.add(i);
@@ -84,5 +87,16 @@ public class MapProperties {
 		
 		properties.rearLayers = rearLayers;
 		properties.frontLayers = frontLayers;
+	}
+	
+	private static boolean isInvisible(TiledMap map, int layer) {
+		for (String property : INVISIBLE_LAYERS) {
+			String value = map.getLayerProperty(layer, property, NO_PROP_DEFAULT);
+			if (!value.equals(NO_PROP_DEFAULT)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }
