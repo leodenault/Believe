@@ -18,6 +18,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class PlatformingState extends GameStateBase implements PausableState {
 	private static final int BPM = 160;
 
+	private boolean ready;
 	private GameContainer container;
 	private StateBasedGame game;
 	private LevelMap map;
@@ -30,6 +31,7 @@ public class PlatformingState extends GameStateBase implements PausableState {
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
+		this.ready = false;
 		this.container = container;
 		this.game = game;
 		this.music = new Music("/res/music/TimeOut_loop.ogg");
@@ -45,13 +47,12 @@ public class PlatformingState extends GameStateBase implements PausableState {
 		pattern.addAction(6.5f, 'd');
 		pattern.addAction(7, 'a');
 		combo = new ComboSyncher(container, pattern, BPM, 120, 120);
-		physics = new PhysicsManager();
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
-		if (mapContainer != null) {
+		if (ready) {
 			mapContainer.render(container, g);
 		}
 	}
@@ -59,22 +60,19 @@ public class PlatformingState extends GameStateBase implements PausableState {
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
-		if (mapContainer != null) {
+		if (ready) {
 			mapContainer.update(delta);
-		}
-		
-		if (player != null) {
+			map.update(delta);
 			player.update(delta);
+			combo.update();
+			physics.update(delta);
+			
+			if (music.paused()) {
+				music.resume();
+			} else if (!music.playing()) {
+				music.loop();
+			}
 		}
-		
-		if (music.paused()) {
-			music.resume();
-		} else if (!music.playing()) {
-			music.loop();
-		}
-		
-		combo.update();
-		physics.update(delta);
 	}
 
 	@Override
@@ -96,17 +94,25 @@ public class PlatformingState extends GameStateBase implements PausableState {
 	public void reset() {
 		map.reset();
 		music.stop();
-		player.setLocation(map.getPlayerStartX(), map.getPlayerStartY());
+		player.setLocation(map.getPlayerStartX(), map.getPlayerStartY() - player.getHeight());
 		player.setVerticalSpeed(0);
+		initPhysics();
 	}
 
 	public void setUp() throws SlickException {
 		map = new LevelMap(container, "testMap");
 		player = new Character(container, map.getPlayerStartX(), map.getPlayerStartY());
 		mapContainer = new PlayArea(container, map, player);
+		initPhysics();
 		mapContainer.addChild(combo);
-		physics.addStaticCollidables(map.getCollidableTiles());
-		physics.addDynamicCollidable(player);
 		music.stop();
+		ready = true;
+	}
+	
+	private void initPhysics() {
+		physics = new PhysicsManager();
+		physics.addStaticCollidables(map.getCollidableTiles());
+		physics.addDynamicCollidables(map.getEnemies());
+		physics.addDynamicCollidable(player);
 	}
 }

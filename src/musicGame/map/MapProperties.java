@@ -21,6 +21,7 @@ public class MapProperties {
 	public int startX;
 	public int startY;
 	public List<Tile> collidableTiles;
+	public List<Tile> enemies;
 	public List<Integer> rearLayers;
 	public List<Integer> frontLayers;
 	
@@ -30,7 +31,8 @@ public class MapProperties {
 		MapProperties properties = new MapProperties();
 		properties.startX = fetchNumber(map, "playerStartX", NUMBER_DEFAULT);
 		properties.startY = fetchNumber(map, "playerStartY", NUMBER_DEFAULT);
-		properties.collidableTiles = fetchCollidableTiles(map);
+		properties.collidableTiles = fetchTilesInLayerWithProperty(map, COLLISION);
+		properties.enemies = fetchTilesInLayerWithProperty(map, ENEMIES);
 		fetchLayers(map, properties);
 		return properties;
 	}
@@ -49,10 +51,10 @@ public class MapProperties {
 		return value;
 	}
 	
-	private static List<Tile> fetchCollidableTiles(TiledMap map) {
+	private static List<Tile> fetchTilesInLayerWithProperty(TiledMap map, String property) {
 		List<Tile> tiles = new LinkedList<Tile>();
 		for (int i = 0; i < map.getLayerCount(); i++) {
-			String prop = map.getLayerProperty(i, COLLISION, NO_PROP_DEFAULT);
+			String prop = map.getLayerProperty(i, property, NO_PROP_DEFAULT);
 			if (!prop.equals(NO_PROP_DEFAULT)) {
 				int tileWidth = map.getTileWidth();
 				int tileHeight = map.getTileHeight();
@@ -70,7 +72,7 @@ public class MapProperties {
 		return tiles;
 	}
 	
-	public static void fetchLayers(TiledMap map, MapProperties properties) {
+	protected static void fetchLayers(TiledMap map, MapProperties properties) {
 		List<Integer> rearLayers = new LinkedList<Integer>();
 		List<Integer> frontLayers = new LinkedList<Integer>();
 		

@@ -36,7 +36,7 @@
    <property name="enemies" value=""/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3OMQ0AAAgDsD1IxzcyyJJWQRMAAAAAAOiz8z0AAADaHO2/c+UoIwAA
+   H4sIAAAAAAAAA+3MIQoAAAgAMYtP998muyCYtnxcBAAAAAAA/Kq8d9sHAADAaAvmrRIoIwAA
   </data>
  </layer>
  <layer name="Fence" width="75" height="30">

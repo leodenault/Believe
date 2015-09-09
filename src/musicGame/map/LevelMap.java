@@ -1,13 +1,17 @@
 package musicGame.map;
 
+import java.util.LinkedList;
 import java.util.List;
 
+import musicGame.character.Character;
+import musicGame.geometry.Rectangle;
 import musicGame.gui.ComponentBase;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.tiled.TiledMap;
+import org.newdawn.slick.util.Log;
 
 public class LevelMap extends ComponentBase {
 	private static final String MAP_DIRECTORY = "/res/maps/";
@@ -19,16 +23,24 @@ public class LevelMap extends ComponentBase {
 	private TiledMap map;
 	private MapProperties properties;
 	private ComponentBase focus;
+	private List<Character> enemies;
 			
 	public LevelMap(GUIContext container, String name) throws SlickException {
 		super(container, 0, 0);
 		map = new TiledMap(String.format("%s%s%s", MAP_DIRECTORY, name, MAP_SUFFIX));
 		properties = MapProperties.create(map);
+		enemies = generateEnemies(properties.enemies);
 		rect.setSize(map.getWidth() * map.getTileWidth(), map.getHeight() * map.getTileHeight());
 	}
 	
 	public void reset() {
 		setLocation(0, 0);
+		// TODO: Find a way to avoid this block
+		try {
+			enemies = generateEnemies(properties.enemies);
+		} catch (SlickException e) {
+			Log.error("There was an error re-generating enemies");
+		}
 	}
 	
 	public int getPlayerStartX() {
@@ -36,11 +48,15 @@ public class LevelMap extends ComponentBase {
 	}
 	
 	public int getPlayerStartY() {
-		return properties.startY * map.getTileHeight();
+		return (properties.startY + 1) * map.getTileHeight();
 	}
 	
 	public List<Tile> getCollidableTiles() {
 		return properties.collidableTiles;
+	}
+	
+	public List<Character> getEnemies() {
+		return enemies;
 	}
 	
 	/**
@@ -50,6 +66,12 @@ public class LevelMap extends ComponentBase {
 	 */
 	public void setFocus(ComponentBase focus) {
 		this.focus = focus;
+	}
+	
+	public void update(int delta) {
+		for (Character enemy : enemies) {
+			enemy.update(delta);
+		}
 	}
 
 	@Override
@@ -62,6 +84,10 @@ public class LevelMap extends ComponentBase {
 			map.render(getX(), getY(), layer);
 		}
 		
+		for (Character enemy : enemies) {
+			enemy.render(context, g);
+		}
+		
 		if (focus != null) {
 			focus.render(context, g);
 		}
@@ -69,5 +95,16 @@ public class LevelMap extends ComponentBase {
 		for (Integer layer : properties.frontLayers) {
 			map.render(getX(), getY(), layer);
 		}
+	}
+	
+	private List<Character> generateEnemies(List<Tile> enemyTiles) throws SlickException {
+		List<Character> enemies = new LinkedList<Character>();
+		
+		for (Tile enemyTile : enemyTiles) {
+			Rectangle rect = enemyTile.getRect();
+			enemies.add(new Character(container, (int)rect.getX(), (int)rect.getMaxY()));
+		}
+		
+		return enemies;
 	}
 }
