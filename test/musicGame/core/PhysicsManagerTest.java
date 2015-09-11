@@ -38,8 +38,8 @@ public class PhysicsManagerTest {
 			oneOf(sC).getRect(); will(returnValue(new Rectangle(0, 0, 50, 50)));
 			oneOf(dC).getRect(); will(returnValue(new Rectangle(dcX, dcY, 50, 50)));
 			oneOf(dC).getVerticalSpeed(); will(returnValue(2f));
-			exactly(2).of(dC).getFloatX(); will(returnValue(dcX));
-			exactly(2).of(dC).getFloatY(); will(returnValue(dcY));
+			oneOf(dC).getFloatX(); will(returnValue(dcX));
+			oneOf(dC).getFloatY(); will(returnValue(dcY));
 			oneOf(dC).setLocation(dcX, -50);
 			oneOf(dC).setVerticalSpeed(0);
 			oneOf(dC).setCanJump(true);
@@ -71,9 +71,9 @@ public class PhysicsManagerTest {
 			oneOf(sC).getRect(); will(returnValue(new Rectangle(0, 49, 50, 50)));
 			exactly(2).of(dC).getRect(); will(returnValue(new Rectangle(0, 0, 50, 50)));
 			oneOf(dC).getVerticalSpeed(); will(returnValue(2f));
-			exactly(2).of(dC).getFloatX(); will(returnValue(0f));
+			oneOf(dC).getFloatX(); will(returnValue(0f));
 			oneOf(dC).getFloatX(); will(returnValue(1f));
-			exactly(3).of(dC).getFloatY(); will(returnValue(0f));
+			exactly(2).of(dC).getFloatY(); will(returnValue(0f));
 			oneOf(dC).setLocation(1, 0);
 			oneOf(dC).setLocation(1, -1);
 			oneOf(dC).setVerticalSpeed(0);
@@ -89,10 +89,6 @@ public class PhysicsManagerTest {
 	
 	@Test
 	public void checkCollisionsShouldNotCollideDynamicWithDynamic() {
-		mockery.checking(new Expectations() {{
-			exactly(2).of(dC).getFloatX(); will(returnValue(0f));
-			exactly(2).of(dC).getFloatY(); will(returnValue(0f));
-		}});
 		manager.addDynamicCollidable(dC);
 		manager.addDynamicCollidable(dC);
 		manager.checkCollisions();
