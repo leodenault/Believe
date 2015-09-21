@@ -1,6 +1,5 @@
 package musicGame.state;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -21,6 +20,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.ResourceLoader;
 
 public class PlayFlowFileState extends GameStateBase implements FlowComponentListener, PausableState {
 	
@@ -29,7 +29,7 @@ public class PlayFlowFileState extends GameStateBase implements FlowComponentLis
 	
 	public void loadFile(String flowFile) throws IOException, FlowFileParserException,
 	SlickException, FlowComponentBuilderException {
-		InputStream stream = new FileInputStream(flowFile);
+		InputStream stream = ResourceLoader.getResourceAsStream(flowFile);
 		GameContainer container = game.getContainer();
 		FlowComponentBuilder builder = new FlowComponentBuilder(container, container.getWidth() / 3);
 		InputStreamReader reader = new InputStreamReader(stream);

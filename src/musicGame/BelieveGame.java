@@ -1,5 +1,6 @@
 package musicGame;
 
+import musicGame.core.JarClasspathLocation;
 import musicGame.state.FlowFilePickerMenuState;
 import musicGame.state.GamePausedOverlay;
 import musicGame.state.GameStateBase;
@@ -12,6 +13,7 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.ResourceLoader;
 
 public class BelieveGame extends StateBasedGame {
 	
@@ -27,6 +29,7 @@ public class BelieveGame extends StateBasedGame {
 	
 	public void run() {
 		try {
+			ResourceLoader.addResourceLocation(new JarClasspathLocation());
 			AppGameContainer game = new AppGameContainer(this);
 			game.setShowFPS(false);
 			

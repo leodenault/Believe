@@ -17,7 +17,7 @@ import org.newdawn.slick.util.xml.XMLParser;
 
 public class SpriteSheetManager {
 	
-	private static final String FILE_LOCATION = "data/spriteSheets.xml";
+	private static final String FILE_LOCATION = "/data/spriteSheets.xml";
 	private static final String SPRITE_SHEET_NODE = "spriteSheet";
 	private static final String NAME_NODE = "name";
 	private static final String SHEET_NODE = "sheet";

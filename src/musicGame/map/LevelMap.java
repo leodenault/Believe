@@ -15,7 +15,7 @@ import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.util.Log;
 
 public class LevelMap extends ComponentBase {
-	private static final String MAP_DIRECTORY = "/res/maps/";
+	private static final String MAP_DIRECTORY = "/res/maps";
 	private static final String MAP_SUFFIX = ".tmx";
 	
 	public static final int TARGET_WIDTH = 1600;
@@ -28,7 +28,7 @@ public class LevelMap extends ComponentBase {
 			
 	public LevelMap(GUIContext container, String name) throws SlickException {
 		super(container, 0, 0);
-		map = new TiledMap(String.format("%s%s%s", MAP_DIRECTORY, name, MAP_SUFFIX));
+		map = new TiledMap(String.format("%s/%s%s", MAP_DIRECTORY, name, MAP_SUFFIX), MAP_DIRECTORY);
 		properties = MapProperties.create(map);
 		enemies = generateEnemies(properties.enemies);
 		rect.setSize(map.getWidth() * map.getTileWidth(), map.getHeight() * map.getTileHeight());

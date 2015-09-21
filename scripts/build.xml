@@ -86,7 +86,7 @@
 		<!-- Build the JAR file -->
 		<jar destfile="${outDir}/${jarName}">
 			<fileset dir="${binaries}" />
-			<fileset dir="." includes="res/** levelFlowFiles/**" />
+			<fileset dir="." includes="res/** levelFlowFiles/** data/**" />
 			<manifest>
 				<attribute name="Main-Class" value="musicGame.Main" />
 				<attribute name="Class-Path" value="${classpath}" />

@@ -5,13 +5,13 @@
   <property name="playerStartY" value="19"/>
  </properties>
  <tileset firstgid="1" name="Test Set" tilewidth="32" tileheight="32">
-  <image source="../graphics/tilesets/testSet.png" width="128" height="96"/>
+  <image source="tilesets/testSet.png" width="128" height="96"/>
  </tileset>
  <tileset firstgid="13" name="Background" tilewidth="32" tileheight="32">
-  <image source="../graphics/tilesets/background.png" width="1600" height="900"/>
+  <image source="tilesets/background.png" width="1600" height="900"/>
  </tileset>
  <tileset firstgid="1413" name="collision" tilewidth="32" tileheight="32">
-  <image source="../graphics/tilesets/collision.png" width="32" height="32"/>
+  <image source="tilesets/collision.png" width="32" height="32"/>
  </tileset>
  <layer name="Background" width="75" height="30">
   <data encoding="base64" compression="gzip">
