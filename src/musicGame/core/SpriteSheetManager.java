@@ -7,7 +7,9 @@ import java.util.List;
 
 import musicGame.core.exception.SpriteSheetLoadingException;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.util.Log;
 import org.newdawn.slick.util.xml.XMLElement;
 import org.newdawn.slick.util.xml.XMLElementList;
@@ -28,11 +30,11 @@ public class SpriteSheetManager {
 	private static SpriteSheetManager INSTANCE;
 	
 	private String spriteSheetData;
-	private HashMap<String, SpriteSheetDatum> sheets;
+	private HashMap<String, Animation> sheets;
 	
 	private SpriteSheetManager(String spriteSheedData) {
 		this.spriteSheetData = spriteSheedData;
-		this.sheets = new HashMap<String, SpriteSheetDatum>();
+		this.sheets = new HashMap<String, Animation>();
 		loadSpriteSheet();
 	}
 	
@@ -43,6 +45,11 @@ public class SpriteSheetManager {
 			INSTANCE = new SpriteSheetManager(FILE_LOCATION);
 		}
 		return INSTANCE;
+	}
+	
+	public Animation getSpriteSheet(String name) {
+		Animation anim = sheets.get(name);
+		return anim.copy();
 	}
 	
 	private void loadSpriteSheet() {
@@ -61,7 +68,9 @@ public class SpriteSheetManager {
 							+ " original value", child, datum.name));
 				}
 				
-				sheets.put(datum.name, datum);
+				sheets.put(datum.name, new Animation(
+						new SpriteSheet(datum.sheet, datum.frameWidth, datum.frameHeight),
+						datum.frameLength));
 			}
 		} catch (SlickException e) {
 			Log.error(String.format("There was an error attempting to"
@@ -140,8 +149,8 @@ public class SpriteSheetManager {
 		for (String node : nodes) {
 			builder.append(node);
 			builder.append(", ");
-			builder.delete(builder.length() - 1, builder.length());
 		}
+		builder.delete(builder.length() - 2, builder.length());
 		return builder.toString();
 	}
 }

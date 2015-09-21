@@ -64,4 +64,9 @@ public class PlayableCharacter extends Character implements DynamicCollidable {
 		super.keyReleased(key, c);
 		horizontalSpeed -= MovementDirection.directionForKey(key).getValue() * Camera.SCROLL_SPEED;
 	}
+
+	@Override
+	protected String getSheetName() {
+		return "stickFigure";
+	}
 }

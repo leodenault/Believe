@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriteSheets>
+	<spriteSheet>
+		<name>stickFigure</name>
+		<sheet>/res/graphics/sprites/stickFigure.png</sheet>
+		<frameWidth>64</frameWidth>
+		<frameHeight>128</frameHeight>
+		<frameLength>100</frameLength>
+	</spriteSheet>
+	<spriteSheet>
+		<name>enemy</name>
+		<sheet>/res/graphics/sprites/enemy.png</sheet>
+		<frameWidth>64</frameWidth>
+		<frameHeight>96</frameHeight>
+		<frameLength>100</frameLength>
+	</spriteSheet>
+</spriteSheets>

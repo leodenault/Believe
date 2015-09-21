@@ -23,4 +23,9 @@ public class EnemyCharacter extends Character {
 
 	@Override
 	public void update(int delta) {}
+
+	@Override
+	protected String getSheetName() {
+		return "enemy";
+	}
 }
