@@ -6,6 +6,18 @@
 		<frameWidth>64</frameWidth>
 		<frameHeight>128</frameHeight>
 		<frameLength>100</frameLength>
+		<frameSequences>
+			<sequence>
+				<name>idle</name>
+				<start>0</start>
+				<end>0</end>
+			</sequence>
+			<sequence>
+				<name>move</name>
+				<start>0</start>
+				<end>3</end>
+			</sequence>
+		</frameSequences>
 	</spriteSheet>
 	<spriteSheet>
 		<name>enemy</name>
@@ -13,5 +25,12 @@
 		<frameWidth>64</frameWidth>
 		<frameHeight>96</frameHeight>
 		<frameLength>100</frameLength>
+		<frameSequences>
+			<sequence>
+				<name>idle</name>
+				<start>0</start>
+				<end>0</end>
+			</sequence>
+		</frameSequences>
 	</spriteSheet>
 </spriteSheets>

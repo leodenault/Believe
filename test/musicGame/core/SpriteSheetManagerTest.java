@@ -2,6 +2,7 @@ package musicGame.core;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import musicGame.core.SpriteSheetDatum.FrameSequence;
 import musicGame.core.exception.SpriteSheetLoadingException;
 
 import org.jmock.Expectations;
@@ -53,7 +54,7 @@ public class SpriteSheetManagerTest {
 	}
 	
 	@Test(expected=SpriteSheetLoadingException.class)
-	public void extractSheetShouldThrowExceptionWhenElementDoesntHaveFiveChildren()
+	public void extractSheetShouldThrowExceptionWhenElementDoesntHaveFiveOrSixChildren()
 			throws NumberFormatException, SpriteSheetLoadingException {
 		mockery.checking(new Expectations() {{
 			oneOf(datum).getName(); will(returnValue("spriteSheet"));
@@ -138,5 +139,144 @@ public class SpriteSheetManagerTest {
 		assertThat(item.frameWidth, is(123));
 		assertThat(item.frameHeight, is(133));
 		assertThat(item.frameLength, is(11));
+	}
+	
+	@Test(expected=SpriteSheetLoadingException.class)
+	public void extractFrameSequencesShouldThrowExceptionIfChildNotFrameSequence()
+			throws SpriteSheetLoadingException {
+		mockery.checking(new Expectations() {{
+			oneOf(datum).getChildren(); will(returnValue(list));
+			oneOf(list).size(); will(returnValue(1));
+			oneOf(list).get(0); will(returnValue(datum));
+			oneOf(datum).getName(); will(returnValue("animationSequence"));
+		}});
+		manager.extractFrameSequences(datum, new SpriteSheetDatum());
+	}
+
+	@Test(expected=SpriteSheetLoadingException.class)
+	public void extractSequenceDetailsShouldThrowExceptionIfChildDoesntHaveThreeChildren()
+			throws SpriteSheetLoadingException {
+		mockery.checking(new Expectations() {{
+			oneOf(datum).getChildren(); will(returnValue(list));
+			oneOf(list).size(); will(returnValue(1));
+		}});
+		manager.extractSequenceDetails(datum);
+	}
+	
+	@Test(expected=SpriteSheetLoadingException.class)
+	public void extractSequenceDetailsShouldThrowExceptionIfChildNotCorrect()
+		throws SpriteSheetLoadingException {
+		mockery.checking(new Expectations() {{
+			oneOf(datum).getChildren(); will(returnValue(list));
+			oneOf(list).size(); will(returnValue(3));
+			oneOf(list).get(0); will(returnValue(datum));
+			oneOf(datum).getName(); will(returnValue("warblgarble"));
+		}});
+		manager.extractSequenceDetails(datum);
+	}
+	
+	@Test(expected=SpriteSheetLoadingException.class)
+	public void extractSequenceDetailsShouldThrowExceptionIfMultipleChildrenWithSameName()
+			throws SpriteSheetLoadingException {
+		mockery.checking(new Expectations() {{
+			oneOf(datum).getChildren(); will(returnValue(list));
+			oneOf(list).size(); will(returnValue(3));
+			oneOf(list).get(0); will(returnValue(datum));
+			oneOf(datum).getName(); will(returnValue("start"));
+			oneOf(datum).getChildren(); will(returnValue(list));
+			oneOf(list).size(); will(returnValue(0));
+			oneOf(datum).getContent(); will(returnValue("2"));
+			oneOf(list).get(1); will(returnValue(datum));
+			oneOf(datum).getName(); will(returnValue("start"));
+		}});
+		manager.extractSequenceDetails(datum);
+	}
+	
+	@Test(expected=SpriteSheetLoadingException.class)
+	public void extractSequenceDetailsShouldThrowExceptionIfChildHasSubChildren()
+			throws SpriteSheetLoadingException {
+		mockery.checking(new Expectations() {{
+			oneOf(datum).getChildren(); will(returnValue(list));
+			oneOf(list).size(); will(returnValue(3));
+			oneOf(list).get(0); will(returnValue(datum));
+			oneOf(datum).getName(); will(returnValue("start"));
+			oneOf(datum).getChildren(); will(returnValue(list));
+			oneOf(list).size(); will(returnValue(1));
+		}});
+		manager.extractSequenceDetails(datum);
+	}
+	
+	@Test(expected=NumberFormatException.class)
+	public void extractSequenceDetailsShouldThrowExceptionIfDataCannotBeRead()
+			throws SpriteSheetLoadingException {
+		mockery.checking(new Expectations() {{
+			oneOf(datum).getChildren(); will(returnValue(list));
+			oneOf(list).size(); will(returnValue(3));
+			oneOf(list).get(0); will(returnValue(datum));
+			oneOf(datum).getName(); will(returnValue("name"));
+			oneOf(datum).getChildren(); will(returnValue(list));
+			oneOf(list).size(); will(returnValue(0));
+			oneOf(datum).getContent(); will(returnValue("mySequence"));
+			oneOf(list).get(1); will(returnValue(datum));
+			oneOf(datum).getName(); will(returnValue("start"));
+			oneOf(datum).getChildren(); will(returnValue(list));
+			oneOf(list).size(); will(returnValue(0));
+			oneOf(datum).getContent(); will(returnValue("notANumb3r"));
+		}});
+		manager.extractSequenceDetails(datum);
+	}
+	
+	@Test(expected=SpriteSheetLoadingException.class)
+	public void extractSequenceDetailsShouldThrowExceptionIfEndAfterStart()
+			throws SpriteSheetLoadingException {
+		mockery.checking(new Expectations() {{
+			oneOf(datum).getChildren(); will(returnValue(list));
+			oneOf(list).size(); will(returnValue(3));
+			oneOf(list).get(0); will(returnValue(datum));
+			oneOf(datum).getName(); will(returnValue("name"));
+			oneOf(datum).getChildren(); will(returnValue(list));
+			oneOf(list).size(); will(returnValue(0));
+			oneOf(datum).getContent(); will(returnValue("mySequence"));
+			oneOf(list).get(1); will(returnValue(datum));
+			oneOf(datum).getName(); will(returnValue("start"));
+			oneOf(datum).getChildren(); will(returnValue(list));
+			oneOf(list).size(); will(returnValue(0));
+			oneOf(datum).getContent(); will(returnValue("5"));
+			oneOf(list).get(2); will(returnValue(datum));
+			oneOf(datum).getName(); will(returnValue("end"));
+			oneOf(datum).getChildren(); will(returnValue(list));
+			oneOf(list).size(); will(returnValue(0));
+			oneOf(datum).getContent(); will(returnValue("0"));
+		}});
+		manager.extractSequenceDetails(datum);
+	}
+	
+	@Test
+	public void extractSequenceDetailsShouldReturnFrameSequenceContainingXMLData()
+			throws SpriteSheetLoadingException {
+		mockery.checking(new Expectations() {{
+			oneOf(datum).getChildren(); will(returnValue(list));
+			oneOf(list).size(); will(returnValue(3));
+			oneOf(list).get(0); will(returnValue(datum));
+			oneOf(datum).getName(); will(returnValue("name"));
+			oneOf(datum).getChildren(); will(returnValue(list));
+			oneOf(list).size(); will(returnValue(0));
+			oneOf(datum).getContent(); will(returnValue("mySequence"));
+			oneOf(list).get(1); will(returnValue(datum));
+			oneOf(datum).getName(); will(returnValue("start"));
+			oneOf(datum).getChildren(); will(returnValue(list));
+			oneOf(list).size(); will(returnValue(0));
+			oneOf(datum).getContent(); will(returnValue("10"));
+			oneOf(list).get(2); will(returnValue(datum));
+			oneOf(datum).getName(); will(returnValue("end"));
+			oneOf(datum).getChildren(); will(returnValue(list));
+			oneOf(list).size(); will(returnValue(0));
+			oneOf(datum).getContent(); will(returnValue("12"));
+		}});
+		
+		FrameSequence sequence = manager.extractSequenceDetails(datum);
+		assertThat(sequence.name, is("mySequence"));
+		assertThat(sequence.start, is(10));
+		assertThat(sequence.end, is(12));
 	}
 }

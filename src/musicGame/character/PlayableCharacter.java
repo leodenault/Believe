@@ -36,10 +36,11 @@ public class PlayableCharacter extends Character implements DynamicCollidable {
 	}
 	
 	public void update(int delta) {
-		if (horizontalSpeed == 0 && !anim.isStopped()) {
+		if (horizontalSpeed == 0 && anim.equals(animSet.get("move"))) {
 			anim.stop();
-			anim.setCurrentFrame(0);
-		} else if (horizontalSpeed != 0 && anim.isStopped()) {
+			anim = animSet.get("idle");
+		} else if (horizontalSpeed != 0 && anim.equals(animSet.get("idle"))) {
+			anim = animSet.get("move");
 			anim.start();
 		}
 		

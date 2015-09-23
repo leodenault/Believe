@@ -1,5 +1,6 @@
 package musicGame.character;
 
+import musicGame.core.AnimationSet;
 import musicGame.core.DynamicCollidable;
 import musicGame.core.SpriteSheetManager;
 import musicGame.gui.ComponentBase;
@@ -11,11 +12,13 @@ import org.newdawn.slick.gui.GUIContext;
 
 public abstract class Character extends ComponentBase implements DynamicCollidable {
 
+	protected AnimationSet animSet;
 	protected Animation anim;
 
 	public Character(GUIContext container, int x, int y) throws SlickException {
 		super(container, x, y);
-		anim = SpriteSheetManager.getInstance().getSpriteSheet(getSheetName());
+		animSet = SpriteSheetManager.getInstance().getAnimationSet(getSheetName());
+		anim = animSet.get("idle");
 		rect = new musicGame.geometry.Rectangle(x, y - anim.getHeight(), anim.getWidth(), anim.getHeight());
 		anim.setLooping(true);
 		anim.stop();
