@@ -4,8 +4,8 @@
 		<name>stickFigure</name>
 		<sheet>/res/graphics/sprites/stickFigure.png</sheet>
 		<frameWidth>64</frameWidth>
-		<frameHeight>128</frameHeight>
-		<frameLength>100</frameLength>
+		<frameHeight>96</frameHeight>
+		<frameLength>80</frameLength>
 		<frameSequences>
 			<sequence>
 				<name>idle</name>
@@ -14,8 +14,13 @@
 			</sequence>
 			<sequence>
 				<name>move</name>
-				<start>0</start>
-				<end>3</end>
+				<start>10</start>
+				<end>19</end>
+			</sequence>
+			<sequence>
+				<name>jump</name>
+				<start>20</start>
+				<end>20</end>
 			</sequence>
 		</frameSequences>
 	</spriteSheet>
