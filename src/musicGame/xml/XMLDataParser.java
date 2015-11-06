@@ -8,6 +8,7 @@ public class XMLDataParser {
 	private String file;
 	private ChildDef schema;
 	private XMLNodeFactory factory;
+	private XMLElement root;
 	
 	public XMLDataParser(String file, ChildDef schema) {
 		this.file = file;
@@ -15,12 +16,19 @@ public class XMLDataParser {
 		this.factory = XMLNodeFactory.getIntance();
 	}
 	
-	protected XMLDataParser() {}
+	protected XMLDataParser(XMLElement root, ChildDef schema) {
+		this("", schema);
+		this.root = root;
+	}
 	
-	public XMLNode loadFile() throws SlickException, XMLLoadingException {
-		XMLNode top = factory.createNode(schema);
+	public <T extends XMLNode> T loadFile() throws SlickException, XMLLoadingException {
+		T top = factory.createNode(schema);
 		XMLParser parser = new XMLParser();
-		XMLElement root = parser.parse(file);
+		
+		if (root == null) {
+			root = parser.parse(file);
+		}
+		
 		return top.fillNode(root);
 	}
 }

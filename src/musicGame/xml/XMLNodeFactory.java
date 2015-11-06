@@ -11,10 +11,16 @@ public class XMLNodeFactory {
 	@SuppressWarnings("serial")
 	private static HashMap<Class<? extends ChildDef>, Creator<? extends XMLNode>> CREATORS =
 		new HashMap<Class<? extends ChildDef>, Creator<? extends XMLNode>>() {{
-		put(ChildDef.class, new Creator<XMLPrimitive>() {
+		put(StringDef.class, new Creator<XMLString>() {
 			@Override
-			public XMLPrimitive createNode(ChildDef childDef) {
-				return new XMLPrimitive();
+			public XMLString createNode(ChildDef childDef) {
+				return new XMLString();
+			}
+		});
+		put(IntegerDef.class, new Creator<XMLInteger>() {
+			@Override
+			public XMLInteger createNode(ChildDef childDef) {
+				return new XMLInteger();
 			}
 		});
 		put(ListDef.class, new Creator<XMLList>() {

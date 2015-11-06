@@ -1,24 +1,25 @@
 package musicGame.core;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 
-import musicGame.core.SpriteSheetDatum.FrameSequence;
-import musicGame.core.exception.SpriteSheetLoadingException;
+import musicGame.xml.CompoundDef;
+import musicGame.xml.ListDef;
+import musicGame.xml.XMLCompound;
+import musicGame.xml.XMLDataParser;
+import musicGame.xml.XMLInteger;
+import musicGame.xml.XMLList;
+import musicGame.xml.XMLLoadingException;
+import musicGame.xml.XMLString;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.util.Log;
-import org.newdawn.slick.util.xml.XMLElement;
-import org.newdawn.slick.util.xml.XMLElementList;
-import org.newdawn.slick.util.xml.XMLParser;
 
 public class SpriteSheetManager {
 	
 	private static final String FILE_LOCATION = "/data/spriteSheets.xml";
+	private static final String TOP_NODE = "spriteSheets";
 	private static final String SPRITE_SHEET_NODE = "spriteSheet";
 	private static final String NAME_NODE = "name";
 	private static final String SHEET_NODE = "sheet";
@@ -26,14 +27,23 @@ public class SpriteSheetManager {
 	private static final String HEIGHT_NODE = "frameHeight";
 	private static final String LENGTH_NODE = "frameLength";
 	private static final String SEQUENCES_NODE = "frameSequences";
-	private static final List<String> NODE_NAMES =
-			Arrays.asList(NAME_NODE, SHEET_NODE, WIDTH_NODE, HEIGHT_NODE, LENGTH_NODE, SEQUENCES_NODE);
 	
 	private static final String SEQUENCE_NODE = "sequence";
 	private static final String START_FRAME_NODE = "start";
 	private static final String END_FRAME_NODE = "end";
-	private static final List<String> SEQUENCE_NODE_NAMES =
-			Arrays.asList(NAME_NODE, START_FRAME_NODE, END_FRAME_NODE);
+	private final static ListDef SCHEMA = new ListDef(
+			TOP_NODE,
+			new CompoundDef(SPRITE_SHEET_NODE).addString(NAME_NODE)
+			.addString(SHEET_NODE)
+			.addInteger(WIDTH_NODE)
+			.addInteger(HEIGHT_NODE)
+			.addInteger(LENGTH_NODE)
+			.addList(SEQUENCES_NODE,
+					new CompoundDef(SEQUENCE_NODE).addString(NAME_NODE)
+					.addInteger(START_FRAME_NODE)
+					.addInteger(END_FRAME_NODE)
+					)
+			);
 	
 	private static SpriteSheetManager INSTANCE;
 	
@@ -60,195 +70,55 @@ public class SpriteSheetManager {
 	}
 	
 	private void loadSpriteSheet() {
-		XMLParser parser = new XMLParser();
-		int child = 0;
+		XMLDataParser parser = new XMLDataParser(spriteSheetData, SCHEMA);
 		
 		try {
-			XMLElement root = parser.parse(spriteSheetData);
-			XMLElementList children = root.getChildren();
+			XMLList top = parser.loadFile();
 			
-			for (; child < children.size(); child++) {
-				SpriteSheetDatum datum = extractSheet(children.get(child));
-				
-				if (sheets.containsKey(datum.name)) {
-					Log.warn(String.format("Child #%d with name %s was already specified. Overriding"
-							+ " original value", child, datum.name));
+			int childNum = 0;
+			for (XMLCompound child : top.children) {
+				String sheetName = child.<XMLString>getValue(NAME_NODE).value;
+				if (sheets.containsKey(sheetName)) {
+					Log.warn(String.format("Sheet #%d with name %s was already specified. Overriding"
+							+ " original value", childNum, sheetName));
 				}
 				
-				SpriteSheet sheet = new SpriteSheet(datum.sheet, datum.frameWidth, datum.frameHeight);
+				SpriteSheet sheet = new SpriteSheet(
+						child.<XMLString>getValue(SHEET_NODE).value,
+						child.<XMLInteger>getValue(WIDTH_NODE).value,
+						child.<XMLInteger>getValue(HEIGHT_NODE).value
+						);
+				
 				HashMap<String, Animation> animations = new HashMap<String, Animation>();
-				for (FrameSequence sequence : datum.getSequences()) {
-					animations.put(sequence.name, createAnimation(sheet, datum, sequence));
+				for (XMLCompound sequence : child.<XMLList>getValue(SEQUENCES_NODE).children) {
+					animations.put(
+							sequence.<XMLString>getValue(NAME_NODE).value,
+							createAnimation(
+									sheet,
+									child.<XMLInteger>getValue(LENGTH_NODE).value,
+									sequence.<XMLInteger>getValue(START_FRAME_NODE).value,
+									sequence.<XMLInteger>getValue(END_FRAME_NODE).value
+									));
 				}
-				sheets.put(datum.name, new AnimationSet(animations));
+
+				sheets.put(sheetName, new AnimationSet(animations));
+				childNum++;
 			}
-		} catch (SlickException e) {
+		} catch (SlickException | XMLLoadingException e) {
 			Log.error(String.format("There was an error attempting to"
 					+ " read the sprite sheet data file named %s. The exception is listed below:\n\n%s",
 					spriteSheetData, e.getMessage()));
-		} catch (SpriteSheetLoadingException | NumberFormatException e) {
-			Log.error(String.format("There was an error trying to parse sheet #%d in %s with an"
-					+ " error of type %s. The reason given:\n\n%s",
-					child, spriteSheetData, e.getClass(), e.getMessage()));
 		}
 	}
 	
-	protected SpriteSheetDatum extractSheet(XMLElement sheetDatum)
-			throws SpriteSheetLoadingException, NumberFormatException {
-		String nodeName = sheetDatum.getName();
-		
-		if (!nodeName.equals(SPRITE_SHEET_NODE)) {
-			throw new SpriteSheetLoadingException(String.format(
-					"The description of a sprite sheet should have the name"
-							+ "\"%s\"", SPRITE_SHEET_NODE));
-		}
-		
-		XMLElementList children = sheetDatum.getChildren();
-		List<String> childrenParsed = new LinkedList<String>();
-		SpriteSheetDatum datum = new SpriteSheetDatum();
-
-		int numChildren = children.size();
-		int nodeNameSize = NODE_NAMES.size();
-		if (numChildren < nodeNameSize - 1 || numChildren > nodeNameSize) {
-			throw new SpriteSheetLoadingException(String.format(
-					"The description of a sprite sheet should have exactly %d"
-					+ " children. They should be named %s, respectively",
-					nodeNameSize, createNodeNameListString(NODE_NAMES)));
-		}
-		
-		for (int i = 0; i < numChildren; i++) {
-			XMLElement child = children.get(i);
-			String name = child.getName();
-			if (!NODE_NAMES.contains(name)) {
-				throw new SpriteSheetLoadingException(String.format("The name of a child in a"
-						+ " sprite sheet description should be one of %s",
-						createNodeNameListString(NODE_NAMES)));
-			} else if (childrenParsed.contains(name)) {
-				throw new SpriteSheetLoadingException(String.format("Cannot specify child with"
-						+ " name %s as it has already been specified", name));
-			} else if (child.getChildren().size() != 0 && !name.equals(SEQUENCES_NODE)) {
-				throw new SpriteSheetLoadingException("Sprite sheet description"
-						+ " should not contain any children, only content");
-			}
-
-			if (name.equals(SEQUENCES_NODE)) {
-				extractFrameSequences(child, datum);
-			} else {
-				String content = child.getContent();
-				setDatumAttribute(datum, name, content);
-				childrenParsed.add(name);
-			}
-		}
-		
-		return datum;
-	}
-	
-	protected void extractFrameSequences(XMLElement sequencesNode, SpriteSheetDatum datum)
-			throws SpriteSheetLoadingException {
-		XMLElementList sequences = sequencesNode.getChildren();
-		for (int i = 0; i < sequences.size(); i++) {
-			XMLElement sequence = sequences.get(i);
-			String childName = sequence.getName();
-			
-			if (!childName.equals(SEQUENCE_NODE)) {
-				throw new SpriteSheetLoadingException(String.format(
-						"Expected tag to have the name %s within %s tags", SEQUENCE_NODE, SEQUENCES_NODE));
-			}
-			
-			datum.addSequence(extractSequenceDetails(sequence));
-		}
-	}
-	
-	protected FrameSequence extractSequenceDetails(XMLElement sequence)
-			throws SpriteSheetLoadingException {
-		XMLElementList children = sequence.getChildren();
-		List<String> processed = new LinkedList<String>();
-		FrameSequence frameSequence = new FrameSequence();
-		int size = children.size();
-		
-		if (size != SEQUENCE_NODE_NAMES.size()) {
-			throw new SpriteSheetLoadingException(String.format("The description of a sequence of frames should have"
-					+ " exactly %d children. They should be named %s, respectively",
-					size, createNodeNameListString(SEQUENCE_NODE_NAMES)));
-		}
-		
-		for (int i = 0; i < size; i++) {
-			XMLElement child = children.get(i);
-			String name = child.getName();
-			
-			if (!SEQUENCE_NODE_NAMES.contains(name)) {
-				throw new SpriteSheetLoadingException(String.format("The description of a sequence of frames should"
-						+ " only contain the following attributes: %s", createNodeNameListString(SEQUENCE_NODE_NAMES)));
-			} else if (processed.contains(name)) {
-				throw new SpriteSheetLoadingException(String.format("Cannot specify child with"
-						+ " name %s as it has already been specified", name));
-			} else if (child.getChildren().size() != 0) {
-				throw new SpriteSheetLoadingException(String.format("Attribute %s"
-						+ " should not contain any children, only content", name));
-			}
-			
-			String content = child.getContent();
-			setSequenceAttribute(frameSequence, name, content);
-			processed.add(name);
-		}
-		
-		if (frameSequence.start > frameSequence.end) {
-			throw new SpriteSheetLoadingException("Start frame should be greater than or equal to end frame");
-		}
-		
-		return frameSequence;
-	}
-	
-	private void setDatumAttribute(SpriteSheetDatum datum, String attributeName, String attribute) {
-		if (attributeName.equals(SHEET_NODE)) {
-			datum.sheet = attribute;
-		} else if (attributeName.equals(NAME_NODE)) {
-			datum.name = attribute;
-		} else {
-			int value = Integer.parseInt(attribute);
-			
-			if (attributeName.equals(WIDTH_NODE)) {
-				datum.frameWidth = value;
-			} else if (attributeName.equals(HEIGHT_NODE)) {
-				datum.frameHeight = value;
-			} else if (attributeName.equals(LENGTH_NODE)) {
-				datum.frameLength = value;
-			}
-		}
-	}
-	
-	private void setSequenceAttribute(FrameSequence sequence, String attributeName, String attribute) {
-		if (attributeName.equals(NAME_NODE)) {
-			sequence.name = attribute;
-		} else {
-			int value = Integer.parseInt(attribute);
-			
-			if (attributeName.equals(START_FRAME_NODE)) {
-				sequence.start = value;
-			} else if (attributeName.equals(END_FRAME_NODE)) {
-				sequence.end = value;
-			}
-		}
-	}
-	
-	private Animation createAnimation(SpriteSheet sheet, SpriteSheetDatum datum, FrameSequence sequence) throws SlickException {
+	private Animation createAnimation(SpriteSheet sheet, int length, int start, int end) throws SlickException {
 		Animation anim = new Animation();
 		int horizontalCount = sheet.getHorizontalCount();
 		
-		for (int i = sequence.start; i <= sequence.end; i++) {
-			anim.addFrame(sheet.getSprite(i % horizontalCount, i / horizontalCount), datum.frameLength);
+		for (int i = start; i <= end; i++) {
+			anim.addFrame(sheet.getSprite(i % horizontalCount, i / horizontalCount), length);
 		}
 		
 		return anim;
-	}
-	
-	private String createNodeNameListString(List<String> nodes) {
-		StringBuilder builder = new StringBuilder();
-		for (String node : nodes) {
-			builder.append(node);
-			builder.append(", ");
-		}
-		builder.delete(builder.length() - 2, builder.length());
-		return builder.toString();
 	}
 }

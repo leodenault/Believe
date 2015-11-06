@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.newdawn.slick.util.xml.XMLElement;
 import org.newdawn.slick.util.xml.XMLElementList;
 
-public class XMLPrimitiveTest {
+public class XMLStringTest {
 
 	@Rule
 	public JUnitRuleMockery mockery = new JUnitRuleMockery() {{
@@ -22,14 +22,14 @@ public class XMLPrimitiveTest {
 		setThreadingPolicy(new Synchroniser());
 	}};
 	
-	private XMLPrimitive primitive;
+	private XMLString primitive;
 	
 	@Mock private XMLElement element;
 	@Mock private XMLElementList list;
 	
 	@Before
 	public void setUp() {
-		primitive = new XMLPrimitive();
+		primitive = new XMLString();
 	}
 	
 	@Test(expected=XMLLoadingException.class)

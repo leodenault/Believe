@@ -44,9 +44,9 @@ public class XMLCompoundTest {
 	@Before
 	public void setUp() {
 		defs = Arrays.asList(
-				new ChildDef(PRIMITIVE),
-				new ChildDef(COMPOUND),
-				new ChildDef(LIST)
+				new StringDef(PRIMITIVE),
+				new CompoundDef(COMPOUND),
+				new ListDef(LIST, null)
 				);
 		compound = new XMLCompound(defs);
 	}
@@ -117,7 +117,7 @@ public class XMLCompoundTest {
 			put("apple", primitive);
 		}};
 		XMLCompound compound = new XMLCompound(defs, map);
-		compound.<XMLPrimitive>getValue("wrong!");
+		compound.getValue("wrong!");
 	}
 	
 	@Test(expected=ClassCastException.class)

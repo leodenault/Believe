@@ -18,6 +18,7 @@ public class XMLList implements XMLNode {
 		factory = XMLNodeFactory.getIntance();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public XMLList fillNode(XMLElement element) throws XMLLoadingException {
 		return fillNode(element, null);

@@ -1,6 +1,6 @@
 package musicGame.xml;
 
-public class ChildDef {
+public abstract class ChildDef {
 	public String name;
 	
 	public ChildDef(String name) {

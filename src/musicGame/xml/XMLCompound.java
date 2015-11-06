@@ -10,7 +10,8 @@ import org.newdawn.slick.util.xml.XMLElementList;
 
 public class XMLCompound implements XMLNode {
 
-	private String name;
+	public String name;
+	
 	private List<ChildDef> childDefs;
 	private HashMap<String, ChildDef> nameTypes;
 	private HashMap<String, XMLNode> values;
@@ -28,6 +29,7 @@ public class XMLCompound implements XMLNode {
 		processChildDefs();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public XMLCompound fillNode(XMLElement element) throws XMLLoadingException {
 		return fillNode(element, null);
@@ -69,7 +71,7 @@ public class XMLCompound implements XMLNode {
 				newNode = childNode;
 			}
 			
-			newNode.fillNode(element);
+			newNode.fillNode(child);
 			values.put(childName, newNode);
 			processed.add(childName);
 		}

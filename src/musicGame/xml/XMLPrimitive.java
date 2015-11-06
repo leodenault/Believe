@@ -3,12 +3,13 @@ package musicGame.xml;
 import org.newdawn.slick.util.xml.XMLElement;
 import org.newdawn.slick.util.xml.XMLElementList;
 
-public class XMLPrimitive implements XMLNode {
+public abstract class XMLPrimitive<Value> implements XMLNode {
 	public String name;
-	public String value;
+	public Value value;
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public XMLPrimitive fillNode(XMLElement element) throws XMLLoadingException {
+	public <T extends XMLNode> T fillNode(XMLElement element) throws XMLLoadingException {
 		name = element.getName();
 		XMLElementList children = element.getChildren();
 		
@@ -17,7 +18,9 @@ public class XMLPrimitive implements XMLNode {
 					"The element named '%s' contains children when it shouldn't", name));
 		}
 		
-		value = element.getContent();
-		return this;
+		value = extractValue(element.getContent());
+		return (T) this;
 	}
+	
+	protected abstract Value extractValue(String content);
 }

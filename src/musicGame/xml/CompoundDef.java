@@ -11,8 +11,24 @@ public class CompoundDef extends ChildDef {
 		this.subChildDefs = new LinkedList<ChildDef>();
 	}
 	
-	public void addSubChildDef(ChildDef def) {
+	public CompoundDef addSubChildDef(ChildDef def) {
 		this.subChildDefs.add(def);
+		return this;
+	}
+	
+	public CompoundDef addString(String name) {
+		this.subChildDefs.add(new StringDef(name));
+		return this;
+	}
+	
+	public CompoundDef addInteger(String name) {
+		this.subChildDefs.add(new IntegerDef(name));
+		return this;
+	}
+	
+	public CompoundDef addList(String name, CompoundDef subChildDef) {
+		this.subChildDefs.add(new ListDef(name, subChildDef));
+		return this;
 	}
 	
 	public List<ChildDef> getSubChildDefs() {

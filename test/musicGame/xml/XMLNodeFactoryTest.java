@@ -16,10 +16,17 @@ public class XMLNodeFactoryTest {
 	}
 	
 	@Test
-	public void createNodeReturnsPrimitiveWhenGivenPrimitive() {
-		ChildDef def = new ChildDef("");
+	public void createNodeReturnsStringWhenGivenString() {
+		ChildDef def = new StringDef("");
 		XMLNode node = factory.createNode(def);
-		assertThat(node, Matchers.instanceOf(XMLPrimitive.class));
+		assertThat(node, Matchers.instanceOf(XMLString.class));
+	}
+	
+	@Test
+	public void createNodeReturnsIntWhenGivenInt() {
+		ChildDef def = new IntegerDef("");
+		XMLNode node = factory.createNode(def);
+		assertThat(node, Matchers.instanceOf(XMLInteger.class));
 	}
 	
 	@Test
