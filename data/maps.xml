@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<maps>
+	<map>
+		<name>testMap</name>
+		<location>/res/maps/testMap.tmx</location>
+		<tileSetsLocation>/res/maps</tileSetsLocation>
+		<backgrounds>
+		</backgrounds>
+	</map>
+	<map>
+		<name>pipeTown</name>
+		<location>/res/maps/pipeTown.tmx</location>
+		<tileSetsLocation>/res/maps</tileSetsLocation>
+		<backgrounds>
+			<background>
+				<location>/res/graphics/backgrounds/darkSky.png</location>
+				<layer>100</layer>
+				<y>5</y>
+			</background>
+			<background>
+				<location>/res/graphics/backgrounds/mountains.png</location>
+				<layer>30</layer>
+				<y>16</y>
+			</background>
+		</backgrounds>
+	</map>
+</maps>

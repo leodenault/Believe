@@ -1,14 +1,16 @@
 package musicGame.gui;
 
-import musicGame.core.Camera;
-import musicGame.core.Util;
-import musicGame.map.LevelMap;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.GUIContext;
+
+import musicGame.core.Camera;
+import musicGame.core.Camera.Layerable;
+import musicGame.core.Util;
+import musicGame.map.LevelMap;
+import musicGame.map.MapBackground;
 
 public class PlayArea extends AbstractContainer {
 
@@ -23,21 +25,24 @@ public class PlayArea extends AbstractContainer {
 		camera = new Camera(getWidth(), getHeight());
 		this.map = map;
 		this.focus = focus;
-		camera.addChild(map);
-		map.setFocus(focus);
+		handleMap();
 		camera.scale(rect.getWidth() / LevelMap.TARGET_WIDTH,
 				rect.getHeight() / LevelMap.TARGET_HEIGHT);
+	}
+
+	private void handleMap() {
+		camera.addChild(map);
+		map.setFocus(focus);
+		
+		for (MapBackground background : map.getBackgrounds()) {
+			camera.addChild(background);
+		}
 	}
 	
 	public void setBorder(boolean border) {
 		this.border = border;
 	}
 	
-	@Override
-	public void addChild(ComponentBase child) {
-		camera.addChild(child);
-	}
-
 	@Override
 	protected void resetLayout() {}
 
@@ -49,6 +54,10 @@ public class PlayArea extends AbstractContainer {
 		if (rect != null) {
 			rect.setLocation(x, y);
 		}
+	}
+	
+	public void addChild(Layerable child) {
+		camera.addChild(child);
 	}
 
 	@Override

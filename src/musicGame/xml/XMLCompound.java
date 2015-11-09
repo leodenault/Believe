@@ -47,7 +47,7 @@ public class XMLCompound implements XMLNode {
 		
 		if (numChildren != numDefs) {
 			throw new XMLLoadingException(String.format("Was expecting compound node '%s' to have %d children"
-					+ " but had %d children instead", name, numChildren, numDefs));
+					+ " but had %d children instead", name, numDefs, numChildren));
 		}
 		
 		for (int i = 0; i < numChildren; i++) {

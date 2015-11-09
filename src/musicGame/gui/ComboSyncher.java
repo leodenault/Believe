@@ -6,18 +6,20 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import musicGame.core.SynchedComboPattern;
-import musicGame.core.SynchedComboPattern.TimeKeyPair;
-import musicGame.levelFlow.FlowComponentListener;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Music;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.gui.GUIContext;
 
-public class ComboSyncher extends ComponentBase {
+import musicGame.core.Camera.Layerable;
+import musicGame.core.SynchedComboPattern;
+import musicGame.core.SynchedComboPattern.TimeKeyPair;
+import musicGame.levelFlow.FlowComponentListener;
+
+public class ComboSyncher extends ComponentBase implements Layerable {
 	protected static final float BUFFER_TIME = 2.5f; // In seconds
 	
 	private static final int HEIGHT = 40;
@@ -185,5 +187,16 @@ public class ComboSyncher extends ComponentBase {
 			}
 			
 		}
+	}
+
+	@Override
+	public int getLayer() {
+		return 0;
+	}
+
+	@Override
+	public void renderComponent(GUIContext context, Graphics g, float xMin,
+			float xMax) throws SlickException {
+		renderComponent(context, g);
 	}
 }

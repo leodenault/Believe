@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="250" height="50" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="playerStartX" value="3"/>
+  <property name="playerStartY" value="46"/>
+ </properties>
+ <tileset firstgid="1" name="Pipe Town" tilewidth="32" tileheight="32">
+  <image source="tilesets/pipeTown.png" width="128" height="128"/>
+  <tile id="1">
+   <properties>
+    <property name="front" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="17" name="Collision" tilewidth="32" tileheight="32">
+  <image source="tilesets/collision.png" width="32" height="32"/>
+ </tileset>
+ <layer name="Collision" width="250" height="50">
+  <properties>
+   <property name="collision" value=""/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt07EJACAAA0FXcP9lXUA7QXnuIH2aHwMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOAv8/UB4Kpd0zqHFp1Dn86hT+fQp3Po0zn06Rz6dA59Ooc+nUOfzqFP59Cnc+jTOfTpHPp0Dn06hz6dQ9+pczNrDQDoWLhtEt0=
+  </data>
+ </layer>
+ <layer name="Pipe" width="250" height="50">
+  <data encoding="base64" compression="zlib">
+   eJztw6ENAEAIBDAQiBe//7osgbq0SasAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOBOq/FHjf/U+F+Nv1ZWG1k=
+  </data>
+ </layer>
+ <layer name="Front" width="250" height="50">
+  <properties>
+   <property name="front" value=""/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt00EKwjAURdFgxUEG3f9ysjQdihRJoG3C4xxwUp6/ndxSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA1lJLabO/AThPPX7W7v4O4Do6h3w6h3w6h3w6h3w6h3w6h3w6h3w6h3w6h3w6h3w6h3w6h3w6h3w6h3w6h3w6h3wjnT867tnY2Ky3Gen81fEOGxub9TYjnf9ut8/v2XHPHXfcmXfnz7N29P+94x02Njbrbb47fwOOjRX0
+  </data>
+ </layer>
+</map>
