@@ -89,12 +89,11 @@ public class ComboSyncher extends ComponentBase implements Layerable {
 		}
 	}
 
-	@Override
-	protected void resetLayout() {
+	private void resetCombo() {
 		for (TimeKeyPair action : actions) {
 			actionColors.put(action, NOT_ACTIVATED);
-			actionsLeft = new LinkedList<TimeKeyPair>(actions);
 		}
+		actionsLeft = new LinkedList<TimeKeyPair>(actions);
 	}
 	
 	@Override
@@ -159,7 +158,7 @@ public class ComboSyncher extends ComponentBase implements Layerable {
 	}
 
 	public void start(Music music) {
-		resetLayout();
+		resetCombo();
 		this.music = music;
 		float secondsInBeat = 60.0f / bpm;
 		start = music.getPosition();
@@ -175,7 +174,7 @@ public class ComboSyncher extends ComponentBase implements Layerable {
 			
 			if (progress < 1.0f) {
 				float x = progress * rect.getWidth() + rect.getX();
-				tracker.set(x, tracker.getY1(), x, tracker.getY2());
+				tracker.set(x, rect.getY(), x, rect.getMaxY());
 				checkForMissed();
 			} else {
 				music = null;
@@ -199,4 +198,7 @@ public class ComboSyncher extends ComponentBase implements Layerable {
 			float xMax) throws SlickException {
 		renderComponent(context, g);
 	}
+
+	@Override
+	protected void resetLayout() {}
 }

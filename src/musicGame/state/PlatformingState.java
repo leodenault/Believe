@@ -3,17 +3,14 @@ package musicGame.state;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import musicGame.character.PlayableCharacter;
-import musicGame.core.Camera.Layerable;
 import musicGame.core.MapManager;
+import musicGame.core.Music;
 import musicGame.core.PhysicsManager;
-import musicGame.core.SynchedComboPattern;
 import musicGame.core.action.PauseGameAction;
-import musicGame.gui.ComboSyncher;
 import musicGame.gui.PlayArea;
 import musicGame.map.LevelMap;
 
@@ -27,7 +24,6 @@ public class PlatformingState extends GameStateBase implements PausableState {
 	private PlayArea mapContainer;
 	private PlayableCharacter player;
 	private Music music;
-	private ComboSyncher combo;
 	private PhysicsManager physics;
 	private MapManager mapManager;
 	
@@ -37,20 +33,8 @@ public class PlatformingState extends GameStateBase implements PausableState {
 		this.ready = false;
 		this.container = container;
 		this.game = game;
-		this.music = new Music("/res/music/Evasion.ogg");
+		this.music = new Music("/res/music/Evasion.ogg", BPM);
 		this.mapManager = MapManager.getInstance();
-		SynchedComboPattern pattern = new SynchedComboPattern();
-		pattern.addAction(0, 's');
-		pattern.addAction(1, 's');
-		pattern.addAction(2, 's');
-		pattern.addAction(3, 's');
-		pattern.addAction(4, 'a');
-		pattern.addAction(4.5f, 'd');
-		pattern.addAction(5, 'a');
-		pattern.addAction(6, 'a');
-		pattern.addAction(6.5f, 'd');
-		pattern.addAction(7, 'a');
-		combo = new ComboSyncher(container, pattern, BPM, 120, 1312);
 	}
 
 	@Override
@@ -68,7 +52,6 @@ public class PlatformingState extends GameStateBase implements PausableState {
 			mapContainer.update(delta);
 			map.update(delta);
 			player.update(delta);
-			combo.update();
 			physics.update(delta);
 			
 			if (music.paused()) {
@@ -88,9 +71,6 @@ public class PlatformingState extends GameStateBase implements PausableState {
 				music.pause();
 				new PauseGameAction(this, game).componentActivated(null);
 				break;
-			case Input.KEY_SPACE:
-				combo.start(music);
-				break;
 		}
 	}
 	
@@ -105,10 +85,9 @@ public class PlatformingState extends GameStateBase implements PausableState {
 
 	public void setUp() throws SlickException {
 		map = mapManager.getMap("pipeTown", container);
-		player = new PlayableCharacter(container, map.getPlayerStartX(), map.getPlayerStartY());
+		player = new PlayableCharacter(container, music, map.getPlayerStartX(), map.getPlayerStartY());
 		mapContainer = new PlayArea(container, map, player);
 		initPhysics();
-		mapContainer.addChild((Layerable)combo);
 		music.stop();
 		ready = true;
 	}

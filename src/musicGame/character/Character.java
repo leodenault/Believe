@@ -1,14 +1,14 @@
 package musicGame.character;
 
-import musicGame.core.AnimationSet;
-import musicGame.core.DynamicCollidable;
-import musicGame.core.SpriteSheetManager;
-import musicGame.gui.ComponentBase;
-
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
+
+import musicGame.core.AnimationSet;
+import musicGame.core.DynamicCollidable;
+import musicGame.core.SpriteSheetManager;
+import musicGame.gui.ComponentBase;
 
 public abstract class Character extends ComponentBase implements DynamicCollidable {
 
@@ -50,7 +50,7 @@ public abstract class Character extends ComponentBase implements DynamicCollidab
 	protected void resetLayout() {}
 	
 	@Override
-	protected void renderComponent(GUIContext context, Graphics g) {
+	protected void renderComponent(GUIContext context, Graphics g) throws SlickException {
 		anim.draw(rect.getX(), rect.getY());
 	}
 }
