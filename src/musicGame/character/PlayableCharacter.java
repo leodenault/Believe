@@ -19,6 +19,7 @@ public class PlayableCharacter extends Character implements DynamicCollidable {
 	private int direction;
 	private float verticalSpeed;
 	private float horizontalSpeed;
+	private float focus;
 	private Music music;
 	private ComboSyncher comboSyncher;
 	
@@ -28,6 +29,7 @@ public class PlayableCharacter extends Character implements DynamicCollidable {
 		direction = 1;
 		verticalSpeed = 0;
 		horizontalSpeed = 0;
+		focus = 1.0f;
 		anim.setAutoUpdate(false);
 		SynchedComboPattern pattern = new SynchedComboPattern();
 		pattern.addAction(0, 's');
@@ -61,6 +63,10 @@ public class PlayableCharacter extends Character implements DynamicCollidable {
 		if (canJump) {
 			anim.setLooping(true);
 		}
+	}
+	
+	public float getFocus() {
+		return focus;
 	}
 	
 	public void update(int delta) {

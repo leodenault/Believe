@@ -12,6 +12,7 @@ import musicGame.core.Music;
 import musicGame.core.PhysicsManager;
 import musicGame.core.action.PauseGameAction;
 import musicGame.gui.PlayArea;
+import musicGame.gui.ProgressBar;
 import musicGame.map.LevelMap;
 
 public class PlatformingState extends GameStateBase implements PausableState {
@@ -23,6 +24,7 @@ public class PlatformingState extends GameStateBase implements PausableState {
 	private LevelMap map;
 	private PlayArea mapContainer;
 	private PlayableCharacter player;
+	private ProgressBar focusBar;
 	private Music music;
 	private PhysicsManager physics;
 	private MapManager mapManager;
@@ -53,6 +55,7 @@ public class PlatformingState extends GameStateBase implements PausableState {
 			map.update(delta);
 			player.update(delta);
 			physics.update(delta);
+			focusBar.setProgress(player.getFocus());
 			
 			if (music.paused()) {
 				music.resume();
@@ -87,6 +90,9 @@ public class PlatformingState extends GameStateBase implements PausableState {
 		map = mapManager.getMap("pipeTown", container);
 		player = new PlayableCharacter(container, music, map.getPlayerStartX(), map.getPlayerStartY());
 		mapContainer = new PlayArea(container, map, player);
+		focusBar = new ProgressBar(container);
+		focusBar.setText("Focus");
+		mapContainer.addHudChild(focusBar, 0.02f, 0.05f, 0.15f, 0.07f);
 		initPhysics();
 		music.stop();
 		ready = true;

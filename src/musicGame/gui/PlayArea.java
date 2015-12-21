@@ -18,6 +18,7 @@ public class PlayArea extends AbstractContainer {
 	private Camera camera;
 	private LevelMap map;
 	private ComponentBase focus;
+	private CanvasContainer hud;
 	
 	public PlayArea(GUIContext container, LevelMap map, ComponentBase focus) {
 		super(container, 0, 0, container.getWidth(), container.getHeight());
@@ -25,6 +26,7 @@ public class PlayArea extends AbstractContainer {
 		camera = new Camera(getWidth(), getHeight());
 		this.map = map;
 		this.focus = focus;
+		this.hud = new CanvasContainer(container, 0, 0, container.getWidth(), container.getHeight());
 		handleMap();
 		camera.scale(rect.getWidth() / LevelMap.TARGET_WIDTH,
 				rect.getHeight() / LevelMap.TARGET_HEIGHT);
@@ -59,6 +61,26 @@ public class PlayArea extends AbstractContainer {
 	public void addChild(Layerable child) {
 		camera.addChild(child);
 	}
+	
+	public void addHudChild(ComponentBase child) {
+		hud.addChild(child);
+	}
+	
+	public void addHudChild(ComponentBase child, float minX, float minY, float maxX, float maxY) {
+		hud.addChild(child);
+		
+		int x1 = (int)convertPercentageToPixels(minX, getWidth(), getX());
+		int y1 = (int)convertPercentageToPixels(minY, getHeight(), getY());
+		int x2 = (int)convertPercentageToPixels(maxX, getWidth(), getX());
+		int y2 = (int)convertPercentageToPixels(maxY, getHeight(), getY());
+		child.setLocation(x1, y1);
+		child.setWidth(x2 - x1);
+		child.setHeight(y2 - y1);
+	}
+	
+	public void removeHudChild(ComponentBase child) {
+		hud.removeChild(child);
+	}
 
 	@Override
 	protected void renderComponent(GUIContext context, Graphics g) throws SlickException {
@@ -75,6 +97,8 @@ public class PlayArea extends AbstractContainer {
 			g.setColor(new Color(0xffffff));
 			g.draw(rect);
 		}
+		
+		hud.render(context, g);
 	}
 	
 	public void update(int delta) {
@@ -93,5 +117,9 @@ public class PlayArea extends AbstractContainer {
 		} else if (camRect.getMaxY() > map.getHeight()) {
 			camRect.setY(map.getHeight() - camRect.getHeight());
 		}
+	}
+	
+	private float convertPercentageToPixels(float percentage, float length, float offset) {
+		return (percentage * length) + offset;
 	}
 }
