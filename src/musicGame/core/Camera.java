@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.gui.GUIContext;
 
 import musicGame.geometry.Rectangle;
@@ -66,6 +67,10 @@ public class Camera {
 		}
 		
 		layerChildren.add(child);
+	}
+	
+	public Vector2f cameraToWindow(Vector2f point) {
+		return new Vector2f((point.x - rect.getX()) * scaleX, (point.y - rect.getY()) * scaleY);
 	}
 	
 	public void render(GUIContext context, Graphics g) throws SlickException {

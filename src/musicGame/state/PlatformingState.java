@@ -7,15 +7,18 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import musicGame.character.PlayableCharacter;
+import musicGame.character.PlayableCharacter.SynchedComboListener;
 import musicGame.core.MapManager;
 import musicGame.core.Music;
 import musicGame.core.PhysicsManager;
+import musicGame.core.SynchedComboPattern;
 import musicGame.core.action.PauseGameAction;
+import musicGame.gui.ComboSyncher;
 import musicGame.gui.PlayArea;
 import musicGame.gui.ProgressBar;
 import musicGame.map.LevelMap;
 
-public class PlatformingState extends GameStateBase implements PausableState {
+public class PlatformingState extends GameStateBase implements PausableState, SynchedComboListener {
 	private static final int BPM = 150;
 
 	private boolean ready;
@@ -28,6 +31,7 @@ public class PlatformingState extends GameStateBase implements PausableState {
 	private Music music;
 	private PhysicsManager physics;
 	private MapManager mapManager;
+	private ComboSyncher comboSyncher;
 	
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
@@ -36,6 +40,8 @@ public class PlatformingState extends GameStateBase implements PausableState {
 		this.container = container;
 		this.game = game;
 		this.music = new Music("/res/music/Evasion.ogg", BPM);
+		this.comboSyncher = new ComboSyncher(container, music.getBpm());
+		this.focusBar = new ProgressBar(container);
 		this.mapManager = MapManager.getInstance();
 	}
 
@@ -55,6 +61,7 @@ public class PlatformingState extends GameStateBase implements PausableState {
 			map.update(delta);
 			player.update(delta);
 			physics.update(delta);
+			comboSyncher.update();
 			focusBar.setProgress(player.getFocus());
 			
 			if (music.paused()) {
@@ -62,6 +69,7 @@ public class PlatformingState extends GameStateBase implements PausableState {
 			} else if (!music.playing()) {
 				music.loop();
 			}
+			
 		}
 	}
 
@@ -89,10 +97,11 @@ public class PlatformingState extends GameStateBase implements PausableState {
 	public void setUp() throws SlickException {
 		map = mapManager.getMap("pipeTown", container);
 		player = new PlayableCharacter(container, music, map.getPlayerStartX(), map.getPlayerStartY());
+		player.addComboListener(this);
 		mapContainer = new PlayArea(container, map, player);
-		focusBar = new ProgressBar(container);
 		focusBar.setText("Focus");
 		mapContainer.addHudChild(focusBar, 0.02f, 0.05f, 0.15f, 0.07f);
+		mapContainer.attachHudChildToFocus(comboSyncher, 0.05f, -0.08f, 0.3f, 0.05f);
 		initPhysics();
 		music.stop();
 		ready = true;
@@ -103,5 +112,11 @@ public class PlatformingState extends GameStateBase implements PausableState {
 		physics.addStaticCollidables(map.getCollidableTiles());
 		physics.addDynamicCollidables(map.getEnemies());
 		physics.addDynamicCollidable(player);
+	}
+
+	@Override
+	public void activateCombo(SynchedComboPattern pattern) {
+		comboSyncher.setPattern(pattern);
+		comboSyncher.start(music);
 	}
 }

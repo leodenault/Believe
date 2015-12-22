@@ -1,9 +1,13 @@
 package musicGame.gui;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.gui.GUIContext;
 
 import musicGame.core.Camera;
@@ -13,12 +17,24 @@ import musicGame.map.LevelMap;
 import musicGame.map.MapBackground;
 
 public class PlayArea extends AbstractContainer {
+	private class DynamicHudChild {
+		public ComponentBase child;
+		public float offsetX;
+		public float offsetY;
+		
+		public DynamicHudChild(ComponentBase child, float offsetX, float offsetY) {
+			this.child = child;
+			this.offsetX = offsetX;
+			this.offsetY = offsetY;
+		}
+	}
 
 	private boolean border;
 	private Camera camera;
 	private LevelMap map;
 	private ComponentBase focus;
 	private CanvasContainer hud;
+	private List<DynamicHudChild> dynamicHudChildren;
 	
 	public PlayArea(GUIContext container, LevelMap map, ComponentBase focus) {
 		super(container, 0, 0, container.getWidth(), container.getHeight());
@@ -30,6 +46,7 @@ public class PlayArea extends AbstractContainer {
 		handleMap();
 		camera.scale(rect.getWidth() / LevelMap.TARGET_WIDTH,
 				rect.getHeight() / LevelMap.TARGET_HEIGHT);
+		this.dynamicHudChildren = new LinkedList<DynamicHudChild>();
 	}
 
 	private void handleMap() {
@@ -78,6 +95,13 @@ public class PlayArea extends AbstractContainer {
 		child.setHeight(y2 - y1);
 	}
 	
+	public void attachHudChildToFocus(ComponentBase child, float offsetX, float offsetY, float width, float height) {
+		hud.addChild(child);
+		child.setWidth((int)convertPercentageToPixels(width, getWidth(), 0));
+		child.setHeight((int)convertPercentageToPixels(height, getHeight(), 0));
+		dynamicHudChildren.add(new DynamicHudChild(child, offsetX, offsetY));
+	}
+	
 	public void removeHudChild(ComponentBase child) {
 		hud.removeChild(child);
 	}
@@ -116,6 +140,19 @@ public class PlayArea extends AbstractContainer {
 			camRect.setY(0);
 		} else if (camRect.getMaxY() > map.getHeight()) {
 			camRect.setY(map.getHeight() - camRect.getHeight());
+		}
+		
+		updateDynamicHudChildren();
+	}
+	
+	private void updateDynamicHudChildren() {
+		Rectangle rect = focus.getRect();
+		Vector2f focusLocation = camera.cameraToWindow(new Vector2f(rect.getCenter()));
+
+		for (DynamicHudChild child : dynamicHudChildren) {
+			float ox = convertPercentageToPixels(child.offsetX, getWidth(), 0);
+			float oy = convertPercentageToPixels(child.offsetY, getHeight(), 0);
+			child.child.setLocation((int)(focusLocation.x + ox), (int)(focusLocation.y + oy));
 		}
 	}
 	

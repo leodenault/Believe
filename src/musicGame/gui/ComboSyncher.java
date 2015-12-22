@@ -1,6 +1,5 @@
 package musicGame.gui;
 
-import java.awt.Font;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,6 +14,7 @@ import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.gui.GUIContext;
 
 import musicGame.core.Camera.Layerable;
+import musicGame.core.FontLoader;
 import musicGame.core.SynchedComboPattern;
 import musicGame.core.SynchedComboPattern.TimeKeyPair;
 import musicGame.levelFlow.FlowComponentListener;
@@ -22,11 +22,7 @@ import musicGame.levelFlow.FlowComponentListener;
 public class ComboSyncher extends ComponentBase implements Layerable {
 	protected static final float BUFFER_TIME = 2.5f; // In seconds
 	
-	private static final int HEIGHT = 40;
-	private static final int PIXELS_PER_SECOND = 100;
-	private static final float BUFFER_LENGTH = BUFFER_TIME * PIXELS_PER_SECOND;
-	private static final float ERROR_MARGIN = 0.15f; // In seconds
-	private static final float ERROR_DISTANCE = ERROR_MARGIN * PIXELS_PER_SECOND;
+	private static final float ERROR_LENGTH = 0.15f; // In seconds
 	private static final Color NOT_ACTIVATED = new Color(0xffffff);
 	private static final Color SUCCESS = new Color(0x00ff00);
 	private static final Color MISSED = new Color(0xff0000);
@@ -38,7 +34,10 @@ public class ComboSyncher extends ComponentBase implements Layerable {
 	private float start;
 	private float length;
 	private float actionSectionLength;
-	private float startBuffer;
+	private float actionSectionWidth;
+	private float startWidth;
+	private float errorWidth;
+	private float trackerSpeed;
 	private SynchedComboPattern pattern;
 	private Line tracker;
 	private Music music;
@@ -46,19 +45,23 @@ public class ComboSyncher extends ComponentBase implements Layerable {
 	private Queue<TimeKeyPair> actionsLeft;
 	private HashMap<TimeKeyPair, Color> actionColors;
 	
-	public ComboSyncher(GUIContext container, SynchedComboPattern pattern, int bpm, int x, int y) {
-		this(container, pattern,new TrueTypeFont(new Font("Verdana", Font.PLAIN, 20), true),
-				bpm, x, y);
+	public ComboSyncher(GUIContext container, int bpm) {
+		this(container, new SynchedComboPattern(), bpm, 0, 0, 0, 0);
+	}
+	
+	public ComboSyncher(GUIContext container, SynchedComboPattern pattern, int bpm, int x, int y, int width, int height) {
+		this(container, pattern, FontLoader.getInstance().getFont("verdana"),
+				bpm, x, y, width, height);
 	}
 	
 	/**
 	 * Used for testing
 	 */
-	protected ComboSyncher(GUIContext container, SynchedComboPattern pattern, TrueTypeFont font, int bpm, int x, int y) {
-		super(container, x, y, 0, HEIGHT);
+	protected ComboSyncher(GUIContext container, SynchedComboPattern pattern, TrueTypeFont font, int bpm, int x, int y, int width, int height) {
+		super(container, x, y, width, height);
 		this.bpm = bpm;
 		this.pattern = pattern;
-		this.tracker = new Line(x, y, x, y + HEIGHT);
+		this.tracker = new Line(x, y, x, y + height);
 		this.font = font;
 		this.actionColors = new HashMap<SynchedComboPattern.TimeKeyPair, Color>();
 		setUpPattern();
@@ -66,18 +69,26 @@ public class ComboSyncher extends ComponentBase implements Layerable {
 	
 	private void setUpPattern() {
 		actions = pattern.getActions();
-		max = actions.get(actions.size() - 1).time;
-		actionSectionLength = PIXELS_PER_SECOND * max * 60.0f / bpm;
+		
+		if (actions.size() > 0) {
+			max = actions.get(actions.size() - 1).time;
+			actionSectionLength = max * 60.0f / bpm;
+		}
+	}
+	
+	public void setPattern(SynchedComboPattern pattern) {
+		this.pattern = pattern;
+		setUpPattern();
 	}
 	
 	private float getActionLocation(TimeKeyPair action) {
-		return (actionSectionLength * action.time / max) + startBuffer + rect.getX();
+		return (actionSectionWidth * action.time / max) + startWidth + rect.getX();
 	}
 	
 	private void checkForMissed() {
 		if (!actionsLeft.isEmpty()) {
 			TimeKeyPair current = actionsLeft.peek();
-			if (tracker.getX() - getActionLocation(current) > ERROR_DISTANCE) {
+			if (tracker.getX() - getActionLocation(current) > errorWidth) {
 				actionColors.put(current, MISSED);
 				actionsLeft.remove();
 				for (Object listener : listeners) {
@@ -106,7 +117,7 @@ public class ComboSyncher extends ComponentBase implements Layerable {
 			g.setLineWidth(1f);
 			g.setColor(new Color(0x0000ff));
 			for (int i = 0; i < actions.size(); i++) {
-				float x = (actionSectionLength * i / max) + startBuffer + rect.getX();
+				float x = (actionSectionWidth * i / max) + startWidth + rect.getX();
 				g.drawLine(x, rect.getY(), x, rect.getMaxY());
 			}
 			
@@ -137,7 +148,7 @@ public class ComboSyncher extends ComponentBase implements Layerable {
 				int index = actions.indexOf(current);
 	
 				if (current.key == c &&
-						Math.abs(tracker.getX() - getActionLocation(current)) < ERROR_DISTANCE) {
+						Math.abs(tracker.getX() - getActionLocation(current)) < errorWidth) {
 					actionsLeft.remove();
 					actionColors.put(current, SUCCESS);
 					
@@ -158,22 +169,28 @@ public class ComboSyncher extends ComponentBase implements Layerable {
 	}
 
 	public void start(Music music) {
-		resetCombo();
-		this.music = music;
-		float secondsInBeat = 60.0f / bpm;
-		start = music.getPosition();
-		float startIn = -(start + BUFFER_TIME) % (secondsInBeat) + BUFFER_TIME;
-		startBuffer = PIXELS_PER_SECOND * startIn;
-		rect.setWidth(actionSectionLength + startBuffer + BUFFER_LENGTH);
-		length = startIn + (max * secondsInBeat) + BUFFER_TIME;
+		float width = getWidth();
+		
+		if (width > 0) {
+			resetCombo();
+			this.music = music;
+			float secondsInBeat = 60.0f / bpm;
+			start = music.getPosition();
+			float startIn = -(start + BUFFER_TIME) % (secondsInBeat) + BUFFER_TIME;
+			length = startIn + actionSectionLength + BUFFER_TIME;
+			trackerSpeed = width / length;
+			startWidth = trackerSpeed * startIn;
+			actionSectionWidth = trackerSpeed * actionSectionLength;
+			errorWidth = trackerSpeed * ERROR_LENGTH;
+		}
 	}
 	
 	public void update() {
 		if (music != null) {
-			float progress = (music.getPosition() - start) / length;
+			float progress = music.getPosition() - start;
 			
-			if (progress < 1.0f) {
-				float x = progress * rect.getWidth() + rect.getX();
+			if (progress < length) {
+				float x = progress * trackerSpeed + rect.getX();
 				tracker.set(x, rect.getY(), x, rect.getMaxY());
 				checkForMissed();
 			} else {

@@ -1,8 +1,6 @@
 package musicGame.gui;
 
 import static musicGame.gui.ComboSyncher.BUFFER_TIME;
-import musicGame.core.SynchedComboPattern;
-import musicGame.levelFlow.FlowComponentListener;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -16,6 +14,9 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.gui.GUIContext;
+
+import musicGame.core.SynchedComboPattern;
+import musicGame.levelFlow.FlowComponentListener;
 
 public class ComboSyncherTest {
 	
@@ -53,7 +54,7 @@ public class ComboSyncherTest {
 		pattern.addAction(FIRST_BEAT, FIRST_KEY);
 		pattern.addAction(SECOND_BEAT, SECOND_KEY);
 		pattern.addAction(LAST_BEAT, '[');
-		combo = new ComboSyncher(container, pattern, font, BPM, 0, 0);
+		combo = new ComboSyncher(container, pattern, font, BPM, 0, 0, 100, 10);
 		combo.addListener(listener);
 	}
 	

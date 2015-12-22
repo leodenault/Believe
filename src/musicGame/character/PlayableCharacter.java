@@ -1,5 +1,8 @@
 package musicGame.character;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -10,9 +13,12 @@ import musicGame.core.DynamicCollidable;
 import musicGame.core.MovementDirection;
 import musicGame.core.Music;
 import musicGame.core.SynchedComboPattern;
-import musicGame.gui.ComboSyncher;
 
 public class PlayableCharacter extends Character implements DynamicCollidable {
+	public interface SynchedComboListener {
+		void activateCombo(SynchedComboPattern pattern);
+	}
+	
 	private static final float JUMP_SPEED = -0.5f;
 	
 	private boolean canJump;
@@ -20,8 +26,8 @@ public class PlayableCharacter extends Character implements DynamicCollidable {
 	private float verticalSpeed;
 	private float horizontalSpeed;
 	private float focus;
-	private Music music;
-	private ComboSyncher comboSyncher;
+	private SynchedComboPattern pattern;
+	private List<SynchedComboListener> comboListeners;
 	
 	public PlayableCharacter(GUIContext container, Music music, int x, int y) throws SlickException {
 		super(container, x, y);
@@ -31,19 +37,13 @@ public class PlayableCharacter extends Character implements DynamicCollidable {
 		horizontalSpeed = 0;
 		focus = 1.0f;
 		anim.setAutoUpdate(false);
-		SynchedComboPattern pattern = new SynchedComboPattern();
+		pattern = new SynchedComboPattern();
 		pattern.addAction(0, 's');
 		pattern.addAction(1, 's');
-		pattern.addAction(2, 's');
-		pattern.addAction(3, 's');
-		pattern.addAction(4, 'a');
-		pattern.addAction(4.5f, 'd');
-		pattern.addAction(5, 'a');
-		pattern.addAction(6, 'a');
-		pattern.addAction(6.5f, 'd');
-		pattern.addAction(7, 'a');
-		this.music = music;
-		comboSyncher = new ComboSyncher(container, pattern, music.getBpm(), 120, 1312);
+		pattern.addAction(2, 'a');
+		pattern.addAction(2.5f, 'd');
+		pattern.addAction(3, 'a');
+		comboListeners = new LinkedList<SynchedComboListener>();
 	}
 	
 	@Override
@@ -69,6 +69,10 @@ public class PlayableCharacter extends Character implements DynamicCollidable {
 		return focus;
 	}
 	
+	public void addComboListener(SynchedComboListener listener) {
+		this.comboListeners.add(listener);
+	}
+	
 	public void update(int delta) {
 		if (canJump) {
 			if (horizontalSpeed == 0 && !anim.equals(animSet.get("idle"))) {
@@ -91,8 +95,6 @@ public class PlayableCharacter extends Character implements DynamicCollidable {
 		}
 		
 		anim.update(delta);
-		comboSyncher.setLocation(getX() + getWidth(), getY() - getHeight());
-		comboSyncher.update();
 	}
 
 	@Override
@@ -112,7 +114,9 @@ public class PlayableCharacter extends Character implements DynamicCollidable {
 				}
 			break;
 			case Input.KEY_C:
-				comboSyncher.start(music);
+				for (SynchedComboListener listener : comboListeners) {
+					listener.activateCombo(pattern);
+				}
 				break;
 		}
 	}
@@ -131,6 +135,5 @@ public class PlayableCharacter extends Character implements DynamicCollidable {
 	@Override
 	protected void renderComponent(GUIContext context, Graphics g) throws SlickException {
 		anim.getCurrentFrame().getFlippedCopy(direction == -1, false).draw(rect.getX(), rect.getY());
-		comboSyncher.render(context, g);
 	}
 }

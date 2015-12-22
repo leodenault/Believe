@@ -1,5 +1,13 @@
 package musicGame;
 
+import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.Log;
+import org.newdawn.slick.util.ResourceLoader;
+
+import musicGame.core.FontLoader;
 import musicGame.core.JarClasspathLocation;
 import musicGame.state.FlowFilePickerMenuState;
 import musicGame.state.GamePausedOverlay;
@@ -8,12 +16,6 @@ import musicGame.state.MainMenuState;
 import musicGame.state.OptionsMenuState;
 import musicGame.state.PlatformingState;
 import musicGame.state.PlayFlowFileState;
-
-import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.util.ResourceLoader;
 
 public class BelieveGame extends StateBasedGame {
 	
@@ -48,6 +50,7 @@ public class BelieveGame extends StateBasedGame {
 
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
+		loadResources();
 		this.addState(new MainMenuState());
 		this.addState(new OptionsMenuState());
 		this.addState(new FlowFilePickerMenuState());
@@ -59,5 +62,11 @@ public class BelieveGame extends StateBasedGame {
 	
 	public void setDebug(boolean debug) {
 		this.debug = debug;
+	}
+	
+	private void loadResources() {
+		Log.info("Loading resources...");
+		FontLoader.getInstance().load();
+		Log.info("Finished loading resources.");
 	}
 }
