@@ -23,6 +23,11 @@
    eJzt1bENgDAQBEG34P6bJSWACCNbqxnp8k9WPwYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMBZ5u4DgKWemtY5tOgc+nQOfTqHPp1Dn86hT+fQp3Po0zn06Rz6dA59Ooc+nUPfH53P24D9/HPo+9q53w3n88+hT+fQ99a5mbUGAHRcg9YTQw==
   </data>
  </layer>
+ <layer name="Back Ridge" width="250" height="50">
+  <data encoding="base64" compression="zlib">
+   eJztyrEJAAAIwDA3/f9ivUIUEujWCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA2JFTeTye9w8AAHBfA2iqAZY=
+  </data>
+ </layer>
  <layer name="Pipe" width="250" height="50">
   <data encoding="base64" compression="zlib">
    eJztw6ENAEAIBDAQiBe//7osgbq0SasAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOBOq/FHjf/U+F+Nv1ZWG1k=
