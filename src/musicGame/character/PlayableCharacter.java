@@ -12,13 +12,19 @@ import musicGame.core.Camera;
 import musicGame.core.MovementDirection;
 import musicGame.core.Music;
 import musicGame.core.SynchedComboPattern;
+import musicGame.physics.PhysicsManager;
 
 public class PlayableCharacter extends Character {
 	public interface SynchedComboListener {
 		void activateCombo(SynchedComboPattern pattern);
 	}
 	
+	// Number of milliseconds to wait for gravity to be constantly
+	// applied before denying a jump (We don't want a character to
+	// jump after having fallen off a platform)
+	private static final int FALLING_DELAY = 20;
 	private static final float JUMP_SPEED = -0.5f;
+	private static final float DENY_JUMP_SPEED = FALLING_DELAY * PhysicsManager.GRAVITY; // Speed at which we start denying jumps
 	
 	private boolean canJump;
 	private int direction;
@@ -73,6 +79,10 @@ public class PlayableCharacter extends Character {
 	}
 	
 	public void update(int delta) {
+		if (verticalSpeed > DENY_JUMP_SPEED) {
+			canJump = false;
+		}
+		
 		if (canJump) {
 			if (horizontalSpeed == 0 && !anim.equals(animSet.get("idle"))) {
 				anim.stop();

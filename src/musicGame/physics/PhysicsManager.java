@@ -8,7 +8,7 @@ import java.util.ListIterator;
 
 public class PhysicsManager {
 	
-	private static final float GRAVITY = 0.00125f; // Pixels per millisecond^2
+	public static final float GRAVITY = 0.00125f; // Pixels per millisecond^2
 	
 	private List<GravityObject> gravityObjects;
 	private List<Collidable> collidables;
