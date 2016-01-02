@@ -9,12 +9,11 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
 
 import musicGame.core.Camera;
-import musicGame.core.DynamicCollidable;
 import musicGame.core.MovementDirection;
 import musicGame.core.Music;
 import musicGame.core.SynchedComboPattern;
 
-public class PlayableCharacter extends Character implements DynamicCollidable {
+public class PlayableCharacter extends Character {
 	public interface SynchedComboListener {
 		void activateCombo(SynchedComboPattern pattern);
 	}
@@ -126,7 +125,7 @@ public class PlayableCharacter extends Character implements DynamicCollidable {
 		super.keyReleased(key, c);
 		horizontalSpeed -= MovementDirection.directionForKey(key).getValue() * Camera.SCROLL_SPEED;
 	}
-
+	
 	@Override
 	protected String getSheetName() {
 		return "stickFigure";

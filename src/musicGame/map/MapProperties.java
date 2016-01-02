@@ -62,7 +62,9 @@ public class MapProperties {
 				for (int x = 0; x < map.getWidth(); x++) {
 					for (int y = 0; y < map.getHeight(); y++) {
 						if (map.getTileId(x, y, i) != EMPTY_TILE) {
-							tiles.add(new Tile(x, y, tileWidth, tileHeight));
+							Tile tile = new Tile(x, y, tileWidth, tileHeight);
+							tiles.add(tile);
+							findNeighbours(map, tile, x, y, i);
 						}
 					}
 				}
@@ -100,5 +102,23 @@ public class MapProperties {
 		}
 		
 		return false;
+	}
+	
+	private static void findNeighbours(TiledMap map, Tile tile, int x, int y, int layer) {
+		if (x > 0 && map.getTileId(x - 1, y, layer) != EMPTY_TILE) {
+			tile.setLeftNeighbour(true);
+		}
+		
+		if (x + 1 < map.getWidth() && map.getTileId(x + 1, y, layer) != EMPTY_TILE) {
+			tile.setRightNeighbour(true);
+		}
+		
+		if (y > 0 && map.getTileId(x, y - 1, layer) != EMPTY_TILE) {
+			tile.setTopNeighbour(true);
+		}
+		
+		if (y + 1 < map.getHeight() && map.getTileId(x, y + 1, layer) != EMPTY_TILE) {
+			tile.setBottomNeighbour(true);
+		}
 	}
 }

@@ -1,22 +1,25 @@
 package musicGame.state;
 
+import java.util.List;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import musicGame.character.EnemyCharacter;
 import musicGame.character.PlayableCharacter;
 import musicGame.character.PlayableCharacter.SynchedComboListener;
 import musicGame.core.MapManager;
 import musicGame.core.Music;
-import musicGame.core.PhysicsManager;
 import musicGame.core.SynchedComboPattern;
 import musicGame.core.action.PauseGameAction;
 import musicGame.gui.ComboSyncher;
 import musicGame.gui.PlayArea;
 import musicGame.gui.ProgressBar;
 import musicGame.map.LevelMap;
+import musicGame.physics.PhysicsManager;
 
 public class PlatformingState extends GameStateBase implements PausableState, SynchedComboListener {
 	private static final int BPM = 150;
@@ -109,9 +112,12 @@ public class PlatformingState extends GameStateBase implements PausableState, Sy
 	
 	private void initPhysics() {
 		physics = new PhysicsManager();
-		physics.addStaticCollidables(map.getCollidableTiles());
-		physics.addDynamicCollidables(map.getEnemies());
-		physics.addDynamicCollidable(player);
+		physics.addCollidables(map.getCollidableTiles());
+		List<EnemyCharacter> enemies = map.getEnemies();
+		physics.addCollidables(enemies);
+		physics.addCollidable(player);
+		physics.addGravityObject(player);
+		physics.addGravityObjects(enemies);
 	}
 
 	@Override

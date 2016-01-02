@@ -20,7 +20,7 @@
    <property name="collision" value=""/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt07EJACAAA0FXcP9lXUA7QXnuIH2aHwMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOAv8/UB4Kpd0zqHFp1Dn86hT+fQp3Po0zn06Rz6dA59Ooc+nUOfzqFP59Cnc+jTOfTpHPp0Dn06hz6dQ9+pczNrDQDoWLhtEt0=
+   eJzt1bENgDAQBEG34P6bJSWACCNbqxnp8k9WPwYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMBZ5u4DgKWemtY5tOgc+nQOfTqHPp1Dn86hT+fQp3Po0zn06Rz6dA59Ooc+nUPfH53P24D9/HPo+9q53w3n88+hT+fQ99a5mbUGAHRcg9YTQw==
   </data>
  </layer>
  <layer name="Pipe" width="250" height="50">
@@ -33,7 +33,7 @@
    <property name="front" value=""/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt00EKwjAURdFgxUEG3f9ysjQdihRJoG3C4xxwUp6/ndxSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA1lJLabO/AThPPX7W7v4O4Do6h3w6h3w6h3w6h3w6h3w6h3w6h3w6h3w6h3w6h3w6h3w6h3w6h3w6h3w6h3w6h3wjnT867tnY2Ky3Gen81fEOGxub9TYjnf9ut8/v2XHPHXfcmXfnz7N29P+94x02Njbrbb47fwOOjRX0
+   eJzt1UEKwyAUBFBp0y6yyP2P49HaZSihKG2iDO+BGxm/bgZLAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAmMtaSh39BuB/1uO9evU7gPPoOeTTc8in55BPzyGfnkM+PYd8eg759Bzy6Tnk03PIp+eQT88h3xk9f+wWMJ7/HPL92nN/N8zPfw75enp+a5gnIyMzX6an58+GO2RkZObL9PT8M3t/r6VhnjnmmDNuzpe9enR+a7hDRkZmvsy+5y+7ThYS
   </data>
  </layer>
 </map>
