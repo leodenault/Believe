@@ -29,12 +29,17 @@
 		<sheet>/res/graphics/sprites/enemy.png</sheet>
 		<frameWidth>64</frameWidth>
 		<frameHeight>96</frameHeight>
-		<frameLength>100</frameLength>
+		<frameLength>250</frameLength>
 		<frameSequences>
 			<sequence>
 				<name>idle</name>
 				<start>0</start>
-				<end>0</end>
+				<end>2</end>
+			</sequence>
+			<sequence>
+				<name>punch</name>
+				<start>4</start>
+				<end>7</end>
 			</sequence>
 		</frameSequences>
 	</spriteSheet>

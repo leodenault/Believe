@@ -9,12 +9,15 @@ import musicGame.core.AnimationSet;
 import musicGame.core.SpriteSheetManager;
 import musicGame.gui.ComponentBase;
 import musicGame.physics.Collidable;
+import musicGame.physics.DamageBoxCollidable;
+import musicGame.physics.DamageHandler;
 import musicGame.physics.TileCollisionHandler;
 import musicGame.physics.TileCollisionHandler.TileCollidable;
 
-public abstract class Character extends ComponentBase implements TileCollidable {
+public abstract class Character extends ComponentBase implements TileCollidable, DamageBoxCollidable {
 
 	private TileCollisionHandler tileHandler;
+	private DamageHandler damageHandler;
 	
 	protected AnimationSet animSet;
 	protected Animation anim;
@@ -22,6 +25,7 @@ public abstract class Character extends ComponentBase implements TileCollidable 
 	public Character(GUIContext container, int x, int y) throws SlickException {
 		super(container, x, y);
 		tileHandler = new TileCollisionHandler();
+		damageHandler = new DamageHandler();
 		animSet = SpriteSheetManager.getInstance().getAnimationSet(getSheetName());
 		anim = animSet.get("idle");
 		rect = new musicGame.geometry.Rectangle(x, y - anim.getHeight(), anim.getWidth(), anim.getHeight());
@@ -51,6 +55,7 @@ public abstract class Character extends ComponentBase implements TileCollidable 
 	@Override
 	public void collision(Collidable other) {
 		tileHandler.handleCollision(this, other);
+		damageHandler.handleCollision(this, other);
 	}
 	
 	@Override

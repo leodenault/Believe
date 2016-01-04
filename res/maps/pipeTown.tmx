@@ -33,6 +33,14 @@
    eJztw6ENAEAIBDAQiBe//7osgbq0SasAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOBOq/FHjf/U+F+Nv1ZWG1k=
   </data>
  </layer>
+ <layer name="Enemies" width="250" height="50">
+  <properties>
+   <property name="enemies" value=""/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztzjENAAAIA7BZwL9ZJCxcPK2CJgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABczHcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKBY9oIAEg==
+  </data>
+ </layer>
  <layer name="Front" width="250" height="50">
   <properties>
    <property name="front" value=""/>

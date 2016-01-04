@@ -12,6 +12,7 @@ import musicGame.core.Camera;
 import musicGame.core.MovementDirection;
 import musicGame.core.Music;
 import musicGame.core.SynchedComboPattern;
+import musicGame.physics.DamageHandler.Faction;
 import musicGame.physics.PhysicsManager;
 
 public class PlayableCharacter extends Character {
@@ -25,6 +26,9 @@ public class PlayableCharacter extends Character {
 	private static final int FALLING_DELAY = 20;
 	private static final float JUMP_SPEED = -0.5f;
 	private static final float DENY_JUMP_SPEED = FALLING_DELAY * PhysicsManager.GRAVITY; // Speed at which we start denying jumps
+	private static final float MAX_FOCUS = 1.0f;
+	private static final float FOCUS_RECHARGE_TIME = 60f; // Time in seconds for recharging focus fully
+	private static final float FOCUS_RECHARGE_RATE = MAX_FOCUS / (FOCUS_RECHARGE_TIME * 1000f);
 	
 	private boolean canJump;
 	private int direction;
@@ -40,7 +44,7 @@ public class PlayableCharacter extends Character {
 		direction = 1;
 		verticalSpeed = 0;
 		horizontalSpeed = 0;
-		focus = 1.0f;
+		focus = MAX_FOCUS;
 		anim.setAutoUpdate(false);
 		pattern = new SynchedComboPattern();
 		pattern.addAction(0, 's');
@@ -103,6 +107,7 @@ public class PlayableCharacter extends Character {
 			}
 		}
 		
+		focus = Math.min(MAX_FOCUS, focus + (delta * FOCUS_RECHARGE_RATE));
 		anim.update(delta);
 	}
 
@@ -144,5 +149,15 @@ public class PlayableCharacter extends Character {
 	@Override
 	protected void renderComponent(GUIContext context, Graphics g) throws SlickException {
 		anim.getCurrentFrame().getFlippedCopy(direction == -1, false).draw(rect.getX(), rect.getY());
+	}
+
+	@Override
+	public Faction getFaction() {
+		return Faction.GOOD;
+	}
+
+	@Override
+	public void inflictDamage(float damage) {
+		focus -= damage;
 	}
 }

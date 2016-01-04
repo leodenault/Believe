@@ -8,14 +8,31 @@ import java.util.ListIterator;
 
 public class PhysicsManager {
 	
+	private static PhysicsManager INSTANCE;
+	
 	public static final float GRAVITY = 0.00125f; // Pixels per millisecond^2
 	
 	private List<GravityObject> gravityObjects;
 	private List<Collidable> collidables;
+	private List<Collidable> removed;
 	
-	public PhysicsManager() {
+	private PhysicsManager() {
 		this.gravityObjects = new LinkedList<GravityObject>();
 		this.collidables = new LinkedList<Collidable>();
+		this.removed = new LinkedList<Collidable>();
+	}
+	
+	public static PhysicsManager getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new PhysicsManager();
+		}
+		
+		return INSTANCE;
+	}
+	
+	public void reset() {
+		this.gravityObjects.clear();
+		this.collidables.clear();
 	}
 	
 	public void addGravityObject(GravityObject gravityObject) {
@@ -32,6 +49,12 @@ public class PhysicsManager {
 	
 	public void addCollidables(Collection<? extends Collidable> collidables) {
 		this.collidables.addAll(collidables);
+	}
+	
+	public void removeCollidable(Collidable collidable) {
+		if (!this.removed.contains(collidable)) {
+			this.removed.add(collidable);
+		}
 	}
 	
 	public void update(int delta) {
@@ -51,6 +74,10 @@ public class PhysicsManager {
 	// This might end up needing some spacial data structures
 	// for optimization, as it's currently not terribly efficient
 	protected void checkCollisions() {
+		for (Collidable collidable : removed) {
+			collidables.remove(collidable);
+		}
+		
 		for (ListIterator<Collidable> i1 = collidables.listIterator(); i1.hasNext();) {
 			Collidable c1 = i1.next();
 			
