@@ -2,6 +2,11 @@ package musicGame.core;
 
 import java.util.HashMap;
 
+import org.newdawn.slick.Animation;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.util.Log;
+
 import musicGame.xml.CompoundDef;
 import musicGame.xml.ListDef;
 import musicGame.xml.XMLCompound;
@@ -10,11 +15,6 @@ import musicGame.xml.XMLInteger;
 import musicGame.xml.XMLList;
 import musicGame.xml.XMLLoadingException;
 import musicGame.xml.XMLString;
-
-import org.newdawn.slick.Animation;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.util.Log;
 
 public class SpriteSheetManager {
 	
@@ -37,11 +37,11 @@ public class SpriteSheetManager {
 			.addString(SHEET_NODE)
 			.addInteger(WIDTH_NODE)
 			.addInteger(HEIGHT_NODE)
-			.addInteger(LENGTH_NODE)
 			.addList(SEQUENCES_NODE,
 					new CompoundDef(SEQUENCE_NODE).addString(NAME_NODE)
 					.addInteger(START_FRAME_NODE)
 					.addInteger(END_FRAME_NODE)
+					.addInteger(LENGTH_NODE)
 					)
 			);
 	
@@ -95,7 +95,7 @@ public class SpriteSheetManager {
 							sequence.<XMLString>getValue(NAME_NODE).value,
 							createAnimation(
 									sheet,
-									child.<XMLInteger>getValue(LENGTH_NODE).value,
+									sequence.<XMLInteger>getValue(LENGTH_NODE).value,
 									sequence.<XMLInteger>getValue(START_FRAME_NODE).value,
 									sequence.<XMLInteger>getValue(END_FRAME_NODE).value
 									));
