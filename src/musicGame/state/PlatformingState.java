@@ -113,7 +113,7 @@ public class PlatformingState extends GameStateBase implements PausableState, Sy
 	private void initPhysics() {
 		physics = PhysicsManager.getInstance();
 		physics.reset();
-		physics.addCollidables(map.getCollidableTiles());
+		physics.addStaticCollidables(map.getCollidableTiles());
 		List<EnemyCharacter> enemies = map.getEnemies();
 		physics.addCollidables(enemies);
 		physics.addCollidable(player);

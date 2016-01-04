@@ -62,7 +62,7 @@ public class EnemyCharacter extends Character {
 
 		if (attacking) {
 			if (anim.getFrame() >= 2 && !damaging) {
-				manager.addCollidable(dmg);
+				manager.addStaticCollidable(dmg);
 				damaging = true;
 			}
 			

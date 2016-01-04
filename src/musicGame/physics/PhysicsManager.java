@@ -1,10 +1,8 @@
 package musicGame.physics;
 
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PhysicsManager {
 	
@@ -12,14 +10,16 @@ public class PhysicsManager {
 	
 	public static final float GRAVITY = 0.00125f; // Pixels per millisecond^2
 	
-	private List<GravityObject> gravityObjects;
-	private List<Collidable> collidables;
-	private List<Collidable> removed;
+	private Set<GravityObject> gravityObjects;
+	private Set<Collidable> collidables;
+	private Set<Collidable> staticCollidables;
+	private Set<Collidable> removed;
 	
 	private PhysicsManager() {
-		this.gravityObjects = new LinkedList<GravityObject>();
-		this.collidables = new LinkedList<Collidable>();
-		this.removed = new LinkedList<Collidable>();
+		this.gravityObjects = new HashSet<GravityObject>();
+		this.collidables = new HashSet<Collidable>();
+		this.staticCollidables = new HashSet<Collidable>();
+		this.removed = new HashSet<Collidable>();
 	}
 	
 	public static PhysicsManager getInstance() {
@@ -43,12 +43,32 @@ public class PhysicsManager {
 		this.gravityObjects.addAll(gravityObjects);
 	}
 	
+	/**
+	 * All collidables added here will interact with all other collidables
+	 */
 	public void addCollidable(Collidable collidable) {
 		collidables.add(collidable);
 	}
 	
+	/**
+	 * All collidables added here will interact with all other collidables
+	 */
 	public void addCollidables(Collection<? extends Collidable> collidables) {
 		this.collidables.addAll(collidables);
+	}
+	
+	/**
+	 * All collidables added here do not interact with each other.
+	 */
+	public void addStaticCollidable(Collidable collidable) {
+		this.staticCollidables.add(collidable);
+	}
+	
+	/**
+	 * All collidables added to this list do not interact with each other.
+	 */
+	public void addStaticCollidables(Collection<? extends Collidable> collidables) {
+		this.staticCollidables.addAll(collidables);
 	}
 	
 	public void removeCollidable(Collidable collidable) {
@@ -77,20 +97,39 @@ public class PhysicsManager {
 		for (Collidable collidable : removed) {
 			collidables.remove(collidable);
 		}
+
+		for (Collidable staticCollidable : removed) {
+			staticCollidables.remove(staticCollidable);
+		}
 		
-		for (ListIterator<Collidable> i1 = collidables.listIterator(); i1.hasNext();) {
-			Collidable c1 = i1.next();
-			
-			if (i1.hasNext()) {
-				for (Iterator<Collidable> i2 = collidables.listIterator(i1.nextIndex()); i2.hasNext();) {
-					Collidable c2 = i2.next();
-					
-					if (c1.getRect().intersects(c2.getRect())) {
-						c1.collision(c2);
-						c2.collision(c1);
-					}
-				}
+		removed.clear();
+
+		Collidable[] coll = new Collidable[collidables.size()];
+		Collidable[] statColl = new Collidable[staticCollidables.size()];
+		collidables.toArray(coll);
+		staticCollidables.toArray(statColl);
+
+		for (int i = 0; i < coll.length; i++) {
+			Collidable c1 = coll[i];
+
+			// Interact with all static collidables first
+			for (int j = 0; j < statColl.length; j++) {
+				Collidable sc2 = statColl[j];
+				engageCollision(c1, sc2);
 			}
+			
+			// Then interact with the normal collidables
+			for (int k = i + 1; k < coll.length; k++) {
+				Collidable c2 = coll[k];
+				engageCollision(c1, c2);
+			}
+		}
+	}
+
+	private void engageCollision(Collidable c1, Collidable c2) {
+		if (c1.getRect().intersects(c2.getRect())) {
+			c1.collision(c2);
+			c2.collision(c1);
 		}
 	}
 }
