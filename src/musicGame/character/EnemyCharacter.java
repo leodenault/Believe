@@ -33,7 +33,7 @@ public class EnemyCharacter extends Character {
 		this.idle = animSet.get("idle");
 		this.punch = animSet.get("punch");
 		this.manager = PhysicsManager.getInstance();
-		setupAnimations();
+		anim.start();
 	}
 	
 	@Override
@@ -86,14 +86,6 @@ public class EnemyCharacter extends Character {
 		return "enemy";
 	}
 	
-	private void setupAnimations() {
-		punch.setLooping(false);
-		punch.setPingPong(true);
-		idle.setPingPong(true);
-		punch.setAutoUpdate(false);
-		idle.setAutoUpdate(false);
-	}
-
 	@Override
 	public Faction getFaction() {
 		return Faction.BAD;

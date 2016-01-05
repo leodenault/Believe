@@ -26,6 +26,11 @@ public class CompoundDef extends ChildDef {
 		return this;
 	}
 	
+	public CompoundDef addBoolean(String name) {
+		this.subChildDefs.add(new BooleanDef(name));
+		return this;
+	}
+	
 	public CompoundDef addList(String name, CompoundDef subChildDef) {
 		this.subChildDefs.add(new ListDef(name, subChildDef));
 		return this;

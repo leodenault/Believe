@@ -23,6 +23,12 @@ public class XMLNodeFactory {
 				return new XMLInteger();
 			}
 		});
+		put(BooleanDef.class, new Creator<XMLBoolean>() {
+			@Override
+			public XMLBoolean createNode(ChildDef childDef) {
+				return new XMLBoolean();
+			}
+		});
 		put(ListDef.class, new Creator<XMLList>() {
 			@Override
 			public XMLList createNode(ChildDef childDef) {

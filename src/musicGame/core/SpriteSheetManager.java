@@ -9,6 +9,7 @@ import org.newdawn.slick.util.Log;
 
 import musicGame.xml.CompoundDef;
 import musicGame.xml.ListDef;
+import musicGame.xml.XMLBoolean;
 import musicGame.xml.XMLCompound;
 import musicGame.xml.XMLDataParser;
 import musicGame.xml.XMLInteger;
@@ -25,12 +26,14 @@ public class SpriteSheetManager {
 	private static final String SHEET_NODE = "sheet";
 	private static final String WIDTH_NODE = "frameWidth";
 	private static final String HEIGHT_NODE = "frameHeight";
-	private static final String LENGTH_NODE = "frameLength";
 	private static final String SEQUENCES_NODE = "frameSequences";
 	
 	private static final String SEQUENCE_NODE = "sequence";
 	private static final String START_FRAME_NODE = "start";
 	private static final String END_FRAME_NODE = "end";
+	private static final String LENGTH_NODE = "frameLength";
+	private static final String LOOPING_NODE = "looping";
+	private static final String PING_PONG_NODE = "pingPong";
 	private final static ListDef SCHEMA = new ListDef(
 			TOP_NODE,
 			new CompoundDef(SPRITE_SHEET_NODE).addString(NAME_NODE)
@@ -42,6 +45,8 @@ public class SpriteSheetManager {
 					.addInteger(START_FRAME_NODE)
 					.addInteger(END_FRAME_NODE)
 					.addInteger(LENGTH_NODE)
+					.addBoolean(LOOPING_NODE)
+					.addBoolean(PING_PONG_NODE)
 					)
 			);
 	
@@ -97,7 +102,9 @@ public class SpriteSheetManager {
 									sheet,
 									sequence.<XMLInteger>getValue(LENGTH_NODE).value,
 									sequence.<XMLInteger>getValue(START_FRAME_NODE).value,
-									sequence.<XMLInteger>getValue(END_FRAME_NODE).value
+									sequence.<XMLInteger>getValue(END_FRAME_NODE).value,
+									sequence.<XMLBoolean>getValue(LOOPING_NODE).value,
+									sequence.<XMLBoolean>getValue(PING_PONG_NODE).value
 									));
 				}
 
@@ -111,7 +118,8 @@ public class SpriteSheetManager {
 		}
 	}
 	
-	private Animation createAnimation(SpriteSheet sheet, int length, int start, int end) throws SlickException {
+	private Animation createAnimation(SpriteSheet sheet, int length, int start, int end,
+			boolean looping, boolean pingPong) throws SlickException {
 		Animation anim = new Animation();
 		int horizontalCount = sheet.getHorizontalCount();
 		
@@ -119,6 +127,9 @@ public class SpriteSheetManager {
 			anim.addFrame(sheet.getSprite(i % horizontalCount, i / horizontalCount), length);
 		}
 		
+		anim.setAutoUpdate(false);
+		anim.setLooping(looping);
+		anim.setPingPong(pingPong);
 		return anim;
 	}
 }

@@ -45,7 +45,6 @@ public class PlayableCharacter extends Character {
 		verticalSpeed = 0;
 		horizontalSpeed = 0;
 		focus = MAX_FOCUS;
-		anim.setAutoUpdate(false);
 		pattern = new SynchedComboPattern();
 		pattern.addAction(0, 's');
 		pattern.addAction(1, 's');
@@ -68,10 +67,6 @@ public class PlayableCharacter extends Character {
 	@Override
 	public void setCanJump(boolean canJump) {
 		this.canJump = canJump;
-		
-		if (canJump) {
-			anim.setLooping(true);
-		}
 	}
 	
 	public float getFocus() {
@@ -122,7 +117,6 @@ public class PlayableCharacter extends Character {
 					canJump = false;
 					verticalSpeed = JUMP_SPEED;
 					anim.stop();
-					anim.setLooping(false);
 					anim = animSet.get("jump");
 					anim.start();
 				}

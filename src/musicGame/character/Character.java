@@ -29,7 +29,6 @@ public abstract class Character extends ComponentBase implements TileCollidable,
 		animSet = SpriteSheetManager.getInstance().getAnimationSet(getSheetName());
 		anim = animSet.get("idle");
 		rect = new musicGame.geometry.Rectangle(x, y - anim.getHeight(), anim.getWidth(), anim.getHeight());
-		anim.setLooping(true);
 		anim.stop();
 		anim.setCurrentFrame(0);
 	}

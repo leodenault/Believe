@@ -11,18 +11,24 @@
 				<start>0</start>
 				<end>0</end>
 				<frameLength>80</frameLength>
+				<looping>false</looping>
+				<pingPong>false</pingPong>
 			</sequence>
 			<sequence>
 				<name>move</name>
 				<start>10</start>
 				<end>19</end>
 				<frameLength>80</frameLength>
+				<looping>true</looping>
+				<pingPong>false</pingPong>
 			</sequence>
 			<sequence>
 				<name>jump</name>
 				<start>20</start>
 				<end>20</end>
 				<frameLength>80</frameLength>
+				<looping>false</looping>
+				<pingPong>false</pingPong>
 			</sequence>
 		</frameSequences>
 	</spriteSheet>
@@ -37,12 +43,16 @@
 				<start>0</start>
 				<end>2</end>
 				<frameLength>250</frameLength>
+				<looping>true</looping>
+				<pingPong>true</pingPong>
 			</sequence>
 			<sequence>
 				<name>punch</name>
 				<start>4</start>
 				<end>7</end>
 				<frameLength>100</frameLength>
+				<looping>false</looping>
+				<pingPong>true</pingPong>
 			</sequence>
 		</frameSequences>
 	</spriteSheet>
