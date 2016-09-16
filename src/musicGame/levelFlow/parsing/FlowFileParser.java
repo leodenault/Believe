@@ -9,8 +9,6 @@ import musicGame.levelFlow.parsing.FlowFileToken.FlowFileTokenType;
 import musicGame.levelFlow.parsing.exceptions.FlowComponentBuilderException;
 import musicGame.levelFlow.parsing.exceptions.FlowFileParserException;
 
-import org.newdawn.slick.SlickException;
-
 public class FlowFileParser {
 
 	private FlowFileTokenizer tokenizer;
@@ -26,7 +24,7 @@ public class FlowFileParser {
 		this.builder = builder;
 	}
 	
-	public void parse() throws IOException, FlowFileParserException, SlickException, FlowComponentBuilderException {
+	public void parse() throws IOException, FlowFileParserException, FlowComponentBuilderException {
 		this.currentToken = this.tokenizer.next();
 		this.parseConfig();
 		this.parseLevel();
@@ -37,7 +35,7 @@ public class FlowFileParser {
 	}
 	
 	protected void parseConfig()
-			throws IOException, FlowFileParserException, SlickException, FlowComponentBuilderException {
+			throws IOException, FlowFileParserException, FlowComponentBuilderException {
 		while (this.isConfigurationValue(this.currentToken)) {
 			this.parseKVPair(this.currentToken);
 		}
@@ -56,7 +54,7 @@ public class FlowFileParser {
 	}
 	
 	protected void parseKVPair(FlowFileToken configValue)
-			throws IOException, FlowFileParserException, SlickException, FlowComponentBuilderException {
+			throws IOException, FlowFileParserException, FlowComponentBuilderException {
 		int line = this.tokenizer.getLineNumber();
 		this.currentToken = this.tokenizer.next();
 		if (this.currentToken.tokenType() != FlowFileTokenType.EQUALS) {
@@ -102,7 +100,7 @@ public class FlowFileParser {
 	}
 	
 	private void setConfigurationValue(FlowFileToken key, List<String> value)
-			throws FlowFileParserException, SlickException, FlowComponentBuilderException {
+			throws FlowFileParserException, FlowComponentBuilderException {
 		switch(key.tokenType()) {
 			case SUBDIVISION_IMAGES:
 				this.builder.subdivisionImages(value);

@@ -6,16 +6,16 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import musicGame.levelFlow.Beat;
-import musicGame.levelFlow.FlowComponent;
-import musicGame.levelFlow.parsing.exceptions.FlowComponentBuilderException;
-import musicGame.levelFlow.parsing.exceptions.FlowFileParserException;
-
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.gui.GUIContext;
+
+import musicGame.levelFlow.Beat;
+import musicGame.levelFlow.FlowComponent;
+import musicGame.levelFlow.parsing.exceptions.FlowComponentBuilderException;
+import musicGame.levelFlow.parsing.exceptions.FlowFileParserException;
 
 public class FlowComponentBuilder {
 	
@@ -26,15 +26,33 @@ public class FlowComponentBuilder {
 	private static final int DEFAULT_FRAME_DURATION = 40;
 
 	private GUIContext container;
-	private Music song;
-	private List<Beat>[] beats;
-	private Animation[] beatAnimations;
+	private String song;
+	private List<BeatData>[] beats;
+	private List<String> subdivisionImageFiles;
 	private HashMap<Integer, Integer> indexTable;
 	private char[] inputKeys;
 	private int subdivisions;
 	private int laneWidth;
 	private int bpm;
 	private int offset;
+	
+	public class BeatData {
+		private int imageIndex;
+		private int position;
+		
+		public BeatData(int imageIndex, int position) {
+			this.imageIndex = imageIndex;
+			this.position = position;
+		}
+
+		public int getPosition() {
+			return position;
+		}
+
+		public Beat convertToBeat(Animation[] beatAnimations) {
+			return new Beat(container, beatAnimations[imageIndex], position);
+		}
+	}
 	
 	public FlowComponentBuilder(GUIContext container, int laneWidth) {
 		this.container = container;
@@ -44,25 +62,21 @@ public class FlowComponentBuilder {
 	}
 	
 	public FlowComponentBuilder subdivisionImages(List<String> values)
-			throws FlowComponentBuilderException, SlickException {
+			throws FlowComponentBuilderException {
 		if (values.isEmpty()) {
 			throw new FlowComponentBuilderException("Expected at least one value for subdivision images, got none");
 		}
-		this.beatAnimations = new Animation[values.size()];
-		this.subdivisions = (int)Math.pow(2, this.beatAnimations.length - 1);
-		for (int i = 0; i < this.beatAnimations.length; i++) {
-			SpriteSheet sheet = new SpriteSheet(values.get(i), DEFAULT_FRAME_WIDTH, DEFAULT_FRAME_HEIGHT);
-			this.beatAnimations[i] = new Animation(sheet, DEFAULT_FRAME_DURATION);
-		}
+		this.subdivisions = (int)Math.pow(2, values.size() - 1);
+		this.subdivisionImageFiles = values;
 		return this;
 	}
 	
-	public FlowComponentBuilder song(List<String> values) throws SlickException, FlowComponentBuilderException {
+	public FlowComponentBuilder song(List<String> values) throws FlowComponentBuilderException {
 		if (values.size() != 1) {
 			throw new FlowComponentBuilderException(
 					String.format("Expected one value for song, got %d", values.size()));
 		}
-		this.song = new Music(values.get(0));
+		this.song = values.get(0);
 		return this;
 	}
 	
@@ -82,7 +96,7 @@ public class FlowComponentBuilder {
 		}
 		this.beats = new List[this.inputKeys.length];
 		for (int i = 0; i < this.beats.length; i++) {
-			this.beats[i] = new LinkedList<Beat>();
+			this.beats[i] = new LinkedList<BeatData>();
 		}
 		return this;
 	}
@@ -132,7 +146,7 @@ public class FlowComponentBuilder {
 		int counter = 0;
 		while (counter < this.beats.length && parser.hasNext()) {
 			if (parser.next()) {
-				this.beats[counter].add(new Beat(this.container, this.beatAnimations[imageIndex], position));
+				this.beats[counter].add(new BeatData(imageIndex, position));
 			}
 			counter++;
 		}
@@ -146,28 +160,52 @@ public class FlowComponentBuilder {
 		}
 	}
 	
-	public FlowComponent buildFlowComponent() throws FlowComponentBuilderException {
+	public FlowComponent buildFlowComponent() throws FlowComponentBuilderException, SlickException {
 		List<String> missingFields = this.getMissingFields();
 		if (missingFields.size() > 0) {
 			this.generateError(missingFields);
 		}
-		FlowComponent component = new FlowComponent(this.container, this.song, this.inputKeys,
+		FlowComponent component = new FlowComponent(this.container, new Music(this.song), this.inputKeys,
 				this.inputKeys.length, this.laneWidth, this.subdivisions, this.bpm, this.offset);
 		component.addBeats(this.convertBeats());
 		return component;
 	}
 	
-	private Beat[][] convertBeats() {
-		Beat[][] converted = new Beat[this.beats.length][];
+	public int getBpm() {
+		return bpm;
+	}
+	
+	public int getOffset() {
+		return offset;
+	}
+	
+	public int getSubdivisions() {
+		return subdivisions;
+	}
+	
+	public char[] getInputKeys() {
+		return inputKeys;
+	}
+	
+	public List<BeatData>[] getBeats() {
+		return beats;
+	}
+	
+	private Beat[][] convertBeats() throws SlickException {
+		Animation[] beatAnimations = fetchBeatAnimations();
+		Beat[][] converted = new Beat[beats.length][];
 		for (int i = 0; i < converted.length; i++) {
-			converted[i] = this.beats[i].toArray(new Beat[this.beats[i].size()]);
+			converted[i] = new Beat[beats[i].size()];
+			for (int j = 0; j < converted[i].length; j++) {
+				converted[i][j] = beats[i].get(j).convertToBeat(beatAnimations);
+			}
 		}
 		return converted;
 	}
 	
 	private List<String> getMissingFields() {
 		List<String> fields = new LinkedList<String>();
-		if (this.beatAnimations == null) {
+		if (this.subdivisionImageFiles == null) {
 			fields.add("SubdivisionImages");
 		}
 		if (this.song == null) {
@@ -199,8 +237,17 @@ public class FlowComponentBuilder {
 		}
 	}
 	
+	private Animation[] fetchBeatAnimations() throws SlickException {
+		Animation[] beatAnimations = new Animation[subdivisionImageFiles.size()];
+		for (int i = 0; i < beatAnimations.length; i++) {
+			SpriteSheet sheet = new SpriteSheet(subdivisionImageFiles.get(i), DEFAULT_FRAME_WIDTH, DEFAULT_FRAME_HEIGHT);
+			beatAnimations[i] = new Animation(sheet, DEFAULT_FRAME_DURATION);
+		}
+		return beatAnimations;
+	}
+	
 	protected int getImageIndex(int position) throws FlowComponentBuilderException {
-		if (this.beatAnimations == null) {
+		if (this.subdivisionImageFiles == null) {
 			throw new FlowComponentBuilderException("Tried to add beats, but the subdivision images haven't been defined");
 		}
 		
@@ -209,7 +256,7 @@ public class FlowComponentBuilder {
 			return 0;
 		}
 		else if (index % 2 == 1) {
-			return this.beatAnimations.length - 1;
+			return this.subdivisionImageFiles.size() - 1;
 		}
 		else {
 			return this.recursiveGetImageIndex(index, this.subdivisions / 2, this.subdivisions / 2, 1);

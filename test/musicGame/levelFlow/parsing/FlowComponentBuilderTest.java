@@ -6,8 +6,6 @@ import static org.junit.Assert.assertThat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import musicGame.levelFlow.parsing.exceptions.FlowComponentBuilderException;
-
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.jmock.lib.concurrent.Synchroniser;
@@ -15,7 +13,10 @@ import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
+
+import musicGame.levelFlow.parsing.exceptions.FlowComponentBuilderException;
 
 public class FlowComponentBuilderTest {
 	
@@ -36,7 +37,7 @@ public class FlowComponentBuilderTest {
 
 	@Test(expected=FlowComponentBuilderException.class)
 	public void buildFlowComponentShouldThrowFlowComponentBuilderExceptionIfValuesAreMissing()
-			throws FlowComponentBuilderException {
+			throws FlowComponentBuilderException, SlickException {
 		this.builder.buildFlowComponent();
 	}
 
