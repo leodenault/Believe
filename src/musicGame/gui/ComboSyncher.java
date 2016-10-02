@@ -20,12 +20,15 @@ import musicGame.core.SynchedComboPattern.TimeKeyPair;
 import musicGame.levelFlow.FlowComponentListener;
 
 public class ComboSyncher extends ComponentBase implements Layerable {
-	protected static final float BUFFER_TIME = 2.5f; // In seconds
-	
-	private static final float ERROR_LENGTH = 0.15f; // In seconds
 	private static final Color NOT_ACTIVATED = new Color(0xffffff);
 	private static final Color SUCCESS = new Color(0x00ff00);
 	private static final Color MISSED = new Color(0xff0000);
+	private static final Color BAR_PULSE = new Color(0xffffff);
+	private static final Color BAR_NORMAL = new Color(0x0000ff);
+	
+	// Visible for testing
+	protected static final float ERROR_LENGTH = 0.15f; // In seconds
+	protected static final float BUFFER_TIME = 2.5f; // In seconds
 	
 	private final TrueTypeFont font;
 	
@@ -115,9 +118,26 @@ public class ComboSyncher extends ComponentBase implements Layerable {
 			g.fill(rect);
 			
 			g.setLineWidth(1f);
-			g.setColor(new Color(0x0000ff));
-			for (int i = 0; i < actions.size(); i++) {
+			for (int i = 0; i < actions.get(actions.size() - 1).time + 1; i++) {
 				float x = (actionSectionWidth * i / max) + startWidth + rect.getX();
+				float trackerX = tracker.getX();
+				float pulseLength = 4 * errorWidth;
+				float start = x - pulseLength;
+				float end = x + pulseLength;
+				if (trackerX >= start && trackerX < end) {
+					float relPosSq = (float)Math.pow(trackerX - x, 2);
+					float pulseLengthSq = (float)Math.pow(pulseLength, 2);
+					float progress = 1 + (relPosSq / (3 * pulseLengthSq))
+							* (((4 * relPosSq) / pulseLengthSq) - 7);
+					Color pulseColour = new Color(BAR_PULSE);
+					Color normalColour = new Color(BAR_NORMAL);
+					pulseColour.scale(progress);
+					normalColour.scale(1 - progress);
+					pulseColour.add(normalColour);
+					g.setColor(pulseColour);
+				} else {
+					g.setColor(BAR_NORMAL);
+				}
 				g.drawLine(x, rect.getY(), x, rect.getMaxY());
 			}
 			
@@ -211,8 +231,8 @@ public class ComboSyncher extends ComponentBase implements Layerable {
 	}
 
 	@Override
-	public void renderComponent(GUIContext context, Graphics g, float xMin,
-			float xMax) throws SlickException {
+	public void renderComponent(
+			GUIContext context, Graphics g, float xMin, float xMax) throws SlickException {
 		renderComponent(context, g);
 	}
 
