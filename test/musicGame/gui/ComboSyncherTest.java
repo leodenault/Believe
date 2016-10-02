@@ -1,6 +1,7 @@
 package musicGame.gui;
 
 import static musicGame.gui.ComboSyncher.BUFFER_TIME;
+import static musicGame.gui.ComboSyncher.ERROR_LENGTH;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -63,14 +64,10 @@ public class ComboSyncherTest {
 				+ BUFFER_TIME + (beat * SECONDS_IN_BEAT);
 	}
 	
-	private float computeLength(float musicPosition, float beat) {
-		return computeUpToBeat(musicPosition, beat) + BUFFER_TIME;
-	}
-	
 	@Test
 	public void updateNotifiesEndOfCombo() {
 		final float musicStart = 2.3f;
-		final float comboLength = computeLength(musicStart, LAST_BEAT);
+		final float comboLength = computeUpToBeat(musicStart, LAST_BEAT) + BUFFER_TIME;
 		
 		mockery.checking(new Expectations() {{
 			oneOf(music).getPosition(); will(returnValue(musicStart));
@@ -134,4 +131,34 @@ public class ComboSyncherTest {
 		combo.keyPressed(0, FIRST_KEY);
 	}
 
+	@Test
+	public void beatsLandOnCorrectTime() {
+		final float lengthToFirstBeat = computeUpToBeat(0, FIRST_BEAT);
+		final float lengthToSecondBeat = computeUpToBeat(0, SECOND_BEAT);
+		// Remove 0.01 since it's not quite exact
+		final float error = ERROR_LENGTH + 0.01f;
+		mockery.checking(new Expectations() {{
+			oneOf(music).getPosition(); will(returnValue(0f));
+			oneOf(music).getPosition(); will(returnValue(lengthToFirstBeat - error));
+			oneOf(music).getPosition(); will(returnValue(lengthToFirstBeat));
+			oneOf(music).getPosition(); will(returnValue(lengthToSecondBeat - error));
+			oneOf(music).getPosition(); will(returnValue(lengthToSecondBeat + error));
+			oneOf(listener).beatFailed();
+			oneOf(listener).beatSuccess(0);
+			oneOf(listener).beatFailed();
+			oneOf(listener).beatMissed();
+		}});
+		combo.start(music);
+		// Hit before first beat
+		combo.update();
+		combo.keyPressed(0, FIRST_KEY);
+		// Hit right on first beat
+		combo.update();
+		combo.keyPressed(0, FIRST_KEY);
+		// Hit before second beat
+		combo.update();
+		combo.keyPressed(0, SECOND_KEY);
+		// Miss second beat
+		combo.update();
+	}
 }
