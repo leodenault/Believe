@@ -101,7 +101,8 @@
 		<mkdir dir="${outDir}/customSongs" />
 		<mkdir dir="${outDir}/lib"/>
 		<copy todir="${outDir}/lib/native">
-			<fileset dir="lib/native" excludes="OpenAL32.dll OpenAL64.dll libopenal.so libopenal64.so" />
+			<fileset dir="lib/native"
+				excludes="OpenAL32.dll OpenAL64.dll libopenal.so libopenal64.so openal.dylib" />
 		</copy>
 		<copy todir="${outDir}/lib">
 			<fileset dir="lib" includes="*.jar"/>
@@ -111,6 +112,7 @@
 			<fileset file="lib/native/OpenAL64.dll" />
 			<fileset file="lib/native/libopenal.so" />
 			<fileset file="lib/native/libopenal64.so" />
+			<fileset file="lib/native/openal.dylib" />
 		</copy>
 		<copy todir="${outDir}/customFlowFiles">
 			<fileset dir="customFlowFiles" includes="*.lfl"/>

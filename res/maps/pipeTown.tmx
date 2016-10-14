@@ -19,34 +19,34 @@
   <properties>
    <property name="collision" value=""/>
   </properties>
-  <data encoding="base64" compression="zlib">
-   eJzt1bENgDAQBEG34P6bJSWACCNbqxnp8k9WPwYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMBZ5u4DgKWemtY5tOgc+nQOfTqHPp1Dn86hT+fQp3Po0zn06Rz6dA59Ooc+nUPfH53P24D9/HPo+9q53w3n88+hT+fQ99a5mbUGAHRcg9YTQw==
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3VsQ2AMBAEQbfg/pslJYAII1urGenyT1Y/BgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwFnm7gOApZ6a1jm06Bz6dA59Ooc+nUOfzqFP59Cnc+jTOfTpHPp0Dn06hz6dQ98fnc/bgP38c+j72rnfDefzz6FP59D31rmZtQYAdFx0aBeYUMMAAA==
   </data>
  </layer>
  <layer name="Back Ridge" width="250" height="50">
-  <data encoding="base64" compression="zlib">
-   eJztyrEJAAAIwDA3/f9ivUIUEujWCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA2JFTeTye9w8AAHBfA2iqAZY=
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3KsQkAAAjAMDf9/2K9QhQS6NYIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADYkVN5PJ73DwAAcF8DnU61AFDDAAA=
   </data>
  </layer>
  <layer name="Pipe" width="250" height="50">
-  <data encoding="base64" compression="zlib">
-   eJztw6ENAEAIBDAQiBe//7osgbq0SasAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOBOq/FHjf/U+F+Nv1ZWG1k=
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3DoQ0AQAgEMBCIF7//uiyBurRJqwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4E6r8UeN/9T4X42/dt+IC1DDAAA=
   </data>
  </layer>
  <layer name="Enemies" width="250" height="50">
   <properties>
    <property name="enemies" value=""/>
   </properties>
-  <data encoding="base64" compression="zlib">
-   eJztzgENAAAIA6BXsH9ZY1w3SEACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/TDsAAAAAhy3GFwAS
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3OAQ0AAAgDoFewf1ljXDdIQAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP9MOwAAAACHLeIBfPZQwwAA
   </data>
  </layer>
  <layer name="Front" width="250" height="50">
   <properties>
    <property name="front" value=""/>
   </properties>
-  <data encoding="base64" compression="zlib">
-   eJzt1UEKwyAUBFBp0y6yyP2P49HaZSihKG2iDO+BGxm/bgZLAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAmMtaSh39BuB/1uO9evU7gPPoOeTTc8in55BPzyGfnkM+PYd8eg759Bzy6Tnk03PIp+eQT88h3xk9f+wWMJ7/HPL92nN/N8zPfw75enp+a5gnIyMzX6an58+GO2RkZObL9PT8M3t/r6VhnjnmmDNuzpe9enR+a7hDRkZmvsy+5y+7ThYS
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3VsQqDMBiFUWmtQ4e+/+Nqt1AcEqzk53IOuMht7PKRZQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKjlPfsPAH911rTOIYvOIZ/OIZ/OIZ/OIZ/OIZ/OIZ/OIZ/OIZ/OIZ/OIZ/OIZ/OId8dnb+aB5jPfQ75rnbu7ob63OeQb6TzR8d5NjY29TYjnW8d37Cxsam3Gen89/3zeNbO3zrHOc6Zc87Iu69PxzdsbGzqbdqmd7eHyQBQwwAA
   </data>
  </layer>
 </map>

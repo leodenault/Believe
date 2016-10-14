@@ -13,4 +13,8 @@ public class Music extends org.newdawn.slick.Music {
 	public int getBpm() {
 		return bpm;
 	}
+	
+	public boolean paused() {
+		return !playing() && getPosition() > 0;
+	}
 }
