@@ -18,6 +18,11 @@
 			<include name="*.jar" />
 		</fileset>
 	</path>
+	<path id="mockito-classpath">
+		<fileset dir="lib/mockito-1.10.19">
+			<include name="*.jar" />
+		</fileset>
+	</path>
 	<path id="junit-classpath">
 		<fileset dir="lib/junit">
 			<include name="*.jar" />
@@ -61,6 +66,7 @@
 		<mkdir dir="${testClasses}" />
 		<javac srcdir="test" destdir="${testClasses}" extdirs="lib">
 			<classpath refid="jmock-classpath" />
+			<classpath refid="mockito-classpath" />
 			<classpath refid="junit-classpath" />
 			<classpath path="${binaries}" />
 		</javac>
@@ -129,6 +135,7 @@
 
 			<classpath path="${testClasses}" />
 			<classpath refid="jmock-classpath" />
+			<classpath refid="mockito-classpath" />
 			<classpath refid="junit-classpath" />
 			<classpath refid="externalLibs-classpath" />
 			<classpath path="${binaries}" />
