@@ -8,7 +8,7 @@ import musicGame.physics.TileCollisionHandler.TileCollidable;
 public class TileCollisionHandler implements CollisionHandler<TileCollidable> {
 	
 	public interface TileCollidable extends Collidable, GravityObject {
-		void setCanJump(boolean canJump);
+		void landed();
 	}
 	
 	@Override
@@ -38,7 +38,7 @@ public class TileCollisionHandler implements CollisionHandler<TileCollidable> {
 					caller.setVerticalSpeed(0);
 
 					if (!down) {
-						caller.setCanJump(true);
+						caller.landed();
 					}
 				}
 			}
