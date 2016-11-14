@@ -24,13 +24,13 @@ public class EntityStateMachineTest {
 	
 	@Mock private Function<Void, State> callback;
 	
-	private EntityStateMachine<Action, State> machine;
+	private EntityStateMachine<Action, State, Void> machine;
 	
 	@SuppressWarnings("serial")
 	@Before
 	public void setUp() {
 		initMocks(this);
-		machine = new EntityStateMachine<Action, State>(
+		machine = new EntityStateMachine<Action, State, Void>(
 				new HashMap<State, Map<Action, Function<Void, State>>>() {{
 					put(State.STATE_1, new HashMap<Action, Function<Void, State>>() {{
 						put(Action.ACTION_2, callback);

@@ -37,7 +37,7 @@ public class EnemyCharacter extends Character {
 	}
 	
 	@Override
-	public void setCanJump(boolean canJump) {}
+	public void landed() {}
 
 	@Override
 	public float getVerticalSpeed() {
