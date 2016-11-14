@@ -14,7 +14,6 @@ import org.newdawn.slick.gui.GUIContext;
 
 import musicGame.core.Camera;
 import musicGame.core.EntityStateMachine;
-import musicGame.core.MovementDirection;
 import musicGame.core.Music;
 import musicGame.core.SynchedComboPattern;
 import musicGame.physics.DamageHandler.Faction;
@@ -207,7 +206,6 @@ public class PlayableCharacter extends Character {
 	@Override
 	public void keyReleased(int key, char c) {
 		super.keyReleased(key, c);
-		horizontalSpeed -= MovementDirection.directionForKey(key).getValue() * Camera.SCROLL_SPEED;
 		Action action = null;
 		switch (key) {
 			case Input.KEY_LEFT:
