@@ -99,7 +99,8 @@ public class PlatformingState extends GameStateBase implements PausableState, Sy
 
 	public void setUp() throws SlickException {
 		map = mapManager.getMap("pipeTown", container);
-		player = new PlayableCharacter(container, music, map.getPlayerStartX(), map.getPlayerStartY());
+		player = new PlayableCharacter(
+				container, music, false, map.getPlayerStartX(), map.getPlayerStartY());
 		player.addComboListener(this);
 		mapContainer = new PlayArea(container, map, player);
 		focusBar.setText("Focus");
@@ -114,6 +115,7 @@ public class PlatformingState extends GameStateBase implements PausableState, Sy
 		physics = PhysicsManager.getInstance();
 		physics.reset();
 		physics.addStaticCollidables(map.getCollidableTiles());
+		physics.addStaticCollidables(map.getCommands());
 		List<EnemyCharacter> enemies = map.getEnemies();
 		physics.addCollidables(enemies);
 		physics.addCollidable(player);

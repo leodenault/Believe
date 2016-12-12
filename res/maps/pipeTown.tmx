@@ -15,6 +15,37 @@
  <tileset firstgid="17" name="Collision" tilewidth="32" tileheight="32">
   <image source="tilesets/collision.png" width="32" height="32"/>
  </tileset>
+ <tileset firstgid="18" name="Commands" tilewidth="32" tileheight="32">
+  <image source="tilesets/commands.png" width="64" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="command" value="right"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="command" value="left"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="command" value="stop"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="command" value="jump"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Commands" width="250" height="50">
+  <properties>
+   <property name="commands" value=""/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3WsQ0AIAgAQWcwuv+qjqAGo5LctTRPBaUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUf11AACwxe0GAIB76mSe6T//qfWnlpMy7pWxeVV7HQAAAIQMNfFH/lDDAAA=
+  </data>
+ </layer>
  <layer name="Collision" width="250" height="50">
   <properties>
    <property name="collision" value=""/>

@@ -4,35 +4,59 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.util.Log;
 
+import musicGame.character.EnemyCharacter;
+
 public class MapProperties {
-	private static final int EMPTY_TILE = 0;
+	public interface MapEntityGenerator<T> {
+		T generateMapEntity(
+				TiledMap map,
+				GUIContext container,
+				int tileId,
+				int x,
+				int y,
+				int tileWidth,
+				int tileHeight, int layer)
+						throws SlickException;
+	}
+	
 	private static final String NUMBER_DEFAULT = "0";
 	
-	protected static final String NO_PROP_DEFAULT = "nonexistent";
+	protected static final String INVALID_PROP = "invalid";
 	protected static final String FRONT = "front";
 	protected static final String COLLISION = "collision";
 	protected static final String ENEMIES = "enemies";
+	protected static final String COMMANDS = "commands";
+
+	private static final List<String> INVISIBLE_LAYERS =
+			Arrays.asList(COLLISION, ENEMIES, COMMANDS);
 	
-	private static final List<String> INVISIBLE_LAYERS = Arrays.asList(COLLISION, ENEMIES);
+	public static final int EMPTY_TILE = 0;
 	
 	public int startX;
 	public int startY;
 	public List<Tile> collidableTiles;
-	public List<Tile> enemies;
+	public List<EnemyCharacter> enemies;
+	public List<Command> commands;
 	public List<Integer> rearLayers;
 	public List<Integer> frontLayers;
 	
 	protected MapProperties() {}
 	
-	public static MapProperties create(TiledMap map) {
+	public static MapProperties create(TiledMap map, GUIContext container) throws SlickException {
 		MapProperties properties = new MapProperties();
 		properties.startX = fetchNumber(map, "playerStartX", NUMBER_DEFAULT);
 		properties.startY = fetchNumber(map, "playerStartY", NUMBER_DEFAULT);
-		properties.collidableTiles = fetchTilesInLayerWithProperty(map, COLLISION);
-		properties.enemies = fetchTilesInLayerWithProperty(map, ENEMIES);
+		properties.collidableTiles = fetchEntitiesInLayerWithProperty(
+				map, container, COLLISION, new Tile.Generator());
+		properties.enemies = fetchEntitiesInLayerWithProperty(
+				map, container, ENEMIES, new EnemyCharacter.Generator());
+		properties.commands = fetchEntitiesInLayerWithProperty(
+				map, container, COMMANDS, new Command.Generator());
 		fetchLayers(map, properties);
 		return properties;
 	}
@@ -51,27 +75,30 @@ public class MapProperties {
 		return value;
 	}
 	
-	private static List<Tile> fetchTilesInLayerWithProperty(TiledMap map, String property) {
-		List<Tile> tiles = new LinkedList<Tile>();
+	private static <T> List<T> fetchEntitiesInLayerWithProperty(
+			TiledMap map, GUIContext container, String property, MapEntityGenerator<T> generator)
+					throws SlickException {
+		List<T> entities = new LinkedList<T>();
 		for (int i = 0; i < map.getLayerCount(); i++) {
-			String prop = map.getLayerProperty(i, property, NO_PROP_DEFAULT);
-			if (!prop.equals(NO_PROP_DEFAULT)) {
+			String prop = map.getLayerProperty(i, property, INVALID_PROP);
+			if (!prop.equals(INVALID_PROP)) {
 				int tileWidth = map.getTileWidth();
 				int tileHeight = map.getTileHeight();
 				
 				for (int x = 0; x < map.getWidth(); x++) {
 					for (int y = 0; y < map.getHeight(); y++) {
-						if (map.getTileId(x, y, i) != EMPTY_TILE) {
-							Tile tile = new Tile(x, y, tileWidth, tileHeight);
-							tiles.add(tile);
-							findNeighbours(map, tile, x, y, i);
+						int tileId = map.getTileId(x, y, i);
+						if (tileId != EMPTY_TILE) {
+							T entity = generator.generateMapEntity(
+									map, container, tileId, x, y, tileWidth, tileHeight, i);
+							entities.add(entity);
 						}
 					}
 				}
 			}
 		
 		}
-		return tiles;
+		return entities;
 	}
 	
 	protected static void fetchLayers(TiledMap map, MapProperties properties) {
@@ -80,8 +107,8 @@ public class MapProperties {
 		
 		for (int i = 0; i < map.getLayerCount(); i++) {
 			if (!isInvisible(map, i)) {
-				String prop = map.getLayerProperty(i, FRONT, NO_PROP_DEFAULT);
-				if (prop.equals(NO_PROP_DEFAULT)) {
+				String prop = map.getLayerProperty(i, FRONT, INVALID_PROP);
+				if (prop.equals(INVALID_PROP)) {
 						rearLayers.add(i);
 				} else {
 					frontLayers.add(i);
@@ -95,30 +122,12 @@ public class MapProperties {
 	
 	private static boolean isInvisible(TiledMap map, int layer) {
 		for (String property : INVISIBLE_LAYERS) {
-			String value = map.getLayerProperty(layer, property, NO_PROP_DEFAULT);
-			if (!value.equals(NO_PROP_DEFAULT)) {
+			String value = map.getLayerProperty(layer, property, INVALID_PROP);
+			if (!value.equals(INVALID_PROP)) {
 				return true;
 			}
 		}
 		
 		return false;
-	}
-	
-	private static void findNeighbours(TiledMap map, Tile tile, int x, int y, int layer) {
-		if (x > 0 && map.getTileId(x - 1, y, layer) != EMPTY_TILE) {
-			tile.setLeftNeighbour(true);
-		}
-		
-		if (x + 1 < map.getWidth() && map.getTileId(x + 1, y, layer) != EMPTY_TILE) {
-			tile.setRightNeighbour(true);
-		}
-		
-		if (y > 0 && map.getTileId(x, y - 1, layer) != EMPTY_TILE) {
-			tile.setTopNeighbour(true);
-		}
-		
-		if (y + 1 < map.getHeight() && map.getTileId(x, y + 1, layer) != EMPTY_TILE) {
-			tile.setBottomNeighbour(true);
-		}
 	}
 }

@@ -3,13 +3,32 @@ package musicGame.character;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
+import org.newdawn.slick.tiled.TiledMap;
 
 import musicGame.core.Timer;
+import musicGame.map.MapProperties.MapEntityGenerator;
 import musicGame.physics.DamageBox;
 import musicGame.physics.DamageHandler.Faction;
 import musicGame.physics.PhysicsManager;
 
 public class EnemyCharacter extends Character {
+	public static class Generator implements MapEntityGenerator<EnemyCharacter> {
+		@Override
+		public EnemyCharacter generateMapEntity(
+				TiledMap map,
+				GUIContext container,
+				int tileId,
+				int x,
+				int y,
+				int tileWidth,
+				int tileHeight,
+				int layer)
+						throws SlickException {
+			return new EnemyCharacter(container, x * tileWidth, (y + 1) * tileHeight /* Assumes that
+			enemy height is x2 that of a tile, and the tile is placed where the enemy's feet are.
+			TODO: Fix this crappy assumption. */);
+		}
+	}
 
 	private static final int PUNCH_PERIOD = 1500; // Period in ms
 	

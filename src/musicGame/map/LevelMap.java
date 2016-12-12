@@ -7,12 +7,10 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.tiled.TiledMap;
-import org.newdawn.slick.util.Log;
 
 import musicGame.character.Character;
 import musicGame.character.EnemyCharacter;
 import musicGame.core.Camera.Layerable;
-import musicGame.geometry.Rectangle;
 import musicGame.gui.ComponentBase;
 
 public class LevelMap extends ComponentBase implements Layerable {
@@ -25,23 +23,18 @@ public class LevelMap extends ComponentBase implements Layerable {
 	private List<EnemyCharacter> enemies;
 	private List<MapBackground> backgrounds;
 
-	public LevelMap(GUIContext container, String location, String tileSetLocation) throws SlickException {
+	public LevelMap(GUIContext container, String location, String tileSetLocation)
+			throws SlickException {
 		super(container, 0, 0);
 		map = new TiledMap(location, tileSetLocation);
-		properties = MapProperties.create(map);
-		enemies = generateEnemies(properties.enemies);
+		properties = MapProperties.create(map, container);
+		enemies = properties.enemies;
 		rect.setSize(map.getWidth() * map.getTileWidth(), map.getHeight() * map.getTileHeight());
 		backgrounds = new LinkedList<MapBackground>();
 	}
 	
 	public void reset() {
 		setLocation(0, 0);
-		// TODO: Find a way to avoid this block
-		try {
-			enemies = generateEnemies(properties.enemies);
-		} catch (SlickException e) {
-			Log.error("There was an error re-generating enemies");
-		}
 	}
 	
 	public int getPlayerStartX() {
@@ -58,6 +51,10 @@ public class LevelMap extends ComponentBase implements Layerable {
 	
 	public List<EnemyCharacter> getEnemies() {
 		return enemies;
+	}
+	
+	public List<Command> getCommands() {
+		return properties.commands;
 	}
 	
 	/**
@@ -115,16 +112,5 @@ public class LevelMap extends ComponentBase implements Layerable {
 		for (Integer layer : properties.frontLayers) {
 			map.render(getX(), getY(), layer);
 		}
-	}
-	
-	private List<EnemyCharacter> generateEnemies(List<Tile> enemyTiles) throws SlickException {
-		List<EnemyCharacter> enemies = new LinkedList<EnemyCharacter>();
-		
-		for (Tile enemyTile : enemyTiles) {
-			Rectangle rect = enemyTile.getRect();
-			enemies.add(new EnemyCharacter(container, (int)rect.getX(), (int)rect.getMaxY()));
-		}
-		
-		return enemies;
 	}
 }

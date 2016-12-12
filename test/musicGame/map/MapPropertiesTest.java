@@ -1,9 +1,10 @@
 package musicGame.map;
 
 import static musicGame.map.MapProperties.COLLISION;
+import static musicGame.map.MapProperties.COMMANDS;
 import static musicGame.map.MapProperties.ENEMIES;
 import static musicGame.map.MapProperties.FRONT;
-import static musicGame.map.MapProperties.NO_PROP_DEFAULT;
+import static musicGame.map.MapProperties.INVALID_PROP;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
@@ -40,18 +41,18 @@ public class MapPropertiesTest {
 	public void fetchLayersShouldPlaceLayersWithFrontPropertyInFront() {
 		mockery.checking(new Expectations() {{
 			exactly(7).of(map).getLayerCount(); will(returnValue(6));
-			exactly(12).of(map).getLayerProperty(
+			exactly(18).of(map).getLayerProperty(
 					with(any(Integer.class)),
-					with(anyOf(equalTo(COLLISION), equalTo(ENEMIES))),
-					with(equalTo(NO_PROP_DEFAULT)));
-			will(returnValue(NO_PROP_DEFAULT));
+					with(anyOf(equalTo(COLLISION), equalTo(ENEMIES), equalTo(COMMANDS))),
+					with(equalTo(INVALID_PROP)));
+			will(returnValue(INVALID_PROP));
 
-			oneOf(map).getLayerProperty(0, FRONT, NO_PROP_DEFAULT); will(returnValue(NO_PROP_DEFAULT));
-			oneOf(map).getLayerProperty(1, FRONT, NO_PROP_DEFAULT); will(returnValue(FRONT));
-			oneOf(map).getLayerProperty(2, FRONT, NO_PROP_DEFAULT); will(returnValue(FRONT));
-			oneOf(map).getLayerProperty(3, FRONT, NO_PROP_DEFAULT); will(returnValue(NO_PROP_DEFAULT));
-			oneOf(map).getLayerProperty(4, FRONT, NO_PROP_DEFAULT); will(returnValue(NO_PROP_DEFAULT));
-			oneOf(map).getLayerProperty(5, FRONT, NO_PROP_DEFAULT); will(returnValue(FRONT));
+			oneOf(map).getLayerProperty(0, FRONT, INVALID_PROP); will(returnValue(INVALID_PROP));
+			oneOf(map).getLayerProperty(1, FRONT, INVALID_PROP); will(returnValue(FRONT));
+			oneOf(map).getLayerProperty(2, FRONT, INVALID_PROP); will(returnValue(FRONT));
+			oneOf(map).getLayerProperty(3, FRONT, INVALID_PROP); will(returnValue(INVALID_PROP));
+			oneOf(map).getLayerProperty(4, FRONT, INVALID_PROP); will(returnValue(INVALID_PROP));
+			oneOf(map).getLayerProperty(5, FRONT, INVALID_PROP); will(returnValue(FRONT));
 		}});
 		
 		MapProperties.fetchLayers(map, properties);
@@ -62,28 +63,34 @@ public class MapPropertiesTest {
 	@Test
 	public void fetchLayersShouldIgnoreInvisibleLayers() {
 		mockery.checking(new Expectations() {{
-			exactly(5).of(map).getLayerCount(); will(returnValue(4));
-			oneOf(map).getLayerProperty(0, COLLISION, NO_PROP_DEFAULT); will(returnValue(COLLISION));
-			oneOf(map).getLayerProperty(1, ENEMIES, NO_PROP_DEFAULT); will(returnValue(ENEMIES));
+			exactly(6).of(map).getLayerCount(); will(returnValue(5));
+			oneOf(map).getLayerProperty(0, COLLISION, INVALID_PROP); will(returnValue(COLLISION));
+			oneOf(map).getLayerProperty(1, ENEMIES, INVALID_PROP); will(returnValue(ENEMIES));
+			oneOf(map).getLayerProperty(2, COMMANDS, INVALID_PROP); will(returnValue(COMMANDS));
 
-			exactly(3).of(map).getLayerProperty(
+			exactly(4).of(map).getLayerProperty(
 					with(any(Integer.class)),
 					with(equalTo(COLLISION)),
-					with(equalTo(NO_PROP_DEFAULT)));
-			will(returnValue(NO_PROP_DEFAULT));
-			exactly(2).of(map).getLayerProperty(
+					with(equalTo(INVALID_PROP)));
+			will(returnValue(INVALID_PROP));
+			exactly(3).of(map).getLayerProperty(
 					with(any(Integer.class)),
 					with(equalTo(ENEMIES)),
-					with(equalTo(NO_PROP_DEFAULT)));
-			will(returnValue(NO_PROP_DEFAULT));
+					with(equalTo(INVALID_PROP)));
+			will(returnValue(INVALID_PROP));
+			exactly(2).of(map).getLayerProperty(
+					with(any(Integer.class)),
+					with(equalTo(COMMANDS)),
+					with(equalTo(INVALID_PROP)));
+			will(returnValue(INVALID_PROP));
 
-			oneOf(map).getLayerProperty(2, FRONT, NO_PROP_DEFAULT); will(returnValue(FRONT));
-			oneOf(map).getLayerProperty(3, FRONT, NO_PROP_DEFAULT); will(returnValue(NO_PROP_DEFAULT));
+			oneOf(map).getLayerProperty(3, FRONT, INVALID_PROP); will(returnValue(FRONT));
+			oneOf(map).getLayerProperty(4, FRONT, INVALID_PROP); will(returnValue(INVALID_PROP));
 		}});
 		
 		MapProperties.fetchLayers(map, properties);
-		assertThat(properties.frontLayers, contains(2));
-		assertThat(properties.rearLayers, contains(3));
+		assertThat(properties.frontLayers, contains(3));
+		assertThat(properties.rearLayers, contains(4));
 	}
 
 }

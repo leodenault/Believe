@@ -16,7 +16,9 @@ import musicGame.core.Camera;
 import musicGame.core.EntityStateMachine;
 import musicGame.core.Music;
 import musicGame.core.SynchedComboPattern;
+import musicGame.physics.Collidable;
 import musicGame.physics.CommandCollidable;
+import musicGame.physics.CommandCollisionHandler;
 import musicGame.physics.DamageHandler.Faction;
 
 public class PlayableCharacter extends Character implements  CommandCollidable {
@@ -119,6 +121,7 @@ public class PlayableCharacter extends Character implements  CommandCollidable {
 			}});
 	}});
 	
+	private boolean onRails;
 	private int direction;
 	private float verticalSpeed;
 	private float horizontalSpeed;
@@ -126,9 +129,12 @@ public class PlayableCharacter extends Character implements  CommandCollidable {
 	private SynchedComboPattern pattern;
 	private List<SynchedComboListener> comboListeners;
 	private EntityStateMachine<Action, State, Integer> machine;
+	private CommandCollisionHandler commandHandler;
 	
-	public PlayableCharacter(GUIContext container, Music music, int x, int y) throws SlickException {
+	public PlayableCharacter(GUIContext container, Music music, boolean onRails, int x, int y)
+			throws SlickException {
 		super(container, x, y);
+		this.onRails = onRails;
 		direction = 1;
 		verticalSpeed = 0;
 		horizontalSpeed = 0;
@@ -141,6 +147,7 @@ public class PlayableCharacter extends Character implements  CommandCollidable {
 		pattern.addAction(3, 'a');
 		comboListeners = new LinkedList<SynchedComboListener>();
 		machine = new EntityStateMachine<>(TRANSITIONS, State.GROUNDED_STATIONARY);
+		commandHandler = new CommandCollisionHandler();
 	}
 	
 	@Override
@@ -176,30 +183,40 @@ public class PlayableCharacter extends Character implements  CommandCollidable {
 	}
 
 	@Override
+	public void collision(Collidable other) {
+		super.collision(other);
+		if (onRails) {
+			commandHandler.handleCollision(this, other);
+		}
+	}
+
+	@Override
 	public void keyPressed(int key, char c) {
 		super.keyPressed(key, c);
-		Action action = null;
-		switch (key) {
-			case Input.KEY_LEFT:
-				action = machine.getCurrentState().movingRight() ?
-						Action.STOP : Action.SELECT_LEFT;
-				break;
-			case Input.KEY_RIGHT:
-				action = machine.getCurrentState().movingLeft() ?
-						Action.STOP : Action.SELECT_RIGHT;
-				break;
-			case Input.KEY_SPACE:
-				action = Action.JUMP;
-				break;
-		}
-		
-		if (action != null) {
-			machine.transition(action, key);
-		}
+		if (!onRails) {
+			Action action = null;
+			switch (key) {
+				case Input.KEY_LEFT:
+					action = machine.getCurrentState().movingRight() ?
+							Action.STOP : Action.SELECT_LEFT;
+					break;
+				case Input.KEY_RIGHT:
+					action = machine.getCurrentState().movingLeft() ?
+							Action.STOP : Action.SELECT_RIGHT;
+					break;
+				case Input.KEY_SPACE:
+					action = Action.JUMP;
+					break;
+			}
 
-		if (key == Input.KEY_C) {
-			for (SynchedComboListener listener : comboListeners) {
-				listener.activateCombo(pattern);
+			if (action != null) {
+				machine.transition(action, key);
+			}
+
+			if (key == Input.KEY_C) {
+				for (SynchedComboListener listener : comboListeners) {
+					listener.activateCombo(pattern);
+				}
 			}
 		}
 	}
@@ -207,20 +224,22 @@ public class PlayableCharacter extends Character implements  CommandCollidable {
 	@Override
 	public void keyReleased(int key, char c) {
 		super.keyReleased(key, c);
-		Action action = null;
-		switch (key) {
-			case Input.KEY_LEFT:
-				action = machine.getCurrentState().movingLeft() ?
-						Action.STOP : Action.SELECT_RIGHT;
-				break;
-			case Input.KEY_RIGHT:
-				action = machine.getCurrentState().movingRight() ?
-						Action.STOP : Action.SELECT_LEFT;
-				break;
-		}
-		
-		if (action != null) {
-			machine.transition(action, key);
+		if (!onRails) {
+			Action action = null;
+			switch (key) {
+				case Input.KEY_LEFT:
+					action = machine.getCurrentState().movingLeft() ?
+							Action.STOP : Action.SELECT_RIGHT;
+					break;
+				case Input.KEY_RIGHT:
+					action = machine.getCurrentState().movingRight() ?
+							Action.STOP : Action.SELECT_LEFT;
+					break;
+			}
+
+			if (action != null) {
+				machine.transition(action, key);
+			}
 		}
 	}
 	
