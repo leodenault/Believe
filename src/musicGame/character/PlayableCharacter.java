@@ -16,9 +16,10 @@ import musicGame.core.Camera;
 import musicGame.core.EntityStateMachine;
 import musicGame.core.Music;
 import musicGame.core.SynchedComboPattern;
+import musicGame.physics.CommandCollidable;
 import musicGame.physics.DamageHandler.Faction;
 
-public class PlayableCharacter extends Character {
+public class PlayableCharacter extends Character implements  CommandCollidable {
 	public interface SynchedComboListener {
 		void activateCombo(SynchedComboPattern pattern);
 	}
@@ -241,6 +242,11 @@ public class PlayableCharacter extends Character {
 	@Override
 	public void inflictDamage(float damage) {
 		focus -= damage;
+	}
+	
+	@Override
+	public void executeCommand(Action command) {
+		machine.transition(command);
 	}
 	
 	private Function<Integer, State> createHorizontalMovementCallback(
