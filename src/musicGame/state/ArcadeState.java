@@ -1,9 +1,9 @@
 package musicGame.state;
 
-public class PlatformingState extends LevelState {
+public class ArcadeState extends LevelState {
 	@Override
 	protected boolean isOnRails() {
-		return false;
+		return true;
 	}
 	
 	@Override

@@ -1,11 +1,11 @@
 package musicGame.core.action;
 
-import musicGame.state.GameStateBase;
-import musicGame.state.PlatformingState;
-
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.state.StateBasedGame;
+
+import musicGame.state.GameStateBase;
+import musicGame.state.PlatformingState;
 
 public class LocalLoadGameAction extends ChangeStateAction {
 

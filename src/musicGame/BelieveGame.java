@@ -9,6 +9,7 @@ import org.newdawn.slick.util.ResourceLoader;
 
 import musicGame.core.FontLoader;
 import musicGame.core.JarClasspathLocation;
+import musicGame.state.ArcadeState;
 import musicGame.state.FlowFilePickerMenuState;
 import musicGame.state.GamePausedOverlay;
 import musicGame.state.GameStateBase;
@@ -57,6 +58,7 @@ public class BelieveGame extends StateBasedGame {
 		this.addState(new PlayFlowFileState());
 		this.addState(new GamePausedOverlay());
 		this.addState(new PlatformingState());
+		this.addState(new ArcadeState());
 		this.enterState(GameStateBase.getStateID(MainMenuState.class));
 	}
 	

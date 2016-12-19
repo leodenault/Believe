@@ -57,7 +57,7 @@ public class GameStateRegistry {
 		if (this.entries.containsKey(entry)) {
 			return this.entries.get(entry);
 		} else {
-			throw new IllegalArgumentException("The given state does not exist in the game");
+			throw new IllegalArgumentException(String.format("The given state '%s' does not exist in the game", entry));
 		}
 	}
 }
