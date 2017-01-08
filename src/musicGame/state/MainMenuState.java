@@ -37,18 +37,22 @@ public class MainMenuState extends GameStateBase {
 	@Override
 	public void init(final GameContainer container, StateBasedGame game)
 			throws SlickException {
-		MenuSelection playRegularLevel = new MenuSelection(container, "Play Regular Level");
-		MenuSelection playCustomLevel = new MenuSelection(container, "Play Custom Level");
+		MenuSelection playPlatformingLevel = new MenuSelection(container, "Play Platforming Level");
+		MenuSelection playArcadeLevel = new MenuSelection(container, "Play Arcade Level");
+		MenuSelection playFlowFile = new MenuSelection(container, "Play Flow File");
 		MenuSelection options = new MenuSelection(container, "Options");
 		MenuSelection exit = new MenuSelection(container, "Exit");
-		panel = new DirectionalPanel(container, container.getWidth() / 2, (container.getHeight() - 250) / 4, 50);
-		panel.addChild(playRegularLevel);
-		panel.addChild(playCustomLevel);
+		panel = new DirectionalPanel(
+				container, container.getWidth() / 2, (container.getHeight() - 250) / 5, 50);
+		panel.addChild(playPlatformingLevel);
+		panel.addChild(playArcadeLevel);
+		panel.addChild(playFlowFile);
 		panel.addChild(options);
 		panel.addChild(exit);
 		
-		playRegularLevel.addListener(new LocalLoadGameAction(game));
-		playCustomLevel.addListener(new ChangeStateAction(FlowFilePickerMenuState.class, game));
+		playPlatformingLevel.addListener(new LocalLoadGameAction(game, true));
+		playArcadeLevel.addListener(new LocalLoadGameAction(game, false));
+		playFlowFile.addListener(new ChangeStateAction(FlowFilePickerMenuState.class, game));
 		options.addListener(new ChangeStateAction(OptionsMenuState.class, game));
 		exit.addListener(new ComponentListener() {
 			@Override
@@ -58,8 +62,9 @@ public class MainMenuState extends GameStateBase {
 		});
 		
 		this.selections = new MenuSelectionGroup();
-		this.selections.add(playRegularLevel);
-		this.selections.add(playCustomLevel);
+		this.selections.add(playPlatformingLevel);
+		this.selections.add(playArcadeLevel);
+		this.selections.add(playFlowFile);
 		this.selections.add(options);
 		this.selections.add(exit);
 	}
