@@ -45,6 +45,7 @@ public class GameStateRegistry {
 	}
 	
 	public int getEntryID(Class<? extends GameState> entry) {
+		System.out.println(String.format("(>'-'>) %s", entry));
 		return getEntry(entry).ID;
 	}
 	

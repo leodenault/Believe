@@ -13,7 +13,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 public class ChangeStateAction implements ComponentListener {
 
 	private static final int DEFAULT_TRANSITION_LENGTH = 65;
-	
+
 	private Class<? extends GameState> state;
 	
 	protected int transitionLength;
@@ -31,6 +31,7 @@ public class ChangeStateAction implements ComponentListener {
 
 	@Override
 	public void componentActivated(AbstractComponent component) {
+		System.out.println(String.format("(>'-'>) %s", GameStateBase.getStateID(state)));
 		game.enterState(GameStateBase.getStateID(state),
 				new FadeOutTransition(Color.black, transitionLength), new FadeInTransition(Color.black, transitionLength));
 		
