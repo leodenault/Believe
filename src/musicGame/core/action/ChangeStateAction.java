@@ -31,7 +31,6 @@ public class ChangeStateAction implements ComponentListener {
 
 	@Override
 	public void componentActivated(AbstractComponent component) {
-		System.out.println(String.format("(>'-'>) %s", GameStateBase.getStateID(state)));
 		game.enterState(GameStateBase.getStateID(state),
 				new FadeOutTransition(Color.black, transitionLength), new FadeInTransition(Color.black, transitionLength));
 		
