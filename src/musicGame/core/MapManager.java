@@ -93,6 +93,11 @@ public class MapManager {
 			
 			maps.put(name, map);
 		}
+		
+		if (!maps.containsKey(name)) {
+			throw new RuntimeException("The map was not defined in the XML configuration.");
+		}
+		
 		return maps.get(name);
 	}
 }
