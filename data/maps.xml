@@ -24,4 +24,16 @@
 			</background>
 		</backgrounds>
 	</map>
+	<map>
+		<name>snow</name>
+		<location>/res/maps/snow.tmx</location>
+		<tileSetsLocation>/res/maps</tileSetsLocation>
+		<backgrounds>
+			<background>
+				<location>/res/graphics/backgrounds/whitewash.png</location>
+				<layer>30</layer>
+				<y>0</y>
+			</background>
+		</backgrounds>
+	</map>
 </maps>

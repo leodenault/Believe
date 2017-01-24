@@ -8,11 +8,11 @@ public class PlatformingState extends LevelState {
 	
 	@Override
 	protected String getMapName() {
-		return "pipeTown";
+		return "snow";
 	}
 	
 	@Override
 	protected String getMusicLocation() {
-		return "/res/music/Evasion.ogg";
+		return "/res/music/TimeOut_loop.ogg";
 	}
 }
