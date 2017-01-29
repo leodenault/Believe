@@ -30,9 +30,9 @@
 		<tileSetsLocation>/res/maps</tileSetsLocation>
 		<backgrounds>
 			<background>
-				<location>/res/graphics/backgrounds/whitewash.png</location>
+				<location>/res/graphics/backgrounds/tree.png</location>
 				<layer>30</layer>
-				<y>0</y>
+				<y>1</y>
 			</background>
 		</backgrounds>
 	</map>

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="250" height="50" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="playerStartX" value="1"/>
+  <property name="playerStartY" value="48"/>
+ </properties>
  <tileset firstgid="1" name="Snow" tilewidth="32" tileheight="32">
   <image source="tilesets/snow.png" width="128" height="128"/>
  </tileset>
@@ -11,7 +15,7 @@
    <property name="collision" value=""/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3DQQkAAAgEsKtg/7KWuIfgBksAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB+GM8GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC6FmgzO5xQwwAA
+   H4sIAAAAAAAAA+3SsQkAMAwDQa/g/ZfNAilFouIO3BteMwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwzv5+gCtdSLKnTrqQZE+ddCHJnjrpQtK62oOUA/+rIuFQwwAA
   </data>
  </layer>
  <layer name="Front" width="250" height="50">
@@ -19,7 +23,7 @@
    <property name="front" value=""/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3TsQ0DMQADsU+R4vdfOMgOFs4FCdwG0vMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPD30bXBKV9dG5zy6trglHrL8nP26i3Lz9mrtyw/Z6/esvycvXrL8nP26i3Lz9mrtyw/Z6/esvycvXrL8nP26i3Lz9mrtyw/Z6/esvycvXrL8nP26i3Lz9mrtyw/Z6/esvycvXrL8nP26i3Lz9mrtyw/Z6/esvycvXrL8nP26i3Lz9mrtyw/Z+8HGjcQcFDDAAA=
+   H4sIAAAAAAAAA+3TMQoAIAwDwDr0/18Wd8egHe4geyFpFQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC8078P4EovJNnTTHohyZ5m0gtJZ09LxsWfk9QyNpCyATLA27tQwwAA
   </data>
  </layer>
 </map>
