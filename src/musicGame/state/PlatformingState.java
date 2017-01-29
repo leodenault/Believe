@@ -13,6 +13,6 @@ public class PlatformingState extends LevelState {
 	
 	@Override
 	protected String getMusicLocation() {
-		return "/res/music/TimeOut_loop.ogg";
+		return "/res/music/Passepied.ogg";
 	}
 }
