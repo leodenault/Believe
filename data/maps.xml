@@ -31,8 +31,8 @@
 		<backgrounds>
 			<background>
 				<location>/res/graphics/backgrounds/tree.png</location>
-				<layer>30</layer>
-				<y>1</y>
+				<layer>1</layer>
+				<y>0</y>
 			</background>
 		</backgrounds>
 	</map>
