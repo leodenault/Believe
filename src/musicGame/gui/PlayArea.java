@@ -37,15 +37,28 @@ public class PlayArea extends AbstractContainer {
 	private List<DynamicHudChild> dynamicHudChildren;
 	
 	public PlayArea(GUIContext container, LevelMap map, ComponentBase focus) {
-		super(container, 0, 0, container.getWidth(), container.getHeight());
+		this(container, map, focus, 1f, 1f);
+	}
+	
+	/**
+	 * Creates the PlayArea using width and height as percentages of the screen size. Assumes that the origin is at 0,0.
+	 */
+	public PlayArea(GUIContext container, LevelMap map, ComponentBase focus, float clipWidth, float clipHeight) {
+		super(container,
+				0,
+				0,
+				convertPercentageToPixels(clipWidth, container.getWidth(), 0),
+				convertPercentageToPixels(clipHeight, container.getHeight(), 0));
+		int width = convertPercentageToPixels(clipWidth, container.getWidth(), 0);
+		int height = convertPercentageToPixels(clipHeight, container.getHeight(), 0);
 		border = false;
-		camera = new Camera(getWidth(), getHeight());
+		camera = new Camera(width, height);
 		this.map = map;
 		this.focus = focus;
-		this.hud = new CanvasContainer(container, 0, 0, container.getWidth(), container.getHeight());
+		this.hud = new CanvasContainer(container, 0, 0, width, height);
 		handleMap();
-		camera.scale(rect.getWidth() / LevelMap.TARGET_WIDTH,
-				rect.getHeight() / LevelMap.TARGET_HEIGHT);
+		camera.scale((float)container.getWidth() / LevelMap.TARGET_WIDTH,
+				(float)container.getHeight() / LevelMap.TARGET_HEIGHT);
 		this.dynamicHudChildren = new LinkedList<DynamicHudChild>();
 	}
 
@@ -86,10 +99,10 @@ public class PlayArea extends AbstractContainer {
 	public void addHudChild(ComponentBase child, float minX, float minY, float maxX, float maxY) {
 		hud.addChild(child);
 		
-		int x1 = (int)convertPercentageToPixels(minX, getWidth(), getX());
-		int y1 = (int)convertPercentageToPixels(minY, getHeight(), getY());
-		int x2 = (int)convertPercentageToPixels(maxX, getWidth(), getX());
-		int y2 = (int)convertPercentageToPixels(maxY, getHeight(), getY());
+		int x1 = convertPercentageToPixels(minX, getWidth(), getX());
+		int y1 = convertPercentageToPixels(minY, getHeight(), getY());
+		int x2 = convertPercentageToPixels(maxX, getWidth(), getX());
+		int y2 = convertPercentageToPixels(maxY, getHeight(), getY());
 		child.setLocation(x1, y1);
 		child.setWidth(x2 - x1);
 		child.setHeight(y2 - y1);
@@ -97,8 +110,8 @@ public class PlayArea extends AbstractContainer {
 	
 	public void attachHudChildToFocus(ComponentBase child, float offsetX, float offsetY, float width, float height) {
 		hud.addChild(child);
-		child.setWidth((int)convertPercentageToPixels(width, getWidth(), 0));
-		child.setHeight((int)convertPercentageToPixels(height, getHeight(), 0));
+		child.setWidth(convertPercentageToPixels(width, getWidth(), 0));
+		child.setHeight(convertPercentageToPixels(height, getHeight(), 0));
 		dynamicHudChildren.add(new DynamicHudChild(child, offsetX, offsetY));
 	}
 	
@@ -150,13 +163,13 @@ public class PlayArea extends AbstractContainer {
 		Vector2f focusLocation = camera.cameraToWindow(new Vector2f(rect.getCenter()));
 
 		for (DynamicHudChild child : dynamicHudChildren) {
-			float ox = convertPercentageToPixels(child.offsetX, getWidth(), 0);
-			float oy = convertPercentageToPixels(child.offsetY, getHeight(), 0);
+			int ox = convertPercentageToPixels(child.offsetX, getWidth(), 0);
+			int oy = convertPercentageToPixels(child.offsetY, getHeight(), 0);
 			child.child.setLocation((int)(focusLocation.x + ox), (int)(focusLocation.y + oy));
 		}
 	}
 	
-	private float convertPercentageToPixels(float percentage, float length, float offset) {
-		return (percentage * length) + offset;
+	private static int convertPercentageToPixels(float percentage, float length, float offset) {
+		return (int)((percentage * length) + offset);
 	}
 }

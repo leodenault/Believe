@@ -96,7 +96,7 @@ public abstract class LevelState extends GameStateBase implements PausableState 
 		map = mapManager.getMap(getMapName(), container);
 		player = new PlayableCharacter(
 				container, music, isOnRails(), map.getPlayerStartX(), map.getPlayerStartY());
-		mapContainer = new PlayArea(container, map, player);
+		mapContainer = providePlayArea(container, map, player);
 		focusBar.setText("Focus");
 		mapContainer.addHudChild(focusBar, 0.02f, 0.05f, 0.15f, 0.07f);
 		initPhysics();
@@ -119,4 +119,5 @@ public abstract class LevelState extends GameStateBase implements PausableState 
 	protected abstract boolean isOnRails();
 	protected abstract String getMapName();
 	protected abstract String getMusicLocation();
+	protected abstract PlayArea providePlayArea(GameContainer container, LevelMap map, PlayableCharacter player);
 }

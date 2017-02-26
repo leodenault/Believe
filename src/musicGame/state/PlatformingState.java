@@ -4,9 +4,12 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import musicGame.character.PlayableCharacter;
 import musicGame.character.PlayableCharacter.SynchedComboListener;
 import musicGame.core.SynchedComboPattern;
 import musicGame.gui.ComboSyncher;
+import musicGame.gui.PlayArea;
+import musicGame.map.LevelMap;
 
 public class PlatformingState extends LevelState implements SynchedComboListener {
 	private ComboSyncher comboSyncher;
@@ -52,5 +55,10 @@ public class PlatformingState extends LevelState implements SynchedComboListener
 	@Override
 	protected String getMusicLocation() {
 		return "/res/music/Passepied.ogg";
+	}
+
+	@Override
+	protected PlayArea providePlayArea(GameContainer container, LevelMap map, PlayableCharacter player) {
+		return new PlayArea(container, map, player);
 	}
 }
