@@ -10,31 +10,27 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import musicGame.character.EnemyCharacter;
 import musicGame.character.PlayableCharacter;
-import musicGame.character.PlayableCharacter.SynchedComboListener;
 import musicGame.core.MapManager;
 import musicGame.core.Music;
-import musicGame.core.SynchedComboPattern;
 import musicGame.core.action.PauseGameAction;
-import musicGame.gui.ComboSyncher;
 import musicGame.gui.PlayArea;
 import musicGame.gui.ProgressBar;
 import musicGame.map.LevelMap;
 import musicGame.physics.PhysicsManager;
 
-public abstract class LevelState extends GameStateBase implements PausableState, SynchedComboListener {
+public abstract class LevelState extends GameStateBase implements PausableState {
 	protected static final int BPM = 150;
 
-	private boolean ready;
 	private GameContainer container;
 	private StateBasedGame game;
 	private LevelMap map;
-	private PlayArea mapContainer;
-	private PlayableCharacter player;
 	private ProgressBar focusBar;
 	private PhysicsManager physics;
 	private MapManager mapManager;
-	private ComboSyncher comboSyncher;
 
+	protected boolean ready;
+	protected PlayArea mapContainer;
+	protected PlayableCharacter player;
 	protected Music music;
 	
 	@Override
@@ -44,7 +40,6 @@ public abstract class LevelState extends GameStateBase implements PausableState,
 		this.container = container;
 		this.game = game;
 		this.music = new Music(getMusicLocation(), BPM);
-		this.comboSyncher = new ComboSyncher(container, music.getBpm());
 		this.focusBar = new ProgressBar(container);
 		this.mapManager = MapManager.getInstance();
 	}
@@ -65,7 +60,6 @@ public abstract class LevelState extends GameStateBase implements PausableState,
 			map.update(delta);
 			player.update(delta);
 			physics.update(delta);
-			comboSyncher.update();
 			focusBar.setProgress(player.getFocus());
 			
 			if (music.paused()) {
@@ -102,11 +96,9 @@ public abstract class LevelState extends GameStateBase implements PausableState,
 		map = mapManager.getMap(getMapName(), container);
 		player = new PlayableCharacter(
 				container, music, isOnRails(), map.getPlayerStartX(), map.getPlayerStartY());
-		player.addComboListener(this);
 		mapContainer = new PlayArea(container, map, player);
 		focusBar.setText("Focus");
 		mapContainer.addHudChild(focusBar, 0.02f, 0.05f, 0.15f, 0.07f);
-		mapContainer.attachHudChildToFocus(comboSyncher, 0.05f, -0.08f, 0.3f, 0.05f);
 		initPhysics();
 		music.stop();
 		ready = true;
@@ -122,12 +114,6 @@ public abstract class LevelState extends GameStateBase implements PausableState,
 		physics.addCollidable(player);
 		physics.addGravityObject(player);
 		physics.addGravityObjects(enemies);
-	}
-
-	@Override
-	public void activateCombo(SynchedComboPattern pattern) {
-		comboSyncher.setPattern(pattern);
-		comboSyncher.start(music);
 	}
 	
 	protected abstract boolean isOnRails();
