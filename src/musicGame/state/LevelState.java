@@ -75,6 +75,7 @@ public abstract class LevelState extends GameStateBase implements PausableState 
 		map.reset();
 		player.setLocation(map.getPlayerStartX(), map.getPlayerStartY() - player.getHeight());
 		player.setVerticalSpeed(0);
+		player.heal(1f);
 		initPhysics();
 	}
 

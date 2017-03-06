@@ -57,9 +57,9 @@ public class PlayableCharacter extends Character implements  CommandCollidable {
 	}
 	
 	private static final float JUMP_SPEED = -0.5f;
-	private static final float MAX_FOCUS = 1.0f;
-	private static final float FOCUS_RECHARGE_TIME = 60f; // Time in seconds for recharging focus fully
-	private static final float FOCUS_RECHARGE_RATE = MAX_FOCUS / (FOCUS_RECHARGE_TIME * 1000f);
+	
+	public static final float MAX_FOCUS = 1.0f;
+	
 	@SuppressWarnings("serial")
 	private final Map<State, Map<Action, Function<Integer, State>>> TRANSITIONS =
 		Collections.unmodifiableMap(new HashMap<State, Map<Action, Function<Integer, State>>>() {{
@@ -176,8 +176,6 @@ public class PlayableCharacter extends Character implements  CommandCollidable {
 		if (horizontalSpeed != 0) {
 			setLocation(getFloatX() + delta * horizontalSpeed, getFloatY());
 		}
-		
-		focus = Math.min(MAX_FOCUS, focus + (delta * FOCUS_RECHARGE_RATE));
 		anim.update(delta);
 	}
 
@@ -259,7 +257,11 @@ public class PlayableCharacter extends Character implements  CommandCollidable {
 
 	@Override
 	public void inflictDamage(float damage) {
-		focus -= damage;
+		focus = Math.max(0f, focus - damage);
+	}
+	
+	public void heal(float health) {
+		focus = Math.min(MAX_FOCUS, focus + health);
 	}
 	
 	@Override

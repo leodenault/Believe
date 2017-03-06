@@ -15,7 +15,7 @@
    <property name="collision" value=""/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3SsQkAMAwDQa/g/ZfNAilFouIO3BteMwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwzv5+gCtdSLKnTrqQZE+ddCHJnjrpQtK62oOUA/+rIuFQwwAA
+   H4sIAAAAAAAAA+3YMQoAIAwDQL/g/z/r6lbEUB3uIJtTWwg4BgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANBtbgEAes0i1XsA4N5pp+rhHmZMknv6k72QVN2T/n7DzElyT3+yF5Kq/3J5F0hZF+gybFDDAAA=
   </data>
  </layer>
  <layer name="Front" width="250" height="50">
@@ -23,7 +23,15 @@
    <property name="front" value=""/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3TMQoAIAwDwDr0/18Wd8egHe4geyFpFQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC8078P4EovJNnTTHohyZ5m0gtJZ09LxsWfk9QyNpCyATLA27tQwwAA
+   H4sIAAAAAAAAA+3YMQoAIQwEQK/w/18Wu+vCcUu0mIHtrGJkwTEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAbvMVAKDXLFKdBwD++9qperiHGZNkn+7kXkiq9kl/n2HmJO19euS6eOckVf/lci6QsgD6gN6SUMMAAA==
+  </data>
+ </layer>
+ <layer name="Enemies" width="250" height="50">
+  <properties>
+   <property name="enemies" value=""/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3OAQ0AAAgDoFewf1ljXDdIQAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA9007AACPLFxhUnhQwwAA
   </data>
  </layer>
 </map>

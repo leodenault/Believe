@@ -15,6 +15,8 @@ import musicGame.map.LevelMap;
 
 public class PlatformingState extends LevelState implements SynchedComboListener {
 	private static final int BPM = 150;
+	private static final float FOCUS_DRAIN_TIME = 60f; // Time in seconds for recharging focus fully
+	private static final float FOCUS_DRAIN_RATE = PlayableCharacter.MAX_FOCUS / (FOCUS_DRAIN_TIME * 1000f);
 	
 	private ComboSyncher comboSyncher;
 	private Music music;
@@ -37,6 +39,7 @@ public class PlatformingState extends LevelState implements SynchedComboListener
 			} else if (!music.playing()) {
 				music.loop();
 			}
+			player.heal(delta * FOCUS_DRAIN_RATE);
 		}
 	}
 	
