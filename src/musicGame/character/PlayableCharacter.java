@@ -14,7 +14,6 @@ import org.newdawn.slick.gui.GUIContext;
 
 import musicGame.core.Camera;
 import musicGame.core.EntityStateMachine;
-import musicGame.core.Music;
 import musicGame.core.SynchedComboPattern;
 import musicGame.physics.Collidable;
 import musicGame.physics.CommandCollidable;
@@ -131,7 +130,7 @@ public class PlayableCharacter extends Character implements  CommandCollidable {
 	private EntityStateMachine<Action, State, Integer> machine;
 	private CommandCollisionHandler commandHandler;
 	
-	public PlayableCharacter(GUIContext container, Music music, boolean onRails, int x, int y)
+	public PlayableCharacter(GUIContext container, boolean onRails, int x, int y)
 			throws SlickException {
 		super(container, x, y);
 		this.onRails = onRails;

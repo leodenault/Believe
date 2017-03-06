@@ -1,4 +1,4 @@
-Song = res/music/Drive.ogg
+Song = customSongs/Drive.ogg
 Keys = a s k l
 Tempo = 180
 Offset = 3238
