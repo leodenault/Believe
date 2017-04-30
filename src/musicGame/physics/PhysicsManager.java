@@ -16,9 +16,29 @@ public class PhysicsManager {
 	private Set<Collidable> removed;
 	
 	private PhysicsManager() {
-		this.gravityObjects = new HashSet<GravityObject>();
-		this.collidables = new HashSet<Collidable>();
-		this.staticCollidables = new HashSet<Collidable>();
+		this(new HashSet<GravityObject>(), new HashSet<Collidable>(), new HashSet<Collidable>());
+	}
+	
+	/**
+	 * Visible for testing.
+	 * 
+	 * Creates a manager for physical interactions in the game. This object manages all instances of objects that are
+	 * affected by gravity or that can collide with each other.
+	 * 
+	 * @param gravityObjects A {@link Set} containing {@link GravityObject GravityObjects}. These objects will be
+	 * 		affected by gravity.
+	 * @param collidables A {@link Set} containing {@link Collidable Collidables} which can be pushed around.
+	 * @param staticCollidables A {@link Set} containing {@link Collidable Collidables} which are stationary and are
+	 * 		meant to push normal {@link Collidable Collidables} around. This {@link Set} would contain tiles, for
+	 * 		example.
+	 */
+	protected PhysicsManager(
+			Set<GravityObject> gravityObjects,
+			Set<Collidable> collidables,
+			Set<Collidable> staticCollidables) {
+		this.gravityObjects = gravityObjects;
+		this.collidables = collidables;
+		this.staticCollidables = staticCollidables;
 		this.removed = new HashSet<Collidable>();
 	}
 	
@@ -33,6 +53,7 @@ public class PhysicsManager {
 	public void reset() {
 		this.gravityObjects.clear();
 		this.collidables.clear();
+		this.staticCollidables.clear();
 	}
 	
 	public void addGravityObject(GravityObject gravityObject) {
