@@ -23,16 +23,16 @@ import musicGame.levelFlow.parsing.exceptions.FlowFileParserException;
 import musicGame.map.LevelMap;
 
 public class ArcadeState extends LevelState implements FlowComponentListener {
+	
 	private static final float FOCUS_RECHARGE_TIME = 45f; // Time in seconds for draining focus fully
 	private static final float FOCUS_RECHARGE_RATE = PlayableCharacter.MAX_FOCUS / (FOCUS_RECHARGE_TIME * 1000f);
 	private static final float HEALTH_PER_SUCCESS = 0.01f;
 	private static final float DAMAGE_PER_FAILURE = 0.03f;
 	
 	private FlowComponent component;
-	
-	@Override
-	public void init(GameContainer container, StateBasedGame game) throws SlickException {
-		super.init(container, game);
+
+	public ArcadeState(GameContainer container, StateBasedGame game) throws SlickException {
+		super(container, game);
 		FlowComponentBuilder builder = new FlowComponentBuilder(container, (int)(0.2 * container.getWidth()));
 		try {
 			new FlowFileParser(
@@ -50,7 +50,7 @@ public class ArcadeState extends LevelState implements FlowComponentListener {
 					e.getStackTrace()));
 		}
 	}
-
+	
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 		super.update(container, game, delta);
@@ -76,9 +76,13 @@ public class ArcadeState extends LevelState implements FlowComponentListener {
 	}
 	
 	@Override
-	public void enter(GameContainer container, StateBasedGame game)
-			throws SlickException {
-		super.enter(container, game);
+	public void reset() {
+		super.reset();
+		component.reset();
+	}
+
+	@Override
+	public void levelEnter(GameContainer container, StateBasedGame game) throws SlickException {
 		component.stop();
 	}
 

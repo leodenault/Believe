@@ -52,13 +52,13 @@ public class BelieveGame extends StateBasedGame {
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
 		loadResources();
-		this.addState(new MainMenuState());
-		this.addState(new OptionsMenuState());
-		this.addState(new FlowFilePickerMenuState());
-		this.addState(new PlayFlowFileState());
-		this.addState(new GamePausedOverlay());
-		this.addState(new PlatformingState());
-		this.addState(new ArcadeState());
+		this.addState(new MainMenuState(container, this));
+		this.addState(new OptionsMenuState(container, this));
+		this.addState(new FlowFilePickerMenuState(container, this));
+		this.addState(new PlayFlowFileState(this));
+		this.addState(new GamePausedOverlay(container, this));
+		this.addState(new PlatformingState(container, this));
+		this.addState(new ArcadeState(container, this));
 		this.enterState(GameStateBase.getStateID(MainMenuState.class));
 	}
 	

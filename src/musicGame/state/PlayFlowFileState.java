@@ -24,8 +24,14 @@ import org.newdawn.slick.util.ResourceLoader;
 
 public class PlayFlowFileState extends GameStateBase implements FlowComponentListener, PausableState {
 	
+	boolean enteringFromPauseMenu;
 	private FlowComponent component;
 	private StateBasedGame game;
+	
+	public PlayFlowFileState(StateBasedGame game) {
+		enteringFromPauseMenu = false;
+		this.game = game;
+	}
 	
 	public void loadFile(String flowFile) throws IOException, FlowFileParserException,
 	SlickException, FlowComponentBuilderException {
@@ -44,9 +50,7 @@ public class PlayFlowFileState extends GameStateBase implements FlowComponentLis
 	
 	@Override
 	public void reset() {
-		if (this.component != null) {
-			this.component.reset();
-		}
+		this.component.reset();
 	}
 
 	@Override
@@ -61,7 +65,6 @@ public class PlayFlowFileState extends GameStateBase implements FlowComponentLis
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		this.game = game;
 	}
 
 	@Override
@@ -88,6 +91,10 @@ public class PlayFlowFileState extends GameStateBase implements FlowComponentLis
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		super.enter(container, game);
+		if (component == null) {
+			throw new RuntimeException(
+					"The file was not loaded prior to activating the flow component.");
+		}
 	}
 
 	@Override
@@ -113,4 +120,9 @@ public class PlayFlowFileState extends GameStateBase implements FlowComponentLis
 
 	@Override
 	public void componentActivated(AbstractComponent source) {}
+
+	@Override
+	public void exitFromPausedState() {
+		this.enteringFromPauseMenu = false;
+	}
 }

@@ -22,6 +22,19 @@ public class FlowFilePickerMenuState extends GameStateBase {
 	private TextComponent noFilesMessage;
 	private VerticalKeyboardScrollpanel scrollPanel;
 	
+	public FlowFilePickerMenuState(GameContainer container, StateBasedGame game) throws SlickException {
+		int cWidth = container.getWidth();
+		int cHeight = container.getHeight();
+		
+		back = new MenuSelection(container, cWidth / 80, cHeight / 80, cWidth / 4, cHeight / 12, "Back");
+		noFilesMessage =
+				new TextComponent(container, (int)(cWidth * 0.37), cHeight / 80, (int)(cWidth * 0.6), cHeight / 8, "");
+		scrollPanel = new VerticalKeyboardScrollpanel(container, (int)(cWidth * 0.37), cHeight / 80,
+				(int)(cWidth * 0.6), cHeight / 8, (int)(cHeight * 0.95));
+		
+		back.addListener(new ChangeStateAction(MainMenuState.class, game));
+	}
+	
 	@Override
 	public void keyPressed(int key, char c) {
 		super.keyPressed(key, c);
@@ -56,15 +69,6 @@ public class FlowFilePickerMenuState extends GameStateBase {
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		int cWidth = container.getWidth();
-		int cHeight = container.getHeight();
-		
-		back = new MenuSelection(container, cWidth / 80, cHeight / 80, cWidth / 4, cHeight / 12, "Back");
-		noFilesMessage = new TextComponent(container, (int)(cWidth * 0.37), cHeight / 80, (int)(cWidth * 0.6), cHeight / 8, "");
-		scrollPanel = new VerticalKeyboardScrollpanel(container, (int)(cWidth * 0.37), cHeight / 80,
-				(int)(cWidth * 0.6), cHeight / 8, (int)(cHeight * 0.95));
-		
-		back.addListener(new ChangeStateAction(MainMenuState.class, game));
 	}
 
 	@Override

@@ -18,45 +18,41 @@ import musicGame.map.LevelMap;
 import musicGame.physics.PhysicsManager;
 
 public abstract class LevelState extends GameStateBase implements PausableState {
-	private GameContainer container;
+	private boolean enteringFromPauseMenu;
 	private LevelMap map;
 	private ProgressBar focusBar;
 	private PhysicsManager physics;
 	private MapManager mapManager;
 
-	protected boolean ready;
 	protected StateBasedGame game;
-	protected PlayArea mapContainer;
+	protected PlayArea playArea;
 	protected PlayableCharacter player;
+	
+	public LevelState(GameContainer container, StateBasedGame game) {
+		this.game = game;
+		this.focusBar = new ProgressBar(container);
+		this.mapManager = MapManager.getInstance();
+	}
 	
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		this.ready = false;
-		this.container = container;
-		this.game = game;
-		this.focusBar = new ProgressBar(container);
-		this.mapManager = MapManager.getInstance();
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
-		if (ready) {
-			mapContainer.render(container, g);
-		}
+		playArea.render(container, g);
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
-		if (ready) {
-			mapContainer.update(delta);
-			map.update(delta);
-			player.update(delta);
-			physics.update(delta);
-			focusBar.setProgress(player.getFocus());
-		}
+		playArea.update(delta);
+		map.update(delta);
+		player.update(delta);
+		physics.update(delta);
+		focusBar.setProgress(player.getFocus());
 	}
 	
 	@Override
@@ -65,6 +61,7 @@ public abstract class LevelState extends GameStateBase implements PausableState 
 		
 		switch (key) {
 			case Input.KEY_ESCAPE:
+				enteringFromPauseMenu = true;
 				new PauseGameAction(this, game).componentActivated(null);
 				break;
 		}
@@ -79,14 +76,24 @@ public abstract class LevelState extends GameStateBase implements PausableState 
 		initPhysics();
 	}
 
-	public void setUp() throws SlickException {
-		map = mapManager.getMap(getMapName(), container);
-		player = new PlayableCharacter(container, isOnRails(), map.getPlayerStartX(), map.getPlayerStartY());
-		mapContainer = providePlayArea(container, map, player);
-		focusBar.setText("Focus");
-		mapContainer.addHudChild(focusBar, 0.02f, 0.05f, 0.15f, 0.07f);
-		initPhysics();
-		ready = true;
+	@Override
+	public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+		super.enter(container, game);
+		if (!enteringFromPauseMenu) {
+			map = mapManager.getMap(getMapName(), container);
+			player = new PlayableCharacter(container, isOnRails(), map.getPlayerStartX(), map.getPlayerStartY());
+			playArea = providePlayArea(container, map, player);
+			focusBar.setText("Focus");
+			playArea.addHudChild(focusBar, 0.02f, 0.05f, 0.15f, 0.07f);
+			initPhysics();
+			
+			levelEnter(container, game);
+		}
+	}
+	
+	@Override
+	public void exitFromPausedState() {
+		this.enteringFromPauseMenu = false;
 	}
 	
 	private void initPhysics() {
@@ -105,4 +112,5 @@ public abstract class LevelState extends GameStateBase implements PausableState 
 	protected abstract String getMapName();
 	protected abstract String getMusicLocation();
 	protected abstract PlayArea providePlayArea(GameContainer container, LevelMap map, PlayableCharacter player);
+	protected abstract void levelEnter(GameContainer container, StateBasedGame game) throws SlickException;
 }

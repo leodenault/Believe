@@ -1,17 +1,16 @@
 package musicGame.state;
 
-import musicGame.core.action.ChangeStateAction;
-import musicGame.gui.DirectionalPanel;
-import musicGame.gui.MenuSelection;
-import musicGame.gui.MenuSelectionGroup;
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.state.StateBasedGame;
+
+import musicGame.core.action.ChangeStateAction;
+import musicGame.gui.DirectionalPanel;
+import musicGame.gui.MenuSelection;
+import musicGame.gui.MenuSelectionGroup;
 
 public class GamePausedOverlay extends GameStateBase {
 	
@@ -24,15 +23,14 @@ public class GamePausedOverlay extends GameStateBase {
 	private ChangeStateAction resumeAction;
 	private ComponentListener restartAction;
 
-	@Override
-	public void init(GameContainer container, final StateBasedGame game)
-			throws SlickException {
+	public GamePausedOverlay(GameContainer container, StateBasedGame game) throws SlickException {
 		this.game = game;
 		panel = new DirectionalPanel(container, container.getWidth() / 2, (container.getHeight() - 200) / 3, 50);
 		resume = new MenuSelection(container, "Resume");
 		restart = new MenuSelection(container, "Restart");
 		MenuSelection exitLevel = new MenuSelection(container, "Exit Level");
 		
+		exitLevel.addListener((component) -> pausedState.exitFromPausedState());
 		exitLevel.addListener(new ChangeStateAction(MainMenuState.class, game));
 		
 		panel.addChild(resume);
@@ -65,6 +63,11 @@ public class GamePausedOverlay extends GameStateBase {
 	
 	
 	@Override
+	public void init(GameContainer container, final StateBasedGame game)
+			throws SlickException {
+	}
+	
+	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
 		panel.render(container, g);
@@ -83,12 +86,9 @@ public class GamePausedOverlay extends GameStateBase {
 		this.selections.select(0);
 		
 		resumeAction = new ChangeStateAction(pausedState.getClass(), game, 500);
-		restartAction = new ComponentListener() {
-			@Override
-			public void componentActivated(AbstractComponent component) {
-				pausedState.reset();
-				new ChangeStateAction(pausedState.getClass(), game).componentActivated(null);
-			}
+		restartAction = (ComponentListener) (component) -> {
+			pausedState.reset();
+			new ChangeStateAction(pausedState.getClass(), game).componentActivated(null);
 		};
 		resume.addListener(resumeAction);
 		restart.addListener(restartAction);
