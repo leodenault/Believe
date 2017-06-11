@@ -9,14 +9,14 @@ import org.newdawn.slick.util.ResourceLoader;
 
 import musicGame.core.FontLoader;
 import musicGame.core.JarClasspathLocation;
-import musicGame.state.ArcadeState;
-import musicGame.state.FlowFilePickerMenuState;
-import musicGame.state.GamePausedOverlay;
-import musicGame.state.GameStateBase;
-import musicGame.state.MainMenuState;
-import musicGame.state.OptionsMenuState;
-import musicGame.state.PlatformingState;
-import musicGame.state.PlayFlowFileState;
+import musicGame.gamestate.ArcadeState;
+import musicGame.gamestate.FlowFilePickerMenuState;
+import musicGame.gamestate.GamePausedOverlay;
+import musicGame.gamestate.GameStateBase;
+import musicGame.gamestate.MainMenuState;
+import musicGame.gamestate.OptionsMenuState;
+import musicGame.gamestate.PlatformingState;
+import musicGame.gamestate.PlayFlowFileState;
 
 public class BelieveGame extends StateBasedGame {
 	

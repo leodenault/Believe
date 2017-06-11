@@ -1,8 +1,8 @@
 package musicGame.core.action;
 
-import musicGame.state.GamePausedOverlay;
-import musicGame.state.GameStateBase;
-import musicGame.state.PausableState;
+import musicGame.gamestate.GamePausedOverlay;
+import musicGame.gamestate.GameStateBase;
+import musicGame.gamestate.PausableState;
 
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.state.StateBasedGame;

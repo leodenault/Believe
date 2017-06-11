@@ -1,4 +1,4 @@
-package musicGame.state;
+package musicGame.gamestate;
 
 import org.newdawn.slick.state.GameState;
 

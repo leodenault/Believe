@@ -2,10 +2,10 @@ package musicGame.core.action;
 
 import java.io.IOException;
 
+import musicGame.gamestate.GameStateBase;
+import musicGame.gamestate.PlayFlowFileState;
 import musicGame.levelFlow.parsing.exceptions.FlowComponentBuilderException;
 import musicGame.levelFlow.parsing.exceptions.FlowFileParserException;
-import musicGame.state.GameStateBase;
-import musicGame.state.PlayFlowFileState;
 
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;

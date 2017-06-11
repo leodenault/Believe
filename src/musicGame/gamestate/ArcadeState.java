@@ -1,4 +1,4 @@
-package musicGame.state;
+package musicGame.gamestate;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
