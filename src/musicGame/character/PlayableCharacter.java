@@ -8,12 +8,12 @@ import java.util.Map;
 import java.util.function.Function;
 
 import musicGame.core.Camera;
-import musicGame.core.EntityStateMachine;
 import musicGame.core.SynchedComboPattern;
 import musicGame.physics.Collidable;
 import musicGame.physics.CommandCollidable;
 import musicGame.physics.CommandCollisionHandler;
 import musicGame.physics.DamageHandler.Faction;
+import musicGame.statemachine.EntityStateMachine;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
