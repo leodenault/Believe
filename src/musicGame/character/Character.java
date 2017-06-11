@@ -1,10 +1,5 @@
 package musicGame.character;
 
-import org.newdawn.slick.Animation;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.gui.GUIContext;
-
 import musicGame.core.AnimationSet;
 import musicGame.core.SpriteSheetManager;
 import musicGame.gui.ComponentBase;
@@ -14,8 +9,16 @@ import musicGame.physics.DamageHandler;
 import musicGame.physics.TileCollisionHandler;
 import musicGame.physics.TileCollisionHandler.TileCollidable;
 
+import org.newdawn.slick.Animation;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.gui.GUIContext;
+
 public abstract class Character extends ComponentBase implements TileCollidable, DamageBoxCollidable {
 
+	public static final float MAX_FOCUS = 1.0f;
+	
+	private float focus;
 	private TileCollisionHandler tileHandler;
 	private DamageHandler damageHandler;
 	
@@ -31,6 +34,7 @@ public abstract class Character extends ComponentBase implements TileCollidable,
 		rect = new musicGame.geometry.Rectangle(x, y - anim.getHeight(), anim.getWidth(), anim.getHeight());
 		anim.stop();
 		anim.setCurrentFrame(0);
+		focus = MAX_FOCUS;
 	}
 
 	@Override
@@ -68,6 +72,20 @@ public abstract class Character extends ComponentBase implements TileCollidable,
 	@Override
 	protected void renderComponent(GUIContext context, Graphics g) throws SlickException {
 		anim.draw(rect.getX(), rect.getY());
+	}
+	
+	
+	public float getFocus() {
+		return focus;
+	}
+	
+	@Override
+	public void inflictDamage(float damage) {
+		focus = Math.max(0f, focus - damage);
+	}
+	
+	public void heal(float health) {
+		focus = Math.min(MAX_FOCUS, focus + health);
 	}
 	
 	public abstract void update(int delta);

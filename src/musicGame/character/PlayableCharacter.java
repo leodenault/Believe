@@ -7,11 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.gui.GUIContext;
-
 import musicGame.core.Camera;
 import musicGame.core.EntityStateMachine;
 import musicGame.core.SynchedComboPattern;
@@ -19,6 +14,11 @@ import musicGame.physics.Collidable;
 import musicGame.physics.CommandCollidable;
 import musicGame.physics.CommandCollisionHandler;
 import musicGame.physics.DamageHandler.Faction;
+
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.gui.GUIContext;
 
 public class PlayableCharacter extends Character implements  CommandCollidable {
 	public interface SynchedComboListener {
@@ -57,8 +57,6 @@ public class PlayableCharacter extends Character implements  CommandCollidable {
 	}
 	
 	private static final float JUMP_SPEED = -0.5f;
-	
-	public static final float MAX_FOCUS = 1.0f;
 	
 	@SuppressWarnings("serial")
 	private final Map<State, Map<Action, Function<Integer, State>>> TRANSITIONS =
@@ -124,7 +122,6 @@ public class PlayableCharacter extends Character implements  CommandCollidable {
 	private int direction;
 	private float verticalSpeed;
 	private float horizontalSpeed;
-	private float focus;
 	private SynchedComboPattern pattern;
 	private List<SynchedComboListener> comboListeners;
 	private EntityStateMachine<Action, State, Integer> machine;
@@ -137,7 +134,6 @@ public class PlayableCharacter extends Character implements  CommandCollidable {
 		direction = 1;
 		verticalSpeed = 0;
 		horizontalSpeed = 0;
-		focus = MAX_FOCUS;
 		pattern = new SynchedComboPattern();
 		pattern.addAction(0, 's');
 		pattern.addAction(1, 's');
@@ -162,10 +158,6 @@ public class PlayableCharacter extends Character implements  CommandCollidable {
 	@Override
 	public void landed() {
 		machine.transition(Action.LAND);
-	}
-	
-	public float getFocus() {
-		return focus;
 	}
 	
 	public void addComboListener(SynchedComboListener listener) {
@@ -253,15 +245,6 @@ public class PlayableCharacter extends Character implements  CommandCollidable {
 	@Override
 	public Faction getFaction() {
 		return Faction.GOOD;
-	}
-
-	@Override
-	public void inflictDamage(float damage) {
-		focus = Math.max(0f, focus - damage);
-	}
-	
-	public void heal(float health) {
-		focus = Math.min(MAX_FOCUS, focus + health);
 	}
 	
 	@Override
