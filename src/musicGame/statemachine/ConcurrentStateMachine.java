@@ -1,11 +1,24 @@
 package musicGame.statemachine;
 
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import musicGame.statemachine.State.Action;
 
 public class ConcurrentStateMachine {
-	private List<State> concurrentStates;
-	
-	public ConcurrentStateMachine(List<State> concurrentStartStates) {
+	private Set<State> concurrentStates;
+
+	public ConcurrentStateMachine(Set<State> concurrentStartStates) {
 		concurrentStates = concurrentStartStates;
+	}
+
+	public Set<State> getStates() {
+		return concurrentStates;
+	}
+
+	public Set<State> transition(Action action) {
+		return concurrentStates.stream()
+				.map(state -> state.transition(action))
+				.collect(Collectors.toSet());
 	}
 }
