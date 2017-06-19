@@ -5,8 +5,7 @@ import java.util.Map;
 
 public class State {
 	public static enum Action {
-		JUMP,
-		LAND
+		SELECT_RIGHT, SELECT_LEFT, STOP, JUMP, LAND
 	}
 
 	public static class Builder {

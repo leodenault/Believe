@@ -3,14 +3,14 @@ package musicGame.map;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.gui.GUIContext;
-import org.newdawn.slick.tiled.TiledMap;
-
-import musicGame.character.PlayableCharacter.Action;
+import musicGame.character.Character.Action;
 import musicGame.geometry.Rectangle;
 import musicGame.map.MapProperties.MapEntityGenerator;
 import musicGame.physics.Collidable;
+
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.gui.GUIContext;
+import org.newdawn.slick.tiled.TiledMap;
 
 public class Command implements Collidable {
 	public static class Generator implements MapEntityGenerator<Command> {
@@ -23,7 +23,7 @@ public class Command implements Collidable {
 			put("jump", Action.JUMP);
 			put("stop", Action.STOP);
 		}};
-		
+
 		@Override
 		public Command generateMapEntity(
 				TiledMap map,
@@ -52,12 +52,12 @@ public class Command implements Collidable {
 
 	private Action type;
 	private Rectangle rect;
-	
+
 	public Command(int x, int y, int tileWidth, int tileHeight, Action type) {
 		rect = new Rectangle(x, y, tileWidth, tileHeight);
 		this.type = type;
 	}
-	
+
 	public Action getCommandType() {
 		return type;
 	}
