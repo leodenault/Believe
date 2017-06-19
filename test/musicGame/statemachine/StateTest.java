@@ -17,17 +17,17 @@ public class StateTest {
 
 	@Mock private Transition transition1;
 	@Mock private Transition transition2;
-	
+
 	private State state1;
 	private State state2;
-	
+
 	@Before
 	public void setUp() {
 		initMocks(this);
-		state1 = State.newBuilder().addTransition(JUMP, transition1).build();
-		state2 = State.newBuilder().build();
+		state1 = new State().addTransition(JUMP, transition1);
+		state2 = new State();
 	}
-	
+
 	@Test
 	public void transitionCorrectlyActivatesTransition() {
 		when(transition1.execute()).thenReturn(state2);
