@@ -16,22 +16,32 @@ import org.mockito.Mock;
 public class StateTest {
 
 	@Mock private Transition transition1;
-	@Mock private Transition transition2;
+	@Mock private Runnable runnable;
 
 	private State state1;
 	private State state2;
+	private State state3;
+	private State state4;
 
 	@Before
 	public void setUp() {
 		initMocks(this);
-		state1 = new State().addTransition(JUMP, transition1);
-		state2 = new State();
+		state1 = new State()
+				.addTransition(JUMP, transition1);
+		state4 = new State();
+		state3 = new State()
+				.addTransition(JUMP, state4);
+		state2 = new State()
+				.addTransition(LAND, runnable, state3);
 	}
 
 	@Test
 	public void transitionCorrectlyActivatesTransition() {
 		when(transition1.execute()).thenReturn(state2);
 		assertThat(state1.transition(JUMP), is(state2));
+		assertThat(state2.transition(LAND), is(state3));
+		assertThat(state3.transition(JUMP), is(state4));
+		verify(runnable).run();
 	}
 
 	@Test
