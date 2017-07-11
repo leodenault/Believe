@@ -40,5 +40,6 @@ public class ConcurrentStateMachineTest {
 		when(state1.transition(JUMP)).thenReturn(state2);
 		when(state3.transition(JUMP)).thenReturn(state3);
 		assertThat(machine.transition(JUMP), containsInAnyOrder(state2, state3));
+		assertThat(machine.getStates(), containsInAnyOrder(state2, state3));
 	}
 }

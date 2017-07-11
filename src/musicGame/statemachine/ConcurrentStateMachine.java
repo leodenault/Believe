@@ -17,8 +17,9 @@ public class ConcurrentStateMachine {
 	}
 
 	public Set<State> transition(Action action) {
-		return concurrentStates.stream()
+		concurrentStates = concurrentStates.stream()
 				.map(state -> state.transition(action))
 				.collect(Collectors.toSet());
+		return concurrentStates;
 	}
 }
