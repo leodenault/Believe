@@ -1,9 +1,17 @@
 package musicGame.character;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
+
+import org.newdawn.slick.Animation;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.gui.GUIContext;
 
 import musicGame.core.AnimationSet;
 import musicGame.core.Camera;
@@ -14,14 +22,29 @@ import musicGame.physics.DamageBoxCollidable;
 import musicGame.physics.DamageHandler;
 import musicGame.physics.TileCollisionHandler;
 import musicGame.physics.TileCollisionHandler.TileCollidable;
+import musicGame.statemachine.ConcurrentStateMachine;
 import musicGame.statemachine.EntityStateMachine;
 
-import org.newdawn.slick.Animation;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.gui.GUIContext;
-
 public abstract class Character extends ComponentBase implements TileCollidable, DamageBoxCollidable {
+	
+	private static final musicGame.statemachine.State STANDING = new musicGame.statemachine.State() {{
+		addTransition(
+			musicGame.statemachine.State.Action.SELECT_LEFT,
+			new musicGame.statemachine.State()
+					.addTransition(musicGame.statemachine.State.Action.STOP, this));
+		addTransition(
+			musicGame.statemachine.State.Action.SELECT_RIGHT,
+			new musicGame.statemachine.State()
+					.addTransition(musicGame.statemachine.State.Action.STOP, this));
+	}};
+	private static final musicGame.statemachine.State GROUNDED = new musicGame.statemachine.State() {{
+		addTransition(
+			musicGame.statemachine.State.Action.JUMP,
+			new musicGame.statemachine.State()
+					.addTransition(musicGame.statemachine.State.Action.LAND, this));
+	}};
+
+	private static final Set<musicGame.statemachine.State> STATES = new HashSet<musicGame.statemachine.State>(Arrays.asList(STANDING, GROUNDED));
 
 	public enum Action {
 		SELECT_RIGHT, SELECT_LEFT, STOP, JUMP, LAND
@@ -125,6 +148,7 @@ public abstract class Character extends ComponentBase implements TileCollidable,
 	private TileCollisionHandler tileHandler;
 	private DamageHandler damageHandler;
 
+	protected ConcurrentStateMachine concurrentMachine;
 	protected EntityStateMachine<Action, State, Integer> machine;
 	protected AnimationSet animSet;
 	protected Animation anim;
@@ -143,6 +167,7 @@ public abstract class Character extends ComponentBase implements TileCollidable,
 		anim.stop();
 		anim.setCurrentFrame(0);
 		machine = new EntityStateMachine<>(TRANSITIONS, State.GROUNDED_STATIONARY);
+		concurrentMachine = new ConcurrentStateMachine(STATES);
 		focus = MAX_FOCUS;
 	}
 
