@@ -1,5 +1,6 @@
 package musicGame.core;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -68,5 +69,11 @@ public class UtilTest {
 			oneOf(g).setClip(parentRect);
 		}});
 		Util.resetClipContext(g, parentRect);
+	}
+	
+	@Test
+	public void hashSetOfReturnsProperHashSet() {
+		assertThat(
+				Util.hashSetOf("one", "two", "three"), containsInAnyOrder("one", "two", "three"));
 	}
 }

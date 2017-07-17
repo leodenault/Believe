@@ -2,6 +2,8 @@ package musicGame.core;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
@@ -46,5 +48,14 @@ public class Util {
 	
 	public static void resetClipContext(Graphics g, Rectangle oldClip) {
 		g.setClip(oldClip);
+	}
+	
+	@SafeVarargs
+	public static <T> Set<T> hashSetOf(T... elements) {
+		HashSet<T> set = new HashSet<>();
+		for (T element : elements) {
+			set.add(element);
+		}
+		return set;
 	}
 }
