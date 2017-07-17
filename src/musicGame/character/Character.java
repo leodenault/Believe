@@ -1,12 +1,12 @@
 package musicGame.character;
 
+import static musicGame.core.Util.hashSetOf;
+
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
@@ -23,121 +23,52 @@ import musicGame.physics.DamageHandler;
 import musicGame.physics.TileCollisionHandler;
 import musicGame.physics.TileCollisionHandler.TileCollidable;
 import musicGame.statemachine.ConcurrentStateMachine;
-import musicGame.statemachine.EntityStateMachine;
+import musicGame.statemachine.State;
+import musicGame.statemachine.State.Action;
 
-public abstract class Character extends ComponentBase implements TileCollidable, DamageBoxCollidable {
+public abstract class Character
+		extends ComponentBase
+		implements TileCollidable, DamageBoxCollidable, ConcurrentStateMachine.Listener {
+	protected static final State STANDING = new State();
+	protected static final State MOVING_LEFT = new State();
+	protected static final State MOVING_RIGHT = new State();
+	{{
+		STANDING.addTransition(
+				Action.SELECT_LEFT,
+				() -> updateHorizontalMovement(-1),
+				MOVING_LEFT.addTransition(
+						Action.STOP,
+						() -> updateHorizontalMovement(0),
+						STANDING));
+		STANDING.addTransition(
+				Action.SELECT_RIGHT,
+				() -> updateHorizontalMovement(1),
+				MOVING_RIGHT.addTransition(
+						Action.STOP,
+						() -> updateHorizontalMovement(0),
+						STANDING));
+	}};
+	protected static final State GROUNDED = new State();
+	protected static final State JUMPING = new State();
+	{{
+		GROUNDED.addTransition(
+				Action.JUMP,
+				() -> { verticalSpeed = JUMP_SPEED; },
+				JUMPING.addTransition(Action.LAND, GROUNDED));
+	}};
 	
-	private static final musicGame.statemachine.State STANDING = new musicGame.statemachine.State() {{
-		addTransition(
-			musicGame.statemachine.State.Action.SELECT_LEFT,
-			new musicGame.statemachine.State()
-					.addTransition(musicGame.statemachine.State.Action.STOP, this));
-		addTransition(
-			musicGame.statemachine.State.Action.SELECT_RIGHT,
-			new musicGame.statemachine.State()
-					.addTransition(musicGame.statemachine.State.Action.STOP, this));
-	}};
-	private static final musicGame.statemachine.State GROUNDED = new musicGame.statemachine.State() {{
-		addTransition(
-			musicGame.statemachine.State.Action.JUMP,
-			new musicGame.statemachine.State()
-					.addTransition(musicGame.statemachine.State.Action.LAND, this));
-	}};
-
-	private static final Set<musicGame.statemachine.State> STATES = new HashSet<musicGame.statemachine.State>(Arrays.asList(STANDING, GROUNDED));
-
-	public enum Action {
-		SELECT_RIGHT, SELECT_LEFT, STOP, JUMP, LAND
-	}
-
-	public enum State {
-		GROUNDED_STATIONARY("idle"), GROUNDED_MOVING_RIGHT("move"), GROUNDED_MOVING_LEFT("move"),
-		AIRBORNE_STATIONARY("jump"), AIRBORNE_MOVING_RIGHT("jump"), AIRBORNE_MOVING_LEFT("jump");
-
-		private String animation;
-
-		private State(String animation) {
-			this.animation = animation;
-		}
-
-		public String getAnimation() {
-			return animation;
-		}
-
-		public boolean movingLeft() {
-			return this == GROUNDED_MOVING_LEFT || this == AIRBORNE_MOVING_LEFT;
-		}
-
-		public boolean movingRight() {
-			return this == GROUNDED_MOVING_RIGHT || this == AIRBORNE_MOVING_RIGHT;
-		}
-
-		public boolean stationary() {
-			return this == GROUNDED_STATIONARY || this == AIRBORNE_STATIONARY;
-		}
-	}
-
 	private static final float JUMP_SPEED = -0.5f;
-
+	private static final Set<State> STATES = new HashSet<State>(Arrays.asList(STANDING, GROUNDED));
 	@SuppressWarnings("serial")
-	private final Map<State, Map<Action, Function<Integer, State>>> TRANSITIONS =
-			Collections.unmodifiableMap(new HashMap<State, Map<Action, Function<Integer, State>>>() {{
-				put(State.GROUNDED_STATIONARY, new HashMap<Action, Function<Integer, State>>() {{
-					put(Action.SELECT_LEFT,
-						createHorizontalMovementCallback(-1, State.GROUNDED_MOVING_LEFT));
-					put(Action.SELECT_RIGHT,
-						createHorizontalMovementCallback(1, State.GROUNDED_MOVING_RIGHT));
-					put(Action.JUMP, key -> {
-						verticalSpeed = JUMP_SPEED;
-						anim = animSet.get(State.AIRBORNE_STATIONARY.getAnimation());
-						return State.AIRBORNE_STATIONARY;
-					});
-				}});
-				put(State.GROUNDED_MOVING_RIGHT, new HashMap<Action, Function<Integer, State>>() {{
-					put(Action.STOP,
-						createHorizontalMovementCallback(0, State.GROUNDED_STATIONARY));
-					put(Action.JUMP, key -> {
-						verticalSpeed = JUMP_SPEED;
-						anim = animSet.get(State.AIRBORNE_MOVING_RIGHT.getAnimation());
-						return State.AIRBORNE_MOVING_RIGHT;
-					});
-				}});
-				put(State.GROUNDED_MOVING_LEFT, new HashMap<Action, Function<Integer, State>>() {{
-					put(Action.STOP,
-						createHorizontalMovementCallback(0, State.GROUNDED_STATIONARY));
-					put(Action.JUMP, key -> {
-						verticalSpeed = JUMP_SPEED;
-						anim = animSet.get(State.AIRBORNE_MOVING_LEFT.getAnimation());
-						return State.AIRBORNE_MOVING_LEFT;
-					});
-				}});
-				put(State.AIRBORNE_STATIONARY, new HashMap<Action, Function<Integer, State>>() {{
-					put(Action.SELECT_LEFT,
-						createHorizontalMovementCallback(-1, State.AIRBORNE_MOVING_LEFT));
-					put(Action.SELECT_RIGHT,
-						createHorizontalMovementCallback(1, State.AIRBORNE_MOVING_RIGHT));
-					put(Action.LAND, key -> {
-						anim = animSet.get(State.GROUNDED_STATIONARY.getAnimation());
-						return State.GROUNDED_STATIONARY;
-					});
-				}});
-				put(State.AIRBORNE_MOVING_RIGHT, new HashMap<Action, Function<Integer, State>>() {{
-					put(Action.STOP,
-						createHorizontalMovementCallback(0, State.AIRBORNE_STATIONARY));
-					put(Action.LAND, key -> {
-						anim = animSet.get(State.GROUNDED_MOVING_RIGHT.getAnimation());
-						return State.GROUNDED_MOVING_RIGHT;
-					});
-				}});
-				put(State.AIRBORNE_MOVING_LEFT, new HashMap<Action, Function<Integer, State>>() {{
-					put(Action.STOP,
-						createHorizontalMovementCallback(0, State.AIRBORNE_STATIONARY));
-					put(Action.LAND, key -> {
-						anim = animSet.get(State.GROUNDED_MOVING_LEFT.getAnimation());
-						return State.GROUNDED_MOVING_LEFT;
-					});
-				}});
-		}});
+	private static final Map<Set<State>, String> ANIMATION_MAP =
+			new HashMap<Set<State>, String>() {{
+		put(hashSetOf(STANDING, GROUNDED), "idle");
+		put(hashSetOf(MOVING_LEFT, GROUNDED), "move");
+		put(hashSetOf(MOVING_RIGHT, GROUNDED), "move");
+		put(hashSetOf(STANDING, JUMPING), "jump");
+		put(hashSetOf(MOVING_LEFT, JUMPING), "jump");
+		put(hashSetOf(MOVING_RIGHT, JUMPING), "jump");
+	}};
 
 	public static final float MAX_FOCUS = 1.0f;
 
@@ -148,8 +79,7 @@ public abstract class Character extends ComponentBase implements TileCollidable,
 	private TileCollisionHandler tileHandler;
 	private DamageHandler damageHandler;
 
-	protected ConcurrentStateMachine concurrentMachine;
-	protected EntityStateMachine<Action, State, Integer> machine;
+	protected ConcurrentStateMachine machine;
 	protected AnimationSet animSet;
 	protected Animation anim;
 
@@ -166,8 +96,8 @@ public abstract class Character extends ComponentBase implements TileCollidable,
 				x, y - anim.getHeight(), anim.getWidth(), anim.getHeight());
 		anim.stop();
 		anim.setCurrentFrame(0);
-		machine = new EntityStateMachine<>(TRANSITIONS, State.GROUNDED_STATIONARY);
-		concurrentMachine = new ConcurrentStateMachine(STATES);
+		machine = new ConcurrentStateMachine(STATES);
+		machine.addListener(this);
 		focus = MAX_FOCUS;
 	}
 
@@ -225,7 +155,6 @@ public abstract class Character extends ComponentBase implements TileCollidable,
 			.draw(rect.getX(), rect.getY());
 	}
 
-
 	public float getFocus() {
 		return focus;
 	}
@@ -239,18 +168,14 @@ public abstract class Character extends ComponentBase implements TileCollidable,
 		focus = Math.min(MAX_FOCUS, focus + health);
 	}
 
-	private Function<Integer, State> createHorizontalMovementCallback(
-			int orientation, State state) {
-		if (!(orientation == -1 || orientation == 1 || orientation == 0)) {
+	private void updateHorizontalMovement(int orientation) {
+		if (orientation < -1 || orientation > 1) {
 			throw new IllegalArgumentException("Direction supplied must be +/- 1 or 0.");
 		}
-
-		return key -> {
-			horizontalSpeed = orientation * Camera.SCROLL_SPEED;
-			direction = orientation == 0 ? direction : orientation;
-			anim = animSet.get(state.getAnimation());
-			return state;
-		};
+		horizontalSpeed = orientation * Camera.SCROLL_SPEED;
+		if (orientation != 0) {
+			direction = orientation;
+		}
 	}
 
 	public void update(int delta) {
@@ -258,6 +183,11 @@ public abstract class Character extends ComponentBase implements TileCollidable,
 			setLocation(getFloatX() + delta * horizontalSpeed, getFloatY());
 		}
 		anim.update(delta);
+	}
+	
+	@Override
+	public void transitionEnded(Set<State> currentStates) {
+		anim = animSet.get(ANIMATION_MAP.get(currentStates));
 	}
 
 	protected abstract String getSheetName();

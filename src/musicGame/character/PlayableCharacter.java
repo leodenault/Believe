@@ -8,6 +8,7 @@ import musicGame.physics.Collidable;
 import musicGame.physics.CommandCollidable;
 import musicGame.physics.CommandCollisionHandler;
 import musicGame.physics.DamageHandler.Faction;
+import musicGame.statemachine.State.Action;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -57,11 +58,11 @@ public class PlayableCharacter extends Character implements  CommandCollidable {
 			Action action = null;
 			switch (key) {
 				case Input.KEY_LEFT:
-					action = machine.getCurrentState().movingRight() ?
+					action = machine.getStates().contains(MOVING_RIGHT) ?
 							Action.STOP : Action.SELECT_LEFT;
 					break;
 				case Input.KEY_RIGHT:
-					action = machine.getCurrentState().movingLeft() ?
+					action = machine.getStates().contains(MOVING_LEFT) ?
 							Action.STOP : Action.SELECT_RIGHT;
 					break;
 				case Input.KEY_SPACE:
@@ -70,7 +71,7 @@ public class PlayableCharacter extends Character implements  CommandCollidable {
 			}
 
 			if (action != null) {
-				machine.transition(action, key);
+				machine.transition(action);
 			}
 
 			if (key == Input.KEY_C) {
@@ -88,17 +89,17 @@ public class PlayableCharacter extends Character implements  CommandCollidable {
 			Action action = null;
 			switch (key) {
 				case Input.KEY_LEFT:
-					action = machine.getCurrentState().movingLeft() ?
+					action = machine.getStates().contains(MOVING_LEFT) ?
 							Action.STOP : Action.SELECT_RIGHT;
 					break;
 				case Input.KEY_RIGHT:
-					action = machine.getCurrentState().movingRight() ?
+					action = machine.getStates().contains(MOVING_RIGHT) ?
 							Action.STOP : Action.SELECT_LEFT;
 					break;
 			}
 
 			if (action != null) {
-				machine.transition(action, key);
+				machine.transition(action);
 			}
 		}
 	}

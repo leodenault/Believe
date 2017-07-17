@@ -1,6 +1,6 @@
 package musicGame.statemachine;
 
-import static musicGame.core.Util.setOf;
+import static musicGame.core.Util.hashSetOf;
 import static musicGame.statemachine.State.Action.JUMP;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
@@ -24,7 +24,7 @@ public class ConcurrentStateMachineTest {
 	@Before
 	public void setUp() {
 		initMocks(this);
-		machine = new ConcurrentStateMachine(setOf(state1, state3));
+		machine = new ConcurrentStateMachine(hashSetOf(state1, state3));
 		when(state1.transition(JUMP)).thenReturn(state2);
 		when(state3.transition(JUMP)).thenReturn(state3);
 	}
@@ -44,6 +44,6 @@ public class ConcurrentStateMachineTest {
 	public void listenersAreUpdatedUponTransitioning() {
 		machine.addListener(listener);
 		machine.transition(JUMP);
-		verify(listener).transitionEnded(setOf(state2, state3));
+		verify(listener).transitionEnded(hashSetOf(state2, state3));
 	}
 }

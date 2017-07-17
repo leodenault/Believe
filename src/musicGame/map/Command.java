@@ -3,10 +3,10 @@ package musicGame.map;
 import java.util.HashMap;
 import java.util.Map;
 
-import musicGame.character.Character.Action;
 import musicGame.geometry.Rectangle;
 import musicGame.map.MapProperties.MapEntityGenerator;
 import musicGame.physics.Collidable;
+import musicGame.statemachine.State.Action;
 
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
