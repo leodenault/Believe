@@ -3,13 +3,13 @@ package musicGame.gui;
 import java.util.Iterator;
 import java.util.List;
 
-import musicGame.core.Util;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.GUIContext;
+
+import musicGame.util.Util;
 
 
 public class VerticalKeyboardScrollpanel extends AbstractContainer {

@@ -5,7 +5,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.GUIContext;
 
-import musicGame.core.Util;
+import musicGame.util.Util;
 
 public class TextComponent extends ComponentBase {
 

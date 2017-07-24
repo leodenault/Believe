@@ -1,4 +1,4 @@
-package musicGame.core;
+package musicGame.util;
 
 import java.io.File;
 import java.io.FileFilter;

@@ -12,9 +12,9 @@ import org.newdawn.slick.gui.GUIContext;
 
 import musicGame.core.Camera;
 import musicGame.core.Camera.Layerable;
-import musicGame.core.Util;
 import musicGame.map.LevelMap;
 import musicGame.map.MapBackground;
+import musicGame.util.Util;
 
 public class PlayArea extends AbstractContainer {
 	private class DynamicHudChild {

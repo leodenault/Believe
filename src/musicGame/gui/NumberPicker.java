@@ -3,8 +3,6 @@ package musicGame.gui;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import musicGame.core.Util;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -15,6 +13,8 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.gui.GUIContext;
+
+import musicGame.util.Util;
 
 
 public class NumberPicker extends MenuSelection {

@@ -1,4 +1,4 @@
-package musicGame.core;
+package musicGame.util;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
@@ -14,6 +14,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
+
+import musicGame.util.Util;
 
 public class UtilTest {
 

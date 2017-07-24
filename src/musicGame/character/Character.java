@@ -1,6 +1,6 @@
 package musicGame.character;
 
-import static musicGame.core.Util.hashSetOf;
+import static musicGame.util.Util.hashSetOf;
 
 import java.util.Arrays;
 import java.util.HashMap;

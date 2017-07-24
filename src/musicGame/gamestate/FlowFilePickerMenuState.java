@@ -3,12 +3,12 @@ package musicGame.gamestate;
 import java.io.File;
 import java.io.IOException;
 
-import musicGame.core.Util;
 import musicGame.core.action.ChangeStateAction;
 import musicGame.core.action.ExternalLoadGameAction;
 import musicGame.gui.MenuSelection;
 import musicGame.gui.TextComponent;
 import musicGame.gui.VerticalKeyboardScrollpanel;
+import musicGame.util.Util;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
