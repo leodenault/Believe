@@ -2,6 +2,7 @@ package musicGame.util;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -57,5 +58,14 @@ public class Util {
 			set.add(element);
 		}
 		return set;
+	}
+	
+	@SafeVarargs
+	public static <K, V> HashMap<K, V> hashMapOf(MapEntry<K, V>... entries) {
+		HashMap<K, V> map = new HashMap<>();
+		for (MapEntry<K, V> entry : entries) {
+			map.put(entry.getKey(), entry.getValue());
+		}
+		return map;
 	}
 }

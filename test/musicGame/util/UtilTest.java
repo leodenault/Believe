@@ -1,9 +1,12 @@
 package musicGame.util;
 
+import static musicGame.util.MapEntry.entry;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
+
+import java.util.HashMap;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -77,5 +80,16 @@ public class UtilTest {
 	public void hashSetOfReturnsProperHashSet() {
 		assertThat(
 				Util.hashSetOf("one", "two", "three"), containsInAnyOrder("one", "two", "three"));
+	}
+	
+	@Test
+	public void hashMapOfReturnsCorrectHashMap() {
+		HashMap<String, String> expectedMap = new HashMap<>();
+		expectedMap.put("key", "value");
+		expectedMap.put("key2", "value2");
+		assertThat(Util.hashMapOf(entry("key", "value"), entry("key2", "value2")), is(expectedMap));
+
+		HashMap<String, String> emptyMap = new HashMap<>();
+		assertThat(Util.hashMapOf(), is(emptyMap));
 	}
 }
