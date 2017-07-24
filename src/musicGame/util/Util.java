@@ -2,8 +2,10 @@ package musicGame.util;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.newdawn.slick.Graphics;
@@ -67,5 +69,10 @@ public class Util {
 			map.put(entry.getKey(), entry.getValue());
 		}
 		return map;
+	}
+	
+	@SafeVarargs
+	public static <K, V> Map<K, V> immutableMapOf(MapEntry<K, V>... entries) {
+		return Collections.unmodifiableMap(hashMapOf(entries));
 	}
 }

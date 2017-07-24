@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -17,8 +18,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
-
-import musicGame.util.Util;
 
 public class UtilTest {
 
@@ -91,5 +90,11 @@ public class UtilTest {
 
 		HashMap<String, String> emptyMap = new HashMap<>();
 		assertThat(Util.hashMapOf(), is(emptyMap));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void immutableMapOfCannotBeModified() {
+		Map<String, String> map = Util.immutableMapOf(entry("key", "value"));
+		map.put("key", "value2");
 	}
 }
