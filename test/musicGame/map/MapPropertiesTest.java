@@ -5,9 +5,9 @@ import static musicGame.map.MapProperties.COMMANDS;
 import static musicGame.map.MapProperties.ENEMIES;
 import static musicGame.map.MapProperties.FRONT;
 import static musicGame.map.MapProperties.INVALID_PROP;
-import static org.hamcrest.Matchers.anyOf;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.contains;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import org.jmock.Expectations;

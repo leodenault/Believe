@@ -2,7 +2,7 @@ package musicGame.statemachine;
 
 import static musicGame.statemachine.State.Action.JUMP;
 import static musicGame.util.Util.hashSetOf;
-import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.CoreMatchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
