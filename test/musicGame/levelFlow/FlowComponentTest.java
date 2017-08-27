@@ -2,12 +2,9 @@ package musicGame.levelFlow;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.jmock.lib.concurrent.Synchroniser;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.mockito.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,13 +15,6 @@ import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.GUIContext;
 
 public class FlowComponentTest {
-	
-	@Rule
-	public JUnitRuleMockery mockery = new JUnitRuleMockery() {{
-		setImposteriser(ClassImposteriser.INSTANCE);
-		setThreadingPolicy(new Synchroniser());
-	}};
-	
 	@Mock private GUIContext context;
 	@Mock private Music song;
 	@Mock private Input input;
@@ -43,6 +33,7 @@ public class FlowComponentTest {
 	
 	@Before
 	public void setUp() {
+		initMocks(this);
 		mockery.checking(new Expectations() {{
 			atLeast(1).of(context).getInput(); will(returnValue(input));
 			oneOf(input).addPrimaryListener(with(any(FlowComponent.class)));

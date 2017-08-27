@@ -1,13 +1,11 @@
 package musicGame.physics;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.jmock.lib.concurrent.Synchroniser;
-import org.jmock.lib.legacy.ClassImposteriser;
+
+import static org.mockito.MockitoAnnotations.initMocks;
+
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
 
 import musicGame.geometry.Rectangle;
 import musicGame.map.Tile;
@@ -15,13 +13,6 @@ import musicGame.physics.Collidable.CollidableType;
 import musicGame.physics.TileCollisionHandler.TileCollidable;
 
 public class TileCollisionHandlerTest {
-
-	@Rule
-	public JUnitRuleMockery mockery = new JUnitRuleMockery() {{
-			setImposteriser(ClassImposteriser.INSTANCE);
-			setThreadingPolicy(new Synchroniser());
-	}};
-	
 	private TileCollisionHandler handler;
 	
 	@Mock private TileCollidable first;
@@ -29,6 +20,7 @@ public class TileCollisionHandlerTest {
 	
 	@Before
 	public void setUp() {
+		initMocks(this);
 		handler = new TileCollisionHandler();
 	}
 	

@@ -6,12 +6,9 @@ import static org.junit.Assert.assertThat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.jmock.auto.Mock;
-import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.jmock.lib.concurrent.Synchroniser;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.mockito.Mock;
+
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
@@ -20,11 +17,7 @@ import musicGame.levelFlow.parsing.exceptions.FlowComponentBuilderException;
 
 public class FlowComponentBuilderTest {
 	
-	@Rule
-	public JUnitRuleMockery mockery = new JUnitRuleMockery() {{
-		setImposteriser(ClassImposteriser.INSTANCE);
-		setThreadingPolicy(new Synchroniser());
-	}};
+	
 	
 	private FlowComponentBuilder builder;
 	

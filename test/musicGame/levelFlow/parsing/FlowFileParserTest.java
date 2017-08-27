@@ -5,19 +5,14 @@ import static org.hamcrest.CoreMatchers.hasSize;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-
 import musicGame.levelFlow.parsing.FlowFileToken.FlowFileTokenType;
 import musicGame.levelFlow.parsing.exceptions.FlowFileParserException;
-
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.jmock.lib.concurrent.Synchroniser;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.mockito.Mock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -25,13 +20,6 @@ import org.junit.Test;
 import org.newdawn.slick.Animation;
 
 public class FlowFileParserTest {
-
-	@Rule
-	public JUnitRuleMockery mockery = new JUnitRuleMockery() {{
-		setImposteriser(ClassImposteriser.INSTANCE);
-		setThreadingPolicy(new Synchroniser());
-	}};
-	
 	private FlowFileParser parser;
 	
 	@Mock private FlowFileTokenizer tokenizer;
@@ -41,6 +29,7 @@ public class FlowFileParserTest {
 	
 	@Before
 	public void setupParser() {
+		initMocks(this);
 		this.parser = new FlowFileParser(this.tokenizer, this.builder);
 	}
 	

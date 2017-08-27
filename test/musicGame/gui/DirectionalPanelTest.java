@@ -1,13 +1,10 @@
 package musicGame.gui;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.MockitoAnnotations.initMocks;
 import static org.hamcrest.CoreMatchers.is;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.jmock.lib.concurrent.Synchroniser;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.mockito.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,13 +12,6 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.gui.GUIContext;
 
 public class DirectionalPanelTest {
-
-	@Rule
-	public JUnitRuleMockery mockery = new JUnitRuleMockery() {{
-		setImposteriser(ClassImposteriser.INSTANCE);
-		setThreadingPolicy(new Synchroniser());
-	}};
-	
 	private static final int X = 400;
 	private static final int Y = 500;
 	private static final int COMPONENT_HEIGHT = 12;
@@ -37,6 +27,7 @@ public class DirectionalPanelTest {
 	
 	@Before
 	public void setUp() {
+		initMocks(this);
 		mockery.checking(new Expectations() {{
 			oneOf(context).getInput(); will(returnValue(input));
 			oneOf(input).addPrimaryListener(with(any(DirectionalPanel.class)));

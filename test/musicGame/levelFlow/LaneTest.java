@@ -3,12 +3,9 @@ package musicGame.levelFlow;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.jmock.lib.concurrent.Synchroniser;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.mockito.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,13 +14,6 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.gui.GUIContext;
 
 public class LaneTest {
-
-	@Rule
-	public JUnitRuleMockery mockery = new JUnitRuleMockery() {{ 
-		setImposteriser(ClassImposteriser.INSTANCE);
-		setThreadingPolicy(new Synchroniser());
-	}};
-	
 	@Mock public GUIContext context;
 	@Mock public Input input;
 	@Mock public Animation animation;
@@ -34,6 +24,7 @@ public class LaneTest {
 	
 	@Before
 	public void setUp() {
+		initMocks(this);
 		mockery.checking(new Expectations() {{
 			oneOf(context).getInput(); will(returnValue(input));
 			oneOf(input).addPrimaryListener(with(any(Lane.class)));

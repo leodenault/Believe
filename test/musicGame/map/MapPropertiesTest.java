@@ -9,31 +9,22 @@ import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.contains;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.jmock.lib.concurrent.Synchroniser;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.mockito.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.newdawn.slick.tiled.TiledMap;
 
 public class MapPropertiesTest {
-
-	@Rule
-	public JUnitRuleMockery mockery = new JUnitRuleMockery() {{
-			setImposteriser(ClassImposteriser.INSTANCE);
-			setThreadingPolicy(new Synchroniser());
-	}};
-
 	private MapProperties properties;
 	
 	@Mock private TiledMap map;
 	
 	@Before
 	public void setUp() {
+		initMocks(this);
 		properties = new MapProperties();
 	}
 

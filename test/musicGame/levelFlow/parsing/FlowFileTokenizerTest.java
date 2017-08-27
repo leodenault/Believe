@@ -9,21 +9,12 @@ import java.io.StringReader;
 
 import musicGame.levelFlow.parsing.FlowFileToken.FlowFileTokenType;
 
-import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.jmock.lib.concurrent.Synchroniser;
-import org.jmock.lib.legacy.ClassImposteriser;
+
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 
 public class FlowFileTokenizerTest {
-
-	@Rule
-	public JUnitRuleMockery mockery = new JUnitRuleMockery()  {{ 
-		setImposteriser(ClassImposteriser.INSTANCE);
-		setThreadingPolicy(new Synchroniser());
-	}};;
-
 	private FlowFileTokenizer tokenizer;
 
 	@After

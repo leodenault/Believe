@@ -5,33 +5,26 @@ import static org.hamcrest.CoreMatchers.containsInAnyOrder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.jmock.lib.concurrent.Synchroniser;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.mockito.Mock;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 
 public class UtilTest {
-
-	@Rule
-	public JUnitRuleMockery mockery = new JUnitRuleMockery() {
-		{
-			setImposteriser(ClassImposteriser.INSTANCE);
-			setThreadingPolicy(new Synchroniser());
-		}
-	};
-	
 	@Mock private Graphics g;
 	@Mock private musicGame.geometry.Rectangle childRect;
 	@Mock private Rectangle parentRect;
+	
+	@Before
+	public void setUp() {
+		initMocks(this);
+	}
 	
 	@Test
 	public void changeClipContextShouldReturnIntersectionOfParentAndChildClips() {

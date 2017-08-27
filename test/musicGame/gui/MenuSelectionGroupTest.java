@@ -5,24 +5,14 @@ import static org.hamcrest.CoreMatchers.hasSize;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.jmock.lib.concurrent.Synchroniser;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.mockito.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 public class MenuSelectionGroupTest {
-	
-	@Rule
-	public JUnitRuleMockery mockery = new JUnitRuleMockery() {{
-		setImposteriser(ClassImposteriser.INSTANCE);
-		setThreadingPolicy(new Synchroniser());
-	}};
-
 	@Mock private MenuSelection selection;
 	@Mock private MenuSelection selection2;
 
@@ -30,6 +20,7 @@ public class MenuSelectionGroupTest {
 	
 	@Before
 	public void setUp() {
+		initMocks(this);
 		this.group = new MenuSelectionGroup();
 	}
 	

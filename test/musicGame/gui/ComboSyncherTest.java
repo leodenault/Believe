@@ -2,12 +2,9 @@ package musicGame.gui;
 
 import static musicGame.gui.ComboSyncher.BUFFER_TIME;
 import static musicGame.gui.ComboSyncher.ERROR_LENGTH;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.jmock.lib.concurrent.Synchroniser;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.mockito.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,12 +12,10 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.gui.GUIContext;
-
 import musicGame.core.SynchedComboPattern;
 import musicGame.levelFlow.FlowComponentListener;
 
 public class ComboSyncherTest {
-	
 	private static final int BPM = 132;
 	private static final int FIRST_BEAT = 4;
 	private static final int SECOND_BEAT = 8;
@@ -29,11 +24,7 @@ public class ComboSyncherTest {
 	private static final char FIRST_KEY = 'd';
 	private static final char SECOND_KEY = 't';
 
-	@Rule
-	public JUnitRuleMockery mockery = new JUnitRuleMockery() {{
-			setImposteriser(ClassImposteriser.INSTANCE);
-			setThreadingPolicy(new Synchroniser());
-	}};
+	
 	
 	private ComboSyncher combo;
 	private SynchedComboPattern pattern;
@@ -46,6 +37,7 @@ public class ComboSyncherTest {
 	
 	@Before
 	public void setUp() {
+		initMocks(this);
 		mockery.checking(new Expectations() {{
 			oneOf(container).getInput(); will(returnValue(input));
 			oneOf(input).addPrimaryListener(with(any(ComboSyncher.class)));
