@@ -19,7 +19,7 @@
 		</fileset>
 	</path>
 	<path id="mockito-classpath">
-		<fileset dir="lib/mockito-1.10.19">
+		<fileset dir="lib/mockito-2.8.55">
 			<include name="*.jar" />
 		</fileset>
 	</path>
