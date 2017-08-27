@@ -26,9 +26,9 @@ public class XMLBooleanTest {
 	@Test(expected=XMLLoadingException.class)
 	public void fillNodeShouldThrowXMLLoadingExceptionWhenThereAreChildren() throws XMLLoadingException {
 		mockery.checking(new Expectations() {{
-			oneOf(element).getName(); will(returnValue("nope"));
-			oneOf(element).getChildren(); will(returnValue(list));
-			oneOf(list).size(); will(returnValue(2));
+			when(element.getName()).thenReturn("nope");
+			when(element.getChildren()).thenReturn(list);
+			when(list.size()).thenReturn(2);
 		}});
 		primitive.fillNode(element);
 	}
@@ -43,8 +43,8 @@ public class XMLBooleanTest {
 			exactly(2).of(element).getChildren(); will(returnValue(list));
 			exactly(2).of(list).size(); will(returnValue(0));
 			exactly(2).of(element).getName(); will(returnValue(name));
-			oneOf(element).getContent(); will(returnValue(falseValue));
-			oneOf(element).getContent(); will(returnValue(incorrectValue));
+			when(element.getContent()).thenReturn(falseValue);
+			when(element.getContent()).thenReturn(incorrectValue);
 		}});
 		
 		primitive.fillNode(element);
@@ -60,10 +60,10 @@ public class XMLBooleanTest {
 		final boolean value = true;
 		
 		mockery.checking(new Expectations() {{
-			oneOf(element).getChildren(); will(returnValue(list));
-			oneOf(list).size(); will(returnValue(0));
-			oneOf(element).getName(); will(returnValue(name));
-			oneOf(element).getContent(); will(returnValue(stringValue));
+			when(element.getChildren()).thenReturn(list);
+			when(list.size()).thenReturn(0);
+			when(element.getName()).thenReturn(name);
+			when(element.getContent()).thenReturn(stringValue);
 		}});
 		
 		primitive.fillNode(element);

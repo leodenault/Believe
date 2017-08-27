@@ -38,12 +38,12 @@ public class MapPropertiesTest {
 					with(equalTo(INVALID_PROP)));
 			will(returnValue(INVALID_PROP));
 
-			oneOf(map).getLayerProperty(0, FRONT, INVALID_PROP); will(returnValue(INVALID_PROP));
-			oneOf(map).getLayerProperty(1, FRONT, INVALID_PROP); will(returnValue(FRONT));
-			oneOf(map).getLayerProperty(2, FRONT, INVALID_PROP); will(returnValue(FRONT));
-			oneOf(map).getLayerProperty(3, FRONT, INVALID_PROP); will(returnValue(INVALID_PROP));
-			oneOf(map).getLayerProperty(4, FRONT, INVALID_PROP); will(returnValue(INVALID_PROP));
-			oneOf(map).getLayerProperty(5, FRONT, INVALID_PROP); will(returnValue(FRONT));
+			when(map.getLayerProperty(0, FRONT, INVALID_PROP)).thenReturn(INVALID_PROP);
+			when(map.getLayerProperty(1, FRONT, INVALID_PROP)).thenReturn(FRONT);
+			when(map.getLayerProperty(2, FRONT, INVALID_PROP)).thenReturn(FRONT);
+			when(map.getLayerProperty(3, FRONT, INVALID_PROP)).thenReturn(INVALID_PROP);
+			when(map.getLayerProperty(4, FRONT, INVALID_PROP)).thenReturn(INVALID_PROP);
+			when(map.getLayerProperty(5, FRONT, INVALID_PROP)).thenReturn(FRONT);
 		}});
 		
 		MapProperties.fetchLayers(map, properties);
@@ -55,9 +55,9 @@ public class MapPropertiesTest {
 	public void fetchLayersShouldIgnoreInvisibleLayers() {
 		mockery.checking(new Expectations() {{
 			exactly(6).of(map).getLayerCount(); will(returnValue(5));
-			oneOf(map).getLayerProperty(0, COLLISION, INVALID_PROP); will(returnValue(COLLISION));
-			oneOf(map).getLayerProperty(1, ENEMIES, INVALID_PROP); will(returnValue(ENEMIES));
-			oneOf(map).getLayerProperty(2, COMMANDS, INVALID_PROP); will(returnValue(COMMANDS));
+			when(map.getLayerProperty(0, COLLISION, INVALID_PROP)).thenReturn(COLLISION);
+			when(map.getLayerProperty(1, ENEMIES, INVALID_PROP)).thenReturn(ENEMIES);
+			when(map.getLayerProperty(2, COMMANDS, INVALID_PROP)).thenReturn(COMMANDS);
 
 			exactly(4).of(map).getLayerProperty(
 					with(any(Integer.class)),
@@ -75,8 +75,8 @@ public class MapPropertiesTest {
 					with(equalTo(INVALID_PROP)));
 			will(returnValue(INVALID_PROP));
 
-			oneOf(map).getLayerProperty(3, FRONT, INVALID_PROP); will(returnValue(FRONT));
-			oneOf(map).getLayerProperty(4, FRONT, INVALID_PROP); will(returnValue(INVALID_PROP));
+			when(map.getLayerProperty(3, FRONT, INVALID_PROP)).thenReturn(FRONT);
+			when(map.getLayerProperty(4, FRONT, INVALID_PROP)).thenReturn(INVALID_PROP);
 		}});
 		
 		MapProperties.fetchLayers(map, properties);

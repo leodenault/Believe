@@ -26,9 +26,9 @@ public class XMLStringTest {
 	@Test(expected=XMLLoadingException.class)
 	public void fillNodeShouldThrowXMLLoadingExceptionWhenThereAreChildren() throws XMLLoadingException {
 		mockery.checking(new Expectations() {{
-			oneOf(element).getName(); will(returnValue("haha"));
-			oneOf(element).getChildren(); will(returnValue(list));
-			oneOf(list).size(); will(returnValue(2));
+			when(element.getName()).thenReturn("haha");
+			when(element.getChildren()).thenReturn(list);
+			when(list.size()).thenReturn(2);
 		}});
 		primitive.fillNode(element);
 	}
@@ -39,10 +39,10 @@ public class XMLStringTest {
 		final String value = "cathode";
 		
 		mockery.checking(new Expectations() {{
-			oneOf(element).getChildren(); will(returnValue(list));
-			oneOf(list).size(); will(returnValue(0));
-			oneOf(element).getName(); will(returnValue(name));
-			oneOf(element).getContent(); will(returnValue(value));
+			when(element.getChildren()).thenReturn(list);
+			when(list.size()).thenReturn(0);
+			when(element.getName()).thenReturn(name);
+			when(element.getContent()).thenReturn(value);
 		}});
 		
 		primitive.fillNode(element);

@@ -55,8 +55,8 @@ public class MenuSelectionGroupTest {
 		this.group.add(selection);
 		this.group.add(selection2);
 		mockery.checking(new Expectations() {{
-			oneOf(selection2).isSelected(); will(returnValue(false));
-			oneOf(selection).isSelected(); will(returnValue(true));
+			when(selection2.isSelected()).thenReturn(false);
+			when(selection.isSelected()).thenReturn(true);
 			oneOf(selection).toggleSelect();
 			oneOf(selection2).toggleSelect(true);
 		}});
@@ -102,8 +102,8 @@ public class MenuSelectionGroupTest {
 			exactly(2).of(selection).toggleSelect();
 			oneOf(selection2).toggleSelect(true);
 			oneOf(selection2).toggleSelect();
-			oneOf(selection).isSelected(); will(returnValue(true));
-			oneOf(selection2).isSelected(); will(returnValue(false));
+			when(selection.isSelected()).thenReturn(true);
+			when(selection2.isSelected()).thenReturn(false);
 		}});
 		this.group.select(1);
 		this.group.selectPrevious();
@@ -119,8 +119,8 @@ public class MenuSelectionGroupTest {
 			exactly(2).of(selection).toggleSelect();
 			oneOf(selection2).toggleSelect(true);
 			oneOf(selection2).toggleSelect();
-			oneOf(selection).isSelected(); will(returnValue(true));
-			oneOf(selection2).isSelected(); will(returnValue(false));
+			when(selection.isSelected()).thenReturn(true);
+			when(selection2.isSelected()).thenReturn(false);
 		}});
 		this.group.select(1);
 		this.group.selectNext();
@@ -161,7 +161,7 @@ public class MenuSelectionGroupTest {
 	public void selectShouldOnlyBeExecutedIfSelectionNotAlreadySelected() {
 		mockery.checking(new Expectations() {{
 			oneOf(selection).toggleSelect(true);
-			oneOf(selection).isSelected(); will(returnValue(true));
+			when(selection.isSelected()).thenReturn(true);
 		}});
 		this.group.add(selection);
 		this.group.select(0);
@@ -182,8 +182,8 @@ public class MenuSelectionGroupTest {
 	public void selectShouldNotDeselectCurrentSelectionIfNotSelected() {
 		mockery.checking(new Expectations() {{
 			oneOf(selection).toggleSelect(true);
-			oneOf(selection).isSelected(); will(returnValue(false));
-			oneOf(selection2).isSelected(); will(returnValue(false));
+			when(selection.isSelected()).thenReturn(false);
+			when(selection2.isSelected()).thenReturn(false);
 			oneOf(selection2).toggleSelect(true);
 		}});
 		this.group.add(selection);

@@ -39,7 +39,7 @@ public class ComboSyncherTest {
 	public void setUp() {
 		initMocks(this);
 		mockery.checking(new Expectations() {{
-			oneOf(container).getInput(); will(returnValue(input));
+			when(container.getInput()).thenReturn(input);
 			oneOf(input).addPrimaryListener(with(any(ComboSyncher.class)));
 		}});
 		
@@ -62,8 +62,8 @@ public class ComboSyncherTest {
 		final float comboLength = computeUpToBeat(musicStart, LAST_BEAT) + BUFFER_TIME;
 		
 		mockery.checking(new Expectations() {{
-			oneOf(music).getPosition(); will(returnValue(musicStart));
-			oneOf(music).getPosition(); will(returnValue(musicStart + comboLength));
+			when(music.getPosition()).thenReturn(musicStart);
+			when(music.getPosition()).thenReturn(musicStart + comboLength);
 			oneOf(listener).songEnded();
 		}});
 		
@@ -78,8 +78,8 @@ public class ComboSyncherTest {
 		final float lengthToBeat = computeUpToBeat(musicStart, FIRST_BEAT);
 		
 		mockery.checking(new Expectations() {{
-			oneOf(music).getPosition(); will(returnValue(musicStart));
-			oneOf(music).getPosition(); will(returnValue(musicStart + lengthToBeat + 1.4f));
+			when(music.getPosition()).thenReturn(musicStart);
+			when(music.getPosition()).thenReturn(musicStart + lengthToBeat + 1.4f);
 			oneOf(listener).beatMissed();
 		}});
 		
@@ -93,9 +93,9 @@ public class ComboSyncherTest {
 		final float lengthToBeat = computeUpToBeat(musicStart, FIRST_BEAT);
 		
 		mockery.checking(new Expectations() {{
-			oneOf(music).getPosition(); will(returnValue(musicStart));
-			oneOf(music).getPosition(); will(returnValue(musicStart + lengthToBeat - 0.65f));
-			oneOf(music).getPosition(); will(returnValue(musicStart + lengthToBeat));
+			when(music.getPosition()).thenReturn(musicStart);
+			when(music.getPosition()).thenReturn(musicStart + lengthToBeat - 0.65f);
+			when(music.getPosition()).thenReturn(musicStart + lengthToBeat);
 			oneOf(listener).beatFailed();
 			oneOf(listener).beatFailed();
 		}});
@@ -113,8 +113,8 @@ public class ComboSyncherTest {
 		final float lengthToBeat = computeUpToBeat(musicStart, FIRST_BEAT);
 		
 		mockery.checking(new Expectations() {{
-			oneOf(music).getPosition(); will(returnValue(musicStart));
-			oneOf(music).getPosition(); will(returnValue(musicStart + lengthToBeat));
+			when(music.getPosition()).thenReturn(musicStart);
+			when(music.getPosition()).thenReturn(musicStart + lengthToBeat);
 			oneOf(listener).beatSuccess(0);
 		}});
 		
@@ -130,11 +130,11 @@ public class ComboSyncherTest {
 		// Remove 0.01 since it's not quite exact
 		final float error = ERROR_LENGTH + 0.01f;
 		mockery.checking(new Expectations() {{
-			oneOf(music).getPosition(); will(returnValue(0f));
-			oneOf(music).getPosition(); will(returnValue(lengthToFirstBeat - error));
-			oneOf(music).getPosition(); will(returnValue(lengthToFirstBeat));
-			oneOf(music).getPosition(); will(returnValue(lengthToSecondBeat - error));
-			oneOf(music).getPosition(); will(returnValue(lengthToSecondBeat + error));
+			when(music.getPosition()).thenReturn(0f);
+			when(music.getPosition()).thenReturn(lengthToFirstBeat - error);
+			when(music.getPosition()).thenReturn(lengthToFirstBeat);
+			when(music.getPosition()).thenReturn(lengthToSecondBeat - error);
+			when(music.getPosition()).thenReturn(lengthToSecondBeat + error);
 			oneOf(listener).beatFailed();
 			oneOf(listener).beatSuccess(0);
 			oneOf(listener).beatFailed();

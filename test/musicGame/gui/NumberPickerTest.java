@@ -24,7 +24,7 @@ public class NumberPickerTest {
 	public void setUp() throws SlickException {
 		initMocks(this);
 		mockery.checking(new Expectations() {{
-			oneOf(container).getInput(); will(returnValue(input));
+			when(container.getInput()).thenReturn(input);
 			oneOf(input).addPrimaryListener(with(any(NumberPicker.class)));
 		}});
 		

@@ -51,8 +51,8 @@ public class FlowComponentIntegrationTest {
 	@Test
 	public void missedBeatsSignaledAtCorrectTime() {
 		mockery.checking(new Expectations() {{
-			oneOf(animation).getWidth(); will(returnValue(0));
-			oneOf(animation).getHeight(); will(returnValue(0));
+			when(animation.getWidth()).thenReturn(0);
+			when(animation.getHeight()).thenReturn(0);
 			oneOf(animation).setCurrentFrame(0);
 			oneOf(animation).setLooping(false);
 			oneOf(animation).stop();

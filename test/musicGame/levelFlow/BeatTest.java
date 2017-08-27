@@ -24,13 +24,13 @@ public class BeatTest {
 	public void setUp() {
 		initMocks(this);
 		mockery.checking(new Expectations() {{
-			oneOf(context).getInput(); will(returnValue(input));
+			when(context.getInput()).thenReturn(input);
 			oneOf(input).addPrimaryListener(with(any(Beat.class)));
 			oneOf(animation).setCurrentFrame(0);
 			oneOf(animation).setLooping(false);
 			oneOf(animation).stop();
-			oneOf(animation).getWidth(); will(returnValue(0));
-			oneOf(animation).getHeight(); will(returnValue(0));
+			when(animation.getWidth()).thenReturn(0);
+			when(animation.getHeight()).thenReturn(0);
 		}});
 		this.beat = new Beat(context, animation, 0);
 	}
@@ -52,9 +52,9 @@ public class BeatTest {
 	@Test
 	public void consumeShouldPutBeatInPlayingState() {
 		mockery.checking(new Expectations() {{
-			oneOf(animation).copy(); will(returnValue(animation));
+			when(animation.copy()).thenReturn(animation);
 			oneOf(animation).start();
-			oneOf(animation).isStopped(); will(returnValue(false));
+			when(animation.isStopped()).thenReturn(false);
 		}});
 		this.beat.consume();
 		assertThat(this.beat.isPlaying(), is(true));
@@ -63,7 +63,7 @@ public class BeatTest {
 	@Test
 	public void resetShouldResetPlayingStateOfBeat() {
 		mockery.checking(new Expectations() {{
-			oneOf(animation).copy(); will(returnValue(animation));
+			when(animation.copy()).thenReturn(animation);
 			oneOf(animation).start();
 			oneOf(animation).stop();
 		}});

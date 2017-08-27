@@ -31,11 +31,11 @@ public class XMLListTest {
 		final String name = "someNodeList";
 		
 		mockery.checking(new Expectations() {{
-			oneOf(element).getName(); will(returnValue(name));
-			oneOf(element).getChildren(); will(returnValue(children));
-			oneOf(children).size(); will(returnValue(1));
-			oneOf(children).get(0); will(returnValue(element));
-			oneOf(element).getName(); will(returnValue("wrongName"));
+			when(element.getName()).thenReturn(name);
+			when(element.getChildren()).thenReturn(children);
+			when(children.size()).thenReturn(1);
+			when(children.get(0)).thenReturn(element);
+			when(element.getName()).thenReturn("wrongName");
 		}});
 		
 		list.fillNode(element);
@@ -46,9 +46,9 @@ public class XMLListTest {
 		final String name = "emptyList";
 		
 		mockery.checking(new Expectations() {{
-			oneOf(element).getName(); will(returnValue(name));
-			oneOf(element).getChildren(); will(returnValue(children));
-			oneOf(children).size(); will(returnValue(0));
+			when(element.getName()).thenReturn(name);
+			when(element.getChildren()).thenReturn(children);
+			when(children.size()).thenReturn(0);
 		}});
 		
 		list.fillNode(element);
@@ -61,13 +61,13 @@ public class XMLListTest {
 		final int numNodes = 5;
 		
 		mockery.checking(new Expectations() {{
-			oneOf(element).getName(); will(returnValue(name));
-			oneOf(element).getChildren(); will(returnValue(children));
-			oneOf(children).size(); will(returnValue(numNodes));
+			when(element.getName()).thenReturn(name);
+			when(element.getChildren()).thenReturn(children);
+			when(children.size()).thenReturn(numNodes);
 			
 			for (int i = 0; i < numNodes; i++) {
-				oneOf(children).get(i); will(returnValue(element));
-				oneOf(element).getName(); will(returnValue(DEF.name));
+				when(children.get(i)).thenReturn(element);
+				when(element.getName()).thenReturn(DEF.name);
 				ignoring(child).fillNode(element);
 			}
 		}});

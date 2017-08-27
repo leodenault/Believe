@@ -35,12 +35,12 @@ public class UtilTest {
 		final float height = 100.0f;
 		
 		mockery.checking(new Expectations() {{
-				oneOf(g).getClip(); will(returnValue(parentRect));
-				oneOf(parentRect).getX(); will(returnValue(x));
-				oneOf(parentRect).getY(); will(returnValue(y));
-				oneOf(parentRect).getWidth(); will(returnValue(width));
-				oneOf(parentRect).getHeight(); will(returnValue(height));
-				oneOf(childRect).intersection(with(any(Rectangle.class))); will(returnValue(newClip));
+				when(g.getClip()).thenReturn(parentRect);
+				when(parentRect.getX()).thenReturn(x);
+				when(parentRect.getY()).thenReturn(y);
+				when(parentRect.getWidth()).thenReturn(width);
+				when(parentRect.getHeight()).thenReturn(height);
+				when(childRect.intersection(with(any(Rectangle.class)))).thenReturn(newClip);
 				oneOf(g).setClip(newClip);
 		}});
 		Rectangle oldClip = Util.changeClipContext(g, childRect);
@@ -53,7 +53,7 @@ public class UtilTest {
 	@Test
 	public void changeClipContextShouldReturnChildClipIfParentClipIsNull() {
 		mockery.checking(new Expectations() {{
-				oneOf(g).getClip(); will(returnValue(null));
+				when(g.getClip()).thenReturn(null);
 				oneOf(g).setClip(childRect);
 		}});
 		Rectangle oldClip = Util.changeClipContext(g, childRect);

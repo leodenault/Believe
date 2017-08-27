@@ -27,7 +27,7 @@ public class TileCollisionHandlerTest {
 	@Test
 	public void handleCollisionShouldNotRunWhenNotGivenATile() {
 		mockery.checking(new Expectations() {{
-			oneOf(collidable).getType(); will(returnValue(CollidableType.CHARACTER));
+			when(collidable.getType()).thenReturn(CollidableType.CHARACTER);
 		}});
 		handler.handleCollision(first, collidable);
 	}
@@ -40,15 +40,15 @@ public class TileCollisionHandlerTest {
 		final float y2 = 38;
 		
 		mockery.checking(new Expectations() {{
-			oneOf(first).getRect(); will(returnValue(new Rectangle(x1, y1, 22, 40)));
-			oneOf(first).getFloatX(); will(returnValue(x1));
-			oneOf(first).getFloatY(); will(returnValue(y1));
+			when(first.getRect()).thenReturn(new Rectangle(x1, y1, 22, 40));
+			when(first.getFloatX()).thenReturn(x1);
+			when(first.getFloatY()).thenReturn(y1);
 			oneOf(first).setLocation(-2, y1);
 			
-			oneOf(first).getRect(); will(returnValue(new Rectangle(x2, y2, 80, 50)));
-			oneOf(first).getVerticalSpeed(); will(returnValue(-2f));
-			oneOf(first).getFloatX(); will(returnValue(x2));
-			oneOf(first).getFloatY(); will(returnValue(y2));
+			when(first.getRect()).thenReturn(new Rectangle(x2, y2, 80, 50));
+			when(first.getVerticalSpeed()).thenReturn(-2f);
+			when(first.getFloatX()).thenReturn(x2);
+			when(first.getFloatY()).thenReturn(y2);
 			oneOf(first).setLocation(x2, 40);
 			oneOf(first).setVerticalSpeed(0f);
 		}});
@@ -64,8 +64,8 @@ public class TileCollisionHandlerTest {
 		final float y = 10;
 		
 		mockery.checking(new Expectations() {{
-			oneOf(first).getRect(); will(returnValue(new Rectangle(x, y, 45, 11)));
-			oneOf(first).getVerticalSpeed(); will(returnValue(1.3f));
+			when(first.getRect()).thenReturn(new Rectangle(x, y, 45, 11));
+			when(first.getVerticalSpeed()).thenReturn(1.3f);
 		}});
 		
 		Tile tile = new Tile(0, 2, 10, 10);

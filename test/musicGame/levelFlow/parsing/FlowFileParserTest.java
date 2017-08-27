@@ -43,12 +43,12 @@ public class FlowFileParserTest {
 	
 	private void checkingKVBuilding(final FlowFileTokenType key, final List<String> values) throws Exception {
 		mockery.checking(new Expectations() {{
-			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.EQUALS)));
+			when(tokenizer.next()).thenReturn(new FlowFileToken(FlowFileTokenType.EQUALS));
 			for (String value : values) {
-				oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.ARG, value)));
+				when(tokenizer.next()).thenReturn(new FlowFileToken(FlowFileTokenType.ARG, value));
 			}
-			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.SONG)));
-			oneOf(token).tokenType(); will(returnValue(key));
+			when(tokenizer.next()).thenReturn(new FlowFileToken(FlowFileTokenType.SONG));
+			when(token.tokenType()).thenReturn(key);
 		}});
 	}
 	
@@ -57,7 +57,7 @@ public class FlowFileParserTest {
 		final int numArgs = 3;
 		mockery.checking(new Expectations() {{
 			atMost(numArgs).of(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.ARG, "some/file.png")));
-			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.EOF)));
+			when(tokenizer.next()).thenReturn(new FlowFileToken(FlowFileTokenType.EOF));
 		}});
 		List<String> args = this.parser.parseArguments();
 		assertThat(args, notNullValue());
@@ -68,9 +68,9 @@ public class FlowFileParserTest {
 	@Test(expected=FlowFileParserException.class)
 	public void parseKVPairShouldThrowFlowFileParserExceptionIfValueNotFollowedByEquals() throws Exception {
 		mockery.checking(new Expectations() {{
-			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.BEGIN)));
-			oneOf(token).text(); will(returnValue(FlowFileTokenType.SONG.toString()));
-			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
+			when(tokenizer.next()).thenReturn(new FlowFileToken(FlowFileTokenType.BEGIN));
+			when(token.text()).thenReturn(FlowFileTokenType.SONG.toString());
+			when(tokenizer.getLineNumber()).thenReturn(1);
 		}});
 		this.parser.parseKVPair(token);
 	}
@@ -78,9 +78,9 @@ public class FlowFileParserTest {
 	@Test(expected=FlowFileParserException.class)
 	public void parseKVPairShouldThrowFlowFileParserExceptionIfEqualsNotFollowedByArg() throws Exception {
 		mockery.checking(new Expectations() {{
-			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.EQUALS)));
-			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.BEGIN)));
-			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
+			when(tokenizer.next()).thenReturn(new FlowFileToken(FlowFileTokenType.EQUALS));
+			when(tokenizer.next()).thenReturn(new FlowFileToken(FlowFileTokenType.BEGIN));
+			when(tokenizer.getLineNumber()).thenReturn(1);
 		}});
 		this.parser.parseKVPair(token);
 	}
@@ -91,7 +91,7 @@ public class FlowFileParserTest {
 		this.checkingKVBuilding(FlowFileTokenType.TEMPO, bpm);
 		mockery.checking(new Expectations() {{
 			oneOf(builder).tempo(bpm);
-			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
+			when(tokenizer.getLineNumber()).thenReturn(1);
 		}});
 		this.parser.parseKVPair(token);
 	}
@@ -102,7 +102,7 @@ public class FlowFileParserTest {
 		this.checkingKVBuilding(FlowFileTokenType.KEYS, keys);
 		mockery.checking(new Expectations() {{
 			oneOf(builder).inputKeys(keys);
-			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
+			when(tokenizer.getLineNumber()).thenReturn(1);
 		}});
 		this.parser.parseKVPair(token);
 	}
@@ -113,7 +113,7 @@ public class FlowFileParserTest {
 		this.checkingKVBuilding(FlowFileTokenType.OFFSET, offset);
 		mockery.checking(new Expectations() {{
 			oneOf(builder).offset(offset);
-			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
+			when(tokenizer.getLineNumber()).thenReturn(1);
 		}});
 		this.parser.parseKVPair(token);
 	}
@@ -124,7 +124,7 @@ public class FlowFileParserTest {
 		this.checkingKVBuilding(FlowFileTokenType.SONG, song);
 		mockery.checking(new Expectations() {{
 			oneOf(builder).song(song);
-			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
+			when(tokenizer.getLineNumber()).thenReturn(1);
 		}});
 		this.parser.parseKVPair(token);
 	}
@@ -132,10 +132,10 @@ public class FlowFileParserTest {
 	@Test
 	public void isConfigurationValueShouldReturnTrueWhenGivenAConfigurationValue() {
 		mockery.checking(new Expectations() {{
-			oneOf(token).tokenType(); will(returnValue(FlowFileTokenType.TEMPO));
-			oneOf(token).tokenType(); will(returnValue(FlowFileTokenType.KEYS));
-			oneOf(token).tokenType(); will(returnValue(FlowFileTokenType.OFFSET));
-			oneOf(token).tokenType(); will(returnValue(FlowFileTokenType.SONG));
+			when(token.tokenType()).thenReturn(FlowFileTokenType.TEMPO);
+			when(token.tokenType()).thenReturn(FlowFileTokenType.KEYS);
+			when(token.tokenType()).thenReturn(FlowFileTokenType.OFFSET);
+			when(token.tokenType()).thenReturn(FlowFileTokenType.SONG);
 		}});
 		assertThat(this.parser.isConfigurationValue(token), is(true));
 		assertThat(this.parser.isConfigurationValue(token), is(true));
@@ -146,12 +146,12 @@ public class FlowFileParserTest {
 	@Test
 	public void isConfigurationValueShouldReturnFalseWhenGivenANonConfigurationValue() {
 		mockery.checking(new Expectations() {{
-			oneOf(token).tokenType(); will(returnValue(FlowFileTokenType.ARG));
-			oneOf(token).tokenType(); will(returnValue(FlowFileTokenType.BEGIN));
-			oneOf(token).tokenType(); will(returnValue(FlowFileTokenType.END));
-			oneOf(token).tokenType(); will(returnValue(FlowFileTokenType.EOF));
-			oneOf(token).tokenType(); will(returnValue(FlowFileTokenType.EQUALS));
-			oneOf(token).tokenType(); will(returnValue(FlowFileTokenType.LINE));
+			when(token.tokenType()).thenReturn(FlowFileTokenType.ARG);
+			when(token.tokenType()).thenReturn(FlowFileTokenType.BEGIN);
+			when(token.tokenType()).thenReturn(FlowFileTokenType.END);
+			when(token.tokenType()).thenReturn(FlowFileTokenType.EOF);
+			when(token.tokenType()).thenReturn(FlowFileTokenType.EQUALS);
+			when(token.tokenType()).thenReturn(FlowFileTokenType.LINE);
 		}});
 		assertThat(this.parser.isConfigurationValue(token), is(false));
 		assertThat(this.parser.isConfigurationValue(token), is(false));
@@ -164,8 +164,8 @@ public class FlowFileParserTest {
 	@Test(expected=FlowFileParserException.class)
 	public void parseShouldThrowFlowFileParserExceptionWhenBeginNotPresent() throws Exception {
 		mockery.checking(new Expectations() {{
-			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.EQUALS, "=")));
-			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
+			when(tokenizer.next()).thenReturn(new FlowFileToken(FlowFileTokenType.EQUALS, "="));
+			when(tokenizer.getLineNumber()).thenReturn(1);
 		}});
 		this.parser.parse();
 	}
@@ -173,9 +173,9 @@ public class FlowFileParserTest {
 	@Test(expected=FlowFileParserException.class)
 	public void parseLevelShouldThrowFlowFileParserExceptionWhenEndNotPresent() throws Exception {
 		mockery.checking(new Expectations() {{
-			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.BEGIN, "BEGIN")));
-			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.EOF, "EOF")));
-			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
+			when(tokenizer.next()).thenReturn(new FlowFileToken(FlowFileTokenType.BEGIN, "BEGIN"));
+			when(tokenizer.next()).thenReturn(new FlowFileToken(FlowFileTokenType.EOF, "EOF"));
+			when(tokenizer.getLineNumber()).thenReturn(1);
 		}});
 		this.parser.parse();
 	}
@@ -184,7 +184,7 @@ public class FlowFileParserTest {
 	public void parseLinesSetsBeatsOnBuilderForEachLineRead() throws Exception {
 		mockery.checking(new Expectations() {{
 			exactly(3).of(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.LINE, "-x-")));
-			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.EOF, "EOF")));
+			when(tokenizer.next()).thenReturn(new FlowFileToken(FlowFileTokenType.EOF, "EOF"));
 			oneOf(builder).addBeatLine("-x-", 0);
 			oneOf(builder).addBeatLine("-x-", 1);
 			oneOf(builder).addBeatLine("-x-", 2);
@@ -195,10 +195,10 @@ public class FlowFileParserTest {
 	@Test(expected=FlowFileParserException.class)
 	public void parseThrowsFlowFileParserExceptionWhenEOFReachedButTokensAreLeft() throws Exception {
 		mockery.checking(new Expectations() {{
-			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.BEGIN, "BEGIN")));
-			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.END, "END")));
-			oneOf(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.LINE, "--x-")));
-			oneOf(tokenizer).getLineNumber(); will(returnValue(1));
+			when(tokenizer.next()).thenReturn(new FlowFileToken(FlowFileTokenType.BEGIN, "BEGIN"));
+			when(tokenizer.next()).thenReturn(new FlowFileToken(FlowFileTokenType.END, "END"));
+			when(tokenizer.next()).thenReturn(new FlowFileToken(FlowFileTokenType.LINE, "--x-"));
+			when(tokenizer.getLineNumber()).thenReturn(1);
 		}});
 		this.parser.parse();
 	}

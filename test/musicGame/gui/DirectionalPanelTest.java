@@ -29,7 +29,7 @@ public class DirectionalPanelTest {
 	public void setUp() {
 		initMocks(this);
 		mockery.checking(new Expectations() {{
-			oneOf(context).getInput(); will(returnValue(input));
+			when(context.getInput()).thenReturn(input);
 			oneOf(input).addPrimaryListener(with(any(DirectionalPanel.class)));
 		}});
 		this.panel = new DirectionalPanel(context, X, Y, COMPONENT_WIDTH, COMPONENT_HEIGHT, SPACING);
@@ -80,7 +80,7 @@ public class DirectionalPanelTest {
 		final int screenHeight = 500;
 		
 		mockery.checking(new Expectations() {{
-			oneOf(context).getInput(); will(returnValue(input));
+			when(context.getInput()).thenReturn(input);
 			oneOf(input).addPrimaryListener(with(any(DirectionalPanel.class)));
 			exactly(2).of(context).getWidth(); will(returnValue(screenWidth));
 			exactly(2).of(context).getHeight(); will(returnValue(screenHeight));

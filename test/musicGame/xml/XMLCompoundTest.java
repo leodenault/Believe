@@ -44,9 +44,9 @@ public class XMLCompoundTest {
 	@Test(expected=XMLLoadingException.class)
 	public void fillNodeShouldThrowExceptionIfNumberOfChildrenIsWrong() throws XMLLoadingException {
 		mockery.checking(new Expectations() {{
-			oneOf(element).getName(); will(returnValue("someElement"));
-			oneOf(element).getChildren(); will(returnValue(elList));
-			oneOf(elList).size(); will(returnValue(2));
+			when(element.getName()).thenReturn("someElement");
+			when(element.getChildren()).thenReturn(elList);
+			when(elList.size()).thenReturn(2);
 		}});
 		compound.fillNode(element, node);
 	}
@@ -54,11 +54,11 @@ public class XMLCompoundTest {
 	@Test(expected=XMLLoadingException.class)
 	public void fillNodeShouldThrowExceptionIfNodeHasIncorrectName() throws XMLLoadingException {
 		mockery.checking(new Expectations() {{
-			oneOf(element).getName(); will(returnValue("someElement"));
-			oneOf(element).getChildren(); will(returnValue(elList));
-			oneOf(elList).size(); will(returnValue(3));
-			oneOf(elList).get(0); will(returnValue(element));
-			oneOf(element).getName(); will(returnValue("Doesn't exist"));
+			when(element.getName()).thenReturn("someElement");
+			when(element.getChildren()).thenReturn(elList);
+			when(elList.size()).thenReturn(3);
+			when(elList.get(0)).thenReturn(element);
+			when(element.getName()).thenReturn("Doesn't exist");
 		}});
 		compound.fillNode(element, node);
 	}
@@ -66,14 +66,14 @@ public class XMLCompoundTest {
 	@Test(expected=XMLLoadingException.class)
 	public void fillNodeShouldThrowExceptionIfTwoNodesHaveSameName() throws XMLLoadingException {
 		mockery.checking(new Expectations() {{
-			oneOf(element).getName(); will(returnValue("someElement"));
-			oneOf(element).getChildren(); will(returnValue(elList));
-			oneOf(elList).size(); will(returnValue(3));
-			oneOf(elList).get(0); will(returnValue(element));
-			oneOf(element).getName(); will(returnValue(COMPOUND));
+			when(element.getName()).thenReturn("someElement");
+			when(element.getChildren()).thenReturn(elList);
+			when(elList.size()).thenReturn(3);
+			when(elList.get(0)).thenReturn(element);
+			when(element.getName()).thenReturn(COMPOUND);
 			ignoring(node).fillNode(element);
-			oneOf(elList).get(1); will(returnValue(element));
-			oneOf(element).getName(); will(returnValue(COMPOUND));
+			when(elList.get(1)).thenReturn(element);
+			when(element.getName()).thenReturn(COMPOUND);
 		}});
 		compound.fillNode(element, node);
 	}
@@ -81,18 +81,18 @@ public class XMLCompoundTest {
 	@Test
 	public void fillNodeShouldPopulateCompoundNodeWithChildren() throws XMLLoadingException {
 		mockery.checking(new Expectations() {{
-			oneOf(element).getName(); will(returnValue("someElement"));
-			oneOf(element).getChildren(); will(returnValue(elList));
-			oneOf(elList).size(); will(returnValue(3));
-			oneOf(elList).get(0); will(returnValue(element));
-			oneOf(element).getName(); will(returnValue(LIST));
-			oneOf(node).fillNode(element); will(returnValue(node));
-			oneOf(elList).get(1); will(returnValue(element));
-			oneOf(element).getName(); will(returnValue(COMPOUND));
-			oneOf(node).fillNode(element); will(returnValue(node));
-			oneOf(elList).get(2); will(returnValue(element));
-			oneOf(element).getName(); will(returnValue(PRIMITIVE));
-			oneOf(node).fillNode(element); will(returnValue(node));
+			when(element.getName()).thenReturn("someElement");
+			when(element.getChildren()).thenReturn(elList);
+			when(elList.size()).thenReturn(3);
+			when(elList.get(0)).thenReturn(element);
+			when(element.getName()).thenReturn(LIST);
+			when(node.fillNode(element)).thenReturn(node);
+			when(elList.get(1)).thenReturn(element);
+			when(element.getName()).thenReturn(COMPOUND);
+			when(node.fillNode(element)).thenReturn(node);
+			when(elList.get(2)).thenReturn(element);
+			when(element.getName()).thenReturn(PRIMITIVE);
+			when(node.fillNode(element)).thenReturn(node);
 		}});
 		compound.fillNode(element, node);
 		assertThat(compound.getValue(LIST), is(node));
