@@ -30,7 +30,7 @@ public class DirectionalPanelTest {
 		initMocks(this);
 		mockery.checking(new Expectations() {{
 			when(context.getInput()).thenReturn(input);
-			oneOf(input).addPrimaryListener(with(any(DirectionalPanel.class)));
+
 		}});
 		this.panel = new DirectionalPanel(context, X, Y, COMPONENT_WIDTH, COMPONENT_HEIGHT, SPACING);
 	}
@@ -65,8 +65,8 @@ public class DirectionalPanelTest {
 			exactly(6).of(component).setLocation(with(any(Integer.class)), with(any(Integer.class)));
 			
 			// Removing one element
-			oneOf(component).setLocation(X, Y);
-			oneOf(component).setLocation(X, Y + COMPONENT_HEIGHT + SPACING);
+
+
 		}});
 		this.panel.addChild(component);
 		this.panel.addChild(component);
@@ -81,13 +81,13 @@ public class DirectionalPanelTest {
 		
 		mockery.checking(new Expectations() {{
 			when(context.getInput()).thenReturn(input);
-			oneOf(input).addPrimaryListener(with(any(DirectionalPanel.class)));
+
 			exactly(2).of(context).getWidth(); will(returnValue(screenWidth));
 			exactly(2).of(context).getHeight(); will(returnValue(screenHeight));
 			
-			oneOf(component).setWidth(COMPONENT_WIDTH);
-			oneOf(component).setHeight(COMPONENT_HEIGHT);
-			oneOf(component).setLocation((screenWidth - COMPONENT_WIDTH) / 2, (screenHeight - COMPONENT_HEIGHT) / 2);
+
+
+
 		}});
 		DirectionalPanel panel = new DirectionalPanel(context, COMPONENT_WIDTH, COMPONENT_HEIGHT);
 		assertThat(panel.getX(), is((screenWidth - COMPONENT_WIDTH) / 2));

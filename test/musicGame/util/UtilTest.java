@@ -41,7 +41,7 @@ public class UtilTest {
 				when(parentRect.getWidth()).thenReturn(width);
 				when(parentRect.getHeight()).thenReturn(height);
 				when(childRect.intersection(with(any(Rectangle.class)))).thenReturn(newClip);
-				oneOf(g).setClip(newClip);
+
 		}});
 		Rectangle oldClip = Util.changeClipContext(g, childRect);
 		assertThat(oldClip.getX(), is(x));
@@ -54,7 +54,7 @@ public class UtilTest {
 	public void changeClipContextShouldReturnChildClipIfParentClipIsNull() {
 		mockery.checking(new Expectations() {{
 				when(g.getClip()).thenReturn(null);
-				oneOf(g).setClip(childRect);
+
 		}});
 		Rectangle oldClip = Util.changeClipContext(g, childRect);
 		assertThat(oldClip, nullValue());
@@ -63,7 +63,7 @@ public class UtilTest {
 	@Test
 	public void resetClipContextShouldSetGraphicsClipToGivenRectangle() {
 		mockery.checking(new Expectations() {{
-			oneOf(g).setClip(parentRect);
+
 		}});
 		Util.resetClipContext(g, parentRect);
 	}

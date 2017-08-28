@@ -43,14 +43,14 @@ public class TileCollisionHandlerTest {
 			when(first.getRect()).thenReturn(new Rectangle(x1, y1, 22, 40));
 			when(first.getFloatX()).thenReturn(x1);
 			when(first.getFloatY()).thenReturn(y1);
-			oneOf(first).setLocation(-2, y1);
+
 			
 			when(first.getRect()).thenReturn(new Rectangle(x2, y2, 80, 50));
 			when(first.getVerticalSpeed()).thenReturn(-2f);
 			when(first.getFloatX()).thenReturn(x2);
 			when(first.getFloatY()).thenReturn(y2);
-			oneOf(first).setLocation(x2, 40);
-			oneOf(first).setVerticalSpeed(0f);
+
+
 		}});
 
 		Tile tile = new Tile(1, 1, 20, 20);

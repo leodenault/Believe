@@ -27,7 +27,7 @@ public class LaneTest {
 		initMocks(this);
 		mockery.checking(new Expectations() {{
 			when(context.getInput()).thenReturn(input);
-			oneOf(input).addPrimaryListener(with(any(Lane.class)));
+
 		}});
 		
 		this.lane = new Lane(context, 4, BPM, 0);
@@ -58,10 +58,10 @@ public class LaneTest {
 	public void stopShouldResetBeatPositions() throws Exception {
 		mockery.checking(new Expectations() {{
 			when(context.getInput()).thenReturn(input);
-			oneOf(input).addPrimaryListener(with(any(Beat.class)));
-			oneOf(animation).setCurrentFrame(0);
-			oneOf(animation).setLooping(false);
-			oneOf(animation).stop();
+
+
+
+
 			atLeast(1).of(animation).getWidth(); will(returnValue(123456789));
 			atLeast(1).of(animation).getHeight(); will(returnValue(123));
 		}});

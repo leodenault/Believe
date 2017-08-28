@@ -36,7 +36,7 @@ public class FlowFileParserTest {
 	@After
 	public void tearDown() throws IOException {
 		mockery.checking(new Expectations() {{
-			oneOf(tokenizer).close();
+
 		}});
 		this.parser.close();
 	}
@@ -90,7 +90,7 @@ public class FlowFileParserTest {
 		final List<String> bpm = Arrays.asList("123");
 		this.checkingKVBuilding(FlowFileTokenType.TEMPO, bpm);
 		mockery.checking(new Expectations() {{
-			oneOf(builder).tempo(bpm);
+
 			when(tokenizer.getLineNumber()).thenReturn(1);
 		}});
 		this.parser.parseKVPair(token);
@@ -101,7 +101,7 @@ public class FlowFileParserTest {
 		final List<String> keys = Arrays.asList("a s k l");
 		this.checkingKVBuilding(FlowFileTokenType.KEYS, keys);
 		mockery.checking(new Expectations() {{
-			oneOf(builder).inputKeys(keys);
+
 			when(tokenizer.getLineNumber()).thenReturn(1);
 		}});
 		this.parser.parseKVPair(token);
@@ -112,7 +112,7 @@ public class FlowFileParserTest {
 		final List<String> offset = Arrays.asList("5000");
 		this.checkingKVBuilding(FlowFileTokenType.OFFSET, offset);
 		mockery.checking(new Expectations() {{
-			oneOf(builder).offset(offset);
+
 			when(tokenizer.getLineNumber()).thenReturn(1);
 		}});
 		this.parser.parseKVPair(token);
@@ -123,7 +123,7 @@ public class FlowFileParserTest {
 		final List<String> song = Arrays.asList("bla/bli/blou.ogg");
 		this.checkingKVBuilding(FlowFileTokenType.SONG, song);
 		mockery.checking(new Expectations() {{
-			oneOf(builder).song(song);
+
 			when(tokenizer.getLineNumber()).thenReturn(1);
 		}});
 		this.parser.parseKVPair(token);
@@ -185,9 +185,9 @@ public class FlowFileParserTest {
 		mockery.checking(new Expectations() {{
 			exactly(3).of(tokenizer).next(); will(returnValue(new FlowFileToken(FlowFileTokenType.LINE, "-x-")));
 			when(tokenizer.next()).thenReturn(new FlowFileToken(FlowFileTokenType.EOF, "EOF"));
-			oneOf(builder).addBeatLine("-x-", 0);
-			oneOf(builder).addBeatLine("-x-", 1);
-			oneOf(builder).addBeatLine("-x-", 2);
+
+
+
 		}});
 		this.parser.parseLines();
 	}

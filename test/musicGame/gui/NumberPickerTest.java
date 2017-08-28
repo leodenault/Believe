@@ -25,7 +25,7 @@ public class NumberPickerTest {
 		initMocks(this);
 		mockery.checking(new Expectations() {{
 			when(container.getInput()).thenReturn(input);
-			oneOf(input).addPrimaryListener(with(any(NumberPicker.class)));
+
 		}});
 		
 		picker = new NumberPicker(container, 0, 0, 0, 0, "", 3, 1, 5, sound, sound, sound);
