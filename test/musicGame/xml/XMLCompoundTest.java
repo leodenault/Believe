@@ -1,17 +1,18 @@
 package musicGame.xml;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import org.mockito.Mock;
+
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.newdawn.slick.util.xml.XMLElement;
 import org.newdawn.slick.util.xml.XMLElementList;
 
@@ -43,57 +44,48 @@ public class XMLCompoundTest {
 	
 	@Test(expected=XMLLoadingException.class)
 	public void fillNodeShouldThrowExceptionIfNumberOfChildrenIsWrong() throws XMLLoadingException {
-		mockery.checking(new Expectations() {{
-			when(element.getName()).thenReturn("someElement");
-			when(element.getChildren()).thenReturn(elList);
-			when(elList.size()).thenReturn(2);
-		}});
+		when(element.getName()).thenReturn("someElement");
+		when(element.getChildren()).thenReturn(elList);
+		when(elList.size()).thenReturn(2);
 		compound.fillNode(element, node);
 	}
 
 	@Test(expected=XMLLoadingException.class)
 	public void fillNodeShouldThrowExceptionIfNodeHasIncorrectName() throws XMLLoadingException {
-		mockery.checking(new Expectations() {{
-			when(element.getName()).thenReturn("someElement");
-			when(element.getChildren()).thenReturn(elList);
-			when(elList.size()).thenReturn(3);
-			when(elList.get(0)).thenReturn(element);
-			when(element.getName()).thenReturn("Doesn't exist");
-		}});
+		when(element.getName()).thenReturn("someElement");
+		when(element.getChildren()).thenReturn(elList);
+		when(elList.size()).thenReturn(3);
+		when(elList.get(0)).thenReturn(element);
+		when(element.getName()).thenReturn("Doesn't exist");
 		compound.fillNode(element, node);
 	}
 	
 	@Test(expected=XMLLoadingException.class)
 	public void fillNodeShouldThrowExceptionIfTwoNodesHaveSameName() throws XMLLoadingException {
-		mockery.checking(new Expectations() {{
-			when(element.getName()).thenReturn("someElement");
-			when(element.getChildren()).thenReturn(elList);
-			when(elList.size()).thenReturn(3);
-			when(elList.get(0)).thenReturn(element);
-			when(element.getName()).thenReturn(COMPOUND);
-			ignoring(node).fillNode(element);
-			when(elList.get(1)).thenReturn(element);
-			when(element.getName()).thenReturn(COMPOUND);
-		}});
+		when(element.getName()).thenReturn("someElement");
+		when(element.getChildren()).thenReturn(elList);
+		when(elList.size()).thenReturn(3);
+		when(elList.get(0)).thenReturn(element);
+		when(element.getName()).thenReturn(COMPOUND);
+		when(elList.get(1)).thenReturn(element);
+		when(element.getName()).thenReturn(COMPOUND);
 		compound.fillNode(element, node);
 	}
 	
 	@Test
 	public void fillNodeShouldPopulateCompoundNodeWithChildren() throws XMLLoadingException {
-		mockery.checking(new Expectations() {{
-			when(element.getName()).thenReturn("someElement");
-			when(element.getChildren()).thenReturn(elList);
-			when(elList.size()).thenReturn(3);
-			when(elList.get(0)).thenReturn(element);
-			when(element.getName()).thenReturn(LIST);
-			when(node.fillNode(element)).thenReturn(node);
-			when(elList.get(1)).thenReturn(element);
-			when(element.getName()).thenReturn(COMPOUND);
-			when(node.fillNode(element)).thenReturn(node);
-			when(elList.get(2)).thenReturn(element);
-			when(element.getName()).thenReturn(PRIMITIVE);
-			when(node.fillNode(element)).thenReturn(node);
-		}});
+		when(element.getName()).thenReturn("someElement");
+		when(element.getChildren()).thenReturn(elList);
+		when(elList.size()).thenReturn(3);
+		when(elList.get(0)).thenReturn(element);
+		when(element.getName()).thenReturn(LIST);
+		when(node.fillNode(element)).thenReturn(node);
+		when(elList.get(1)).thenReturn(element);
+		when(element.getName()).thenReturn(COMPOUND);
+		when(node.fillNode(element)).thenReturn(node);
+		when(elList.get(2)).thenReturn(element);
+		when(element.getName()).thenReturn(PRIMITIVE);
+		when(node.fillNode(element)).thenReturn(node);
 		compound.fillNode(element, node);
 		assertThat(compound.getValue(LIST), is(node));
 		assertThat(compound.getValue(COMPOUND), is(node));

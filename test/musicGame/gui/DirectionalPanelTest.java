@@ -1,13 +1,13 @@
 package musicGame.gui;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.hamcrest.CoreMatchers.is;
 
-import org.mockito.Mock;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.gui.GUIContext;
 
@@ -28,10 +28,7 @@ public class DirectionalPanelTest {
 	@Before
 	public void setUp() {
 		initMocks(this);
-		mockery.checking(new Expectations() {{
-			when(context.getInput()).thenReturn(input);
-
-		}});
+		when(context.getInput()).thenReturn(input);
 		this.panel = new DirectionalPanel(context, X, Y, COMPONENT_WIDTH, COMPONENT_HEIGHT, SPACING);
 	}
 	
@@ -46,11 +43,6 @@ public class DirectionalPanelTest {
 	
 	@Test
 	public void getHeightShouldReturnTotalHeightOfVisibleItems() {
-		mockery.checking(new Expectations() {{
-			exactly(2).of(component).setWidth(COMPONENT_WIDTH);
-			exactly(2).of(component).setHeight(COMPONENT_HEIGHT);
-			exactly(3).of(component).setLocation(with(any(Integer.class)), with(any(Integer.class)));
-		}});
 		this.panel.addChild(component);
 		this.panel.addChild(component);
 		assertThat(this.panel.getHeight(), is((COMPONENT_HEIGHT * 2) + SPACING));
@@ -58,16 +50,6 @@ public class DirectionalPanelTest {
 	
 	@Test
 	public void removingItemShouldRepeatItemLayout() {
-		mockery.checking(new Expectations() {{
-			// Adding elements
-			exactly(3).of(component).setWidth(COMPONENT_WIDTH);
-			exactly(3).of(component).setHeight(COMPONENT_HEIGHT);
-			exactly(6).of(component).setLocation(with(any(Integer.class)), with(any(Integer.class)));
-			
-			// Removing one element
-
-
-		}});
 		this.panel.addChild(component);
 		this.panel.addChild(component);
 		this.panel.addChild(component);
@@ -78,17 +60,6 @@ public class DirectionalPanelTest {
 	public void constructionWithoutXYShouldBuildIntoMiddleOfScreen() {
 		final int screenWidth = 1000;
 		final int screenHeight = 500;
-		
-		mockery.checking(new Expectations() {{
-			when(context.getInput()).thenReturn(input);
-
-			exactly(2).of(context).getWidth(); will(returnValue(screenWidth));
-			exactly(2).of(context).getHeight(); will(returnValue(screenHeight));
-			
-
-
-
-		}});
 		DirectionalPanel panel = new DirectionalPanel(context, COMPONENT_WIDTH, COMPONENT_HEIGHT);
 		assertThat(panel.getX(), is((screenWidth - COMPONENT_WIDTH) / 2));
 		assertThat(panel.getY(), is(screenHeight / 2));

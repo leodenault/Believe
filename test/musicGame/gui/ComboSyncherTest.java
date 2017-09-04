@@ -2,16 +2,17 @@ package musicGame.gui;
 
 import static musicGame.gui.ComboSyncher.BUFFER_TIME;
 import static musicGame.gui.ComboSyncher.ERROR_LENGTH;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import org.mockito.Mock;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.gui.GUIContext;
+
 import musicGame.core.SynchedComboPattern;
 import musicGame.levelFlow.FlowComponentListener;
 
@@ -38,11 +39,7 @@ public class ComboSyncherTest {
 	@Before
 	public void setUp() {
 		initMocks(this);
-		mockery.checking(new Expectations() {{
-			when(container.getInput()).thenReturn(input);
-
-		}});
-		
+		when(container.getInput()).thenReturn(input);
 		pattern = new SynchedComboPattern();
 		pattern.addAction(FIRST_BEAT, FIRST_KEY);
 		pattern.addAction(SECOND_BEAT, SECOND_KEY);
@@ -60,13 +57,8 @@ public class ComboSyncherTest {
 	public void updateNotifiesEndOfCombo() {
 		final float musicStart = 2.3f;
 		final float comboLength = computeUpToBeat(musicStart, LAST_BEAT) + BUFFER_TIME;
-		
-		mockery.checking(new Expectations() {{
-			when(music.getPosition()).thenReturn(musicStart);
-			when(music.getPosition()).thenReturn(musicStart + comboLength);
-
-		}});
-		
+		when(music.getPosition()).thenReturn(musicStart);
+		when(music.getPosition()).thenReturn(musicStart + comboLength);
 		combo.start(music);
 		combo.update();
 		
@@ -76,13 +68,8 @@ public class ComboSyncherTest {
 	public void updateNotifiesMissedComboBeats() {
 		final float musicStart = 4.8f;
 		final float lengthToBeat = computeUpToBeat(musicStart, FIRST_BEAT);
-		
-		mockery.checking(new Expectations() {{
-			when(music.getPosition()).thenReturn(musicStart);
-			when(music.getPosition()).thenReturn(musicStart + lengthToBeat + 1.4f);
-
-		}});
-		
+		when(music.getPosition()).thenReturn(musicStart);
+		when(music.getPosition()).thenReturn(musicStart + lengthToBeat + 1.4f);
 		combo.start(music);
 		combo.update();
 	}
@@ -91,15 +78,9 @@ public class ComboSyncherTest {
 	public void updateNotifiesFailedBeatWhenPressingAtWrongTime() {
 		final float musicStart = 0.2f;
 		final float lengthToBeat = computeUpToBeat(musicStart, FIRST_BEAT);
-		
-		mockery.checking(new Expectations() {{
-			when(music.getPosition()).thenReturn(musicStart);
-			when(music.getPosition()).thenReturn(musicStart + lengthToBeat - 0.65f);
-			when(music.getPosition()).thenReturn(musicStart + lengthToBeat);
-
-
-		}});
-		
+		when(music.getPosition()).thenReturn(musicStart);
+		when(music.getPosition()).thenReturn(musicStart + lengthToBeat - 0.65f);
+		when(music.getPosition()).thenReturn(musicStart + lengthToBeat);
 		combo.start(music);
 		combo.update();
 		combo.keyPressed(0, FIRST_KEY);
@@ -111,13 +92,8 @@ public class ComboSyncherTest {
 	public void updateNotifiesSuccessfulBeatsWhenPressingAtRightTime() {
 		final float musicStart = 45.8f;
 		final float lengthToBeat = computeUpToBeat(musicStart, FIRST_BEAT);
-		
-		mockery.checking(new Expectations() {{
-			when(music.getPosition()).thenReturn(musicStart);
-			when(music.getPosition()).thenReturn(musicStart + lengthToBeat);
-
-		}});
-		
+		when(music.getPosition()).thenReturn(musicStart);
+		when(music.getPosition()).thenReturn(musicStart + lengthToBeat);
 		combo.start(music);
 		combo.update();
 		combo.keyPressed(0, FIRST_KEY);
@@ -129,17 +105,11 @@ public class ComboSyncherTest {
 		final float lengthToSecondBeat = computeUpToBeat(0, SECOND_BEAT);
 		// Remove 0.01 since it's not quite exact
 		final float error = ERROR_LENGTH + 0.01f;
-		mockery.checking(new Expectations() {{
-			when(music.getPosition()).thenReturn(0f);
-			when(music.getPosition()).thenReturn(lengthToFirstBeat - error);
-			when(music.getPosition()).thenReturn(lengthToFirstBeat);
-			when(music.getPosition()).thenReturn(lengthToSecondBeat - error);
-			when(music.getPosition()).thenReturn(lengthToSecondBeat + error);
-
-
-
-
-		}});
+		when(music.getPosition()).thenReturn(0f);
+		when(music.getPosition()).thenReturn(lengthToFirstBeat - error);
+		when(music.getPosition()).thenReturn(lengthToFirstBeat);
+		when(music.getPosition()).thenReturn(lengthToSecondBeat - error);
+		when(music.getPosition()).thenReturn(lengthToSecondBeat + error);
 		combo.start(music);
 		// Hit before first beat
 		combo.update();

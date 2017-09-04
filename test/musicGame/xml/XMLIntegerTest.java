@@ -1,13 +1,13 @@
 package musicGame.xml;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import org.mockito.Mock;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.newdawn.slick.util.xml.XMLElement;
 import org.newdawn.slick.util.xml.XMLElementList;
 
@@ -25,11 +25,9 @@ public class XMLIntegerTest {
 	
 	@Test(expected=XMLLoadingException.class)
 	public void fillNodeShouldThrowXMLLoadingExceptionWhenThereAreChildren() throws XMLLoadingException {
-		mockery.checking(new Expectations() {{
-			when(element.getName()).thenReturn("haha");
-			when(element.getChildren()).thenReturn(list);
-			when(list.size()).thenReturn(2);
-		}});
+		when(element.getName()).thenReturn("haha");
+		when(element.getChildren()).thenReturn(list);
+		when(list.size()).thenReturn(2);
 		primitive.fillNode(element);
 	}
 	
@@ -38,12 +36,10 @@ public class XMLIntegerTest {
 		final String name = "anode";
 		final String stringValue = "123asna!@$";
 		
-		mockery.checking(new Expectations() {{
-			when(element.getChildren()).thenReturn(list);
-			when(list.size()).thenReturn(0);
-			when(element.getName()).thenReturn(name);
-			when(element.getContent()).thenReturn(stringValue);
-		}});
+		when(element.getChildren()).thenReturn(list);
+		when(list.size()).thenReturn(0);
+		when(element.getName()).thenReturn(name);
+		when(element.getContent()).thenReturn(stringValue);
 		
 		primitive.fillNode(element);
 	}
@@ -54,12 +50,10 @@ public class XMLIntegerTest {
 		final String stringValue = "654";
 		final int value = 654;
 		
-		mockery.checking(new Expectations() {{
-			when(element.getChildren()).thenReturn(list);
-			when(list.size()).thenReturn(0);
-			when(element.getName()).thenReturn(name);
-			when(element.getContent()).thenReturn(stringValue);
-		}});
+		when(element.getChildren()).thenReturn(list);
+		when(list.size()).thenReturn(0);
+		when(element.getName()).thenReturn(name);
+		when(element.getContent()).thenReturn(stringValue);
 		
 		primitive.fillNode(element);
 		assertThat(primitive.name, is(name));

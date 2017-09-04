@@ -1,13 +1,13 @@
 package musicGame.levelFlow;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import org.mockito.Mock;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.TrueTypeFont;
@@ -34,49 +34,29 @@ public class FlowComponentTest {
 	@Before
 	public void setUp() {
 		initMocks(this);
-		mockery.checking(new Expectations() {{
-			atLeast(1).of(context).getInput(); will(returnValue(input));
-
-			atLeast(4).of(input).addPrimaryListener(with(any(Lane.class)));
-
-		}});
+		when(context.getInput()).thenReturn(input);
 		this.flowComponent = new FlowComponent(context, song, INPUT_KEYS, NUM_LANES, LANE_WIDTH, SUBDIVISION, BPM, OFFSET, 0, 0, 0, font);
 	}
 
 	@Test
 	public void componentActivatedShouldNotifyListenersThatABeatWasMissed() {
-		mockery.checking(new Expectations() {{
-
-		}});
 		this.flowComponent.addListener(this.listener);
 		this.flowComponent.componentActivated(this.abstractComponent);
 	}
 
 	@Test
 	public void playShouldActivateMusic() {
-		mockery.checking(new Expectations() {{
-
-		}});
 		this.flowComponent.play();
 	}
 	
 	@Test
 	public void pauseShouldPauseMusic() {
-		mockery.checking(new Expectations() {{
-
-
-		}});
 		this.flowComponent.play();
 		this.flowComponent.pause();
 	}
 	
 	@Test
 	public void playShouldResumeMusicAfterPausing() {
-		mockery.checking(new Expectations() {{
-
-
-
-		}});
 		this.flowComponent.play();
 		this.flowComponent.pause();
 		this.flowComponent.play();
@@ -84,21 +64,12 @@ public class FlowComponentTest {
 	
 	@Test
 	public void stopShouldStopMusicAfterPlaying() {
-		mockery.checking(new Expectations() {{
-
-
-		}});
 		this.flowComponent.play();
 		this.flowComponent.stop();
 	}
 	
 	@Test
 	public void stopShouldStopMusicAfterPausing() {
-		mockery.checking(new Expectations() {{
-
-
-
-		}});
 		this.flowComponent.play();
 		this.flowComponent.pause();
 		this.flowComponent.stop();
@@ -106,19 +77,12 @@ public class FlowComponentTest {
 	
 	@Test
 	public void isPlayingReturnsTrueIfComponentIsPlaying() {
-		mockery.checking(new Expectations() {{
-
-		}});
 		this.flowComponent.play();
 		assertThat(this.flowComponent.isPlaying(), is(true));
 	}
 	
 	@Test
 	public void isPlayingReturnsFalseIfComponentIsPaused() {
-		mockery.checking(new Expectations() {{
-
-
-		}});
 		this.flowComponent.play();
 		this.flowComponent.pause();
 		assertThat(this.flowComponent.isPlaying(), is(false));

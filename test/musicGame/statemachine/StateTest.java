@@ -2,7 +2,7 @@ package musicGame.statemachine;
 
 import static musicGame.statemachine.State.Action.JUMP;
 import static musicGame.statemachine.State.Action.LAND;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;

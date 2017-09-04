@@ -1,18 +1,20 @@
 package musicGame.util;
 
 import static musicGame.util.MapEntry.entry;
-import static org.hamcrest.CoreMatchers.containsInAnyOrder;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.mockito.Mock;
+
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 
@@ -34,15 +36,13 @@ public class UtilTest {
 		final float width = 100.0f;
 		final float height = 100.0f;
 		
-		mockery.checking(new Expectations() {{
-				when(g.getClip()).thenReturn(parentRect);
-				when(parentRect.getX()).thenReturn(x);
-				when(parentRect.getY()).thenReturn(y);
-				when(parentRect.getWidth()).thenReturn(width);
-				when(parentRect.getHeight()).thenReturn(height);
-				when(childRect.intersection(with(any(Rectangle.class)))).thenReturn(newClip);
+		when(g.getClip()).thenReturn(parentRect);
+		when(parentRect.getX()).thenReturn(x);
+		when(parentRect.getY()).thenReturn(y);
+		when(parentRect.getWidth()).thenReturn(width);
+		when(parentRect.getHeight()).thenReturn(height);
+		when(childRect.intersection(any())).thenReturn(newClip);
 
-		}});
 		Rectangle oldClip = Util.changeClipContext(g, childRect);
 		assertThat(oldClip.getX(), is(x));
 		assertThat(oldClip.getY(), is(y));
@@ -52,19 +52,13 @@ public class UtilTest {
 
 	@Test
 	public void changeClipContextShouldReturnChildClipIfParentClipIsNull() {
-		mockery.checking(new Expectations() {{
-				when(g.getClip()).thenReturn(null);
-
-		}});
+		when(g.getClip()).thenReturn(null);
 		Rectangle oldClip = Util.changeClipContext(g, childRect);
 		assertThat(oldClip, nullValue());
 	}
 	
 	@Test
 	public void resetClipContextShouldSetGraphicsClipToGivenRectangle() {
-		mockery.checking(new Expectations() {{
-
-		}});
 		Util.resetClipContext(g, parentRect);
 	}
 	

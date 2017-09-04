@@ -1,6 +1,7 @@
 package musicGame.physics;
 
 
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import org.junit.Before;
@@ -26,9 +27,7 @@ public class TileCollisionHandlerTest {
 	
 	@Test
 	public void handleCollisionShouldNotRunWhenNotGivenATile() {
-		mockery.checking(new Expectations() {{
-			when(collidable.getType()).thenReturn(CollidableType.CHARACTER);
-		}});
+		when(collidable.getType()).thenReturn(CollidableType.CHARACTER);
 		handler.handleCollision(first, collidable);
 	}
 	
@@ -39,19 +38,13 @@ public class TileCollisionHandlerTest {
 		final float x2 = 28;
 		final float y2 = 38;
 		
-		mockery.checking(new Expectations() {{
-			when(first.getRect()).thenReturn(new Rectangle(x1, y1, 22, 40));
-			when(first.getFloatX()).thenReturn(x1);
-			when(first.getFloatY()).thenReturn(y1);
-
-			
-			when(first.getRect()).thenReturn(new Rectangle(x2, y2, 80, 50));
-			when(first.getVerticalSpeed()).thenReturn(-2f);
-			when(first.getFloatX()).thenReturn(x2);
-			when(first.getFloatY()).thenReturn(y2);
-
-
-		}});
+		when(first.getRect()).thenReturn(new Rectangle(x1, y1, 22, 40));
+		when(first.getFloatX()).thenReturn(x1);
+		when(first.getFloatY()).thenReturn(y1);
+		when(first.getRect()).thenReturn(new Rectangle(x2, y2, 80, 50));
+		when(first.getVerticalSpeed()).thenReturn(-2f);
+		when(first.getFloatX()).thenReturn(x2);
+		when(first.getFloatY()).thenReturn(y2);
 
 		Tile tile = new Tile(1, 1, 20, 20);
 		handler.handleCollision(first, tile);
@@ -63,10 +56,8 @@ public class TileCollisionHandlerTest {
 		final float x = 8;
 		final float y = 10;
 		
-		mockery.checking(new Expectations() {{
-			when(first.getRect()).thenReturn(new Rectangle(x, y, 45, 11));
-			when(first.getVerticalSpeed()).thenReturn(1.3f);
-		}});
+		when(first.getRect()).thenReturn(new Rectangle(x, y, 45, 11));
+		when(first.getVerticalSpeed()).thenReturn(1.3f);
 		
 		Tile tile = new Tile(0, 2, 10, 10);
 		tile.setTopNeighbour(true);

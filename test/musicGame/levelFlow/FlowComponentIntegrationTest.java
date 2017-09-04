@@ -1,13 +1,13 @@
 package musicGame.levelFlow;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import org.mockito.Mock;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
@@ -38,28 +38,15 @@ public class FlowComponentIntegrationTest {
 	@Before
 	public void setUp() {
 		initMocks(this);
-		mockery.checking(new Expectations() {{
-			atLeast(1).of(context).getInput(); will(returnValue(input));
-
-			atLeast(4).of(input).addPrimaryListener(with(any(Lane.class)));
-
-		}});
+		when(context.getInput()).thenReturn(input);
 		flowComponent = new FlowComponent(context, song, INPUT_KEYS, NUM_LANES, LANE_WIDTH, SUBDIVISION, BPM, OFFSET, 0, 0, 0, font);
 		flowComponent.setSpeedMultiplier(1);
 	}
 	
 	@Test
 	public void missedBeatsSignaledAtCorrectTime() {
-		mockery.checking(new Expectations() {{
-			when(animation.getWidth()).thenReturn(0);
-			when(animation.getHeight()).thenReturn(0);
-
-
-
-
-
-
-		}});
+		when(animation.getWidth()).thenReturn(0);
+		when(animation.getHeight()).thenReturn(0);
 		flowComponent.addListener(listener);
 		Beat[][] beats = new Beat[][] {
 			new Beat [] {

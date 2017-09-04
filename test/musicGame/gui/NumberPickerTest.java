@@ -1,13 +1,13 @@
 package musicGame.gui;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import org.mockito.Mock;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
@@ -23,11 +23,7 @@ public class NumberPickerTest {
 	@Before
 	public void setUp() throws SlickException {
 		initMocks(this);
-		mockery.checking(new Expectations() {{
-			when(container.getInput()).thenReturn(input);
-
-		}});
-		
+		when(container.getInput()).thenReturn(input);
 		picker = new NumberPicker(container, 0, 0, 0, 0, "", 3, 1, 5, sound, sound, sound);
 	}
 	
@@ -42,10 +38,6 @@ public class NumberPickerTest {
 	
 	@Test
 	public void pressingLeftShouldDecreaseValue() {
-		mockery.checking(new Expectations() {{
-			exactly(2).of(sound).play();
-		}});
-
 		assertThat(picker.getValue(), is(3));
 		picker.activate();
 		picker.keyPressed(Input.KEY_LEFT, '`');
@@ -54,10 +46,6 @@ public class NumberPickerTest {
 	
 	@Test
 	public void pressingRightShouldDecreaseValue() {
-		mockery.checking(new Expectations() {{
-			exactly(2).of(sound).play();
-		}});
-
 		assertThat(picker.getValue(), is(3));
 		picker.activate();
 		picker.keyPressed(Input.KEY_RIGHT, '`');
@@ -66,10 +54,6 @@ public class NumberPickerTest {
 	
 	@Test
 	public void valueShouldNotDecreaseBelowMinimum() {
-		mockery.checking(new Expectations() {{
-			exactly(3).of(sound).play();
-		}});
-		
 		assertThat(picker.getValue(), is(3));
 		picker.activate();
 		picker.keyPressed(Input.KEY_LEFT, '`');
@@ -81,10 +65,6 @@ public class NumberPickerTest {
 	
 	@Test
 	public void valueShouldNotIncreaseBeyondMaximum() {
-		mockery.checking(new Expectations() {{
-			exactly(3).of(sound).play();
-		}});
-		
 		assertThat(picker.getValue(), is(3));
 		picker.activate();
 		picker.keyPressed(Input.KEY_RIGHT, '`');

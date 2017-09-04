@@ -1,14 +1,14 @@
 package musicGame.levelFlow;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import org.mockito.Mock;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.gui.GUIContext;
@@ -25,11 +25,7 @@ public class LaneTest {
 	@Before
 	public void setUp() {
 		initMocks(this);
-		mockery.checking(new Expectations() {{
-			when(context.getInput()).thenReturn(input);
-
-		}});
-		
+		when(context.getInput()).thenReturn(input);
 		this.lane = new Lane(context, 4, BPM, 0);
 	}
 	
@@ -56,16 +52,9 @@ public class LaneTest {
 
 	@Test
 	public void stopShouldResetBeatPositions() throws Exception {
-		mockery.checking(new Expectations() {{
-			when(context.getInput()).thenReturn(input);
-
-
-
-
-			atLeast(1).of(animation).getWidth(); will(returnValue(123456789));
-			atLeast(1).of(animation).getHeight(); will(returnValue(123));
-		}});
-		
+		when(context.getInput()).thenReturn(input);
+		when(animation.getWidth()).thenReturn(123456789);
+		when(animation.getHeight()).thenReturn(123);
 		Beat[] beats = new Beat[] { new Beat(this.context, animation, 1000) };
 		this.lane.setSpeedMultiplier(10);
 		this.lane.addBeats(beats);

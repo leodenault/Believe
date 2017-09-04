@@ -13,11 +13,6 @@
 	<property name="testClasses" value="bin-test" />
 	<property name="testReportsDir" value="testReports" />
 
-	<path id="jmock-classpath">
-		<fileset dir="lib/jmock-2.6.0">
-			<include name="*.jar" />
-		</fileset>
-	</path>
 	<path id="mockito-classpath">
 		<fileset dir="lib/mockito-2.8.55">
 			<include name="*.jar" />
@@ -65,7 +60,6 @@
 		description="Compiles the tests.">
 		<mkdir dir="${testClasses}" />
 		<javac srcdir="test" destdir="${testClasses}" extdirs="lib">
-			<classpath refid="jmock-classpath" />
 			<classpath refid="mockito-classpath" />
 			<classpath refid="junit-classpath" />
 			<classpath path="${binaries}" />
@@ -134,7 +128,6 @@
 		<junit printsummary="true">
 
 			<classpath path="${testClasses}" />
-			<classpath refid="jmock-classpath" />
 			<classpath refid="mockito-classpath" />
 			<classpath refid="junit-classpath" />
 			<classpath refid="externalLibs-classpath" />
