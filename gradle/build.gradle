@@ -1,0 +1,97 @@
+description ="""
+Project name: ${project.name}
+Believe is a 2D action platforming, musically driven video game with branching storylines.
+"""
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+def classpath = '. customFlowFiles customSongs'
+def nativeDir = 'lib/native'
+def openalFiles = ['libopenal*', 'OpenAL*', 'openal.dylib']
+
+mainClassName = 'musicGame.Main'
+
+repositories {
+	mavenCentral()
+	flatDir {
+	    dirs = [
+	    	'../lib',
+	    	'../lib/native'
+	    ]
+	 //   dirs '../lib/hamcrest-2.0'
+	}
+}
+
+dependencies {
+	//compile 'org.mockito:mockito-core:2.11.0'
+	compile fileTree(dir: '../lib')
+	compile fileTree(dir: '../${nativeDir}')
+	//compile files('liblwjgl64.so'
+	//compile 'junit:junit:4.12'
+	//compile 'org.hamcrest:hamcrest-junit:2.0.0.0'
+	
+	testCompile 'org.mockito:mockito-core:2.11.0'
+	testCompile 'junit:junit:4.12'
+	testCompile 'org.hamcrest:hamcrest-junit:2.0.0.0'
+
+}
+
+sourceSets {
+	main {
+		java {
+			srcDir '../src'
+		}
+	}
+	test {
+	    java {
+	        srcDir '../test'
+	    }
+	}
+}
+
+task copyLibraries {
+	doLast {
+		copy {
+		    from "../${nativeDir}"
+		    into "${libsDir}/${nativeDir}"
+		    exclude openalFiles
+		}
+		copy {
+		    from "../${nativeDir}"
+		    into libsDir
+		    include openalFiles
+		}
+		copy {
+		    from '../lib'
+		    include '*.jar'
+		    into "${libsDir}/lib"
+		}
+		copy {
+		    from '../'
+		    include 'customFlowFiles/**', 'customSongs/**'
+		    into "${libsDir}"
+		}
+
+	}
+}
+
+
+jar {
+	dependsOn copyLibraries
+
+	// Include libraries in the classpath.
+    fileTree('../lib').include('*.jar').each {
+        File file -> classpath += ' lib/' + file.name
+    }
+
+	from('..') {
+		include 'data/**', 'levelFlowFiles/**', 'res/**'
+	}
+	
+    manifest {
+        attributes(
+        	'Main-Class': mainClassName,
+        	'Class-Path': classpath)
+    }
+}

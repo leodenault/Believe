@@ -14,6 +14,7 @@ testReports
 
 #Temporary files
 *~
+*.swp
 
 #Javadoc
 javadoc
@@ -27,3 +28,9 @@ config.prop
 #Build Directory
 Believe
 Believe.zip
+
+# Gradle
+gradle/.gradle/
+gradle/build
+gradle/.settings/**
+
