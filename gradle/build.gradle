@@ -9,6 +9,8 @@ apply plugin: 'application'
 def classpath = '. customFlowFiles customSongs'
 def nativeDir = 'lib/native'
 def openalFiles = ['libopenal*', 'OpenAL*', 'openal.dylib']
+def scriptsDir = 'build/scripts'
+def distributionsDir = 'build/distributions/'
 
 mainClassName = 'musicGame.Main'
 
@@ -96,13 +98,17 @@ jar {
     }
 }
 
-distributions {
-    main {
-        contents {
-            from "${libsDir}"
-        }
-    }
-}
+task makeZip(type: Zip) {
+	dependsOn jar
+ 	archiveName = rootProject.name + '.zip'
+ 	destinationDir = file(distributionsDir)
+ 	from(libsDir) {
+ 	    into rootProject.name + '/bin'
+ 	}
+ 	from(scriptsDir) {
+ 	    into rootProject.name
+ 	}
+ }
 
 //task runGame(type: JavaExec) {
 //	classpath sourceSets.main.runtimeClasspath + file" ../lib ../lib/native"]
