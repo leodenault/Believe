@@ -6,11 +6,21 @@ Believe is a 2D action platforming, musically driven video game with branching s
 apply plugin: 'java'
 apply plugin: 'application'
 
+enum Os {
+	LINUX, WINDOWS, MAC
+}
+
 def classpath = '. customFlowFiles customSongs'
 def nativeDir = 'lib/native'
 def openalFiles = ['libopenal*', 'OpenAL*', 'openal.dylib']
 def scriptsDir = 'build/scripts'
 def distributionsDir = 'build/distributions/'
+def distOs = Os.LINUX
+def osNativeMap = [
+	(Os.LINUX): '.so',
+	(Os.WINDOWS): '.dll',
+	(Os.MAC): '.dylib'
+]
 
 mainClassName = 'musicGame.Main'
 
@@ -74,7 +84,6 @@ task copyLibraries {
 		    include 'customFlowFiles/**', 'customSongs/**'
 		    into "${libsDir}"
 		}
-
 	}
 }
 
@@ -100,15 +109,36 @@ jar {
 
 task makeZip(type: Zip) {
 	dependsOn jar
- 	archiveName = rootProject.name + '.zip'
- 	destinationDir = file(distributionsDir)
- 	from(libsDir) {
- 	    into rootProject.name + '/bin'
- 	}
- 	from(scriptsDir) {
- 	    into rootProject.name
- 	}
- }
+	project.afterEvaluate {
+		archiveName = rootProject.name + "-${distOs}.zip"
+	}
+	destinationDir = file(distributionsDir)
+	from(libsDir) {
+	    into rootProject.name + '/bin'
+	}
+	from(scriptsDir) {
+	    into rootProject.name
+	}
+}
+
+task configureWindows() {
+	distOs = Os.WINDOWS
+}
+
+task configureMac() {
+	distOs = Os.MAC
+}
+
+task makeWindowsZip() {
+	dependsOn configureWindows, makeZip
+	makeZip.mustRunAfter(configureWindows)
+}
+
+task makeMacZip() {
+	dependsOn configureMac, makeZip
+	makeZip.mustRunAfter(configureMac)
+}
+
 
 //task runGame(type: JavaExec) {
 //	classpath sourceSets.main.runtimeClasspath + file" ../lib ../lib/native"]

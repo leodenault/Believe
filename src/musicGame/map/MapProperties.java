@@ -69,7 +69,7 @@ public class MapProperties {
 		} catch (NumberFormatException e) {
 			Log.error(String.format(
 					"Could not fetch numeric property %s from map",
-					propertyName, defaultValue));
+					propertyName));
 		}
 		
 		return value;

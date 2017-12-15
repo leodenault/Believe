@@ -34,3 +34,9 @@ gradle/.gradle/
 gradle/build
 gradle/.settings/**
 
+# Bazel
+bazel-*
+
+# intellij
+.idea
+*.iml
