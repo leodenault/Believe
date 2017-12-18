@@ -1,20 +1,33 @@
-java_binary(
-    name = "Believe",
+load("//rules:rules.bzl", "believe_binary")
+
+java_library(
+    name = "believe_lib",
     srcs = glob(["src/**/*.java"]),
     data = [
         "//customFlowFiles:custom_flow_files",
         "//customSongs:custom_songs",
+    ],
+    resources = [
         "//data",
         "//levelFlowFiles:level_flow_files",
         "//res",
     ],
-    main_class = "musicGame.Main",
     deps = [":libs"],
+)
+
+believe_binary(
+    name = "Believe_bin",
+    dep = ":believe_lib",
+    main_class = "musicGame.Main",
 )
 
 java_import(
     name = "libs",
-    data = [":natives"],
+    data = [
+        ":natives",
+        "//customFlowFiles:custom_flow_files",
+        "//customSongs:custom_songs",
+    ],
     jars = glob(["lib/*.jar"]),
 )
 

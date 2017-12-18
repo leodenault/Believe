@@ -1,5 +1,5 @@
 filegroup(
     name = "custom_songs",
-    srcs = glob(["*"]),
+    srcs = glob(["*.ogg"]),
     visibility = ["//:__pkg__"],
 )
