@@ -1,4 +1,4 @@
-load("//rules:rules.bzl", "believe_binary")
+load("//rules:rules.bzl", "believe_binary", "pkg_zip")
 
 java_library(
     name = "believe_lib",
@@ -19,6 +19,11 @@ believe_binary(
     name = "Believe",
     dep = ":believe_lib",
     main_class = "musicGame.Main",
+)
+
+pkg_zip(
+    name = "Believe_pkg",
+    deps = [":Believe"],
 )
 
 java_import(
