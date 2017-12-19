@@ -1,9 +1,3 @@
-def purnt(message, var):
-  print(message)
-  for v in var:
-    print(v)
-    print(dir(v))
-
 MAX_CLASSPATH_LINE_LENGTH = 70
 
 def normalize_classpath(classpath):
@@ -20,7 +14,8 @@ def normalize_classpath(classpath):
 def _impl(ctx):
   dep = ctx.attr.dep
   out_dir = ctx.outputs.out_dir
-  jar_path = out_dir.path + "/Believe.jar"
+  jar_name = ctx.attr.name + "_app.jar"
+  jar_path = out_dir.path + "/" + jar_name
   build_output = out_dir.path + ".output"
   _manifest_temp = ctx.outputs._manifest_temp
   manifest_out= build_output + "/META-INF/MANIFEST.MF"
@@ -66,6 +61,14 @@ def _impl(ctx):
     command=cmd,
     use_default_shell_env=True)
 
+  ctx.actions.write(
+      output = ctx.outputs.executable,
+      content = "cd " + out_dir.basename + ";java -jar " + jar_name,
+      is_executable = True,
+  )
+
+  return [DefaultInfo(runfiles=ctx.runfiles(files=[out_dir]))]
+
 believe_binary = rule(
     _impl,
     attrs = {
@@ -73,8 +76,9 @@ believe_binary = rule(
         "main_class": attr.string(),
     },
     outputs = {
-        "out_dir": "Believe",
+        "out_dir": "%{name}_bin",
         "_manifest_temp": "MANIFEST.MF",
     },
+    executable = True,
 )
 

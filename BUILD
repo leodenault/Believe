@@ -16,7 +16,7 @@ java_library(
 )
 
 believe_binary(
-    name = "Believe_bin",
+    name = "Believe",
     dep = ":believe_lib",
     main_class = "musicGame.Main",
 )
