@@ -160,7 +160,7 @@ pkg_all = rule(
     },
 )
 
-def binary_for_platform(name, os, architecture=None):
+def pkg_for_platform(name, os, architecture=None):
   rule_name = platform_name(prefix = name, os = os, architecture = architecture)
   lib_name = platform_name(prefix = name, os = os, architecture = architecture, suffix = "lib")
   native_dep = platform_name(prefix = "native", os = os, architecture = architecture)
@@ -181,7 +181,6 @@ def binary_for_platform(name, os, architecture=None):
       ],
       deps = ["//lib"],
   )
-
 
   believe_binary(
     name = rule_name,

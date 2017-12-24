@@ -1,31 +1,31 @@
-load("//bzl:rules.bzl", "believe_binary", "pkg_zip", "binary_for_platform", "pkg_all")
+load("//bzl:rules.bzl", "pkg_for_platform", "pkg_all")
 load("//bzl:enums.bzl", "ARCHITECTURE", "OS")
 
-binary_for_platform(
+pkg_for_platform(
     name = "Believe",
     architecture = ARCHITECTURE.X86,
     os = OS.WINDOWS,
 )
 
-binary_for_platform(
+pkg_for_platform(
     name = "Believe",
     architecture = ARCHITECTURE.X64,
     os = OS.WINDOWS,
 )
 
-binary_for_platform(
+pkg_for_platform(
     name = "Believe",
     architecture = ARCHITECTURE.X86,
     os = OS.LINUX,
 )
 
-binary_for_platform(
+pkg_for_platform(
     name = "Believe",
     architecture = ARCHITECTURE.X64,
     os = OS.LINUX,
 )
 
-binary_for_platform(
+pkg_for_platform(
     name = "Believe",
     os = OS.MAC,
 )
