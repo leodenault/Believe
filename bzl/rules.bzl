@@ -156,7 +156,7 @@ pkg_all = rule(
         "deps" : attr.label_list(allow_files=False)
     },
     outputs = {
-        "out_dir": "%{name}",
+        "out_dir": "%{name}_pkgs",
     },
 )
 

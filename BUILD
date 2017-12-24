@@ -36,7 +36,7 @@ alias(
 )
 
 pkg_all(
-    name = "Believe_all_pkgs",
+    name = "Believe_all",
     deps = [
         ":Believe_linux_x64_pkg",
         ":Believe_linux_x86_pkg",
