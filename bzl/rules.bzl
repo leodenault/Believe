@@ -1,23 +1,27 @@
-MAX_CLASSPATH_LINE_LENGTH = 70
+load(":enums.bzl", "ARCHITECTURE", "OS")
+load(":util.bzl", "platform_name")
 
-def normalize_classpath(classpath):
+# Private constants
+_MAX_CLASSPATH_LINE_LENGTH = 70
+
+def _normalize_classpath(classpath):
   '''
-  Takes a classpath string and chops it up into lines of length MAX_CLASSPATH_LINE_LENGTH.
+  Takes a classpath string and chops it up into lines of length _MAX_CLASSPATH_LINE_LENGTH.
   '''
   classpath_length = len(classpath)
-  if classpath_length <= MAX_CLASSPATH_LINE_LENGTH:
+  if classpath_length <= _MAX_CLASSPATH_LINE_LENGTH:
     return classpath
 
-  lines = [classpath[0:MAX_CLASSPATH_LINE_LENGTH]]
-  for i in range(MAX_CLASSPATH_LINE_LENGTH, classpath_length, MAX_CLASSPATH_LINE_LENGTH - 1):
-    lines.append(classpath[i:i + MAX_CLASSPATH_LINE_LENGTH - 1])
+  lines = [classpath[0:_MAX_CLASSPATH_LINE_LENGTH]]
+  for i in range(_MAX_CLASSPATH_LINE_LENGTH, classpath_length, _MAX_CLASSPATH_LINE_LENGTH - 1):
+    lines.append(classpath[i:i + _MAX_CLASSPATH_LINE_LENGTH - 1])
 
   return "\n ".join(lines)
 
 def _believe_binary_impl(ctx):
   dep = ctx.attr.dep
   out_dir = ctx.outputs.out_dir
-  jar_name = ctx.attr.name + "_app.jar"
+  jar_name = ctx.attr.jar_name if ctx.attr.jar_name else ctx.attr.name + "_app.jar"
   jar_path = out_dir.path + "/" + jar_name
   build_output = out_dir.path + ".output"
   _manifest_temp = ctx.outputs._manifest_temp
@@ -43,7 +47,7 @@ def _believe_binary_impl(ctx):
   # Set up the manifest file contents.
   manifest_main_class = "Main-Class: " + ctx.attr.main_class
   manifest_classpath = "Class-Path: " + " ".join([file.short_path for file in data])
-  manifest = manifest_main_class + "\n" + normalize_classpath(manifest_classpath) + "\n"
+  manifest = manifest_main_class + "\n" + _normalize_classpath(manifest_classpath) + "\n"
 
   ctx.file_action(
       output = _manifest_temp,
@@ -102,7 +106,6 @@ def _zip_impl(ctx):
     cmd += "current_dir=$(pwd)\n"
     cmd += "cd " + files_to_zip[0].path + "\n"
   cmd += "zip -qr " + ("$current_dir/" if single_dir else "") + zip_file.path + " " + file_string
-  print(cmd)
 
   ctx.actions.run_shell(
       inputs = files_to_zip,
@@ -111,16 +114,28 @@ def _zip_impl(ctx):
       use_default_shell_env = True,
   )
 
+def _pkg_all_impl(ctx):
+  out_dir = ctx.outputs.out_dir
+  files = [file for dep in ctx.attr.deps for file in dep.files]
+  cmd = "mkdir " + out_dir.path + "\n"
+  cmd += "\n".join(["cp " + file.path + " " + out_dir.path for file in files])
+  ctx.actions.run_shell(
+      inputs = files,
+      outputs = [out_dir],
+      command = cmd,
+      use_default_shell_env = True,
+  )
 
 believe_binary = rule(
     _believe_binary_impl,
     attrs = {
         "dep": attr.label(allow_files=False, mandatory=True),
         "main_class": attr.string(),
+        "jar_name": attr.string(mandatory=False),
     },
     outputs = {
         "out_dir": "%{name}_bin",
-        "_manifest_temp": "MANIFEST.MF",
+        "_manifest_temp": "MANIFEST_%{name}.MF",
     },
     executable = True,
 )
@@ -134,3 +149,48 @@ pkg_zip = rule(
         "zip_file": "%{name}.zip",
     },
 )
+
+pkg_all = rule(
+    _pkg_all_impl,
+    attrs = {
+        "deps" : attr.label_list(allow_files=False)
+    },
+    outputs = {
+        "out_dir": "%{name}",
+    },
+)
+
+def binary_for_platform(name, os, architecture=None):
+  rule_name = platform_name(prefix = name, os = os, architecture = architecture)
+  lib_name = platform_name(prefix = name, os = os, architecture = architecture, suffix = "lib")
+  native_dep = platform_name(prefix = "native", os = os, architecture = architecture)
+  pkg_name = platform_name(prefix = name, os = os, architecture = architecture, suffix = "pkg")
+
+  native.java_library(
+      name = lib_name,
+      srcs = native.glob(["src/**/*.java"]),
+      data = [
+          "//customFlowFiles:custom_flow_files",
+          "//customSongs:custom_songs",
+          "//lib/native:" + native_dep
+      ],
+      resources = [
+          "//data",
+          "//levelFlowFiles:level_flow_files",
+          "//res",
+      ],
+      deps = ["//lib"],
+  )
+
+
+  believe_binary(
+    name = rule_name,
+    dep = ":" + lib_name,
+    main_class = "musicGame.Main",
+    jar_name= name + ".jar",
+  )
+
+  pkg_zip(
+      name = rule_name + "_pkg",
+      deps = [":" + rule_name]
+  )

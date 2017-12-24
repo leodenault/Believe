@@ -1,42 +1,47 @@
-load("//rules:rules.bzl", "believe_binary", "pkg_zip")
+load("//bzl:rules.bzl", "believe_binary", "pkg_zip", "binary_for_platform", "pkg_all")
+load("//bzl:enums.bzl", "ARCHITECTURE", "OS")
 
-java_library(
-    name = "believe_lib",
-    srcs = glob(["src/**/*.java"]),
-    data = [
-        "//customFlowFiles:custom_flow_files",
-        "//customSongs:custom_songs",
-    ],
-    resources = [
-        "//data",
-        "//levelFlowFiles:level_flow_files",
-        "//res",
-    ],
-    deps = [":libs"],
-)
-
-believe_binary(
+binary_for_platform(
     name = "Believe",
-    dep = ":believe_lib",
-    main_class = "musicGame.Main",
+    architecture = ARCHITECTURE.X86,
+    os = OS.WINDOWS,
 )
 
-pkg_zip(
-    name = "Believe_pkg",
-    deps = [":Believe"],
+binary_for_platform(
+    name = "Believe",
+    architecture = ARCHITECTURE.X64,
+    os = OS.WINDOWS,
 )
 
-java_import(
-    name = "libs",
-    data = [
-        ":natives",
-        "//customFlowFiles:custom_flow_files",
-        "//customSongs:custom_songs",
+binary_for_platform(
+    name = "Believe",
+    architecture = ARCHITECTURE.X86,
+    os = OS.LINUX,
+)
+
+binary_for_platform(
+    name = "Believe",
+    architecture = ARCHITECTURE.X64,
+    os = OS.LINUX,
+)
+
+binary_for_platform(
+    name = "Believe",
+    os = OS.MAC,
+)
+
+alias(
+    name = "Believe",
+    actual = ":Believe_linux_x64",
+)
+
+pkg_all(
+    name = "Believe_all_pkgs",
+    deps = [
+        ":Believe_linux_x64_pkg",
+        ":Believe_linux_x86_pkg",
+        ":Believe_mac_pkg",
+        ":Believe_windows_x64_pkg",
+        ":Believe_windows_x86_pkg",
     ],
-    jars = glob(["lib/*.jar"]),
-)
-
-filegroup(
-    name = "natives",
-    srcs = glob(["lib/native/*"]),
 )
