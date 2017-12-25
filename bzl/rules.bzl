@@ -160,11 +160,11 @@ pkg_all = rule(
     },
 )
 
-def pkg_for_platform(name, os, architecture=None):
-  rule_name = platform_name(prefix = name, os = os, architecture = architecture)
-  lib_name = platform_name(prefix = name, os = os, architecture = architecture, suffix = "lib")
+def pkg_for_platform(base_name, os, architecture=None):
+  rule_name = platform_name(prefix = base_name, os = os, architecture = architecture)
+  lib_name = platform_name(prefix = base_name, os = os, architecture = architecture, suffix = "lib")
   native_dep = platform_name(prefix = "native", os = os, architecture = architecture)
-  pkg_name = platform_name(prefix = name, os = os, architecture = architecture, suffix = "pkg")
+  pkg_name = platform_name(prefix = base_name, os = os, architecture = architecture, suffix = "pkg")
 
   native.java_library(
       name = lib_name,
@@ -186,7 +186,7 @@ def pkg_for_platform(name, os, architecture=None):
     name = rule_name,
     dep = ":" + lib_name,
     main_class = "musicGame.Main",
-    jar_name= name + ".jar",
+    jar_name = base_name + ".jar",
   )
 
   pkg_zip(

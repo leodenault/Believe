@@ -2,31 +2,31 @@ load("//bzl:rules.bzl", "pkg_for_platform", "pkg_all")
 load("//bzl:enums.bzl", "ARCHITECTURE", "OS")
 
 pkg_for_platform(
-    name = "Believe",
     architecture = ARCHITECTURE.X86,
+    base_name = "Believe",
     os = OS.WINDOWS,
 )
 
 pkg_for_platform(
-    name = "Believe",
     architecture = ARCHITECTURE.X64,
+    base_name = "Believe",
     os = OS.WINDOWS,
 )
 
 pkg_for_platform(
-    name = "Believe",
     architecture = ARCHITECTURE.X86,
+    base_name = "Believe",
     os = OS.LINUX,
 )
 
 pkg_for_platform(
-    name = "Believe",
     architecture = ARCHITECTURE.X64,
+    base_name = "Believe",
     os = OS.LINUX,
 )
 
 pkg_for_platform(
-    name = "Believe",
+    base_name = "Believe",
     os = OS.MAC,
 )
 
