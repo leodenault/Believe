@@ -2,6 +2,8 @@ package musicGame.gui;
 
 import java.util.Iterator;
 
+import musicGame.gui.base.AbstractContainer;
+import musicGame.gui.base.ComponentBase;
 import org.newdawn.slick.gui.GUIContext;
 
 public class DirectionalPanel extends AbstractContainer {
@@ -57,9 +59,13 @@ public class DirectionalPanel extends AbstractContainer {
 		this.children.remove(child);
 		this.resetLayout();
 	}
+
+	public void clear() {
+		children.clear();
+	}
 	
 	@Override
-	protected void resetLayout() {
+	public void resetLayout() {
 		int position = 0;
 		int parentY = (int)rect.getY();
 		

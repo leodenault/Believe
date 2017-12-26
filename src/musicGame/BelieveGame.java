@@ -12,7 +12,7 @@ import musicGame.core.JarClasspathLocation;
 import musicGame.gamestate.ArcadeState;
 import musicGame.gamestate.FlowFilePickerMenuState;
 import musicGame.gamestate.GamePausedOverlay;
-import musicGame.gamestate.GameStateBase;
+import musicGame.gamestate.base.GameStateBase;
 import musicGame.gamestate.MainMenuState;
 import musicGame.gamestate.OptionsMenuState;
 import musicGame.gamestate.PlatformingState;

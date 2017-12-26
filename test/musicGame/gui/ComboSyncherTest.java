@@ -14,7 +14,7 @@ import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.gui.GUIContext;
 
 import musicGame.core.SynchedComboPattern;
-import musicGame.levelFlow.FlowComponentListener;
+import musicGame.levelFlow.component.FlowComponentListener;
 
 public class ComboSyncherTest {
 	private static final int BPM = 132;

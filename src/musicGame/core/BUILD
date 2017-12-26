@@ -1,0 +1,15 @@
+java_library(
+    name = "core",
+    srcs = glob(["*.java"]),
+    visibility = [
+        "//src/musicGame:__pkg__",
+        "//src/musicGame/character:__pkg__",
+        "//src/musicGame/gamestate:__pkg__",
+        "//src/musicGame/gui:__pkg__",
+        "//src/musicGame/levelFlow/component:__pkg__",
+    ],
+    deps = [
+        "//lib",
+        "//src/musicGame/xml",
+    ],
+)

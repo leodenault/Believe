@@ -1,28 +1,22 @@
 package musicGame.character;
 
-import static musicGame.util.MapEntry.entry;
-import static musicGame.util.Util.hashMapOf;
-import static musicGame.util.Util.hashSetOf;
-import static musicGame.util.Util.immutableMapOf;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import musicGame.character.base.Character;
+import musicGame.character.base.Faction;
+import musicGame.core.SynchedComboPattern;
+import musicGame.physics.collision.Collidable;
+import musicGame.physics.collision.CommandCollidable;
+import musicGame.physics.collision.CommandCollisionHandler;
+import musicGame.statemachine.State;
+import musicGame.statemachine.State.Action;
+import musicGame.util.MapEntry;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
 
-import musicGame.core.SynchedComboPattern;
-import musicGame.physics.Collidable;
-import musicGame.physics.CommandCollidable;
-import musicGame.physics.CommandCollisionHandler;
-import musicGame.physics.DamageHandler.Faction;
-import musicGame.statemachine.State;
-import musicGame.statemachine.State.Action;
-import musicGame.util.MapEntry;
+import java.util.*;
+
+import static musicGame.util.MapEntry.entry;
+import static musicGame.util.Util.*;
 
 public class PlayableCharacter extends Character implements  CommandCollidable {
 	public interface SynchedComboListener {

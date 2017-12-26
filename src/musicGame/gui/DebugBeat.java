@@ -3,6 +3,7 @@ package musicGame.gui;
 import java.util.HashMap;
 import java.util.Set;
 
+import musicGame.gui.base.ComponentBase;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -76,7 +77,7 @@ public class DebugBeat extends ComponentBase {
 	}
 	
 	@Override
-	protected void resetLayout() {}
+	public void resetLayout() {}
 
 	@Override
 	protected void renderComponent(GUIContext context, Graphics g)

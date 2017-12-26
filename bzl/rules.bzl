@@ -18,60 +18,88 @@ def _normalize_classpath(classpath):
 
   return "\n ".join(lines)
 
+def _make_dir_and_copy_file(file, dest_dir, dest_file_name=None):
+  '''
+  Generates commands for making a directory for a file and copying the file into the directory.
+  '''
+  dest_name = dest_file_name if dest_file_name else file.basename
+  cmd = "mkdir -p " + dest_dir + "\n"
+  cmd += "cp " + file.path + " " + dest_dir + "/" + dest_name
+  return cmd
+
+def _make_dirs_and_copy_files(files, dest_dir, file_dir_override=None):
+  '''
+  Generates commands for making directories for a set of files and copying the files into the
+  directories.
+  '''
+  return "\n".join([_make_dir_and_copy_file(file, dest_dir + "/" + file.dirname) for file in files])
+
 def _believe_binary_impl(ctx):
-  dep = ctx.attr.dep
   out_dir = ctx.outputs.out_dir
+  build_dir = out_dir.path + ".build"
   jar_name = ctx.attr.jar_name if ctx.attr.jar_name else ctx.attr.name + "_app.jar"
   jar_path = out_dir.path + "/" + jar_name
-  build_output = out_dir.path + ".output"
-  _manifest_temp = ctx.outputs._manifest_temp
-  manifest_out= build_output + "/META-INF/MANIFEST.MF"
+  manifest_temp = ctx.outputs._manifest_temp
 
-  # First fetch the data files and filter out the JAR file.
-  data = dep.data_runfiles.files.to_list()
-  jar = [file for file in data
-            if file.basename == "lib" + dep.label.name + ".jar"]
-  if len(jar) == 0:
-    fail(msg = "Expected a single jar, but found none.", attr="dep")
-  elif len(jar) > 1:
-    fail(msg = "Expected a single jar, but found multiple.", attr="dep")
-  jar = jar[0]
-  data.remove(jar)
+  generated_libs = []
+  third_party_libs = []
 
-  # Now filter out the openal natives. They need to be placed right next to the JAR due to a bug
-  # which causes them not to be found otherwise.
-  openal = [file for file in data if ("openal" in file.basename or "OpenAL" in file.basename)]
-  for file in openal:
-    data.remove(file)
+  # Split up the jar files into third party and generated libraries.
+  for dep in ctx.attr.runtime_deps:
+    for file in dep.data_runfiles.files:
+      if file.is_source:
+        third_party_libs.append(file)
+      else:
+        generated_libs.append(file)
+
+  # Gather the data files which will reside outside of the final jar file.
+  data_files = []
+  openal_files = []
+  for dep in ctx.attr.data:
+    for file in dep.files:
+      if "openal" in file.basename.lower():
+        openal_files.append(file)
+      else:
+        data_files.append(file)
+
+  # Gather the resource files which will be put into the final jar file.
+  resource_files = [file for dep in ctx.attr.resources for file in dep.files]
 
   # Set up the manifest file contents.
   manifest_main_class = "Main-Class: " + ctx.attr.main_class
-  manifest_classpath = "Class-Path: " + " ".join([file.short_path for file in data])
-  manifest = manifest_main_class + "\n" + _normalize_classpath(manifest_classpath) + "\n"
+  manifest_classpath = "Class-Path: " + " ".join([file.short_path for file in data_files + third_party_libs])
+  manifest_content = manifest_main_class + "\n" + _normalize_classpath(manifest_classpath) + "\n"
 
   ctx.file_action(
-      output = _manifest_temp,
-      content = manifest,
+      output = manifest_temp,
+      content = manifest_content,
       executable = False)
 
-  # Get the jar created from the java_lib rule. We want to unzip it and replace its manifest with
-  # ours. Then we want to re-JAR it.
-  cmd = "mkdir " + build_output + "\n"
-  cmd += "unzip -q " + jar.path + " -d " + build_output + "\n"
-  cmd += "cp -f " + _manifest_temp.path + " " + manifest_out + "\n"
-  cmd += "mkdir " + out_dir.path + "\n"
-  cmd += "jar -cfM " + jar_path + " -C " + build_output + "/ ." + "\n"
+  cmd = "mkdir " + build_dir + "\n"
 
-  # Add all of the data files to the output directory.
-  cmd += "\n".join(
-      ["mkdir -p " + out_dir.path + "/" + file.dirname + "\n" +
-       "cp " + file.short_path + " " + out_dir.path + "/" + file.short_path
-       for file in data]) + "\n"
-  cmd += "\n".join(
-      ["cp " + file.short_path + " " + out_dir.path + "/" + file.basename for file in openal])
+  # Unzip the jar contents of the generated libraries and zip them up in the final jar file.
+  cmd += "".join(["unzip -q " + jar.path + " -d " + build_dir + " -x META-INF/*\n"
+                    for jar in generated_libs])
+
+  # Then copy the resources and the manifest in the build directory to include them in the jar, too.
+  cmd += _make_dirs_and_copy_files(resource_files, build_dir) + "\n"
+  cmd += _make_dir_and_copy_file(manifest_temp, build_dir + "/META-INF", "MANIFEST.MF") + "\n"
+  cmd += "mkdir " + out_dir.path + "\n"
+  cmd += "jar -cfM " + jar_path  + " -C " + build_dir + "/ ." + "\n"
+
+  # Copy the data to the output directory.
+  cmd += _make_dirs_and_copy_files(data_files, out_dir.path) + "\n"
+  cmd += _make_dirs_and_copy_files(third_party_libs, out_dir.path) + "\n"
+  cmd += "\n".join([_make_dir_and_copy_file(file, out_dir.path) for file in openal_files])
 
   ctx.actions.run_shell(
-    inputs = [jar, _manifest_temp] + data + openal,
+    inputs = (
+        generated_libs +
+        third_party_libs +
+        resource_files +
+        data_files +
+        openal_files +
+        [manifest_temp]),
     outputs = [out_dir],
     command=cmd,
     use_default_shell_env=True)
@@ -84,9 +112,9 @@ def _believe_binary_impl(ctx):
   )
 
   return [DefaultInfo(
-      runfiles=ctx.runfiles(files=[out_dir]),
-      files=depset([out_dir])
-      )]
+        runfiles=ctx.runfiles(files=[out_dir]),
+        files=depset([out_dir])
+        )]
 
 def _zip_impl(ctx):
   zip_file = ctx.outputs.zip_file
@@ -129,15 +157,17 @@ def _pkg_all_impl(ctx):
 believe_binary = rule(
     _believe_binary_impl,
     attrs = {
-        "dep": attr.label(allow_files=False, mandatory=True),
-        "main_class": attr.string(),
-        "jar_name": attr.string(mandatory=False),
+        "data": attr.label_list(allow_files=True),
+        "main_class": attr.string(mandatory=True),
+        "resources": attr.label_list(allow_files=False),
+        "runtime_deps": attr.label_list(allow_files=False),
+        "jar_name": attr.string(mandatory=False)
     },
     outputs = {
         "out_dir": "%{name}_bin",
-        "_manifest_temp": "MANIFEST_%{name}.MF",
+        "_manifest_temp": "MANIFEST_%{name}.MF"
     },
-    executable = True,
+    executable = True
 )
 
 pkg_zip = rule(
@@ -162,34 +192,27 @@ pkg_all = rule(
 
 def pkg_for_platform(base_name, os, architecture=None):
   rule_name = platform_name(prefix = base_name, os = os, architecture = architecture)
-  lib_name = platform_name(prefix = base_name, os = os, architecture = architecture, suffix = "lib")
   native_dep = platform_name(prefix = "native", os = os, architecture = architecture)
   pkg_name = platform_name(prefix = base_name, os = os, architecture = architecture, suffix = "pkg")
 
-  native.java_library(
-      name = lib_name,
-      srcs = native.glob(["src/**/*.java"]),
-      data = [
-          "//customFlowFiles:custom_flow_files",
-          "//customSongs:custom_songs",
-          "//lib/native:" + native_dep
-      ],
-      resources = [
-          "//data",
-          "//levelFlowFiles:level_flow_files",
-          "//res",
-      ],
-      deps = ["//lib"],
-  )
-
   believe_binary(
     name = rule_name,
-    dep = ":" + lib_name,
     main_class = "musicGame.Main",
     jar_name = base_name + ".jar",
+    data = [
+        "//customFlowFiles:custom_flow_files",
+        "//customSongs:custom_songs",
+        "//lib/native:" + native_dep,
+    ],
+    resources = [
+        "//data",
+        "//levelFlowFiles:level_flow_files",
+        "//res",
+    ],
+    runtime_deps = ["//src/musicGame:believe_src"],
   )
 
   pkg_zip(
-      name = rule_name + "_pkg",
+      name = pkg_name,
       deps = [":" + rule_name]
   )

@@ -1,6 +1,6 @@
 package musicGame.core.action;
 
-import musicGame.gamestate.GameStateBase;
+import musicGame.gamestate.base.GameStateBase;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.gui.AbstractComponent;
@@ -14,8 +14,7 @@ public class ChangeStateAction implements ComponentListener {
 
 	private static final int DEFAULT_TRANSITION_LENGTH = 65;
 
-	private Class<? extends GameState> state;
-	
+	protected Class<? extends GameState> state;
 	protected int transitionLength;
 	protected StateBasedGame game;
 	

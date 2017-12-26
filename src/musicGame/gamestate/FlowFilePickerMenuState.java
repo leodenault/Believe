@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import musicGame.core.action.ChangeStateAction;
 import musicGame.core.action.ExternalLoadGameAction;
+import musicGame.gamestate.base.GameStateBase;
 import musicGame.gui.MenuSelection;
 import musicGame.gui.TextComponent;
 import musicGame.gui.VerticalKeyboardScrollpanel;
@@ -98,7 +99,9 @@ public class FlowFilePickerMenuState extends GameStateBase {
 					final String name = file.getName().substring(0, file.getName().lastIndexOf("."));
 
 					MenuSelection selection = new MenuSelection(container, name);
-					selection.addListener(new ExternalLoadGameAction(file.getCanonicalPath(), game));
+					selection.addListener(
+							new ExternalLoadGameAction(
+									PlayFlowFileState.class, file.getCanonicalPath(), game));
 					scrollPanel.addChild(selection);
 				}
 			}

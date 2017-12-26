@@ -4,14 +4,16 @@ package musicGame.physics;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+import musicGame.physics.collision.Collidable;
+import musicGame.physics.collision.TileCollisionHandler;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
 import musicGame.geometry.Rectangle;
-import musicGame.map.Tile;
-import musicGame.physics.Collidable.CollidableType;
-import musicGame.physics.TileCollisionHandler.TileCollidable;
+import musicGame.map.collidable.Tile;
+import musicGame.physics.collision.Collidable.CollidableType;
+import musicGame.physics.collision.TileCollisionHandler.TileCollidable;
 
 public class TileCollisionHandlerTest {
 	private TileCollisionHandler handler;

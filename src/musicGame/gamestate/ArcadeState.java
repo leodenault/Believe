@@ -14,13 +14,13 @@ import org.newdawn.slick.util.ResourceLoader;
 import musicGame.character.PlayableCharacter;
 import musicGame.core.Options;
 import musicGame.gui.PlayArea;
-import musicGame.levelFlow.FlowComponent;
-import musicGame.levelFlow.FlowComponentListener;
+import musicGame.levelFlow.component.FlowComponent;
+import musicGame.levelFlow.component.FlowComponentListener;
 import musicGame.levelFlow.parsing.FlowComponentBuilder;
 import musicGame.levelFlow.parsing.FlowFileParser;
 import musicGame.levelFlow.parsing.exceptions.FlowComponentBuilderException;
 import musicGame.levelFlow.parsing.exceptions.FlowFileParserException;
-import musicGame.map.LevelMap;
+import musicGame.map.gui.LevelMap;
 
 public class ArcadeState extends LevelState implements FlowComponentListener {
 	

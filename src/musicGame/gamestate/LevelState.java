@@ -2,6 +2,8 @@ package musicGame.gamestate;
 
 import java.util.List;
 
+import musicGame.core.action.PausableState;
+import musicGame.gamestate.base.GameStateBase;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -10,12 +12,12 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import musicGame.character.EnemyCharacter;
 import musicGame.character.PlayableCharacter;
-import musicGame.core.MapManager;
+import musicGame.map.gui.MapManager;
 import musicGame.core.action.PauseGameAction;
 import musicGame.gui.PlayArea;
 import musicGame.gui.ProgressBar;
-import musicGame.map.LevelMap;
-import musicGame.physics.PhysicsManager;
+import musicGame.map.gui.LevelMap;
+import musicGame.physics.manager.PhysicsManager;
 
 public abstract class LevelState extends GameStateBase implements PausableState {
 	private boolean enteringFromPauseMenu;
@@ -62,7 +64,8 @@ public abstract class LevelState extends GameStateBase implements PausableState 
 		switch (key) {
 			case Input.KEY_ESCAPE:
 				enteringFromPauseMenu = true;
-				new PauseGameAction(this, game).componentActivated(null);
+				new PauseGameAction(GamePausedOverlay.class, this, game)
+					.componentActivated(null);
 				break;
 		}
 	}

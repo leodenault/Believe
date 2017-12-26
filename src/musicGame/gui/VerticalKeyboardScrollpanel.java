@@ -3,6 +3,8 @@ package musicGame.gui;
 import java.util.Iterator;
 import java.util.List;
 
+import musicGame.gui.base.AbstractContainer;
+import musicGame.gui.base.ComponentBase;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -39,7 +41,7 @@ public class VerticalKeyboardScrollpanel extends AbstractContainer {
 	}
 	
 	@Override
-	protected void resetLayout() {
+	public void resetLayout() {
 		for (ComponentBase child : children) {
 			child.resetLayout();
 		}
@@ -65,7 +67,7 @@ public class VerticalKeyboardScrollpanel extends AbstractContainer {
 	}
 	
 	public void clear() {
-		this.panel.children.clear();
+		this.panel.clear();
 		this.selections.clear();
 		this.resetLayout();
 	}

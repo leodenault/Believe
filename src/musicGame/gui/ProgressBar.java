@@ -1,5 +1,6 @@
 package musicGame.gui;
 
+import musicGame.gui.base.AbstractContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -63,7 +64,7 @@ public class ProgressBar extends AbstractContainer {
 	}
 
 	@Override
-	protected void resetLayout() {}
+	public void resetLayout() {}
 
 	@Override
 	protected void renderComponent(GUIContext context, Graphics g)

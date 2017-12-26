@@ -9,6 +9,9 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import java.util.HashSet;
 import java.util.Set;
 
+import musicGame.physics.collision.Collidable;
+import musicGame.physics.gravity.GravityObject;
+import musicGame.physics.manager.PhysicsManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

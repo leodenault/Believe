@@ -11,7 +11,7 @@ import musicGame.core.Music;
 import musicGame.core.SynchedComboPattern;
 import musicGame.gui.ComboSyncher;
 import musicGame.gui.PlayArea;
-import musicGame.map.LevelMap;
+import musicGame.map.gui.LevelMap;
 
 public class PlatformingState extends LevelState implements SynchedComboListener {
 	public PlatformingState(GameContainer container, StateBasedGame game) throws SlickException {

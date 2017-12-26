@@ -1,15 +1,15 @@
 package musicGame.character;
 
+import musicGame.character.base.Character;
+import musicGame.character.base.Faction;
+import musicGame.core.Timer;
+import musicGame.map.io.MapEntityGenerator;
+import musicGame.physics.collision.DamageBox;
+import musicGame.physics.manager.PhysicsManager;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.tiled.TiledMap;
-
-import musicGame.core.Timer;
-import musicGame.map.MapProperties.MapEntityGenerator;
-import musicGame.physics.DamageBox;
-import musicGame.physics.DamageHandler.Faction;
-import musicGame.physics.PhysicsManager;
 
 public class EnemyCharacter extends Character {
 	public static class Generator implements MapEntityGenerator<EnemyCharacter> {

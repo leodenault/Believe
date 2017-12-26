@@ -1,10 +1,10 @@
 package musicGame.map;
 
-import static musicGame.map.MapProperties.COLLISION;
-import static musicGame.map.MapProperties.COMMANDS;
-import static musicGame.map.MapProperties.ENEMIES;
-import static musicGame.map.MapProperties.FRONT;
-import static musicGame.map.MapProperties.INVALID_PROP;
+import static musicGame.map.io.MapProperties.COLLISION;
+import static musicGame.map.io.MapProperties.COMMANDS;
+import static musicGame.map.io.MapProperties.ENEMIES;
+import static musicGame.map.io.MapProperties.FRONT;
+import static musicGame.map.io.MapProperties.INVALID_PROP;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -12,6 +12,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+import musicGame.map.io.MapProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

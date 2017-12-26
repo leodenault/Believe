@@ -3,6 +3,8 @@ package musicGame.gui;
 import java.util.LinkedList;
 import java.util.List;
 
+import musicGame.gui.base.AbstractContainer;
+import musicGame.gui.base.ComponentBase;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -10,10 +12,10 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.gui.GUIContext;
 
-import musicGame.core.Camera;
-import musicGame.core.Camera.Layerable;
-import musicGame.map.LevelMap;
-import musicGame.map.MapBackground;
+import musicGame.core.display.Camera;
+import musicGame.core.display.Camera.Layerable;
+import musicGame.map.gui.LevelMap;
+import musicGame.map.gui.MapBackground;
 import musicGame.util.Util;
 
 public class PlayArea extends AbstractContainer {
@@ -76,7 +78,7 @@ public class PlayArea extends AbstractContainer {
 	}
 	
 	@Override
-	protected void resetLayout() {}
+	public void resetLayout() {}
 
 	// This is so we can handle moving the children in the graphics
 	// rendering part. The play area behaves a little differently from

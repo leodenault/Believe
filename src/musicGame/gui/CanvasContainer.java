@@ -1,5 +1,6 @@
 package musicGame.gui;
 
+import musicGame.gui.base.AbstractContainer;
 import org.newdawn.slick.gui.GUIContext;
 
 public class CanvasContainer extends AbstractContainer {
@@ -10,6 +11,6 @@ public class CanvasContainer extends AbstractContainer {
 	}
 
 	@Override
-	protected void resetLayout() {}
+	public void resetLayout() {}
 
 }

@@ -12,8 +12,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.gui.GUIContext;
 
-import musicGame.levelFlow.Beat;
-import musicGame.levelFlow.FlowComponent;
+import musicGame.levelFlow.component.Beat;
+import musicGame.levelFlow.component.FlowComponent;
 import musicGame.levelFlow.parsing.exceptions.FlowComponentBuilderException;
 import musicGame.levelFlow.parsing.exceptions.FlowFileParserException;
 

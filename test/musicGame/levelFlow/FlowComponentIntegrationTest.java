@@ -5,6 +5,10 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+import musicGame.levelFlow.component.Beat;
+import musicGame.levelFlow.component.FlowComponent;
+import musicGame.levelFlow.component.FlowComponentListener;
+import musicGame.levelFlow.component.Lane;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

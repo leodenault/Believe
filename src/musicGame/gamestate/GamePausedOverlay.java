@@ -1,5 +1,8 @@
 package musicGame.gamestate;
 
+import musicGame.core.action.PausableState;
+import musicGame.core.action.PauseGameAction.OverlayState;
+import musicGame.gamestate.base.GameStateBase;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -12,7 +15,7 @@ import musicGame.gui.DirectionalPanel;
 import musicGame.gui.MenuSelection;
 import musicGame.gui.MenuSelectionGroup;
 
-public class GamePausedOverlay extends GameStateBase {
+public class GamePausedOverlay extends GameStateBase implements OverlayState {
 	
 	private MenuSelectionGroup selections;
 	private DirectionalPanel panel;
@@ -102,6 +105,7 @@ public class GamePausedOverlay extends GameStateBase {
 		restart.removeListener(restartAction);
 	}
 
+	@Override
 	public void setPausedState(PausableState state) {
 		this.pausedState = state;
 	}
