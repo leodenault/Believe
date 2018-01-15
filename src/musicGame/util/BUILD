@@ -6,6 +6,8 @@ java_library(
         "//src/musicGame/character/base:__pkg__",
         "//src/musicGame/gamestate:__pkg__",
         "//src/musicGame/gui:__pkg__",
+        "//test/musicGame/statemachine:__pkg__",
+        "//test/musicGame/util:__pkg__",
     ],
     deps = [
         "//lib",

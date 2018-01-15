@@ -1,4 +1,4 @@
-package musicGame.levelFlow;
+package musicGame.levelFlow.component;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -6,8 +6,6 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import musicGame.levelFlow.component.Beat;
-import musicGame.levelFlow.component.Lane;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

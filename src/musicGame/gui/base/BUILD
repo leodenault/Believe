@@ -7,6 +7,7 @@ java_library(
         "//src/musicGame/gui:__pkg__",
         "//src/musicGame/levelFlow/component:__pkg__",
         "//src/musicGame/map/gui:__pkg__",
+        "//test/musicGame/gui:__pkg__",
     ],
     deps = [
         "//lib",

@@ -6,5 +6,6 @@ java_library(
         "//src/musicGame/debug:__pkg__",
         "//src/musicGame/gamestate:__pkg__",
         "//src/musicGame/levelFlow/parsing:__pkg__",
+        "//test/musicGame/levelFlow/parsing:__pkg__",
     ],
 )

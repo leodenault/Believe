@@ -4,6 +4,8 @@ package(
         "//src/musicGame/character/base:__pkg__",
         "//src/musicGame/map/collidable:__pkg__",
         "//src/musicGame/physics/manager:__pkg__",
+        "//test/musicGame/physics/collision:__pkg__",
+        "//test/musicGame/physics/manager:__pkg__",
     ],
 )
 

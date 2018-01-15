@@ -1,7 +1,10 @@
 java_library(
     name = "gui",
     srcs = glob(["*.java"]),
-    visibility = ["//src/musicGame/gamestate:__pkg__"],
+    visibility = [
+        "//src/musicGame/gamestate:__pkg__",
+        "//test/musicGame/gui:__pkg__",
+    ],
     deps = [
         "//lib",
         "//src/musicGame/core",

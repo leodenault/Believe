@@ -5,6 +5,7 @@ java_library(
         "//src/musicGame/character:__pkg__",
         "//src/musicGame/gamestate:__pkg__",
         "//src/musicGame/physics/collision:__pkg__",
+        "//test/musicGame/physics/manager:__pkg__",
     ],
     deps = [
         "//src/musicGame/physics/collision",

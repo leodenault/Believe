@@ -9,6 +9,9 @@ java_library(
         "//src/musicGame/map/collidable:__pkg__",
         "//src/musicGame/physics/collision:__pkg__",
         "//src/musicGame/util:__pkg__",
+        "//test/musicGame/geometry:__pkg__",
+        "//test/musicGame/physics/collision:__pkg__",
+        "//test/musicGame/util:__pkg__",
     ],
     deps = ["//lib"],
 )

@@ -3,6 +3,7 @@ package(
         "//src/musicGame/character:__pkg__",
         "//src/musicGame/map/collidable:__pkg__",
         "//src/musicGame/map/gui:__pkg__",
+        "//test/musicGame/map/io:__pkg__",
     ],
 )
 

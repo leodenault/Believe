@@ -5,6 +5,7 @@ java_library(
         "//src/musicGame/map/gui:__pkg__",
         "//src/musicGame/map/io:__pkg__",
         "//src/musicGame/physics/collision:__pkg__",
+        "//test/musicGame/physics/collision:__pkg__",
     ],
     deps = [
         "//lib",

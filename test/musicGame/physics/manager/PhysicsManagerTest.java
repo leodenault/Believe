@@ -1,20 +1,16 @@
-package musicGame.physics;
+package musicGame.physics.manager;
 
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import musicGame.physics.collision.Collidable;
 import musicGame.physics.gravity.GravityObject;
-import musicGame.physics.manager.PhysicsManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PhysicsManagerTest {
 

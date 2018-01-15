@@ -1,15 +1,16 @@
 package musicGame.gui;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
-
+import musicGame.gui.base.ComponentBase;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.gui.GUIContext;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 public class DirectionalPanelTest {
 	private static final int X = 400;

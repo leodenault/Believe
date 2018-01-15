@@ -22,5 +22,32 @@ java_import(
         "//src/musicGame/map/io:__pkg__",
         "//src/musicGame/util:__pkg__",
         "//src/musicGame/xml:__pkg__",
+        "//test/musicGame/gui:__pkg__",
+        "//test/musicGame/levelFlow/component:__pkg__",
+        "//test/musicGame/levelFlow/parsing:__pkg__",
+        "//test/musicGame/map/io:__pkg__",
+        "//test/musicGame/util:__pkg__",
+        "//test/musicGame/xml:__pkg__",
+    ],
+)
+
+java_library(
+    name = "mockito",
+    visibility = [
+        "//test/musicGame/gui:__pkg__",
+        "//test/musicGame/levelFlow/component:__pkg__",
+        "//test/musicGame/levelFlow/parsing:__pkg__",
+        "//test/musicGame/map/io:__pkg__",
+        "//test/musicGame/physics/collision:__pkg__",
+        "//test/musicGame/physics/manager:__pkg__",
+        "//test/musicGame/statemachine:__pkg__",
+        "//test/musicGame/util:__pkg__",
+        "//test/musicGame/xml:__pkg__",
+    ],
+    exports = ["@mockito_maven//jar"],
+    runtime_deps = [
+        "@bytebuddy//jar",
+        "@bytebuddy_agent//jar",
+        "@objenesis//jar",
     ],
 )

@@ -5,15 +5,12 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
-import musicGame.statemachine.EntityStateMachine;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 public class EntityStateMachineTest {
 	private enum Action {

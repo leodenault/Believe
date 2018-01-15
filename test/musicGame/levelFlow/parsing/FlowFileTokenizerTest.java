@@ -1,16 +1,15 @@
 package musicGame.levelFlow.parsing;
 
-import static org.hamcrest.Matchers.in;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import musicGame.levelFlow.parsing.FlowFileToken.FlowFileTokenType;
+import org.junit.After;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.io.StringReader;
 
-import org.junit.After;
-import org.junit.Test;
-
-import musicGame.levelFlow.parsing.FlowFileToken.FlowFileTokenType;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isIn;
+import static org.junit.Assert.assertThat;
 
 public class FlowFileTokenizerTest {
 	private FlowFileTokenizer tokenizer;
@@ -138,7 +137,7 @@ public class FlowFileTokenizerTest {
 			typeNames[i] = tokenTypes[i].toString();
 		}
 		while ((currentToken = this.tokenizer.next()).tokenType() != FlowFileTokenType.EOF) {
-			assertThat(currentToken.text(), is(in(typeNames)));
+			assertThat(currentToken.text(), isIn(typeNames));
 		}
 	}
 	
