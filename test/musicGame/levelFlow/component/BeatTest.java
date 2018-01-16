@@ -61,6 +61,8 @@ public class BeatTest {
 	
 	@Test
 	public void cloneShouldReturnBeatInstanceWithSameProperties() {
+		when(animation.copy()).thenReturn(animation);
+
 		Beat newBeat = this.beat.clone();
 		assertThat(newBeat, not(this.beat));
 		assertThat(newBeat.getPosition(), is(this.beat.getPosition()));

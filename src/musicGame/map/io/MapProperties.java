@@ -90,8 +90,8 @@ public class MapProperties {
 	}
 	
 	protected static void fetchLayers(TiledMap map, MapProperties properties) {
-		List<Integer> rearLayers = new LinkedList<Integer>();
-		List<Integer> frontLayers = new LinkedList<Integer>();
+		List<Integer> rearLayers = new LinkedList<>();
+		List<Integer> frontLayers = new LinkedList<>();
 		
 		for (int i = 0; i < map.getLayerCount(); i++) {
 			if (!isInvisible(map, i)) {

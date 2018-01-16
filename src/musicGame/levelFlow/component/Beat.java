@@ -127,7 +127,12 @@ public class Beat extends ComponentBase {
 	}
 
 	protected Beat clone() {
-		return new Beat(this.container, this.animation.copy(), this.position, (int)rect.getX(), (int)rect.getY());
+		return new Beat(
+				this.container,
+				this.animation.copy(),
+				this.position,
+				(int)rect.getX(),
+				(int)rect.getY());
 	}
 
 	@Override

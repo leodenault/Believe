@@ -74,17 +74,12 @@ public class XMLCompoundTest {
 	
 	@Test
 	public void fillNodeShouldPopulateCompoundNodeWithChildren() throws XMLLoadingException {
-		when(element.getName()).thenReturn("someElement");
+		when(element.getName()).thenReturn("someElement", LIST, COMPOUND, PRIMITIVE);
 		when(element.getChildren()).thenReturn(elList);
 		when(elList.size()).thenReturn(3);
 		when(elList.get(0)).thenReturn(element);
-		when(element.getName()).thenReturn(LIST);
-		when(node.fillNode(element)).thenReturn(node);
 		when(elList.get(1)).thenReturn(element);
-		when(element.getName()).thenReturn(COMPOUND);
-		when(node.fillNode(element)).thenReturn(node);
 		when(elList.get(2)).thenReturn(element);
-		when(element.getName()).thenReturn(PRIMITIVE);
 		when(node.fillNode(element)).thenReturn(node);
 		compound.fillNode(element, node);
 		assertThat(compound.getValue(LIST), is(node));

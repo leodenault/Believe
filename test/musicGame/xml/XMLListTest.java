@@ -55,16 +55,15 @@ public class XMLListTest {
 	public void fillNodeShouldFillWithChildren() throws XMLLoadingException {
 		final String name = "someNodeList";
 		final int numNodes = 5;
-		
-		when(element.getName()).thenReturn(name);
+
+		when(element.getName()).thenReturn(name, DEF.name);
 		when(element.getChildren()).thenReturn(children);
 		when(children.size()).thenReturn(numNodes);
-		
+
 		for (int i = 0; i < numNodes; i++) {
 			when(children.get(i)).thenReturn(element);
-			when(element.getName()).thenReturn(DEF.name);
 		}
-		
+
 		list.fillNode(element, child);
 		assertThat(list.name, is(name));
 		assertThat(list.children.size(), is(numNodes));

@@ -61,6 +61,9 @@ public class DirectionalPanelTest {
 	public void constructionWithoutXYShouldBuildIntoMiddleOfScreen() {
 		final int screenWidth = 1000;
 		final int screenHeight = 500;
+		when(context.getWidth()).thenReturn(screenWidth);
+		when(context.getHeight()).thenReturn(screenHeight);
+
 		DirectionalPanel panel = new DirectionalPanel(context, COMPONENT_WIDTH, COMPONENT_HEIGHT);
 		assertThat(panel.getX(), is((screenWidth - COMPONENT_WIDTH) / 2));
 		assertThat(panel.getY(), is(screenHeight / 2));
