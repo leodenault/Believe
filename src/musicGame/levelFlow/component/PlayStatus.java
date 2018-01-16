@@ -1,7 +1,7 @@
 package musicGame.levelFlow.component;
 
 public enum PlayStatus {
-	PLAYING,
-	STOPPED,
-	PAUSED
+  PLAYING,
+  STOPPED,
+  PAUSED
 }

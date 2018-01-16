@@ -12,31 +12,31 @@ import java.util.function.Function;
  * @param <T> The type of parameter being passed to the callback function upon transitioning.
  */
 public class EntityStateMachine<A, S, T> {
-	private Map<S, Map<A, Function<T, S>>> transitions;
-	private S currentState;
-	
-	public EntityStateMachine(
-			Map<S, Map<A, Function<T, S>>> transitions, S initialState) {
-		this.transitions = transitions;
-		currentState = initialState;
-	}
-	
-	public S getCurrentState() {
-		return currentState;
-	}
-	
-	public S transition(A action) {
-		return transition(action, null);
-	}
-	
-	public S transition(A action, T param) {
-		Map<A, Function<T, S>> stateTransitions = transitions.get(currentState);
-		if (stateTransitions != null && stateTransitions.containsKey(action)) {
-			S state = stateTransitions.get(action).apply(param);
-			if (state != null) {
-				currentState = state;
-			}
-		}
-		return currentState;
-	}
+  private Map<S, Map<A, Function<T, S>>> transitions;
+  private S currentState;
+
+  public EntityStateMachine(
+      Map<S, Map<A, Function<T, S>>> transitions, S initialState) {
+    this.transitions = transitions;
+    currentState = initialState;
+  }
+
+  public S getCurrentState() {
+    return currentState;
+  }
+
+  public S transition(A action) {
+    return transition(action, null);
+  }
+
+  public S transition(A action, T param) {
+    Map<A, Function<T, S>> stateTransitions = transitions.get(currentState);
+    if (stateTransitions != null && stateTransitions.containsKey(action)) {
+      S state = stateTransitions.get(action).apply(param);
+      if (state != null) {
+        currentState = state;
+      }
+    }
+    return currentState;
+  }
 }

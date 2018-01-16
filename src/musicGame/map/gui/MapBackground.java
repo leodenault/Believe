@@ -9,37 +9,37 @@ import musicGame.core.display.Camera.Layerable;
 import musicGame.gui.base.ComponentBase;
 
 public class MapBackground extends ComponentBase implements Layerable {
-	private Image image;
-	private int layer;
-	
-	public MapBackground(GUIContext container, String image, int layer, int y) throws SlickException {
-		super(container, 0, y);
-		this.image = new Image(image);
-		this.layer = layer;
-		rect.setWidth(this.image.getWidth());
-		rect.setHeight(this.image.getHeight());
-	}
+  private Image image;
+  private int layer;
 
-	@Override
-	public int getLayer() {
-		return layer;
-	}
+  public MapBackground(GUIContext container, String image, int layer, int y) throws SlickException {
+    super(container, 0, y);
+    this.image = new Image(image);
+    this.layer = layer;
+    rect.setWidth(this.image.getWidth());
+    rect.setHeight(this.image.getHeight());
+  }
 
-	@Override
-	public void resetLayout() {}
+  @Override
+  public int getLayer() {
+    return layer;
+  }
 
-	@Override
-	public void renderComponent(GUIContext context, Graphics g, float xMin, float xMax)
-			throws SlickException {
-		float left;
-		for (left = getX() + xMin - (xMin % getWidth()); left < xMax; left += getWidth()) {
-			g.drawImage(image, left, getY());
-		}
-	}
+  @Override
+  public void resetLayout() {}
 
-	@Override
-	protected void renderComponent(GUIContext context, Graphics g)
-			throws SlickException {
-		renderComponent(context, g, 0, 0);
-	}
+  @Override
+  public void renderComponent(GUIContext context, Graphics g, float xMin, float xMax)
+      throws SlickException {
+    float left;
+    for (left = getX() + xMin - (xMin % getWidth()); left < xMax; left += getWidth()) {
+      g.drawImage(image, left, getY());
+    }
+  }
+
+  @Override
+  protected void renderComponent(GUIContext context, Graphics g)
+      throws SlickException {
+    renderComponent(context, g, 0, 0);
+  }
 }

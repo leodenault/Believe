@@ -26,108 +26,108 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ResourceLoader;
 
 public class PlayFlowFileState
-		extends GameStateBase implements FlowComponentListener, PausableState, LoadableState {
-	
-	boolean enteringFromPauseMenu;
-	private FlowComponent component;
-	private StateBasedGame game;
-	
-	public PlayFlowFileState(StateBasedGame game) {
-		enteringFromPauseMenu = false;
-		this.game = game;
-	}
+    extends GameStateBase implements FlowComponentListener, PausableState, LoadableState {
 
-	@Override
-	public void loadFile(String flowFile) throws IOException, FlowFileParserException,
-	SlickException, FlowComponentBuilderException {
-		InputStream stream = ResourceLoader.getResourceAsStream(flowFile);
-		GameContainer container = game.getContainer();
-		FlowComponentBuilder builder = new FlowComponentBuilder(container, container.getWidth() / 3);
-		InputStreamReader reader = new InputStreamReader(stream);
-		FlowFileParser parser = new FlowFileParser(reader, builder);
-		parser.parse();
-		this.component = builder.buildFlowComponent();
-		this.component.setSpeedMultiplier(Options.getInstance().flowSpeed);
-		this.component.setLocation((container.getWidth() - component.getWidth())/ 2, container.getHeight() / 15);
-		this.component.setHeight(container.getHeight());
-		this.component.addListener(this);
-	}
-	
-	@Override
-	public void reset() {
-		this.component.reset();
-	}
+  boolean enteringFromPauseMenu;
+  private FlowComponent component;
+  private StateBasedGame game;
 
-	@Override
-	public void keyPressed(int key, char c) {
-		super.keyPressed(key, c);
-		if (key == Input.KEY_ESCAPE) {
-			this.component.pause();
-			new PauseGameAction(GamePausedOverlay.class, this, game).componentActivated(null);
-		}
-	}
+  public PlayFlowFileState(StateBasedGame game) {
+    enteringFromPauseMenu = false;
+    this.game = game;
+  }
 
-	@Override
-	public void init(GameContainer container, StateBasedGame game)
-			throws SlickException {
-	}
+  @Override
+  public void loadFile(String flowFile) throws IOException, FlowFileParserException,
+  SlickException, FlowComponentBuilderException {
+    InputStream stream = ResourceLoader.getResourceAsStream(flowFile);
+    GameContainer container = game.getContainer();
+    FlowComponentBuilder builder = new FlowComponentBuilder(container, container.getWidth() / 3);
+    InputStreamReader reader = new InputStreamReader(stream);
+    FlowFileParser parser = new FlowFileParser(reader, builder);
+    parser.parse();
+    this.component = builder.buildFlowComponent();
+    this.component.setSpeedMultiplier(Options.getInstance().flowSpeed);
+    this.component.setLocation((container.getWidth() - component.getWidth())/ 2, container.getHeight() / 15);
+    this.component.setHeight(container.getHeight());
+    this.component.addListener(this);
+  }
 
-	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g)
-			throws SlickException {
-		if (component != null) {
-			component.render(container, g);
-		}
-	}
+  @Override
+  public void reset() {
+    this.component.reset();
+  }
 
-	@Override
-	public void update(GameContainer container, StateBasedGame game, int delta)
-			throws SlickException {
-		if (component != null) {
-			component.update(delta);
-		}
+  @Override
+  public void keyPressed(int key, char c) {
+    super.keyPressed(key, c);
+    if (key == Input.KEY_ESCAPE) {
+      this.component.pause();
+      new PauseGameAction(GamePausedOverlay.class, this, game).componentActivated(null);
+    }
+  }
 
-		if (!component.isPlaying()) {
-			component.play();
-		}
-	}
+  @Override
+  public void init(GameContainer container, StateBasedGame game)
+      throws SlickException {
+  }
 
-	@Override
-	public void enter(GameContainer container, StateBasedGame game)
-			throws SlickException {
-		super.enter(container, game);
-		if (component == null) {
-			throw new RuntimeException(
-					"The file was not loaded prior to activating the flow component.");
-		}
-	}
+  @Override
+  public void render(GameContainer container, StateBasedGame game, Graphics g)
+      throws SlickException {
+    if (component != null) {
+      component.render(container, g);
+    }
+  }
 
-	@Override
-	public void leave(GameContainer container, StateBasedGame game)
-			throws SlickException {
-		super.leave(container, game);
-		this.component.pause();
-	}
+  @Override
+  public void update(GameContainer container, StateBasedGame game, int delta)
+      throws SlickException {
+    if (component != null) {
+      component.update(delta);
+    }
 
-	@Override
-	public void beatSuccess(int index) {}
+    if (!component.isPlaying()) {
+      component.play();
+    }
+  }
 
-	@Override
-	public void beatFailed() {}
+  @Override
+  public void enter(GameContainer container, StateBasedGame game)
+      throws SlickException {
+    super.enter(container, game);
+    if (component == null) {
+      throw new RuntimeException(
+          "The file was not loaded prior to activating the flow component.");
+    }
+  }
 
-	@Override
-	public void beatMissed() {}
+  @Override
+  public void leave(GameContainer container, StateBasedGame game)
+      throws SlickException {
+    super.leave(container, game);
+    this.component.pause();
+  }
 
-	@Override
-	public void songEnded() {
-		new ChangeStateAction(MainMenuState.class, game).componentActivated(null);
-	}
+  @Override
+  public void beatSuccess(int index) {}
 
-	@Override
-	public void componentActivated(AbstractComponent source) {}
+  @Override
+  public void beatFailed() {}
 
-	@Override
-	public void exitFromPausedState() {
-		this.enteringFromPauseMenu = false;
-	}
+  @Override
+  public void beatMissed() {}
+
+  @Override
+  public void songEnded() {
+    new ChangeStateAction(MainMenuState.class, game).componentActivated(null);
+  }
+
+  @Override
+  public void componentActivated(AbstractComponent source) {}
+
+  @Override
+  public void exitFromPausedState() {
+    this.enteringFromPauseMenu = false;
+  }
 }

@@ -2,8 +2,8 @@ package musicGame.xml;
 
 public class XMLString extends XMLPrimitive<String> {
 
-	@Override
-	protected String extractValue(String content) {
-		return content;
-	}
+  @Override
+  protected String extractValue(String content) {
+    return content;
+  }
 }

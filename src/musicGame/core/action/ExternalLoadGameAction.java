@@ -12,28 +12,28 @@ import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class ExternalLoadGameAction extends ChangeStateAction {
-	public interface LoadableState extends GameState {
-		void loadFile(String fileName)
-			throws IOException, FlowFileParserException, SlickException, FlowComponentBuilderException;
-	}
+  public interface LoadableState extends GameState {
+    void loadFile(String fileName)
+      throws IOException, FlowFileParserException, SlickException, FlowComponentBuilderException;
+  }
 
-	private String flowFile;
-	
-	public ExternalLoadGameAction(Class<? extends LoadableState> state, String flowFile, StateBasedGame game) {
-		super(state, game);
-		this.flowFile = flowFile;
-	}
-	
-	@Override
-	public void componentActivated(AbstractComponent component) {
-		try {
-			((LoadableState) GameStateBase.getStateInstance(state)).loadFile(this.flowFile);
-		} catch (IOException | FlowFileParserException | SlickException
-				| FlowComponentBuilderException e) {
-			// TODO Properly handle the exception
-			e.printStackTrace();
-		}
-		super.componentActivated(component);
-	}
+  private String flowFile;
+
+  public ExternalLoadGameAction(Class<? extends LoadableState> state, String flowFile, StateBasedGame game) {
+    super(state, game);
+    this.flowFile = flowFile;
+  }
+
+  @Override
+  public void componentActivated(AbstractComponent component) {
+    try {
+      ((LoadableState) GameStateBase.getStateInstance(state)).loadFile(this.flowFile);
+    } catch (IOException | FlowFileParserException | SlickException
+        | FlowComponentBuilderException e) {
+      // TODO Properly handle the exception
+      e.printStackTrace();
+    }
+    super.componentActivated(component);
+  }
 
 }
