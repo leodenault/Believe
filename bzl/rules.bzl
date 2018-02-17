@@ -197,7 +197,7 @@ def pkg_for_platform(base_name, os, architecture=None):
 
   believe_binary(
     name = rule_name,
-    main_class = "musicGame.Main",
+    main_class = "believe.Main",
     jar_name = base_name + ".jar",
     data = [
         "//customFlowFiles:custom_flow_files",
@@ -209,7 +209,7 @@ def pkg_for_platform(base_name, os, architecture=None):
         "//levelFlowFiles:level_flow_files",
         "//res",
     ],
-    runtime_deps = ["//src/musicGame:believe_src"],
+    runtime_deps = ["//src/believe:believe_src"],
   )
 
   pkg_zip(

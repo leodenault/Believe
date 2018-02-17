@@ -3,15 +3,15 @@ java_import(
     jars = glob(["*.jar"]),
     visibility = [
         "//:__pkg__",
-        "//src/musicGame:believe_pkg",
-        "//test/musicGame:believe_tests",
+        "//src/believe:believe_pkg",
+        "//test/believe:believe_tests",
     ],
 )
 
 java_library(
     name = "mockito",
     visibility = [
-        "//test/musicGame:believe_tests",
+        "//test/believe:believe_tests",
     ],
     exports = ["@mockito_maven//jar"],
     runtime_deps = [

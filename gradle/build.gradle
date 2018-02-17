@@ -22,7 +22,7 @@ def osNativeMap = [
 	(Os.MAC): '.dylib'
 ]
 
-mainClassName = 'musicGame.Main'
+mainClassName = 'believe.Main'
 
 repositories {
 	mavenCentral()
@@ -142,5 +142,5 @@ task makeMacZip() {
 
 //task runGame(type: JavaExec) {
 //	classpath sourceSets.main.runtimeClasspath + file" ../lib ../lib/native"]
-//	main = "musicGame.Main"
+//	main = "believe.Main"
 //}
