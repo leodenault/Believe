@@ -11,7 +11,7 @@ import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ResourceLoader;
 
-import musicGame.character.PlayableCharacter;
+import musicGame.character.playable.PlayableCharacter;
 import musicGame.core.Options;
 import musicGame.gui.PlayArea;
 import musicGame.levelFlow.component.FlowComponent;

@@ -2,7 +2,7 @@ java_library(
     name = "display",
     srcs = glob(["*.java"]),
     visibility = [
-        "//src/musicGame/character/base:__pkg__",
+        "//src/musicGame/character:character_pkg",
         "//src/musicGame/gui:__pkg__",
         "//src/musicGame/map/gui:__pkg__",
     ],

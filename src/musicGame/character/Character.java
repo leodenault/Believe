@@ -1,4 +1,4 @@
-package musicGame.character.base;
+package musicGame.character;
 
 import static musicGame.util.Util.hashSetOf;
 

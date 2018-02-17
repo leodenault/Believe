@@ -1,7 +1,7 @@
 package musicGame.physics.collision;
 
 import musicGame.geometry.Rectangle;
-import musicGame.character.base.Faction;
+import musicGame.character.Faction;
 
 public class DamageBox implements Collidable {
 

@@ -1,7 +1,7 @@
-package musicGame.character;
+package musicGame.character.playable;
 
-import musicGame.character.base.Character;
-import musicGame.character.base.Faction;
+import musicGame.character.Character;
+import musicGame.character.Faction;
 import musicGame.core.Timer;
 import musicGame.map.io.MapEntityGenerator;
 import musicGame.physics.collision.DamageBox;

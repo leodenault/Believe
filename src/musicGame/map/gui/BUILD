@@ -8,7 +8,7 @@ java_library(
     deps = [
         "//lib",
         "//src/musicGame/character",
-        "//src/musicGame/character/base",
+        "//src/musicGame/character/playable",
         "//src/musicGame/core/display",
         "//src/musicGame/gui/base",
         "//src/musicGame/map/collidable",

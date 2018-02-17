@@ -1,7 +1,6 @@
 package(
     default_visibility = [
-        "//src/musicGame/character:__pkg__",
-        "//src/musicGame/character/base:__pkg__",
+        "//src/musicGame/character:character_pkg",
         "//src/musicGame/map/collidable:__pkg__",
         "//src/musicGame/physics/manager:__pkg__",
         "//test/musicGame/physics/collision:__pkg__",
@@ -18,7 +17,7 @@ java_library(
         "DamageBoxCollidable.java",
     ],
     deps = [
-        "//src/musicGame/character/base:faction",
+        "//src/musicGame/character:faction",
         "//src/musicGame/geometry",
         "//src/musicGame/statemachine",
     ],

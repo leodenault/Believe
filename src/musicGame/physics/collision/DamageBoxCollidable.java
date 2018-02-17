@@ -1,6 +1,6 @@
 package musicGame.physics.collision;
 
-import musicGame.character.base.Faction;
+import musicGame.character.Faction;
 
 public interface DamageBoxCollidable extends Collidable {
   Faction getFaction();

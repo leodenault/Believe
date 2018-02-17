@@ -1,6 +1,6 @@
 package(
     default_visibility = [
-        "//src/musicGame/character:__pkg__",
+        "//src/musicGame/character:character_pkg",
         "//src/musicGame/map/collidable:__pkg__",
         "//src/musicGame/map/gui:__pkg__",
         "//test/musicGame/map/io:__pkg__",
@@ -13,7 +13,7 @@ java_library(
     deps = [
         ":map_entity_generator",
         "//lib",
-        "//src/musicGame/character",
+        "//src/musicGame/character/playable",
         "//src/musicGame/map/collidable",
     ],
 )

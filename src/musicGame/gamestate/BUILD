@@ -4,7 +4,7 @@ java_library(
     visibility = ["//src/musicGame:__pkg__"],
     deps = [
         "//lib",
-        "//src/musicGame/character",
+        "//src/musicGame/character/playable",
         "//src/musicGame/core",
         "//src/musicGame/core/action",
         "//src/musicGame/gamestate/base",

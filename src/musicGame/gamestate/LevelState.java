@@ -10,8 +10,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import musicGame.character.EnemyCharacter;
-import musicGame.character.PlayableCharacter;
+import musicGame.character.playable.EnemyCharacter;
+import musicGame.character.playable.PlayableCharacter;
 import musicGame.map.gui.MapManager;
 import musicGame.core.action.PauseGameAction;
 import musicGame.gui.PlayArea;

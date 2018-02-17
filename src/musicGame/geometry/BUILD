@@ -2,7 +2,7 @@ java_library(
     name = "geometry",
     srcs = glob(["*.java"]),
     visibility = [
-        "//src/musicGame/character/base:__pkg__",
+        "//src/musicGame/character:character_pkg",
         "//src/musicGame/core/display:__pkg__",
         "//src/musicGame/gui/base:__pkg__",
         "//src/musicGame/levelFlow/component:__pkg__",

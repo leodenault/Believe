@@ -11,7 +11,7 @@ import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.util.Log;
 
-import musicGame.character.EnemyCharacter;
+import musicGame.character.playable.EnemyCharacter;
 
 public class MapProperties {
   private static final String NUMBER_DEFAULT = "0";

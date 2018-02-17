@@ -11,8 +11,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.tiled.TiledMap;
 
-import musicGame.character.base.Character;
-import musicGame.character.EnemyCharacter;
+import musicGame.character.Character;
+import musicGame.character.playable.EnemyCharacter;
 import musicGame.core.display.Camera.Layerable;
 import musicGame.gui.base.ComponentBase;
 

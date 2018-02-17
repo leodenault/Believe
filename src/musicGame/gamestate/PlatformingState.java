@@ -5,8 +5,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import musicGame.character.PlayableCharacter;
-import musicGame.character.PlayableCharacter.SynchedComboListener;
+import musicGame.character.playable.PlayableCharacter;
+import musicGame.character.playable.PlayableCharacter.SynchedComboListener;
 import musicGame.core.Music;
 import musicGame.core.SynchedComboPattern;
 import musicGame.gui.ComboSyncher;
