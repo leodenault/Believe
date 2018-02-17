@@ -1,4 +1,17 @@
 java_test(
+    name = "ComboSyncherTest",
+    srcs = ["ComboSyncherTest.java"],
+    test_class = "musicGame.levelFlow.component.ComboSyncherTest",
+    deps = [
+        "//lib",
+        "//lib:mockito",
+        "//src/musicGame/core",
+        "//src/musicGame/levelFlow/component",
+        "@junit//jar",
+    ],
+)
+
+java_test(
     name = "BeatTest",
     srcs = ["BeatTest.java"],
     test_class = "musicGame.levelFlow.component.BeatTest",

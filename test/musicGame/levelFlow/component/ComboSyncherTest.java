@@ -1,11 +1,11 @@
-package musicGame.gui;
+package musicGame.levelFlow.component;
 
 import static musicGame.levelFlow.component.ComboSyncher.BUFFER_TIME;
 import static musicGame.levelFlow.component.ComboSyncher.ERROR_LENGTH;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import musicGame.levelFlow.component.ComboSyncher;
+import musicGame.core.SynchedComboPattern;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -13,9 +13,6 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.gui.GUIContext;
-
-import musicGame.core.SynchedComboPattern;
-import musicGame.levelFlow.component.FlowComponentListener;
 
 public class ComboSyncherTest {
   private static final int BPM = 132;

@@ -1,24 +1,17 @@
 package musicGame.levelFlow.component;
 
+import musicGame.core.FontLoader;
+import musicGame.core.SynchedComboPattern;
+import musicGame.core.SynchedComboPattern.TimeKeyPair;
+import musicGame.core.display.Camera.Layerable;
+import musicGame.gui.ComponentBase;
+import org.newdawn.slick.*;
+import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.gui.GUIContext;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-
-import musicGame.gui.ComponentBase;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Music;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.geom.Line;
-import org.newdawn.slick.gui.GUIContext;
-
-import musicGame.core.display.Camera.Layerable;
-import musicGame.core.FontLoader;
-import musicGame.core.SynchedComboPattern;
-import musicGame.core.SynchedComboPattern.TimeKeyPair;
-import musicGame.levelFlow.component.FlowComponentListener;
 
 public class ComboSyncher extends ComponentBase implements Layerable {
   private static final Color NOT_ACTIVATED = new Color(0xffffff);
