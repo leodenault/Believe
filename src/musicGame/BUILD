@@ -11,6 +11,5 @@ java_library(
         "//lib",
         "//src/musicGame/core",
         "//src/musicGame/gamestate",
-        "//src/musicGame/gamestate/base",
     ],
 )

@@ -3,9 +3,6 @@ package musicGame.gamestate;
 import java.io.File;
 import java.io.IOException;
 
-import musicGame.core.action.ChangeStateAction;
-import musicGame.core.action.ExternalLoadGameAction;
-import musicGame.gamestate.base.GameStateBase;
 import musicGame.gui.MenuSelection;
 import musicGame.gui.TextComponent;
 import musicGame.gui.VerticalKeyboardScrollpanel;

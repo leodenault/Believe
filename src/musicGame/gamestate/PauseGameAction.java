@@ -1,6 +1,4 @@
-package musicGame.core.action;
-
-import musicGame.gamestate.base.GameStateBase;
+package musicGame.gamestate;
 
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.state.GameState;

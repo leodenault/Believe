@@ -5,11 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import musicGame.core.Options;
-import musicGame.core.action.ChangeStateAction;
-import musicGame.core.action.ExternalLoadGameAction.LoadableState;
-import musicGame.core.action.PausableState;
-import musicGame.core.action.PauseGameAction;
-import musicGame.gamestate.base.GameStateBase;
+import musicGame.gamestate.ExternalLoadGameAction.LoadableState;
 import musicGame.levelFlow.component.FlowComponent;
 import musicGame.levelFlow.component.FlowComponentListener;
 import musicGame.levelFlow.parsing.FlowComponentBuilder;

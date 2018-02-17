@@ -1,6 +1,6 @@
-package musicGame.core.action;
+package musicGame.gamestate;
 
-import musicGame.gamestate.base.GameStateBase;
+import musicGame.gamestate.GameStateBase;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.gui.AbstractComponent;

@@ -1,4 +1,4 @@
-package musicGame.gamestate.base;
+package musicGame.gamestate;
 
 import java.util.HashMap;
 

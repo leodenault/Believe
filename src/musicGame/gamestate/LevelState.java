@@ -2,8 +2,6 @@ package musicGame.gamestate;
 
 import java.util.List;
 
-import musicGame.core.action.PausableState;
-import musicGame.gamestate.base.GameStateBase;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -13,7 +11,6 @@ import org.newdawn.slick.state.StateBasedGame;
 import musicGame.character.playable.EnemyCharacter;
 import musicGame.character.playable.PlayableCharacter;
 import musicGame.map.gui.MapManager;
-import musicGame.core.action.PauseGameAction;
 import musicGame.map.gui.PlayArea;
 import musicGame.gui.ProgressBar;
 import musicGame.map.gui.LevelMap;

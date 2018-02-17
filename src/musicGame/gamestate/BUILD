@@ -6,8 +6,6 @@ java_library(
         "//lib",
         "//src/musicGame/character/playable",
         "//src/musicGame/core",
-        "//src/musicGame/core/action",
-        "//src/musicGame/gamestate/base",
         "//src/musicGame/gui",
         "//src/musicGame/levelFlow/component",
         "//src/musicGame/levelFlow/parsing",

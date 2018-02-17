@@ -1,8 +1,7 @@
-package musicGame.core.action;
+package musicGame.gamestate;
 
 import java.io.IOException;
 
-import musicGame.gamestate.base.GameStateBase;
 import musicGame.levelFlow.parsing.exceptions.FlowComponentBuilderException;
 import musicGame.levelFlow.parsing.exceptions.FlowFileParserException;
 
