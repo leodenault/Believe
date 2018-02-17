@@ -4,7 +4,7 @@ java_library(
     visibility = [
         "//src/musicGame/debug:__pkg__",
         "//src/musicGame/gamestate:__pkg__",
-        "//test/musicGame/levelFlow/parsing:__pkg__",
+        "//test/musicGame:believe_tests",
     ],
     deps = [
         "//lib",

@@ -4,6 +4,6 @@ java_library(
     visibility = [
         "//src/musicGame/physics/collision:__pkg__",
         "//src/musicGame/physics/manager:__pkg__",
-        "//test/musicGame/physics/manager:__pkg__",
+        "//test/musicGame:believe_tests",
     ],
 )
