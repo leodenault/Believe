@@ -1,4 +1,4 @@
-package believe;
+package believe.game;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;

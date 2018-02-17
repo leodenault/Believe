@@ -2,8 +2,8 @@ java_library(
     name = "core",
     srcs = glob(["*.java"]),
     visibility = [
-        "//src/believe:__pkg__",
         "//src/believe/character:character_pkg",
+        "//src/believe/game:__pkg__",
         "//src/believe/gamestate:__pkg__",
         "//src/believe/gui:__pkg__",
         "//src/believe/levelFlow/component:__pkg__",

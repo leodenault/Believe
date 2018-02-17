@@ -1,4 +1,4 @@
-package believe;
+package believe.game;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;

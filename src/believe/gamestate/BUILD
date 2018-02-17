@@ -1,7 +1,7 @@
 java_library(
     name = "gamestate",
     srcs = glob(["*.java"]),
-    visibility = ["//src/believe:__pkg__"],
+    visibility = ["//src/believe/game:__pkg__"],
     deps = [
         "//lib",
         "//src/believe/character/playable",
