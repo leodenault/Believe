@@ -10,9 +10,10 @@ java_library(
         "//src/musicGame/character",
         "//src/musicGame/character/playable",
         "//src/musicGame/core/display",
-        "//src/musicGame/gui/base",
+        "//src/musicGame/gui",
         "//src/musicGame/map/collidable",
         "//src/musicGame/map/io:properties",
+        "//src/musicGame/util",
         "//src/musicGame/xml",
     ],
 )

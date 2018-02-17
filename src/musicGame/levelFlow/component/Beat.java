@@ -1,6 +1,6 @@
 package musicGame.levelFlow.component;
 
-import musicGame.gui.base.ComponentBase;
+import musicGame.gui.ComponentBase;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;

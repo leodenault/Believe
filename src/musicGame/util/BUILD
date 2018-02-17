@@ -5,6 +5,7 @@ java_library(
         "//src/musicGame/character:character_pkg",
         "//src/musicGame/gamestate:__pkg__",
         "//src/musicGame/gui:__pkg__",
+        "//src/musicGame/map/gui:__pkg__",
         "//test/musicGame:believe_tests",
     ],
     deps = [

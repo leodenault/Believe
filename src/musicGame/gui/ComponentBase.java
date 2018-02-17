@@ -1,4 +1,4 @@
-package musicGame.gui.base;
+package musicGame.gui;
 
 import musicGame.geometry.Rectangle;
 

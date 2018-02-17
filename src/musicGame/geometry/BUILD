@@ -4,7 +4,7 @@ java_library(
     visibility = [
         "//src/musicGame/character:character_pkg",
         "//src/musicGame/core/display:__pkg__",
-        "//src/musicGame/gui/base:__pkg__",
+        "//src/musicGame/gui:__pkg__",
         "//src/musicGame/levelFlow/component:__pkg__",
         "//src/musicGame/map/collidable:__pkg__",
         "//src/musicGame/physics/collision:__pkg__",

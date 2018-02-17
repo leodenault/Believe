@@ -19,7 +19,7 @@ java_library(
         "//lib",
         "//src/musicGame/core/display",
         "//src/musicGame/geometry",
-        "//src/musicGame/gui/base",
+        "//src/musicGame/gui",
         "//src/musicGame/physics/collision",
         "//src/musicGame/physics/collision:handlers",
         "//src/musicGame/statemachine",

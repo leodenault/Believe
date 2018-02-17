@@ -16,7 +16,7 @@ import org.newdawn.slick.gui.GUIContext;
 import musicGame.core.display.AnimationSet;
 import musicGame.core.display.Camera;
 import musicGame.core.display.SpriteSheetManager;
-import musicGame.gui.base.ComponentBase;
+import musicGame.gui.ComponentBase;
 import musicGame.physics.collision.Collidable;
 import musicGame.physics.collision.DamageBoxCollidable;
 import musicGame.physics.collision.DamageHandler;

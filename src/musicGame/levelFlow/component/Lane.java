@@ -10,7 +10,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.gui.GUIContext;
 
 import musicGame.core.Timer;
-import musicGame.gui.base.AbstractContainer;
+import musicGame.gui.AbstractContainer;
 
 /**
  * Container for beats. This class manages the movement of the beats

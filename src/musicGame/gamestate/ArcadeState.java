@@ -13,7 +13,7 @@ import org.newdawn.slick.util.ResourceLoader;
 
 import musicGame.character.playable.PlayableCharacter;
 import musicGame.core.Options;
-import musicGame.gui.PlayArea;
+import musicGame.map.gui.PlayArea;
 import musicGame.levelFlow.component.FlowComponent;
 import musicGame.levelFlow.component.FlowComponentListener;
 import musicGame.levelFlow.parsing.FlowComponentBuilder;

@@ -1,6 +1,5 @@
 package musicGame.gui;
 
-import musicGame.gui.base.AbstractContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;

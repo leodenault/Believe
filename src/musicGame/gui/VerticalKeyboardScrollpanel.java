@@ -3,8 +3,6 @@ package musicGame.gui;
 import java.util.Iterator;
 import java.util.List;
 
-import musicGame.gui.base.AbstractContainer;
-import musicGame.gui.base.ComponentBase;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;

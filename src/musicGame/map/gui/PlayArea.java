@@ -1,10 +1,11 @@
-package musicGame.gui;
+package musicGame.map.gui;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import musicGame.gui.base.AbstractContainer;
-import musicGame.gui.base.ComponentBase;
+import musicGame.gui.AbstractContainer;
+import musicGame.gui.CanvasContainer;
+import musicGame.gui.ComponentBase;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;

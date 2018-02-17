@@ -14,7 +14,7 @@ import org.newdawn.slick.tiled.TiledMap;
 import musicGame.character.Character;
 import musicGame.character.playable.EnemyCharacter;
 import musicGame.core.display.Camera.Layerable;
-import musicGame.gui.base.ComponentBase;
+import musicGame.gui.ComponentBase;
 
 public class LevelMap extends ComponentBase implements Layerable {
   public static final int TARGET_WIDTH = 1600;

@@ -20,7 +20,6 @@ java_test(
         "//lib",
         "//lib:mockito",
         "//src/musicGame/gui",
-        "//src/musicGame/gui/base",
         "@hamcrest//jar",
         "@junit//jar",
     ],

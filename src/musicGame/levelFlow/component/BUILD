@@ -10,7 +10,8 @@ java_library(
     deps = [
         "//lib",
         "//src/musicGame/core",
+        "//src/musicGame/core/display",
         "//src/musicGame/geometry",
-        "//src/musicGame/gui/base",
+        "//src/musicGame/gui",
     ],
 )

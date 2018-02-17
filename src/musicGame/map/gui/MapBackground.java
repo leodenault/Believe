@@ -6,7 +6,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
 
 import musicGame.core.display.Camera.Layerable;
-import musicGame.gui.base.ComponentBase;
+import musicGame.gui.ComponentBase;
 
 public class MapBackground extends ComponentBase implements Layerable {
   private Image image;

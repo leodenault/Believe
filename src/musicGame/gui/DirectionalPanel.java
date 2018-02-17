@@ -2,8 +2,6 @@ package musicGame.gui;
 
 import java.util.Iterator;
 
-import musicGame.gui.base.AbstractContainer;
-import musicGame.gui.base.ComponentBase;
 import org.newdawn.slick.gui.GUIContext;
 
 public class DirectionalPanel extends AbstractContainer {

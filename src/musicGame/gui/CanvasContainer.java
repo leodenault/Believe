@@ -1,6 +1,5 @@
 package musicGame.gui;
 
-import musicGame.gui.base.AbstractContainer;
 import org.newdawn.slick.gui.GUIContext;
 
 public class CanvasContainer extends AbstractContainer {

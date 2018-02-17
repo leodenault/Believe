@@ -1,10 +1,11 @@
 package musicGame.gui;
 
-import static musicGame.gui.ComboSyncher.BUFFER_TIME;
-import static musicGame.gui.ComboSyncher.ERROR_LENGTH;
+import static musicGame.levelFlow.component.ComboSyncher.BUFFER_TIME;
+import static musicGame.levelFlow.component.ComboSyncher.ERROR_LENGTH;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+import musicGame.levelFlow.component.ComboSyncher;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

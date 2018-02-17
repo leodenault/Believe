@@ -9,8 +9,8 @@ import musicGame.character.playable.PlayableCharacter;
 import musicGame.character.playable.PlayableCharacter.SynchedComboListener;
 import musicGame.core.Music;
 import musicGame.core.SynchedComboPattern;
-import musicGame.gui.ComboSyncher;
-import musicGame.gui.PlayArea;
+import musicGame.levelFlow.component.ComboSyncher;
+import musicGame.map.gui.PlayArea;
 import musicGame.map.gui.LevelMap;
 
 public class PlatformingState extends LevelState implements SynchedComboListener {

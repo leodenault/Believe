@@ -1,11 +1,11 @@
-package musicGame.gui;
+package musicGame.levelFlow.component;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import musicGame.gui.base.ComponentBase;
+import musicGame.gui.ComponentBase;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Music;

@@ -14,7 +14,7 @@ import musicGame.character.playable.EnemyCharacter;
 import musicGame.character.playable.PlayableCharacter;
 import musicGame.map.gui.MapManager;
 import musicGame.core.action.PauseGameAction;
-import musicGame.gui.PlayArea;
+import musicGame.map.gui.PlayArea;
 import musicGame.gui.ProgressBar;
 import musicGame.map.gui.LevelMap;
 import musicGame.physics.manager.PhysicsManager;

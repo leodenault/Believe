@@ -2,7 +2,7 @@ package musicGame.levelFlow.component;
 
 import java.awt.Font;
 
-import musicGame.gui.base.AbstractContainer;
+import musicGame.gui.AbstractContainer;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
