@@ -70,7 +70,7 @@ public class Launcher extends StateBasedGame {
       addState(instantiator.create(container, this));
     }
     enterState(GameStateBase.getStateID(startState));
-    this.enterState(GameStateBase.getStateID(MainMenuState.class));
+    this.enterState(GameStateBase.getStateID(startState));
   }
 
   private void loadResources() {

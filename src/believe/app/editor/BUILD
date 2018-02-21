@@ -1,12 +1,9 @@
 package(
-    default_visibility = [
-        "//:__pkg__",
-        "//test/believe:believe_tests",
-    ],
+    default_visibility = ["//:__pkg__"],
 )
 
 java_library(
-    name = "game",
+    name = "editor",
     srcs = glob(["*.java"]),
     deps = [
         "//src/believe/app",

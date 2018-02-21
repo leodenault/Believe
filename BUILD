@@ -88,6 +88,14 @@ alias(
     actual = ":Believe_linux_x64",
 )
 
+believe_binary(
+    name = "LevelEditor",
+    data = ["//lib/native:linux_x64"],
+    main_class = "believe.app.editor.LevelEditor",
+    resources = BELIEVE_RES,
+    runtime_deps = ["//src/believe/app/editor"],
+)
+
 pkg_all(
     name = "Believe_all",
     deps = [

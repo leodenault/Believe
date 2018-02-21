@@ -5,6 +5,7 @@ import static believe.util.Util.immutableSetOf;
 import believe.app.Launcher;
 import believe.app.flag_parsers.CommandLineParser;
 import believe.app.flag_parsers.Flag;
+import believe.app.flags.AppFlags;
 import believe.gamestate.ArcadeState;
 import believe.gamestate.FlowFilePickerMenuState;
 import believe.gamestate.GamePausedOverlay;
@@ -14,19 +15,8 @@ import believe.gamestate.PlatformingState;
 import believe.gamestate.PlayFlowFileState;
 
 public class Believe {
-  interface Flags {
-    @Flag.Integer(name = "width", defaultValue = -1)
-    int width();
-
-    @Flag.Integer(name = "height", defaultValue = -1)
-    int height();
-
-    @Flag.Boolean(name = "windowed")
-    boolean windowed();
-  }
-
   public static void main(String[] args) {
-    Flags flags = CommandLineParser.parse(Flags.class, args);
+    AppFlags flags = CommandLineParser.parse(AppFlags.class, args);
     Launcher.setUpAndLaunch(
         "Believe",
         immutableSetOf(MainMenuState::new,
