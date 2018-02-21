@@ -11,6 +11,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -66,6 +67,12 @@ public class UtilTest {
   public void hashSetOfReturnsProperHashSet() {
     assertThat(
         Util.hashSetOf("one", "two", "three"), containsInAnyOrder("one", "two", "three"));
+  }
+
+  @Test(expected = UnsupportedOperationException.class)
+  public void immutableSetOfCannotBeModified() {
+    Set<String> set = Util.immutableSetOf("value");
+    set.add("some other value");
   }
 
   @Test

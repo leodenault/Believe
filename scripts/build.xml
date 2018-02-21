@@ -88,7 +88,7 @@
 			<fileset dir="${binaries}" />
 			<fileset dir="." includes="res/** levelFlowFiles/** data/**" />
 			<manifest>
-				<attribute name="Main-Class" value="believe.game.Main" />
+				<attribute name="Main-Class" value="believe.app.Launcher" />
 				<attribute name="Class-Path" value="${classpath}" />
 			</manifest>
 		</jar>

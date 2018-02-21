@@ -2,6 +2,7 @@ java_library(
     name = "util",
     srcs = glob(["*.java"]),
     visibility = [
+        "//src/believe/app:app_pkg",
         "//src/believe/character:character_pkg",
         "//src/believe/gamestate:__pkg__",
         "//src/believe/gui:__pkg__",

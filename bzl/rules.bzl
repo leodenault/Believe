@@ -104,10 +104,10 @@ def _believe_binary_impl(ctx):
     command=cmd,
     use_default_shell_env=True)
 
-  # This is needed so that the rule can be run with 'bazel run'.
+  # This is needed so that the rule can be launch with 'bazel run'.
   ctx.actions.write(
       output = ctx.outputs.executable,
-      content = "cd " + out_dir.basename + ";java -jar " + jar_name,
+      content = "cd " + out_dir.basename + ";java -jar " + jar_name + " \"$@\"",
       is_executable = True,
   )
 
@@ -197,7 +197,7 @@ def pkg_for_platform(base_name, os, architecture=None):
 
   believe_binary(
     name = rule_name,
-    main_class = "believe.game.Main",
+    main_class = "believe.app.game.Believe",
     jar_name = base_name + ".jar",
     data = [
         "//customFlowFiles:custom_flow_files",
@@ -209,7 +209,7 @@ def pkg_for_platform(base_name, os, architecture=None):
         "//levelFlowFiles:level_flow_files",
         "//res",
     ],
-    runtime_deps = ["//src/believe/game:game"],
+    runtime_deps = ["//src/believe/app/game"],
   )
 
   pkg_zip(
