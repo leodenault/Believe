@@ -1,14 +1,7 @@
-load("//bzl:enums.bzl", "ARCHITECTURE", "OS")
-load("//bzl:util.bzl", "platform_name")
-
 package(default_visibility = ["//:__pkg__"])
 
 filegroup(
-    name = platform_name(
-        architecture = ARCHITECTURE.X86,
-        os = OS.WINDOWS,
-        prefix = "native",
-    ),
+    name = "windows_x86",
     srcs = [
         "OpenAL32.dll",
         "lwjgl.dll",
@@ -16,11 +9,7 @@ filegroup(
 )
 
 filegroup(
-    name = platform_name(
-        architecture = ARCHITECTURE.X64,
-        os = OS.WINDOWS,
-        prefix = "native",
-    ),
+    name = "windows_x64",
     srcs = [
         "OpenAL64.dll",
         "lwjgl64.dll",
@@ -28,11 +17,7 @@ filegroup(
 )
 
 filegroup(
-    name = platform_name(
-        architecture = ARCHITECTURE.X86,
-        os = OS.LINUX,
-        prefix = "native",
-    ),
+    name = "linux_x86",
     srcs = [
         "libjinput-linux.so",
         "liblwjgl.so",
@@ -41,11 +26,7 @@ filegroup(
 )
 
 filegroup(
-    name = platform_name(
-        architecture = ARCHITECTURE.X64,
-        os = OS.LINUX,
-        prefix = "native",
-    ),
+    name = "linux_x64",
     srcs = [
         "libjinput-linux64.so",
         "liblwjgl64.so",
@@ -54,10 +35,7 @@ filegroup(
 )
 
 filegroup(
-    name = platform_name(
-        os = OS.MAC,
-        prefix = "native",
-    ),
+    name = "mac",
     srcs = [
         "libjinput-osx.dylib",
         "liblwjgl.dylib",

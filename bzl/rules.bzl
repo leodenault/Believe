@@ -1,6 +1,3 @@
-load(":enums.bzl", "ARCHITECTURE", "OS")
-load(":util.bzl", "platform_name")
-
 # Private constants
 _MAX_CLASSPATH_LINE_LENGTH = 70
 
@@ -189,30 +186,3 @@ pkg_all = rule(
         "out_dir": "%{name}_pkgs",
     },
 )
-
-def pkg_for_platform(base_name, os, architecture=None):
-  rule_name = platform_name(prefix = base_name, os = os, architecture = architecture)
-  native_dep = platform_name(prefix = "native", os = os, architecture = architecture)
-  pkg_name = platform_name(prefix = base_name, os = os, architecture = architecture, suffix = "pkg")
-
-  believe_binary(
-    name = rule_name,
-    main_class = "believe.app.game.Believe",
-    jar_name = base_name + ".jar",
-    data = [
-        "//customFlowFiles:custom_flow_files",
-        "//customSongs:custom_songs",
-        "//lib/native:" + native_dep,
-    ],
-    resources = [
-        "//data",
-        "//levelFlowFiles:level_flow_files",
-        "//res",
-    ],
-    runtime_deps = ["//src/believe/app/game"],
-  )
-
-  pkg_zip(
-      name = pkg_name,
-      deps = [":" + rule_name]
-  )
