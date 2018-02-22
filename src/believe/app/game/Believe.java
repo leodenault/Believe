@@ -4,7 +4,6 @@ import static believe.util.Util.immutableSetOf;
 
 import believe.app.Launcher;
 import believe.app.flag_parsers.CommandLineParser;
-import believe.app.flag_parsers.Flag;
 import believe.app.flags.AppFlags;
 import believe.gamestate.ArcadeState;
 import believe.gamestate.FlowFilePickerMenuState;
