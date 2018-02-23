@@ -84,7 +84,6 @@ public class CommandLineParser {
     Iterator<String> it = Arrays.asList(args).iterator();
     while (it.hasNext()) {
       String flag = it.next();
-      System.out.println(flag);
 
       if (flag.length() < 3 || !flag.substring(0, 2).equals("--")) {
         throw new UnknownFormatFlagsException("Flag '" + flag + "' should be preceded by '--'.");
@@ -102,7 +101,6 @@ public class CommandLineParser {
         String parseToken = "";
         if (!(returns.get(method) instanceof Boolean) && it.hasNext()) {
           parseToken = it.next();
-          System.out.println(parseToken);
         }
         returns.put(method, methodFlagParserPair.getValue().parseFlag(parseToken));
       }
