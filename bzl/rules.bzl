@@ -31,6 +31,40 @@ def _make_dirs_and_copy_files(files, dest_dir, file_dir_override=None):
   '''
   return "\n".join([_make_dir_and_copy_file(file, dest_dir + "/" + file.dirname) for file in files])
 
+def _generate_run_script(basename, jar_name):
+  return "\n".join([
+  "#!/bin/bash",
+  "function create_debug_flag() {",
+  "  if [[ $# -eq 1 ]]; then",
+  "    JVM_DEBUG_PORT=\"$1\"",
+  "  else",
+  "    JVM_DEBUG_PORT=\"${DEFAULT_JVM_DEBUG_PORT:-5005}\"",
+  "  fi",
+  "  JVM_DEBUG_SUSPEND=${DEFAULT_JVM_DEBUG_SUSPEND:-\"y\"}",
+  "  echo \"-agentlib:jdwp=transport=dt_socket,server=y,suspend=${JVM_DEBUG_SUSPEND},address=${JVM_DEBUG_PORT}\"",
+  "}",
+  "function process_java_arg() {",
+  "  local val=$1",
+  "  case \"$1\" in",
+  "    --debug) var=$(create_debug_flag) ;;",
+  "    --debug=*) var=$(create_debug_flag \"${1#--debug=}\") ;;",
+  "    *) ;;",
+  "  esac",
+  "  echo \"$var\"",
+  "}",
+  "ARGS=()",
+  "JAVA_ARGS=()",
+  "for ARG in \"$@\"; do",
+  "  JAVA_ARG=$(process_java_arg \"$ARG\")",
+  "  if [[ -n $JAVA_ARG ]]; then",
+  "    JAVA_ARGS+=( \"$JAVA_ARG\" )",
+  "  else",
+  "    ARGS+=( \"$ARG\" )",
+  "  fi",
+  "done",
+  "cd " + basename + ";java \"${JAVA_ARGS[@]}\" -jar " + jar_name + " \"${ARGS[@]}\"",
+  ])
+
 def _believe_binary_impl(ctx):
   out_dir = ctx.outputs.out_dir
   build_dir = out_dir.path + ".build"
@@ -104,7 +138,7 @@ def _believe_binary_impl(ctx):
   # This is needed so that the rule can be launch with 'bazel run'.
   ctx.actions.write(
       output = ctx.outputs.executable,
-      content = "cd " + out_dir.basename + ";java -jar " + jar_name + " \"$@\"",
+      content = _generate_run_script(out_dir.basename, jar_name),
       is_executable = True,
   )
 
