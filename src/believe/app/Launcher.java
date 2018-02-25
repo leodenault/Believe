@@ -2,36 +2,27 @@ package believe.app;
 
 import believe.core.FontLoader;
 import believe.core.JarClasspathLocation;
-import believe.gamestate.GameStateBase;
-import believe.gamestate.MainMenuState;
 import believe.util.Util;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.Log;
 import org.newdawn.slick.util.ResourceLoader;
-import java.util.Set;
+import java.util.List;
 
 
 public class Launcher extends StateBasedGame {
   private final AppGameContainer gameContainer;
-  private final Set<StateInstantiator> gameStates;
-  private final Class<? extends GameState> startState;
+  private final List<StateInstantiator> gameStates;
 
   private Launcher(
-      String title,
-      Set<StateInstantiator> gameStates,
-      Class<? extends GameState> startState,
-      int width,
-      int height,
-      boolean windowed) throws SlickException {
+      String title, List<StateInstantiator> gameStates, int width, int height, boolean windowed)
+      throws SlickException {
     super(title);
     ResourceLoader.addResourceLocation(new JarClasspathLocation());
     gameContainer = new AppGameContainer(this);
     this.gameStates = gameStates;
-    this.startState = startState;
     gameContainer.setShowFPS(false);
 
     int gameWidth = width < 0 ? gameContainer.getScreenWidth() : width;
@@ -41,21 +32,29 @@ public class Launcher extends StateBasedGame {
     gameContainer.setMouseGrabbed(!windowed);
   }
 
+  /**
+   * Launches the game using the settings provided.
+   *
+   * @param title      The title of the window conatining the game.
+   * @param gameStates The list of states that make up the game. The first state in the list should
+   *                   be the first state in the game to be entered.
+   * @param width      The width of the window for the game, or -1 for the entire width of the
+   *                   device's
+   *                   screen.
+   * @param height     The height of the window for the game, or -1 for the entire height of the
+   *                   device's
+   *                   screen.
+   * @param windowed   Whether the game should be displayed in a window or at fullscreen.
+   */
   public static void setUpAndLaunch(
-      String title,
-      Set<StateInstantiator> gameStates,
-      Class<? extends GameState> startState,
-      int width,
-      int height,
-      boolean windowed) {
+      String title, List<StateInstantiator> gameStates, int width, int height, boolean windowed) {
     try {
       Util.setNativePath();
-      Launcher launcher = new Launcher(title, gameStates, startState, width, height, windowed);
+      Launcher launcher = new Launcher(title, gameStates, width, height, windowed);
       launcher.launch();
     } catch (Exception e) {
-      Log.info(String.format("An error was caught and unfortunately, it was not graceful: %s",
-          e.getMessage()));
-      e.printStackTrace();
+      Log.error(String.format("An error was caught and unfortunately, it was not graceful: %s",
+          e.getMessage()), e);
     }
   }
 
@@ -69,8 +68,6 @@ public class Launcher extends StateBasedGame {
     for (StateInstantiator instantiator : gameStates) {
       addState(instantiator.create(container, this));
     }
-    enterState(GameStateBase.getStateID(startState));
-    this.enterState(GameStateBase.getStateID(startState));
   }
 
   private void loadResources() {
