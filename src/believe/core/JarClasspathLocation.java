@@ -1,10 +1,10 @@
 package believe.core;
 
-import java.io.InputStream;
-import java.net.URL;
-
 import org.newdawn.slick.util.ResourceLoader;
 import org.newdawn.slick.util.ResourceLocation;
+
+import java.io.InputStream;
+import java.net.URL;
 
 /**
  * Implementation that doesn't use the class loader to load resources

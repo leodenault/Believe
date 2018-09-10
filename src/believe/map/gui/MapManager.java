@@ -1,14 +1,35 @@
 package believe.map.gui;
 
-import believe.xml.*;
+import believe.xml.CompoundDef;
+import believe.xml.ListDef;
+import believe.xml.XMLCompound;
+import believe.xml.XMLDataParser;
+import believe.xml.XMLInteger;
+import believe.xml.XMLList;
+import believe.xml.XMLLoadingException;
+import believe.xml.XMLString;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.util.Log;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class MapManager {
-  private static final String FILE = "/data/maps.xml";
+  private static final class MapConfig {
+    private final XMLCompound xmlMap;
+    private LevelMap levelMap;
+
+    private MapConfig(XMLCompound xmlMap) {
+      this.xmlMap = xmlMap;
+    }
+
+    private void setLevelMap(LevelMap levelMap) {
+      this.levelMap = levelMap;
+    }
+  }
+
+  private static final String DEFAULT_FILE = "/data/maps.xml";
   private static final String MAPS_NODE = "maps";
   private static final String MAP_NODE = "map";
   private static final String NAME_NODE = "name";
@@ -18,38 +39,39 @@ public class MapManager {
   private static final String BACKGROUND_NODE = "background";
   private static final String LAYER_NODE = "layer";
   private static final String Y_NODE = "y";
-  private static final ListDef SCHEMA =
-      new ListDef(MAPS_NODE,
-          new CompoundDef(MAP_NODE)
+  private static final ListDef SCHEMA = new ListDef(
+      MAPS_NODE,
+      new CompoundDef(MAP_NODE)
           .addString(NAME_NODE)
           .addString(LOCATION_NODE)
           .addString(TILE_SETS_LOCATION_NODE)
-          .addList(BACKGROUNDS_NODE,
+          .addList(
+              BACKGROUNDS_NODE,
               new CompoundDef(BACKGROUND_NODE)
-              .addString(LOCATION_NODE)
-              .addInteger(LAYER_NODE)
-              .addInteger(Y_NODE)
-              )
-          );
+                  .addString(LOCATION_NODE)
+                  .addInteger(LAYER_NODE)
+                  .addInteger(Y_NODE)));
 
-  private static MapManager INSTANCE;
+  private static Map<String, MapManager> INSTANCES = new HashMap<>();
 
   private String file;
-  private HashMap<String, XMLCompound> uninitializedMaps;
-  private HashMap<String, LevelMap> maps;
+  private HashMap<String, MapConfig> uninitializedMaps;
+  private HashMap<String, MapConfig> maps;
+  private boolean mapsLoaded;
 
   private MapManager(String file) {
     this.file = file;
-    this.uninitializedMaps = new HashMap<String, XMLCompound>();
-    this.maps = new HashMap<String, LevelMap>();
-    loadMaps();
+    this.uninitializedMaps = new HashMap<>();
+    this.maps = new HashMap<>();
+    mapsLoaded = false;
   }
 
-  public static MapManager getInstance() {
-    if (INSTANCE == null) {
-      INSTANCE = new MapManager(FILE);
-    }
-    return INSTANCE;
+  public static MapManager defaultManager() {
+    return managerForFile(DEFAULT_FILE);
+  }
+
+  public static MapManager managerForFile(String fileName) {
+    return INSTANCES.getOrDefault(fileName, new MapManager(fileName));
   }
 
   private void loadMaps() {
@@ -59,36 +81,55 @@ public class MapManager {
       XMLList top = parser.loadFile();
 
       for (XMLCompound map : top.children) {
-        uninitializedMaps.put(map.<XMLString>getValue(NAME_NODE).value, map);
+        uninitializedMaps.put(map.<XMLString>getValue(NAME_NODE).value, new MapConfig(map));
       }
     } catch (SlickException | XMLLoadingException e) {
-      Log.error(String.format("There was an error attempting to "
-          + "read the map data file named '%s'. The exception is listed below:\n\n%s",
-          file, e.getMessage()));
+      Log.error(String.format("There was an error attempting to read the map data file named '%s'"
+          + ". The exception is "
+          + "listed below:\n\n%s", file, e.getMessage()));
     }
   }
 
-  public LevelMap getMap(String name, GUIContext container) throws SlickException {
-    if (uninitializedMaps.containsKey(name)) {
-      XMLCompound xmlMap = uninitializedMaps.get(name);
-      LevelMap map = new LevelMap(container,
-          xmlMap.<XMLString>getValue(LOCATION_NODE).value,
-          xmlMap.<XMLString>getValue(TILE_SETS_LOCATION_NODE).value);
-
-      for (XMLCompound background : xmlMap.<XMLList>getValue(BACKGROUNDS_NODE).children) {
-        map.addBackground(
-            background.<XMLString>getValue(LOCATION_NODE).value,
-            background.<XMLInteger>getValue(LAYER_NODE).value,
-            background.<XMLInteger>getValue(Y_NODE).value);
-      }
-
-      maps.put(name, map);
+  public LevelMap getMap(String name, GUIContext container, boolean forceReload)
+      throws SlickException {
+    if (!mapsLoaded) {
+      loadMaps();
+      mapsLoaded = true;
     }
 
-    if (!maps.containsKey(name)) {
+    // HERE!!
+    // Maps don't visibly load
+    // Looks like the Slick resource loading could be an issue...
+    MapConfig config;
+    if (uninitializedMaps.containsKey(name)) {
+      config = uninitializedMaps.get(name);
+      fetchMap(config, container);
+      uninitializedMaps.remove(name);
+    } else if (maps.containsKey(name)) {
+      config = maps.get(name);
+      fetchMap(config, container);
+      maps.remove(name);
+    } else {
       throw new RuntimeException("The map was not defined in the XML configuration.");
     }
 
-    return maps.get(name);
+    maps.put(name, config);
+    return maps.get(name).levelMap;
+  }
+
+  private void fetchMap(MapConfig mapConfig, GUIContext container) throws SlickException {
+    XMLCompound xmlMap = mapConfig.xmlMap;
+    LevelMap levelMap = new LevelMap(
+        container,
+        xmlMap.<XMLString>getValue(LOCATION_NODE).value,
+        xmlMap.<XMLString>getValue(TILE_SETS_LOCATION_NODE).value);
+
+    for (XMLCompound background : xmlMap.<XMLList>getValue(BACKGROUNDS_NODE).children) {
+      levelMap.addBackground(
+          background.<XMLString>getValue(LOCATION_NODE).value,
+          background.<XMLInteger>getValue(LAYER_NODE).value,
+          background.<XMLInteger>getValue(Y_NODE).value);
+    }
+    mapConfig.setLevelMap(levelMap);
   }
 }

@@ -1,7 +1,13 @@
+package(
+    default_visibility = [
+        "//src/believe/app:app_pkg",
+        "//test/believe:believe_tests",
+    ],
+)
+
 java_library(
     name = "gamestate",
     srcs = glob(["*.java"]),
-    visibility = ["//src/believe/app:app_pkg"],
     deps = [
         "//lib",
         "//src/believe/character",

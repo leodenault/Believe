@@ -1,5 +1,6 @@
 package believe.gamestate;
 
+import believe.map.gui.MapManager;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -13,22 +14,40 @@ import believe.levelFlow.component.ComboSyncher;
 import believe.map.gui.PlayArea;
 import believe.map.gui.LevelMap;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.function.Function;
+
 public class PlatformingState extends LevelState implements SynchedComboListener {
-  public PlatformingState(GameContainer container, StateBasedGame game) throws SlickException {
-    super(container, game);
-    this.music = new Music(getMusicLocation(), BPM);
-    this.comboSyncher = new ComboSyncher(container, BPM);
-  }
 
   private static final int BPM = 150;
   private static final float FOCUS_DRAIN_TIME = 60f; // Time in seconds for recharging focus fully
-  private static final float FOCUS_DRAIN_RATE = PlayableCharacter.MAX_FOCUS / (FOCUS_DRAIN_TIME * 1000f);
+  private static final float
+      FOCUS_DRAIN_RATE =
+      PlayableCharacter.MAX_FOCUS / (FOCUS_DRAIN_TIME * 1000f);
 
-  private ComboSyncher comboSyncher;
+  private final ComboSyncher comboSyncher;
+  private final Map<Integer, Function<PlatformingState, Void>> eventActions;
+
   private Music music;
 
+  public PlatformingState(GameContainer container, StateBasedGame game) {
+    this(container, game, MapManager.defaultManager(), Collections.emptyMap());
+  }
+
+  public PlatformingState(
+      GameContainer container,
+      StateBasedGame game,
+      MapManager mapManager,
+      Map<Integer, Function<PlatformingState, Void>> eventActions) {
+    super(container, game, mapManager);
+    this.comboSyncher = new ComboSyncher(container, BPM);
+    this.eventActions = eventActions;
+  }
+
   @Override
-  public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+  public void update(GameContainer container, StateBasedGame game, int delta)
+      throws SlickException {
     super.update(container, game, delta);
 
     comboSyncher.update();
@@ -49,10 +68,15 @@ public class PlatformingState extends LevelState implements SynchedComboListener
         music.pause();
         break;
     }
+
+    if (eventActions.containsKey(key)) {
+      eventActions.get(key).apply(this);
+    }
   }
 
   @Override
   public void levelEnter(GameContainer container, StateBasedGame game) throws SlickException {
+    music = new Music(getMusicLocation(), BPM);
     playArea.attachHudChildToFocus(comboSyncher, 0.05f, -0.08f, 0.3f, 0.05f);
     player.addComboListener(this);
     music.stop();
@@ -92,7 +116,8 @@ public class PlatformingState extends LevelState implements SynchedComboListener
   }
 
   @Override
-  protected PlayArea providePlayArea(GameContainer container, LevelMap map, PlayableCharacter player) {
+  protected PlayArea providePlayArea(
+      GameContainer container, LevelMap map, PlayableCharacter player) {
     return new PlayArea(container, map, player);
   }
 }

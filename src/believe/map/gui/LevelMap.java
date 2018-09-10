@@ -20,6 +20,9 @@ public class LevelMap extends ComponentBase implements Layerable {
   public static final int TARGET_WIDTH = 1600;
   public static final int TARGET_HEIGHT = 900;
 
+  private final String location;
+  private final String tileSetLocation;
+
   private TiledMap map;
   private MapProperties properties;
   private ComponentBase focus;
@@ -29,11 +32,19 @@ public class LevelMap extends ComponentBase implements Layerable {
   public LevelMap(GUIContext container, String location, String tileSetLocation)
       throws SlickException {
     super(container, 0, 0);
+    this.location = location;
+    this.tileSetLocation = tileSetLocation;
+    setupMap(container, location, tileSetLocation);
+  }
+
+  public void setupMap(GUIContext container, String location, String tileSetLocation)
+      throws SlickException {
     map = new TiledMap(location, tileSetLocation);
     properties = MapProperties.create(map, container);
     enemies = properties.enemies;
     rect.setSize(map.getWidth() * map.getTileWidth(), map.getHeight() * map.getTileHeight());
     backgrounds = new LinkedList<MapBackground>();
+    setLocation(0, 0);
   }
 
   public void reset() {

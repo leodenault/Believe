@@ -1,4 +1,4 @@
-load("//bzl:rules.bzl", "pkg_all", "believe_binary", "pkg_zip")
+load("//bzl:rules.bzl", "believe_binary", "pkg_all", "pkg_zip")
 
 BELIEVE_MAIN_CLASS = "believe.app.game.Believe"
 
@@ -12,6 +12,24 @@ BELIEVE_RES = [
     "//levelFlowFiles:level_flow_files",
     "//res",
 ]
+
+package_group(
+    name = "believe_src_pkgs",
+    packages = ["//src/..."],
+)
+
+package_group(
+    name = "believe_test_pkgs",
+    packages = ["//test/..."],
+)
+
+package_group(
+    name = "believe_all_pkgs",
+    includes = [
+        ":believe_src_pkgs",
+        ":believe_test_pkgs",
+    ],
+)
 
 believe_binary(
     name = "Believe_windows_x86",
@@ -91,6 +109,14 @@ alias(
 believe_binary(
     name = "LevelEditor",
     data = ["//lib/native:linux_x64"],
+    main_class = "believe.app.editor.LevelEditor",
+    resources = BELIEVE_RES,
+    runtime_deps = ["//src/believe/app/editor"],
+)
+
+believe_binary(
+    name = "LevelEditor_windows",
+    data = ["//lib/native:windows_x64"],
     main_class = "believe.app.editor.LevelEditor",
     resources = BELIEVE_RES,
     runtime_deps = ["//src/believe/app/editor"],

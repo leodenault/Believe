@@ -69,6 +69,16 @@ public class Camera {
     layerChildren.add(child);
   }
 
+  public void removeChild(Layerable child) {
+    int layer = child.getLayer();
+
+    if (layer > children.length + 1) {
+      return;
+    }
+
+    children[layer] = new LinkedList<>();
+  }
+
   public Vector2f cameraToWindow(Vector2f point) {
     return new Vector2f((point.x - rect.getX()) * scaleX, (point.y - rect.getY()) * scaleY);
   }

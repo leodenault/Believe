@@ -1,43 +1,43 @@
 package believe.gamestate;
 
-import java.util.List;
-
 import believe.character.Character.DamageListener;
 import believe.character.Faction;
+import believe.character.playable.EnemyCharacter;
+import believe.character.playable.PlayableCharacter;
+import believe.gui.ProgressBar;
+import believe.map.gui.LevelMap;
+import believe.map.gui.MapManager;
+import believe.map.gui.PlayArea;
+import believe.physics.manager.PhysicsManager;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import believe.character.playable.EnemyCharacter;
-import believe.character.playable.PlayableCharacter;
-import believe.map.gui.MapManager;
-import believe.map.gui.PlayArea;
-import believe.gui.ProgressBar;
-import believe.map.gui.LevelMap;
-import believe.physics.manager.PhysicsManager;
+import java.util.List;
 
 public abstract class LevelState extends GameStateBase implements PausableState, DamageListener {
+
+  private final MapManager mapManager;
+
   private boolean enteringFromPauseMenu;
   private LevelMap map;
   private ProgressBar focusBar;
   private PhysicsManager physics;
-  private MapManager mapManager;
 
   protected StateBasedGame game;
   protected PlayArea playArea;
   protected PlayableCharacter player;
 
-  public LevelState(GameContainer container, StateBasedGame game) {
+  public LevelState(GameContainer container, StateBasedGame game, MapManager mapManager) {
     this.game = game;
     this.focusBar = new ProgressBar(container);
-    this.mapManager = MapManager.getInstance();
+    this.mapManager = mapManager;
   }
 
   @Override
-  public void init(GameContainer container, StateBasedGame game)
-      throws SlickException {
+  public void init(GameContainer container, StateBasedGame game) throws SlickException {
   }
 
   @Override
@@ -63,8 +63,7 @@ public abstract class LevelState extends GameStateBase implements PausableState,
     switch (key) {
       case Input.KEY_ESCAPE:
         enteringFromPauseMenu = true;
-        new PauseGameAction(GamePausedOverlay.class, this, game)
-            .componentActivated(null);
+        new PauseGameAction(GamePausedOverlay.class, this, game).componentActivated(null);
         break;
     }
   }
@@ -82,10 +81,9 @@ public abstract class LevelState extends GameStateBase implements PausableState,
   public void enter(GameContainer container, StateBasedGame game) throws SlickException {
     super.enter(container, game);
     if (!enteringFromPauseMenu) {
-      map = mapManager.getMap(getMapName(), container);
+      map = mapManager.getMap(getMapName(), container, false);
       player =
-          new PlayableCharacter(
-              container,
+          new PlayableCharacter(container,
               this,
               isOnRails(),
               map.getPlayerStartX(),
@@ -97,6 +95,12 @@ public abstract class LevelState extends GameStateBase implements PausableState,
 
       levelEnter(container, game);
     }
+  }
+
+  public void reloadLevel(GameContainer container) throws SlickException {
+    map = mapManager.getMap(getMapName(), container, true);
+    playArea.reloadMap(map);
+    initPhysics();
   }
 
   @Override
@@ -123,9 +127,7 @@ public abstract class LevelState extends GameStateBase implements PausableState,
   protected abstract String getMusicLocation();
 
   protected abstract PlayArea providePlayArea(
-      GameContainer container,
-      LevelMap map,
-      PlayableCharacter player);
+      GameContainer container, LevelMap map, PlayableCharacter player);
 
   protected abstract void levelEnter(GameContainer container, StateBasedGame game)
       throws SlickException;

@@ -45,6 +45,10 @@ public abstract class ComponentBase extends AbstractComponent {
     super(container);
     this.rect = new Rectangle(x, y, width, height);
     this.rendering = true;
+    // These are necessary because Slick makes it possible to enter an infinite loop. It
+    // unfortunately has the capacity for modifying the list of input listeners it's iterating over.
+    input.removeListener(this);
+    input.addListener(this);
   }
 
   @Override

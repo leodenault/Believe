@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="250" height="50" tilewidth="32" tileheight="32">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="250" height="50" tilewidth="32" tileheight="32" nextobjectid="1">
  <properties>
   <property name="playerStartX" value="1"/>
   <property name="playerStartY" value="48"/>
  </properties>
- <tileset firstgid="1" name="Snow" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="Snow" tilewidth="32" tileheight="32" tilecount="16">
   <image source="tilesets/snow.png" width="128" height="128"/>
  </tileset>
- <tileset firstgid="17" name="collision" tilewidth="32" tileheight="32">
+ <tileset firstgid="17" name="collision" tilewidth="32" tileheight="32" tilecount="1">
   <image source="tilesets/collision.png" width="32" height="32"/>
  </tileset>
  <layer name="Collision" width="250" height="50">
@@ -32,6 +32,14 @@
   </properties>
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAA+3OAQ0AAAgDoFewf1ljXDdIQAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA9007AACPLFxhUnhQwwAA
+  </data>
+ </layer>
+ <layer name="Tile Layer 4" width="250" height="50">
+  <properties>
+   <property name="lol" value=""/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3BAQ0AAADCoPdPbQ8HFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE8GJbO3FlDDAAA=
   </data>
  </layer>
 </map>

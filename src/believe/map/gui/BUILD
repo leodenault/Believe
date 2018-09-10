@@ -2,8 +2,7 @@ java_library(
     name = "gui",
     srcs = glob(["*.java"]),
     visibility = [
-        "//src/believe/gamestate:__pkg__",
-        "//src/believe/gui:__pkg__",
+        "//:believe_all_pkgs",
     ],
     deps = [
         "//lib",

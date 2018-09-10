@@ -15,15 +15,15 @@ maven_jar(
 
 maven_jar(
     name = "bytebuddy",
-    artifact = "net.bytebuddy:byte-buddy:1.7.9"
+    artifact = "net.bytebuddy:byte-buddy:1.7.9",
 )
 
 maven_jar(
     name = "bytebuddy_agent",
-    artifact = "net.bytebuddy:byte-buddy-agent:1.7.9"
+    artifact = "net.bytebuddy:byte-buddy-agent:1.7.9",
 )
 
 maven_jar(
     name = "objenesis",
-    artifact = "org.objenesis:objenesis:2.6"
+    artifact = "org.objenesis:objenesis:2.6",
 )

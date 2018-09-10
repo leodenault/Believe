@@ -20,6 +20,7 @@ import believe.map.gui.MapBackground;
 import believe.util.Util;
 
 public class PlayArea extends AbstractContainer {
+
   private class DynamicHudChild {
     public ComponentBase child;
     public float offsetX;
@@ -72,6 +73,12 @@ public class PlayArea extends AbstractContainer {
     for (MapBackground background : map.getBackgrounds()) {
       camera.addChild(background);
     }
+  }
+
+  public void reloadMap(LevelMap newMap) {
+    camera.removeChild(map);
+    map = newMap;
+    handleMap();
   }
 
   public void setBorder(boolean border) {
