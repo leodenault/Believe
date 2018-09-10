@@ -1,6 +1,7 @@
 package(
     default_visibility = [
         "//src/believe/character:character_pkg",
+        "//src/believe/gamestate:__pkg__",
         "//src/believe/map/gui:__pkg__",
         "//src/believe/physics/collision:__pkg__",
     ],

@@ -4,6 +4,8 @@ java_library(
     visibility = ["//src/believe/app:app_pkg"],
     deps = [
         "//lib",
+        "//src/believe/character",
+        "//src/believe/character:faction",
         "//src/believe/character/playable",
         "//src/believe/core",
         "//src/believe/gui",

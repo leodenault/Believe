@@ -32,6 +32,7 @@ java_library(
     ],
     deps = [
         ":collision",
+        "//src/believe/character:faction",
         "//src/believe/geometry",
         "//src/believe/map/collidable",
         "//src/believe/physics/gravity",

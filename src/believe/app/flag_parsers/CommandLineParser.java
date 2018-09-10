@@ -1,12 +1,10 @@
 package believe.app.flag_parsers;
 
-import javafx.util.Pair;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -14,6 +12,7 @@ import java.util.UnknownFormatFlagsException;
 
 public class CommandLineParser {
   private static class FlagImplementor implements InvocationHandler {
+
     private final Map<Method, Object> returns;
 
     FlagImplementor(Map<Method, Object> returns) {
@@ -26,6 +25,16 @@ public class CommandLineParser {
     }
   }
 
+  private static final class MethodAndParser<T> {
+    private final Method method;
+    private final FlagParser<T> flagParser;
+
+    private MethodAndParser(Method method, FlagParser<T> flagParser) {
+      this.method = method;
+      this.flagParser = flagParser;
+    }
+  }
+
 
   public static <T> T parse(Class<T> clazz, String[] args) {
     if (!clazz.isInterface()) {
@@ -33,7 +42,7 @@ public class CommandLineParser {
           "CommandLineParser requires interfaces with flag definitions.");
     }
 
-    Map<String, Pair<Method, FlagParser<?>>> flagMethods = new HashMap<>();
+    Map<String, MethodAndParser> flagMethods = new HashMap<>();
     Map<Method, Object> returns = new HashMap<>();
 
     // Run through the flag interface and find all of the relevant annotated methods.
@@ -45,7 +54,8 @@ public class CommandLineParser {
         Object value = null;
         if (annotationType.equals(Flag.Integer.class)) {
           if (!method.getReturnType().equals(int.class)) {
-            throw new IllegalStateException(String.format("Integer flag for method '%s' should " +
+            throw new IllegalStateException(String.format(
+                "Integer flag for method '%s' should " +
                     "have integer return type.",
                 method.getName()));
           }
@@ -55,7 +65,8 @@ public class CommandLineParser {
           value = intAnnotation.defaultValue();
         } else if (annotationType.equals(Flag.Boolean.class)) {
           if (!method.getReturnType().equals(boolean.class)) {
-            throw new IllegalStateException(String.format("Boolean flag for method '%s' should " +
+            throw new IllegalStateException(String.format(
+                "Boolean flag for method '%s' should " +
                     "have boolean return type.",
                 method.getName()));
           }
@@ -74,7 +85,7 @@ public class CommandLineParser {
 
           }
         } else {
-          flagMethods.put(name, new Pair<>(method, parser));
+          flagMethods.put(name, new MethodAndParser<>(method, parser));
           returns.put(method, value); // Set the default value now so it can be overridden later.
         }
       }
@@ -94,15 +105,15 @@ public class CommandLineParser {
         throw new UnknownFormatFlagsException("Flag '" + flag + "' is unkown to this application.");
       }
 
-      Pair<Method, FlagParser<?>> methodFlagParserPair = flagMethods.get(flag);
+      MethodAndParser methodFlagParserPair = flagMethods.get(flag);
 
       if (methodFlagParserPair != null) {
-        Method method = methodFlagParserPair.getKey();
+        Method method = methodFlagParserPair.method;
         String parseToken = "";
         if (!(returns.get(method) instanceof Boolean) && it.hasNext()) {
           parseToken = it.next();
         }
-        returns.put(method, methodFlagParserPair.getValue().parseFlag(parseToken));
+        returns.put(method, methodFlagParserPair.flagParser.parseFlag(parseToken));
       }
     }
 

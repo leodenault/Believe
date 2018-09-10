@@ -18,7 +18,7 @@ import java.util.*;
 import static believe.util.MapEntry.entry;
 import static believe.util.Util.*;
 
-public class PlayableCharacter extends Character implements  CommandCollidable {
+public class PlayableCharacter extends Character implements CommandCollidable {
   public interface SynchedComboListener {
     void activateCombo(SynchedComboPattern pattern);
   }
@@ -67,9 +67,14 @@ public class PlayableCharacter extends Character implements  CommandCollidable {
   private List<SynchedComboListener> comboListeners;
   private CommandCollisionHandler commandHandler;
 
-  public PlayableCharacter(GUIContext container, boolean onRails, int x, int y)
+  public PlayableCharacter(
+      GUIContext container,
+      DamageListener damageListener,
+      boolean onRails,
+      int x,
+      int y)
       throws SlickException {
-    super(container, x, y);
+    super(container, damageListener, x, y);
     this.onRails = onRails;
     pattern = new SynchedComboPattern();
     pattern.addAction(0, 's');

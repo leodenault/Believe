@@ -30,48 +30,67 @@ public abstract class Character
     extends ComponentBase
     implements TileCollidable, DamageBoxCollidable, ConcurrentStateMachine.Listener {
 
+  public interface DamageListener {
+    DamageListener NONE = (currentFocus, inflictor) -> {};
+
+    void damageInflicted(float currentFocus, Faction inflictor);
+  }
+
   protected static final State STANDING = new State();
   protected static final State MOVING_LEFT = new State();
   protected static final State MOVING_RIGHT = new State();
-  {{
-    STANDING.addTransition(
-        Action.SELECT_LEFT,
-        () -> updateHorizontalMovement(-1),
-        MOVING_LEFT.addTransition(
-            Action.STOP,
-            () -> updateHorizontalMovement(0),
-            STANDING));
-    STANDING.addTransition(
-        Action.SELECT_RIGHT,
-        () -> updateHorizontalMovement(1),
-        MOVING_RIGHT.addTransition(
-            Action.STOP,
-            () -> updateHorizontalMovement(0),
-            STANDING));
-  }};
+
+  {
+    {
+      STANDING.addTransition(
+          Action.SELECT_LEFT,
+          () -> updateHorizontalMovement(-1),
+          MOVING_LEFT.addTransition(
+              Action.STOP,
+              () -> updateHorizontalMovement(0),
+              STANDING));
+      STANDING.addTransition(
+          Action.SELECT_RIGHT,
+          () -> updateHorizontalMovement(1),
+          MOVING_RIGHT.addTransition(
+              Action.STOP,
+              () -> updateHorizontalMovement(0),
+              STANDING));
+    }
+  }
+
   protected static final State GROUNDED = new State();
   protected static final State JUMPING = new State();
-  {{
-    GROUNDED.addTransition(
-        Action.JUMP,
-        () -> { verticalSpeed = JUMP_SPEED; },
-        JUMPING.addTransition(Action.LAND, GROUNDED));
-  }};
+
+  {
+    {
+      GROUNDED.addTransition(
+          Action.JUMP,
+          () -> {
+            verticalSpeed = JUMP_SPEED;
+          },
+          JUMPING.addTransition(Action.LAND, GROUNDED));
+    }
+  }
+
+  ;
 
   private static final float JUMP_SPEED = -0.5f;
   private static final Set<State> STATES = new HashSet<State>(Arrays.asList(STANDING, GROUNDED));
   @SuppressWarnings("serial")
   private static final Map<Set<State>, String> ANIMATION_MAP =
       new HashMap<Set<State>, String>() {{
-    put(hashSetOf(STANDING, GROUNDED), "idle");
-    put(hashSetOf(MOVING_LEFT, GROUNDED), "move");
-    put(hashSetOf(MOVING_RIGHT, GROUNDED), "move");
-    put(hashSetOf(STANDING, JUMPING), "jump");
-    put(hashSetOf(MOVING_LEFT, JUMPING), "jump");
-    put(hashSetOf(MOVING_RIGHT, JUMPING), "jump");
-  }};
+        put(hashSetOf(STANDING, GROUNDED), "idle");
+        put(hashSetOf(MOVING_LEFT, GROUNDED), "move");
+        put(hashSetOf(MOVING_RIGHT, GROUNDED), "move");
+        put(hashSetOf(STANDING, JUMPING), "jump");
+        put(hashSetOf(MOVING_LEFT, JUMPING), "jump");
+        put(hashSetOf(MOVING_RIGHT, JUMPING), "jump");
+      }};
 
   public static final float MAX_FOCUS = 1.0f;
+
+  private final DamageListener damageListener;
 
   private float focus;
   private int direction;
@@ -84,8 +103,10 @@ public abstract class Character
   protected AnimationSet animSet;
   protected Animation anim;
 
-  public Character(GUIContext container, int x, int y) throws SlickException {
+  public Character(GUIContext container, DamageListener damageListener, int x, int y)
+      throws SlickException {
     super(container, x, y);
+    this.damageListener = damageListener;
     direction = 1;
     verticalSpeed = 0;
     horizontalSpeed = 0;
@@ -137,7 +158,8 @@ public abstract class Character
   }
 
   @Override
-  public void resetLayout() {}
+  public void resetLayout() {
+  }
 
   @Override
   public float getVerticalSpeed() {
@@ -152,8 +174,8 @@ public abstract class Character
   @Override
   protected void renderComponent(GUIContext context, Graphics g) throws SlickException {
     anim.getCurrentFrame()
-      .getFlippedCopy(direction == -1, false)
-      .draw(rect.getX(), rect.getY());
+        .getFlippedCopy(direction == -1, false)
+        .draw(rect.getX(), rect.getY());
   }
 
   public float getFocus() {
@@ -161,8 +183,9 @@ public abstract class Character
   }
 
   @Override
-  public void inflictDamage(float damage) {
+  public void inflictDamage(float damage, Faction inflictor) {
     focus = Math.max(0f, focus - damage);
+    damageListener.damageInflicted(focus, inflictor);
   }
 
   public void heal(float health) {

@@ -59,6 +59,12 @@ public class PlatformingState extends LevelState implements SynchedComboListener
   }
 
   @Override
+  public void leave(GameContainer container, StateBasedGame game) throws SlickException {
+    super.leave(container, game);
+    music.pause();
+  }
+
+  @Override
   public void reset() {
     super.reset();
     music.stop();

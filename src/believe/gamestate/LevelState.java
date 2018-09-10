@@ -2,6 +2,8 @@ package believe.gamestate;
 
 import java.util.List;
 
+import believe.character.Character.DamageListener;
+import believe.character.Faction;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -16,7 +18,7 @@ import believe.gui.ProgressBar;
 import believe.map.gui.LevelMap;
 import believe.physics.manager.PhysicsManager;
 
-public abstract class LevelState extends GameStateBase implements PausableState {
+public abstract class LevelState extends GameStateBase implements PausableState, DamageListener {
   private boolean enteringFromPauseMenu;
   private LevelMap map;
   private ProgressBar focusBar;
@@ -62,7 +64,7 @@ public abstract class LevelState extends GameStateBase implements PausableState 
       case Input.KEY_ESCAPE:
         enteringFromPauseMenu = true;
         new PauseGameAction(GamePausedOverlay.class, this, game)
-          .componentActivated(null);
+            .componentActivated(null);
         break;
     }
   }
@@ -81,7 +83,13 @@ public abstract class LevelState extends GameStateBase implements PausableState 
     super.enter(container, game);
     if (!enteringFromPauseMenu) {
       map = mapManager.getMap(getMapName(), container);
-      player = new PlayableCharacter(container, isOnRails(), map.getPlayerStartX(), map.getPlayerStartY());
+      player =
+          new PlayableCharacter(
+              container,
+              this,
+              isOnRails(),
+              map.getPlayerStartX(),
+              map.getPlayerStartY());
       playArea = providePlayArea(container, map, player);
       focusBar.setText("Focus");
       playArea.addHudChild(focusBar, 0.02f, 0.05f, 0.15f, 0.07f);
@@ -109,8 +117,23 @@ public abstract class LevelState extends GameStateBase implements PausableState 
   }
 
   protected abstract boolean isOnRails();
+
   protected abstract String getMapName();
+
   protected abstract String getMusicLocation();
-  protected abstract PlayArea providePlayArea(GameContainer container, LevelMap map, PlayableCharacter player);
-  protected abstract void levelEnter(GameContainer container, StateBasedGame game) throws SlickException;
+
+  protected abstract PlayArea providePlayArea(
+      GameContainer container,
+      LevelMap map,
+      PlayableCharacter player);
+
+  protected abstract void levelEnter(GameContainer container, StateBasedGame game)
+      throws SlickException;
+
+  @Override
+  public void damageInflicted(float currentFocus, Faction inflictor) {
+    if (currentFocus <= 0 && inflictor != Faction.NONE && inflictor != player.getFaction()) {
+      new ChangeStateAction(GameOverState.class, game).componentActivated(/* component= */ null);
+    }
+  }
 }

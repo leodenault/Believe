@@ -43,7 +43,7 @@ public class EnemyCharacter extends Character {
 
   public EnemyCharacter(GUIContext container, int x, int y)
       throws SlickException {
-    super(container, x, y);
+    super(container, DamageListener.NONE, x, y);
     this.attacking = false;
     this.damaging = false;
     this.verticalSpeed = 0f;
@@ -109,7 +109,4 @@ public class EnemyCharacter extends Character {
   public Faction getFaction() {
     return Faction.BAD;
   }
-
-  @Override
-  public void inflictDamage(float damage) {}
 }

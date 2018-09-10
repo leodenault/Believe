@@ -3,6 +3,7 @@ package believe.gamestate;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import believe.character.Faction;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -58,7 +59,7 @@ public class ArcadeState extends LevelState implements FlowComponentListener {
     if (!component.isPlaying()) {
       component.play();
     }
-    player.inflictDamage(delta * FOCUS_RECHARGE_RATE);
+    player.inflictDamage(delta * FOCUS_RECHARGE_RATE, Faction.NONE);
   }
 
   @Override
@@ -116,7 +117,7 @@ public class ArcadeState extends LevelState implements FlowComponentListener {
 
   @Override
   public void beatFailed() {
-    player.inflictDamage(DAMAGE_PER_FAILURE);
+    player.inflictDamage(DAMAGE_PER_FAILURE, Faction.NONE);
   }
 
   @Override

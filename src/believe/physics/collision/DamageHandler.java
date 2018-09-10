@@ -1,5 +1,6 @@
 package believe.physics.collision;
 
+import believe.character.Faction;
 import believe.physics.manager.PhysicsManager;
 import believe.physics.collision.Collidable.CollidableType;
 
@@ -15,9 +16,10 @@ public class DamageHandler implements CollisionHandler<DamageBoxCollidable> {
     if (inflictor.getType() == CollidableType.DAMAGE_BOX) {
       DamageBox dmg = (DamageBox)inflictor;
 
-      if (dmg.getFaction() != inflicted.getFaction()) {
+      Faction inflictorFaction = dmg.getFaction();
+      if (inflictorFaction != inflicted.getFaction()) {
         manager.removeCollidable(inflictor);
-        inflicted.inflictDamage(dmg.getDamage());
+        inflicted.inflictDamage(dmg.getDamage(), inflictorFaction);
       }
     }
   }
