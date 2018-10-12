@@ -11,6 +11,7 @@ java_library(
         "//lib",
         "//src/believe/core",
         "//src/believe/core/display",
+        "//src/believe/core/io",
         "//src/believe/geometry",
         "//src/believe/gui",
     ],

@@ -4,7 +4,10 @@ filegroup(
         ":map_files",
         ":tilesets",
     ],
-    visibility = ["//res:__pkg__"],
+    visibility = [
+        "//:__pkg__",
+        "//res:__pkg__",
+    ],
 )
 
 filegroup(

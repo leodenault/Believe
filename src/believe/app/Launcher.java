@@ -1,7 +1,7 @@
 package believe.app;
 
-import believe.core.FontLoader;
-import believe.core.JarClasspathLocation;
+import believe.core.io.FontLoader;
+import believe.core.io.JarClasspathLocation;
 import believe.util.Util;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;

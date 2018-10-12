@@ -10,6 +10,7 @@ java_library(
         "//src/believe/app",
         "//src/believe/app/flag_parsers",
         "//src/believe/app/flags",
+        "//src/believe/core/io",
         "//src/believe/gamestate",
         "//src/believe/map/gui",
         "//src/believe/util",

@@ -16,7 +16,7 @@ java_library(
     srcs = glob(["*.java"]),
     deps = [
         "//lib",
-        "//src/believe/core",
+        "//src/believe/core/io",
         "//src/believe/gamestate",
         "//src/believe/util",
     ],

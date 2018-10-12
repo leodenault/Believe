@@ -108,17 +108,33 @@ alias(
 
 believe_binary(
     name = "LevelEditor",
-    data = ["//lib/native:linux_x64"],
+    data = [
+        "//lib/native:linux_x64",
+        "//res/maps",
+    ],
     main_class = "believe.app.editor.LevelEditor",
-    resources = BELIEVE_RES,
+    resources = [
+        "//data",
+        "//res/graphics",
+        "//res/music",
+        "//res/sfx",
+    ],
     runtime_deps = ["//src/believe/app/editor"],
 )
 
 believe_binary(
     name = "LevelEditor_windows",
-    data = ["//lib/native:windows_x64"],
+    data = [
+        "//lib/native:windows_x64",
+        "//res/maps",
+    ],
     main_class = "believe.app.editor.LevelEditor",
-    resources = BELIEVE_RES,
+    resources = [
+        "//data",
+        "//res/graphics",
+        "//res/music",
+        "//res/sfx",
+    ],
     runtime_deps = ["//src/believe/app/editor"],
 )
 

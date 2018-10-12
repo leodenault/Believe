@@ -97,9 +97,6 @@ public class MapManager {
       mapsLoaded = true;
     }
 
-    // HERE!!
-    // Maps don't visibly load
-    // Looks like the Slick resource loading could be an issue...
     MapConfig config;
     if (uninitializedMaps.containsKey(name)) {
       config = uninitializedMaps.get(name);
@@ -110,7 +107,9 @@ public class MapManager {
       fetchMap(config, container);
       maps.remove(name);
     } else {
-      throw new RuntimeException("The map was not defined in the XML configuration.");
+      throw new RuntimeException("The map '"
+          + name
+          + "' was not defined in the XML configuration.");
     }
 
     maps.put(name, config);

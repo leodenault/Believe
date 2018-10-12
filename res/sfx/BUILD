@@ -1,5 +1,8 @@
 filegroup(
     name = "sfx",
     srcs = glob(["*.ogg"]),
-    visibility = ["//res:__pkg__"],
+    visibility = [
+        "//:__pkg__",
+        "//res:__pkg__",
+    ],
 )

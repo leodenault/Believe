@@ -1,4 +1,4 @@
-package believe.core;
+package believe.core.io;
 
 import org.newdawn.slick.util.ResourceLoader;
 import org.newdawn.slick.util.ResourceLocation;

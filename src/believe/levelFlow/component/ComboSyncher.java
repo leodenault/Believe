@@ -1,6 +1,6 @@
 package believe.levelFlow.component;
 
-import believe.core.FontLoader;
+import believe.core.io.FontLoader;
 import believe.core.SynchedComboPattern;
 import believe.core.SynchedComboPattern.TimeKeyPair;
 import believe.core.display.Camera.Layerable;

@@ -1,5 +1,8 @@
 filegroup(
     name = "graphics",
     srcs = glob(["**/*.png"]),
-    visibility = ["//res:__pkg__"],
+    visibility = [
+        "//:__pkg__",
+        "//res:__pkg__",
+    ],
 )
