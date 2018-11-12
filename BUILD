@@ -122,6 +122,11 @@ believe_binary(
     runtime_deps = ["//src/believe/app/editor"],
 )
 
+pkg_zip(
+    name = "LevelEditor_pkg",
+    deps = [":LevelEditor"],
+)
+
 believe_binary(
     name = "LevelEditor_windows",
     data = [
