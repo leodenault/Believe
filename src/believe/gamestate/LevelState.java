@@ -100,7 +100,7 @@ public abstract class LevelState extends GameStateBase implements PausableState,
   public void reloadLevel(GameContainer container) throws SlickException {
     map = mapManager.getMap(getMapName(), container, true);
     playArea.reloadMap(map);
-    initPhysics();
+    reset();
   }
 
   @Override

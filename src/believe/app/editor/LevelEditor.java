@@ -47,7 +47,6 @@ public class LevelEditor {
 
   private static Void resetLevel(
       PlatformingState state, GameContainer container, StateBasedGame game) {
-    state.reset();
     try {
       state.reloadLevel(container);
     } catch (SlickException e) {

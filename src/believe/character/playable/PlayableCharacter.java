@@ -23,41 +23,24 @@ public class PlayableCharacter extends Character implements CommandCollidable {
     void activateCombo(SynchedComboPattern pattern);
   }
 
-  private static final Map<Integer, Action> BASE_KEY_PRESSED_MAP =
-      immutableMapOf(
-          entry(Input.KEY_LEFT, Action.SELECT_LEFT),
+  private static final Map<Integer, Action>
+      BASE_KEY_PRESSED_MAP =
+      immutableMapOf(entry(Input.KEY_LEFT, Action.SELECT_LEFT),
           entry(Input.KEY_RIGHT, Action.SELECT_RIGHT),
           entry(Input.KEY_SPACE, Action.JUMP));
-  private static final Map<State, Set<MapEntry<Integer, Action>>> KEY_PRESSED_MODS =
-      immutableMapOf(
-          entry(
-              STANDING,
-              hashSetOf(
-                  entry(Input.KEY_LEFT, Action.SELECT_LEFT),
-                  entry(Input.KEY_RIGHT, Action.SELECT_RIGHT))),
-          entry(
-              MOVING_LEFT,
-              hashSetOf(
-                  entry(Input.KEY_RIGHT, Action.STOP))),
-          entry(
-              MOVING_RIGHT,
-              hashSetOf(
-                  entry(Input.KEY_LEFT, Action.STOP))));
-  private static final Map<State, Set<MapEntry<Integer, Action>>> KEY_RELEASED_MODS =
-      immutableMapOf(
-          entry(
-              STANDING,
-              hashSetOf(
-                  entry(Input.KEY_LEFT, Action.SELECT_RIGHT),
-                  entry(Input.KEY_RIGHT, Action.SELECT_LEFT))),
-          entry(
-              MOVING_LEFT,
-              hashSetOf(
-                  entry(Input.KEY_LEFT, Action.STOP))),
-          entry(
-              MOVING_RIGHT,
-              hashSetOf(
-                  entry(Input.KEY_RIGHT, Action.STOP))));
+
+  private final Map<State, Set<MapEntry<Integer, Action>>> KEY_PRESSED_MODS = immutableMapOf(
+      entry(standingState,
+          hashSetOf(entry(Input.KEY_LEFT, Action.SELECT_LEFT),
+              entry(Input.KEY_RIGHT, Action.SELECT_RIGHT))),
+      entry(movingLeftState, hashSetOf(entry(Input.KEY_RIGHT, Action.STOP))),
+      entry(movingRightState, hashSetOf(entry(Input.KEY_LEFT, Action.STOP))));
+  private final Map<State, Set<MapEntry<Integer, Action>>> KEY_RELEASED_MODS = immutableMapOf(
+      entry(standingState,
+          hashSetOf(entry(Input.KEY_LEFT, Action.SELECT_RIGHT),
+              entry(Input.KEY_RIGHT, Action.SELECT_LEFT))),
+      entry(movingLeftState, hashSetOf(entry(Input.KEY_LEFT, Action.STOP))),
+      entry(movingRightState, hashSetOf(entry(Input.KEY_RIGHT, Action.STOP))));
 
   private boolean onRails;
   private Map<Integer, Action> keyPressedActionMap;
@@ -68,12 +51,7 @@ public class PlayableCharacter extends Character implements CommandCollidable {
   private CommandCollisionHandler commandHandler;
 
   public PlayableCharacter(
-      GUIContext container,
-      DamageListener damageListener,
-      boolean onRails,
-      int x,
-      int y)
-      throws SlickException {
+      GUIContext container, DamageListener damageListener, boolean onRails, int x, int y) {
     super(container, damageListener, x, y);
     this.onRails = onRails;
     pattern = new SynchedComboPattern();
@@ -98,6 +76,11 @@ public class PlayableCharacter extends Character implements CommandCollidable {
     if (onRails) {
       commandHandler.handleCollision(this, other);
     }
+  }
+
+  @Override
+  public void update(int delta) {
+    super.update(delta);
   }
 
   @Override
