@@ -1,5 +1,7 @@
 package believe.character;
 
+import static believe.util.MapEntry.entry;
+import static believe.util.Util.hashMapOf;
 import static believe.util.Util.hashSetOf;
 
 import believe.core.display.AnimationSet;
@@ -14,6 +16,7 @@ import believe.physics.collision.TileCollisionHandler.TileCollidable;
 import believe.statemachine.ConcurrentStateMachine;
 import believe.statemachine.State;
 import believe.statemachine.State.Action;
+import believe.util.MapEntry;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -45,8 +48,7 @@ public abstract class Character extends ComponentBase
   protected final State jumpingState;
   protected final ConcurrentStateMachine machine;
 
-  @SuppressWarnings("serial")
-  private final Map<Set<State>, String> animationMap = new HashMap<>();
+  private final Map<Set<State>, String> animationMap;
   private final DamageListener damageListener;
 
   private float focus;
@@ -84,6 +86,13 @@ public abstract class Character extends ComponentBase
     machine =
         new ConcurrentStateMachine(new HashSet<>(Arrays.asList(standingState, groundedState)));
     machine.addListener(this);
+
+    animationMap = hashMapOf(entry(hashSetOf(standingState, groundedState), "idle"),
+        entry(hashSetOf(movingLeftState, groundedState), "move"),
+        entry(hashSetOf(movingRightState, groundedState), "move"),
+        entry(hashSetOf(standingState, jumpingState), "jump"),
+        entry(hashSetOf(movingLeftState, jumpingState), "jump"),
+        entry(hashSetOf(movingRightState, jumpingState), "jump"));
   }
 
   private void buildStateMachine() {
@@ -100,12 +109,6 @@ public abstract class Character extends ComponentBase
     groundedState.addTransition(Action.JUMP,
         () -> verticalSpeed = JUMP_SPEED,
         jumpingState.addTransition(Action.LAND, groundedState));
-    animationMap.put(hashSetOf(standingState, groundedState), "idle");
-    animationMap.put(hashSetOf(movingLeftState, groundedState), "move");
-    animationMap.put(hashSetOf(movingRightState, groundedState), "move");
-    animationMap.put(hashSetOf(standingState, jumpingState), "jump");
-    animationMap.put(hashSetOf(movingLeftState, jumpingState), "jump");
-    animationMap.put(hashSetOf(movingRightState, jumpingState), "jump");
   }
 
   @Override
