@@ -98,9 +98,12 @@ public abstract class LevelState extends GameStateBase implements PausableState,
   }
 
   public void reloadLevel(GameContainer container) throws SlickException {
+    int playerX = player.getX();
+    int playerY = player.getY();
     map = mapManager.getMap(getMapName(), container, true);
     playArea.reloadMap(map);
     reset();
+    player.setLocation(playerX, playerY);
   }
 
   @Override
