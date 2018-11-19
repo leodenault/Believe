@@ -7,20 +7,18 @@ import believe.app.Launcher;
 import believe.app.flag_parsers.CommandLineParser;
 import believe.app.flags.AppFlags;
 import believe.core.io.ReloadableFileSystemLocation;
+import believe.gamestate.GamePausedOverlay;
 import believe.gamestate.PlatformingState;
 import believe.map.gui.MapManager;
-import javax.swing.JFileChooser;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ClasspathLocation;
-import org.newdawn.slick.util.FileSystemLocation;
 import org.newdawn.slick.util.Log;
 import org.newdawn.slick.util.ResourceLoader;
 
-import java.io.File;
-import java.util.Collections;
+import java.util.Arrays;
 
 public class LevelEditor {
 
@@ -35,11 +33,14 @@ public class LevelEditor {
 
     Launcher.setUpAndLaunch(
         "Believe Level Editor",
-        Collections.singletonList((container, game) -> new PlatformingState(container,
-            game,
-            MapManager.defaultManager(),
-            hashMapOf(entry(Input.KEY_R,
-                state -> LevelEditor.resetLevel(state, container, game))))),
+        Arrays.asList(
+            (container, game) -> new PlatformingState(container,
+                game,
+                MapManager.defaultManager(),
+                hashMapOf(entry(
+                    Input.KEY_R,
+                    state -> LevelEditor.resetLevel(state, container, game)))),
+            (container, game) -> new GamePausedOverlay(container, game, () -> container.exit())),
         flags.width(),
         flags.height(),
         flags.windowed());

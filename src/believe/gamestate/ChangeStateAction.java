@@ -1,7 +1,5 @@
 package believe.gamestate;
 
-import believe.gamestate.GameStateBase;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
@@ -32,7 +30,5 @@ public class ChangeStateAction implements ComponentListener {
   public void componentActivated(AbstractComponent component) {
     game.enterState(GameStateBase.getStateID(state),
         new FadeOutTransition(Color.black, transitionLength), new FadeInTransition(Color.black, transitionLength));
-
   }
-
 }

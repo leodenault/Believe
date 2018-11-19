@@ -1,6 +1,9 @@
 package believe.gamestate;
 
 import believe.gamestate.PauseGameAction.OverlayState;
+import believe.gui.DirectionalPanel;
+import believe.gui.MenuSelection;
+import believe.gui.MenuSelectionGroup;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -8,11 +11,10 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.state.StateBasedGame;
 
-import believe.gui.DirectionalPanel;
-import believe.gui.MenuSelection;
-import believe.gui.MenuSelectionGroup;
-
 public class GamePausedOverlay extends GameStateBase implements OverlayState {
+  public interface ExitPausedStateAction {
+    void exitPausedState();
+  }
 
   private MenuSelectionGroup selections;
   private DirectionalPanel panel;
@@ -23,15 +25,23 @@ public class GamePausedOverlay extends GameStateBase implements OverlayState {
   private ChangeStateAction resumeAction;
   private ComponentListener restartAction;
 
-  public GamePausedOverlay(GameContainer container, StateBasedGame game) throws SlickException {
+  public GamePausedOverlay(
+      GameContainer container, StateBasedGame game, ExitPausedStateAction exitPausedStateAction)
+      throws SlickException {
     this.game = game;
-    panel = new DirectionalPanel(container, container.getWidth() / 2, (container.getHeight() - 200) / 3, 50);
+    panel =
+        new DirectionalPanel(container,
+            container.getWidth() / 2,
+            (container.getHeight() - 200) / 3,
+            50);
     resume = new MenuSelection(container, "Resume");
     restart = new MenuSelection(container, "Restart");
     MenuSelection exitLevel = new MenuSelection(container, "Exit Level");
 
-    exitLevel.addListener((component) -> pausedState.exitFromPausedState());
-    exitLevel.addListener(new ChangeStateAction(MainMenuState.class, game));
+    exitLevel.addListener(component -> {
+      pausedState.exitFromPausedState();
+      exitPausedStateAction.exitPausedState();
+    });
 
     panel.addChild(resume);
     panel.addChild(restart);
@@ -63,8 +73,7 @@ public class GamePausedOverlay extends GameStateBase implements OverlayState {
 
 
   @Override
-  public void init(GameContainer container, final StateBasedGame game)
-      throws SlickException {
+  public void init(GameContainer container, final StateBasedGame game) throws SlickException {
   }
 
   @Override
@@ -80,8 +89,7 @@ public class GamePausedOverlay extends GameStateBase implements OverlayState {
   }
 
   @Override
-  public void enter(GameContainer container, final StateBasedGame game)
-      throws SlickException {
+  public void enter(GameContainer container, final StateBasedGame game) throws SlickException {
     super.enter(container, game);
     this.selections.select(0);
 
@@ -95,8 +103,7 @@ public class GamePausedOverlay extends GameStateBase implements OverlayState {
   }
 
   @Override
-  public void leave(GameContainer container, StateBasedGame game)
-      throws SlickException {
+  public void leave(GameContainer container, StateBasedGame game) throws SlickException {
     super.leave(container, game);
     resume.removeListener(resumeAction);
     restart.removeListener(restartAction);
