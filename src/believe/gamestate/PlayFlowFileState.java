@@ -59,7 +59,7 @@ public class PlayFlowFileState
     super.keyPressed(key, c);
     if (key == Input.KEY_ESCAPE) {
       this.component.pause();
-      new PauseGameAction(GamePausedOverlay.class, this, game).componentActivated(null);
+      new PauseGameAction(GamePausedOverlay.class, this, game).pause(null);
     }
   }
 

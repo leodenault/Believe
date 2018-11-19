@@ -1,20 +1,27 @@
 package believe.gamestate;
 
 import believe.gamestate.PauseGameAction.OverlayState;
+import believe.graphics_transitions.CrossFadeTransition;
+import believe.graphics_transitions.GraphicsTransitionPairFactory;
 import believe.gui.DirectionalPanel;
 import believe.gui.MenuSelection;
 import believe.gui.MenuSelectionGroup;
+import javax.annotation.Nullable;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.EmptyTransition;
 
 public class GamePausedOverlay extends GameStateBase implements OverlayState {
   public interface ExitPausedStateAction {
     void exitPausedState();
   }
+
+  private static final int PAUSED_TO_STATE_TRANSITION_LENGTH = 500; // In seconds.
 
   private MenuSelectionGroup selections;
   private DirectionalPanel panel;
@@ -22,8 +29,12 @@ public class GamePausedOverlay extends GameStateBase implements OverlayState {
   private PausableState pausedState;
   private MenuSelection resume;
   private MenuSelection restart;
+  @Nullable
   private ChangeStateAction resumeAction;
   private ComponentListener restartAction;
+
+  @Nullable
+  private Image backgroundImage;
 
   public GamePausedOverlay(
       GameContainer container, StateBasedGame game, ExitPausedStateAction exitPausedStateAction)
@@ -66,7 +77,7 @@ public class GamePausedOverlay extends GameStateBase implements OverlayState {
         this.selections.selectPrevious();
         break;
       case Input.KEY_ESCAPE:
-        new ChangeStateAction(pausedState.getClass(), game, 500).componentActivated(null);
+        resumeAction.componentActivated(null);
         break;
     }
   }
@@ -79,6 +90,9 @@ public class GamePausedOverlay extends GameStateBase implements OverlayState {
   @Override
   public void render(GameContainer container, StateBasedGame game, Graphics g)
       throws SlickException {
+    if (backgroundImage != null) {
+      g.drawImage(backgroundImage, 0, 0);
+    }
     panel.render(container, g);
   }
 
@@ -93,7 +107,6 @@ public class GamePausedOverlay extends GameStateBase implements OverlayState {
     super.enter(container, game);
     this.selections.select(0);
 
-    resumeAction = new ChangeStateAction(pausedState.getClass(), game, 500);
     restartAction = (ComponentListener) (component) -> {
       pausedState.reset();
       new ChangeStateAction(pausedState.getClass(), game).componentActivated(null);
@@ -112,5 +125,15 @@ public class GamePausedOverlay extends GameStateBase implements OverlayState {
   @Override
   public void setPausedState(PausableState state) {
     this.pausedState = state;
+    resumeAction = new ChangeStateAction(pausedState.getClass(),
+        game,
+        new GraphicsTransitionPairFactory(() -> new CrossFadeTransition(pausedState,
+            PAUSED_TO_STATE_TRANSITION_LENGTH), EmptyTransition::new),
+        500);
+  }
+
+  @Override
+  public void setBackgroundImage(Image backgroundImage) {
+    this.backgroundImage = backgroundImage;
   }
 }

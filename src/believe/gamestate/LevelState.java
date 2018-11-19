@@ -9,8 +9,10 @@ import believe.map.gui.LevelMap;
 import believe.map.gui.MapManager;
 import believe.map.gui.PlayArea;
 import believe.physics.manager.PhysicsManager;
+import javax.annotation.Nullable;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
@@ -20,20 +22,28 @@ import java.util.List;
 public abstract class LevelState extends GameStateBase implements PausableState, DamageListener {
 
   private final MapManager mapManager;
+  private final GameContainer container;
 
   private boolean enteringFromPauseMenu;
+  @Nullable
   private LevelMap map;
   private ProgressBar focusBar;
+  @Nullable
   private PhysicsManager physics;
+  @Nullable
+  private Graphics graphics;
 
   protected StateBasedGame game;
+  @Nullable
   protected PlayArea playArea;
+  @Nullable
   protected PlayableCharacter player;
 
   public LevelState(GameContainer container, StateBasedGame game, MapManager mapManager) {
+    this.mapManager = mapManager;
+    this.container = container;
     this.game = game;
     this.focusBar = new ProgressBar(container);
-    this.mapManager = mapManager;
   }
 
   @Override
@@ -44,6 +54,7 @@ public abstract class LevelState extends GameStateBase implements PausableState,
   public void render(GameContainer container, StateBasedGame game, Graphics g)
       throws SlickException {
     playArea.render(container, g);
+    graphics = g;
   }
 
   @Override
@@ -63,7 +74,14 @@ public abstract class LevelState extends GameStateBase implements PausableState,
     switch (key) {
       case Input.KEY_ESCAPE:
         enteringFromPauseMenu = true;
-        new PauseGameAction(GamePausedOverlay.class, this, game).componentActivated(null);
+        Image backgroundImage = null;
+        try {
+          backgroundImage = new Image(container.getWidth(), container.getHeight());
+        } catch (SlickException e) {
+          e.printStackTrace();
+        }
+        graphics.copyArea(backgroundImage, 0, 0);
+        new PauseGameAction(GamePausedOverlay.class, this, game).pause(backgroundImage);
         break;
     }
   }

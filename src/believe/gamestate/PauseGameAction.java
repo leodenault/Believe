@@ -1,27 +1,35 @@
 package believe.gamestate;
 
-import org.newdawn.slick.gui.AbstractComponent;
+import believe.graphics_transitions.GraphicsTransitionPairFactory;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.EmptyTransition;
 
-public class PauseGameAction extends ChangeStateAction {
+public class PauseGameAction {
   public interface OverlayState extends GameState {
     void setPausedState(PausableState state);
+
+    void setBackgroundImage(Image backgroundImage);
   }
 
-  PausableState pausableState;
+  private final ChangeStateAction changeStateAction;
+  private final PausableState pausableState;
 
-  public PauseGameAction(Class<? extends OverlayState> overlay, PausableState state, StateBasedGame game) {
-    super(overlay, game);
+  public PauseGameAction(
+      Class<? extends OverlayState> overlay, PausableState state, StateBasedGame game) {
+    changeStateAction = new ChangeStateAction(
+        overlay,
+        game,
+        new GraphicsTransitionPairFactory(EmptyTransition::new, EmptyTransition::new));
     pausableState = state;
   }
 
-  @Override
-  public void componentActivated(AbstractComponent component) {
-    OverlayState overlay =
-        (OverlayState) GameStateBase.getStateInstance(state);
+  public void pause(Image backgroundImage) {
+    OverlayState overlay = (OverlayState) GameStateBase.getStateInstance(changeStateAction.state);
     overlay.setPausedState(pausableState);
+    overlay.setBackgroundImage(backgroundImage);
 
-    super.componentActivated(component);
+    changeStateAction.componentActivated(null);
   }
 }

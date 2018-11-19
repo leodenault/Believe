@@ -7,13 +7,19 @@ package(
 
 java_library(
     name = "gamestate",
-    srcs = glob(["*.java"]),
+    srcs = glob(
+        ["*.java"],
+        exclude = ["package-info.java"],
+    ),
     deps = [
+        ":package-info",
         "//lib",
+        "//lib:javax_annotations",
         "//src/believe/character",
         "//src/believe/character:faction",
         "//src/believe/character/playable",
         "//src/believe/core",
+        "//src/believe/graphics_transitions",
         "//src/believe/gui",
         "//src/believe/levelFlow/component",
         "//src/believe/levelFlow/parsing",
@@ -21,5 +27,15 @@ java_library(
         "//src/believe/map/gui",
         "//src/believe/physics/manager",
         "//src/believe/util",
+    ],
+)
+
+java_library(
+    name = "package-info",
+    srcs = ["package-info.java"],
+    visibility = ["//:believe_test_pkgs"],
+    deps = [
+        "//lib:javax_annotations",
+        "//src/believe/app/annotation",
     ],
 )

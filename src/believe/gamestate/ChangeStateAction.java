@@ -1,5 +1,6 @@
 package believe.gamestate;
 
+import believe.graphics_transitions.GraphicsTransitionPairFactory;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
@@ -9,26 +10,45 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 public class ChangeStateAction implements ComponentListener {
-
   private static final int DEFAULT_TRANSITION_LENGTH = 65;
+  private static final GraphicsTransitionPairFactory
+      DEFAULT_TRANSITIONS =
+      new GraphicsTransitionPairFactory(() -> new FadeOutTransition(Color.black,
+          DEFAULT_TRANSITION_LENGTH),
+          () -> new FadeInTransition(Color.black, DEFAULT_TRANSITION_LENGTH));
+
+  private final GraphicsTransitionPairFactory transitions;
 
   protected Class<? extends GameState> state;
   protected int transitionLength;
   protected StateBasedGame game;
 
   public ChangeStateAction(Class<? extends GameState> state, StateBasedGame game) {
-    this(state, game, DEFAULT_TRANSITION_LENGTH);
+    this(state, game, DEFAULT_TRANSITIONS, DEFAULT_TRANSITION_LENGTH);
   }
 
-  public ChangeStateAction(Class<? extends GameState> state, StateBasedGame game, int transitionLength) {
+  public ChangeStateAction(
+      Class<? extends GameState> state,
+      StateBasedGame game,
+      GraphicsTransitionPairFactory graphicsTransitionPairFactory) {
+    this(state, game, graphicsTransitionPairFactory, DEFAULT_TRANSITION_LENGTH);
+  }
+
+  public ChangeStateAction(
+      Class<? extends GameState> state,
+      StateBasedGame game,
+      GraphicsTransitionPairFactory graphicsTransitionPairFactory,
+      int transitionLength) {
     this.state = state;
     this.game = game;
     this.transitionLength = transitionLength;
+    this.transitions = graphicsTransitionPairFactory;
   }
 
   @Override
   public void componentActivated(AbstractComponent component) {
     game.enterState(GameStateBase.getStateID(state),
-        new FadeOutTransition(Color.black, transitionLength), new FadeInTransition(Color.black, transitionLength));
+        transitions.createLeaveTransition(),
+        transitions.createEnterTransition());
   }
 }

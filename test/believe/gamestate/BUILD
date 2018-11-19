@@ -6,6 +6,7 @@ java_test(
         "//lib",
         "//lib:mockito",
         "//src/believe/gamestate",
+        "//src/believe/gamestate:package-info",
         "//src/believe/map/gui",
         "//src/believe/testing",
         "//src/believe/util",
