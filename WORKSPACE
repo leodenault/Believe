@@ -27,3 +27,8 @@ maven_jar(
     name = "objenesis",
     artifact = "org.objenesis:objenesis:2.6",
 )
+
+maven_jar(
+    name = "javax_annotations_maven",
+    artifact = "com.google.code.findbugs:jsr305:3.0.2",
+)

@@ -20,3 +20,9 @@ java_library(
         "@objenesis//jar",
     ],
 )
+
+java_library(
+    name = "javax_annotations",
+    visibility = ["//src/believe:believe_pkg"],
+    exports = ["@javax_annotations_maven//jar"],
+)
