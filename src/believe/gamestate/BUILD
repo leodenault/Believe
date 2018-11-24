@@ -13,7 +13,7 @@ java_library(
     ),
     deps = [
         ":package-info",
-        "//lib:javax_annotations",
+        "//lib/javax:annotations",
         "//lib/slick",
         "//src/believe/character",
         "//src/believe/character:faction",
@@ -35,7 +35,7 @@ java_library(
     srcs = ["package-info.java"],
     visibility = ["//:believe_test_pkgs"],
     deps = [
-        "//lib:javax_annotations",
+        "//lib/javax:annotations",
         "//src/believe/app/annotation",
     ],
 )

@@ -3,8 +3,8 @@ java_test(
     srcs = ["RectangleTest.java"],
     test_class = "believe.geometry.RectangleTest",
     deps = [
-        "//lib:hamcrest",
-        "//lib:junit",
+        "//lib/hamcrest",
+        "//lib/junit",
         "//src/believe/geometry",
     ],
 )
