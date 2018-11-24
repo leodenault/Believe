@@ -7,5 +7,5 @@ java_library(
         "//src/believe/map/gui:__pkg__",
         "//test/believe:believe_tests",
     ],
-    deps = ["//lib"],
+    deps = ["//lib/slick"],
 )

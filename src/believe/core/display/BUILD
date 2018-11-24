@@ -8,7 +8,7 @@ java_library(
         "//src/believe/map/gui:__pkg__",
     ],
     deps = [
-        "//lib",
+        "//lib/slick",
         "//src/believe/geometry",
         "//src/believe/xml",
     ],

@@ -6,7 +6,7 @@ java_library(
     name = "editor",
     srcs = glob(["*.java"]),
     deps = [
-        "//lib",
+        "//lib/slick",
         "//src/believe/app",
         "//src/believe/app/flag_parsers",
         "//src/believe/app/flags",

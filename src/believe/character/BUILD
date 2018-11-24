@@ -17,7 +17,7 @@ java_library(
     srcs = ["Character.java"],
     deps = [
         ":faction",
-        "//lib",
+        "//lib/slick",
         "//src/believe/core/display",
         "//src/believe/geometry",
         "//src/believe/gui",

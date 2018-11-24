@@ -12,7 +12,7 @@ java_library(
     srcs = ["MapProperties.java"],
     deps = [
         ":map_entity_generator",
-        "//lib",
+        "//lib/slick",
         "//src/believe/character/playable",
         "//src/believe/map/collidable",
     ],
@@ -21,5 +21,5 @@ java_library(
 java_library(
     name = "map_entity_generator",
     srcs = ["MapEntityGenerator.java"],
-    deps = ["//lib"],
+    deps = ["//lib/slick"],
 )

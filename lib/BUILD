@@ -1,9 +1,3 @@
-java_import(
-    name = "lib",
-    jars = glob(["*.jar"]),
-    visibility = ["//:believe_all_pkgs"],
-)
-
 java_library(
     name = "mockito",
     visibility = ["//:believe_test_pkgs"],

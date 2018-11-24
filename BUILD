@@ -7,6 +7,34 @@ BELIEVE_DATA_FILES = [
     "//customSongs:custom_songs",
 ]
 
+WINDOWS_X86_NATIVES = [
+    "//lib/lwjgl:windows_x86",
+    "//lib/openal:windows_x86",
+]
+
+WINDOWS_X64_NATIVES = [
+    "//lib/lwjgl:windows_x64",
+    "//lib/openal:windows_x64",
+]
+
+LINUX_X86_NATIVES = [
+    "//lib/lwjgl:linux_x86",
+    "//lib/openal:linux_x86",
+    "//lib/jinput:linux_x86",
+]
+
+LINUX_X64_NATIVES = [
+    "//lib/lwjgl:linux_x64",
+    "//lib/openal:linux_x64",
+    "//lib/jinput:linux_x64",
+]
+
+MAC_NATIVES = [
+    "//lib/lwjgl:mac",
+    "//lib/openal:mac",
+    "//lib/jinput:mac",
+]
+
 BELIEVE_RES = [
     "//data",
     "//levelFlowFiles:level_flow_files",
@@ -33,7 +61,7 @@ package_group(
 
 believe_binary(
     name = "Believe_windows_x86",
-    data = BELIEVE_DATA_FILES + ["//lib/native:windows_x86"],
+    data = BELIEVE_DATA_FILES + WINDOWS_X86_NATIVES,
     jar_name = "Believe.jar",
     main_class = BELIEVE_MAIN_CLASS,
     resources = BELIEVE_RES,
@@ -47,7 +75,7 @@ pkg_zip(
 
 believe_binary(
     name = "Believe_windows_x64",
-    data = BELIEVE_DATA_FILES + ["//lib/native:windows_x64"],
+    data = BELIEVE_DATA_FILES + WINDOWS_X64_NATIVES,
     jar_name = "Believe.jar",
     main_class = BELIEVE_MAIN_CLASS,
     resources = BELIEVE_RES,
@@ -61,7 +89,7 @@ pkg_zip(
 
 believe_binary(
     name = "Believe_linux_x86",
-    data = BELIEVE_DATA_FILES + ["//lib/native:linux_x86"],
+    data = BELIEVE_DATA_FILES + LINUX_X86_NATIVES,
     jar_name = "Believe.jar",
     main_class = BELIEVE_MAIN_CLASS,
     resources = BELIEVE_RES,
@@ -75,7 +103,7 @@ pkg_zip(
 
 believe_binary(
     name = "Believe_linux_x64",
-    data = BELIEVE_DATA_FILES + ["//lib/native:linux_x64"],
+    data = BELIEVE_DATA_FILES + LINUX_X64_NATIVES,
     jar_name = "Believe.jar",
     main_class = BELIEVE_MAIN_CLASS,
     resources = BELIEVE_RES,
@@ -89,7 +117,7 @@ pkg_zip(
 
 believe_binary(
     name = "Believe_mac",
-    data = BELIEVE_DATA_FILES + ["//lib/native:mac"],
+    data = BELIEVE_DATA_FILES + MAC_NATIVES,
     jar_name = "Believe.jar",
     main_class = BELIEVE_MAIN_CLASS,
     resources = BELIEVE_RES,
@@ -108,10 +136,7 @@ alias(
 
 believe_binary(
     name = "LevelEditor",
-    data = [
-        "//lib/native:linux_x64",
-        "//res/maps",
-    ],
+    data = LINUX_X64_NATIVES + ["//res/maps"],
     main_class = "believe.app.editor.LevelEditor",
     resources = [
         "//data",
@@ -129,10 +154,7 @@ pkg_zip(
 
 believe_binary(
     name = "LevelEditor_windows",
-    data = [
-        "//lib/native:windows_x64",
-        "//res/maps",
-    ],
+    data = WINDOWS_X64_NATIVES + ["//res/maps"],
     main_class = "believe.app.editor.LevelEditor",
     resources = [
         "//data",

@@ -8,7 +8,7 @@ java_library(
         "//src/believe/physics/collision:__pkg__",
     ],
     deps = [
-        "//lib",
+        "//lib/slick",
         "//src/believe/character",
         "//src/believe/character:faction",
         "//src/believe/core",

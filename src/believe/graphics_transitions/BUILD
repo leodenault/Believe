@@ -5,5 +5,5 @@ java_library(
         "GraphicsTransitionPairFactory.java",
     ],
     visibility = ["//:believe_all_pkgs"],
-    deps = ["//lib"],
+    deps = ["//lib/slick"],
 )

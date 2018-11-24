@@ -15,7 +15,7 @@ java_library(
     name = "app",
     srcs = glob(["*.java"]),
     deps = [
-        "//lib",
+        "//lib/slick",
         "//src/believe/core/io",
         "//src/believe/gamestate",
         "//src/believe/util",

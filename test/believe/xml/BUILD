@@ -3,10 +3,10 @@ java_test(
     srcs = ["XMLBooleanTest.java"],
     test_class = "believe.xml.XMLBooleanTest",
     deps = [
-        "//lib",
         "//lib:hamcrest",
         "//lib:junit",
         "//lib:mockito",
+        "//lib/slick",
         "//src/believe/xml",
     ],
 )
@@ -16,10 +16,10 @@ java_test(
     srcs = ["XMLCompoundTest.java"],
     test_class = "believe.xml.XMLCompoundTest",
     deps = [
-        "//lib",
         "//lib:hamcrest",
         "//lib:junit",
         "//lib:mockito",
+        "//lib/slick",
         "//src/believe/xml",
     ],
 )
@@ -29,10 +29,10 @@ java_test(
     srcs = ["XMLIntegerTest.java"],
     test_class = "believe.xml.XMLIntegerTest",
     deps = [
-        "//lib",
         "//lib:hamcrest",
         "//lib:junit",
         "//lib:mockito",
+        "//lib/slick",
         "//src/believe/xml",
     ],
 )
@@ -42,10 +42,10 @@ java_test(
     srcs = ["XMLListTest.java"],
     test_class = "believe.xml.XMLListTest",
     deps = [
-        "//lib",
         "//lib:hamcrest",
         "//lib:junit",
         "//lib:mockito",
+        "//lib/slick",
         "//src/believe/xml",
     ],
 )
@@ -66,10 +66,10 @@ java_test(
     srcs = ["XMLStringTest.java"],
     test_class = "believe.xml.XMLStringTest",
     deps = [
-        "//lib",
         "//lib:hamcrest",
         "//lib:junit",
         "//lib:mockito",
+        "//lib/slick",
         "//src/believe/xml",
     ],
 )

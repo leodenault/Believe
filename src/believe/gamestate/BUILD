@@ -13,8 +13,8 @@ java_library(
     ),
     deps = [
         ":package-info",
-        "//lib",
         "//lib:javax_annotations",
+        "//lib/slick",
         "//src/believe/character",
         "//src/believe/character:faction",
         "//src/believe/character/playable",

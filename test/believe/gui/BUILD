@@ -3,10 +3,10 @@ java_test(
     srcs = ["DirectionalPanelTest.java"],
     test_class = "believe.gui.DirectionalPanelTest",
     deps = [
-        "//lib",
         "//lib:hamcrest",
         "//lib:junit",
         "//lib:mockito",
+        "//lib/slick",
         "//src/believe/gui",
     ],
 )
@@ -28,10 +28,10 @@ java_test(
     srcs = ["NumberPickerTest.java"],
     test_class = "believe.gui.NumberPickerTest",
     deps = [
-        "//lib",
         "//lib:hamcrest",
         "//lib:junit",
         "//lib:mockito",
+        "//lib/slick",
         "//src/believe/gui",
     ],
 )
