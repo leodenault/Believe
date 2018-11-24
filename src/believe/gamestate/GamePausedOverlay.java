@@ -15,13 +15,16 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.EmptyTransition;
+import org.newdawn.slick.util.Log;
 
 public class GamePausedOverlay extends GameStateBase implements OverlayState {
   public interface ExitPausedStateAction {
     void exitPausedState();
   }
 
-  private static final int PAUSED_TO_STATE_TRANSITION_LENGTH = 500; // In seconds.
+  private static final int PAUSED_TO_STATE_TRANSITION_LENGTH = 500; // In milliseconds.
+
+  private final GameContainer gameContainer;
 
   private MenuSelectionGroup selections;
   private DirectionalPanel panel;
@@ -40,6 +43,7 @@ public class GamePausedOverlay extends GameStateBase implements OverlayState {
       GameContainer container, StateBasedGame game, ExitPausedStateAction exitPausedStateAction)
       throws SlickException {
     this.game = game;
+    this.gameContainer = container;
     panel =
         new DirectionalPanel(container,
             container.getWidth() / 2,
@@ -123,17 +127,24 @@ public class GamePausedOverlay extends GameStateBase implements OverlayState {
   }
 
   @Override
-  public void setPausedState(PausableState state) {
+  public void setPausedStateInfo(PausableState state, Image backgroundImage) {
     this.pausedState = state;
-    resumeAction = new ChangeStateAction(pausedState.getClass(),
-        game,
-        new GraphicsTransitionPairFactory(() -> new CrossFadeTransition(pausedState,
-            PAUSED_TO_STATE_TRANSITION_LENGTH), EmptyTransition::new),
-        500);
-  }
-
-  @Override
-  public void setBackgroundImage(Image backgroundImage) {
     this.backgroundImage = backgroundImage;
+
+    GraphicsTransitionPairFactory transitionPairFactory;
+    transitionPairFactory = new GraphicsTransitionPairFactory(() -> {
+      Image pauseOverlayScreenshot;
+      try {
+        pauseOverlayScreenshot = new Image(gameContainer.getWidth(), gameContainer.getHeight());
+      } catch (SlickException e) {
+        Log.error("Failed to fetch pause overlay screenshot.", e);
+        return new EmptyTransition();
+      }
+      gameContainer.getGraphics().copyArea(pauseOverlayScreenshot, 0, 0);
+      return new CrossFadeTransition(pauseOverlayScreenshot,
+          backgroundImage,
+          PAUSED_TO_STATE_TRANSITION_LENGTH);
+    }, EmptyTransition::new);
+    resumeAction = new ChangeStateAction(pausedState.getClass(), game, transitionPairFactory);
   }
 }

@@ -12,8 +12,7 @@ public final class GraphicsTransitionPairFactory {
 
 
   public GraphicsTransitionPairFactory(
-      TransitionFactory leaveTransition,
-      TransitionFactory enterTransition) {
+      TransitionFactory leaveTransition, TransitionFactory enterTransition) {
     this.leaveTransition = leaveTransition;
     this.enterTransition = enterTransition;
   }

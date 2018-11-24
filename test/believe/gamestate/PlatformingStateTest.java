@@ -44,6 +44,6 @@ public class PlatformingStateTest {
   public void eventActionsAreUsed() {
     state.keyPressed(Input.KEY_LEFT, '\0');
 
-    verify(singleEventAction).apply(null);
+    verify(singleEventAction).apply(state);
   }
 }

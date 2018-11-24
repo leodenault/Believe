@@ -20,28 +20,18 @@ public class ChangeStateAction implements ComponentListener {
   private final GraphicsTransitionPairFactory transitions;
 
   protected Class<? extends GameState> state;
-  protected int transitionLength;
   protected StateBasedGame game;
 
   public ChangeStateAction(Class<? extends GameState> state, StateBasedGame game) {
-    this(state, game, DEFAULT_TRANSITIONS, DEFAULT_TRANSITION_LENGTH);
+    this(state, game, DEFAULT_TRANSITIONS);
   }
 
   public ChangeStateAction(
       Class<? extends GameState> state,
       StateBasedGame game,
       GraphicsTransitionPairFactory graphicsTransitionPairFactory) {
-    this(state, game, graphicsTransitionPairFactory, DEFAULT_TRANSITION_LENGTH);
-  }
-
-  public ChangeStateAction(
-      Class<? extends GameState> state,
-      StateBasedGame game,
-      GraphicsTransitionPairFactory graphicsTransitionPairFactory,
-      int transitionLength) {
     this.state = state;
     this.game = game;
-    this.transitionLength = transitionLength;
     this.transitions = graphicsTransitionPairFactory;
   }
 

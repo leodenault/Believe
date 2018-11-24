@@ -8,9 +8,7 @@ import org.newdawn.slick.state.transition.EmptyTransition;
 
 public class PauseGameAction {
   public interface OverlayState extends GameState {
-    void setPausedState(PausableState state);
-
-    void setBackgroundImage(Image backgroundImage);
+    void setPausedStateInfo(PausableState state, Image backgroundImage);
   }
 
   private final ChangeStateAction changeStateAction;
@@ -27,8 +25,7 @@ public class PauseGameAction {
 
   public void pause(Image backgroundImage) {
     OverlayState overlay = (OverlayState) GameStateBase.getStateInstance(changeStateAction.state);
-    overlay.setPausedState(pausableState);
-    overlay.setBackgroundImage(backgroundImage);
+    overlay.setPausedStateInfo(pausableState, backgroundImage);
 
     changeStateAction.componentActivated(null);
   }

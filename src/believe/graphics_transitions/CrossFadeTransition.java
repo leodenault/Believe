@@ -3,25 +3,31 @@ package believe.graphics_transitions;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.CrossStateTransition;
+import org.newdawn.slick.state.transition.Transition;
 
-public final class CrossFadeTransition extends CrossStateTransition {
+public final class CrossFadeTransition implements Transition {
+
+  private final Image previousStateScreenshot;
+  private final Image nextStateScreenshot;
   private final int transitionLength;
 
   private float duration;
 
-  public CrossFadeTransition(GameState secondState, int transitionLength) {
-    super(secondState);
+  public CrossFadeTransition(
+      Image previousStateScreenshot, Image nextStateScreenshot, int transitionLength) {
+    this.previousStateScreenshot = previousStateScreenshot;
+    this.nextStateScreenshot = nextStateScreenshot;
     this.transitionLength = transitionLength;
     this.duration = 0;
   }
 
   @Override
   public boolean isComplete() {
-    return duration > transitionLength;
+    return duration >= transitionLength;
   }
 
   @Override
@@ -34,19 +40,17 @@ public final class CrossFadeTransition extends CrossStateTransition {
   }
 
   @Override
-  public void preRenderSecondState(
-      StateBasedGame game, GameContainer container, Graphics g) throws SlickException {
-    float completion = duration / (float) transitionLength;
-    g.setDrawMode(Graphics.MODE_ALPHA_MAP);
-    g.clearAlphaMap();
-    g.setColor(new Color(1f, 1f, 1f, completion));
-    g.fillRect(0, 0, container.getWidth(), container.getHeight());
-    g.setDrawMode(Graphics.MODE_ALPHA_BLEND);
-  }
+  public void preRender(StateBasedGame game, GameContainer container, Graphics g)
+      throws SlickException {}
 
   @Override
-  public void postRenderSecondState(
-      StateBasedGame game, GameContainer container, Graphics g) throws SlickException {
-    g.setDrawMode(Graphics.MODE_NORMAL);
+  public void postRender(StateBasedGame game, GameContainer container, Graphics g)
+      throws SlickException {
+    g.drawImage(previousStateScreenshot, 0, 0);
+    g.drawImage(nextStateScreenshot,
+        0,
+        0,
+        new Color(1f, 1f, 1f, duration / (float) transitionLength));
+
   }
 }
