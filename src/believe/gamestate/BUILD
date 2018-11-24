@@ -13,8 +13,6 @@ java_library(
     ),
     deps = [
         ":package-info",
-        "//lib/javax:annotations",
-        "//lib/slick",
         "//src/believe/character",
         "//src/believe/character:faction",
         "//src/believe/character/playable",
@@ -27,6 +25,8 @@ java_library(
         "//src/believe/map/gui",
         "//src/believe/physics/manager",
         "//src/believe/util",
+        "//third_party/javax:annotations",
+        "//third_party/slick",
     ],
 )
 
@@ -35,7 +35,7 @@ java_library(
     srcs = ["package-info.java"],
     visibility = ["//:believe_test_pkgs"],
     deps = [
-        "//lib/javax:annotations",
         "//src/believe/app/annotation",
+        "//third_party/javax:annotations",
     ],
 )

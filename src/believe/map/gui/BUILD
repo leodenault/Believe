@@ -5,7 +5,6 @@ java_library(
         "//:believe_all_pkgs",
     ],
     deps = [
-        "//lib/slick",
         "//src/believe/character",
         "//src/believe/character/playable",
         "//src/believe/core/display",
@@ -14,5 +13,6 @@ java_library(
         "//src/believe/map/io:properties",
         "//src/believe/util",
         "//src/believe/xml",
+        "//third_party/slick",
     ],
 )

@@ -3,11 +3,11 @@ java_test(
     srcs = ["DirectionalPanelTest.java"],
     test_class = "believe.gui.DirectionalPanelTest",
     deps = [
-        "//lib/hamcrest",
-        "//lib/junit",
-        "//lib/mockito",
-        "//lib/slick",
         "//src/believe/gui",
+        "//third_party/hamcrest",
+        "//third_party/junit",
+        "//third_party/mockito",
+        "//third_party/slick",
     ],
 )
 
@@ -16,10 +16,10 @@ java_test(
     srcs = ["MenuSelectionGroupTest.java"],
     test_class = "believe.gui.MenuSelectionGroupTest",
     deps = [
-        "//lib/hamcrest",
-        "//lib/junit",
-        "//lib/mockito",
         "//src/believe/gui",
+        "//third_party/hamcrest",
+        "//third_party/junit",
+        "//third_party/mockito",
     ],
 )
 
@@ -28,10 +28,10 @@ java_test(
     srcs = ["NumberPickerTest.java"],
     test_class = "believe.gui.NumberPickerTest",
     deps = [
-        "//lib/hamcrest",
-        "//lib/junit",
-        "//lib/mockito",
-        "//lib/slick",
         "//src/believe/gui",
+        "//third_party/hamcrest",
+        "//third_party/junit",
+        "//third_party/mockito",
+        "//third_party/slick",
     ],
 )

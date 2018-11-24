@@ -3,13 +3,13 @@ java_test(
     srcs = ["PlatformingStateTest.java"],
     test_class = "believe.gamestate.PlatformingStateTest",
     deps = [
-        "//lib/junit",
-        "//lib/mockito",
-        "//lib/slick",
         "//src/believe/gamestate",
         "//src/believe/gamestate:package-info",
         "//src/believe/map/gui",
         "//src/believe/testing",
         "//src/believe/util",
+        "//third_party/junit",
+        "//third_party/mockito",
+        "//third_party/slick",
     ],
 )

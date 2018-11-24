@@ -3,9 +3,9 @@ java_test(
     srcs = ["IntegerFlagParserTest.java"],
     test_class = "believe.app.flag_parsers.IntegerFlagParserTest",
     deps = [
-        "//lib/hamcrest",
-        "//lib/junit",
         "//src/believe/app/flag_parsers",
+        "//third_party/hamcrest",
+        "//third_party/junit",
     ],
 )
 
@@ -14,9 +14,9 @@ java_test(
     srcs = ["BooleanFlagParserTest.java"],
     test_class = "believe.app.flag_parsers.BooleanFlagParserTest",
     deps = [
-        "//lib/hamcrest",
-        "//lib/junit",
         "//src/believe/app/flag_parsers",
+        "//third_party/hamcrest",
+        "//third_party/junit",
     ],
 )
 
@@ -25,8 +25,8 @@ java_test(
     srcs = ["CommandLineParserTest.java"],
     test_class = "believe.app.flag_parsers.CommandLineParserTest",
     deps = [
-        "//lib/hamcrest",
-        "//lib/junit",
         "//src/believe/app/flag_parsers",
+        "//third_party/hamcrest",
+        "//third_party/junit",
     ],
 )

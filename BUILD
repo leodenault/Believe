@@ -8,31 +8,31 @@ BELIEVE_DATA_FILES = [
 ]
 
 WINDOWS_X86_NATIVES = [
-    "//lib/lwjgl:windows_x86",
-    "//lib/openal:windows_x86",
+    "//third_party/lwjgl:windows_x86",
+    "//third_party/openal:windows_x86",
 ]
 
 WINDOWS_X64_NATIVES = [
-    "//lib/lwjgl:windows_x64",
-    "//lib/openal:windows_x64",
+    "//third_party/lwjgl:windows_x64",
+    "//third_party/openal:windows_x64",
 ]
 
 LINUX_X86_NATIVES = [
-    "//lib/lwjgl:linux_x86",
-    "//lib/openal:linux_x86",
-    "//lib/jinput:linux_x86",
+    "//third_party/lwjgl:linux_x86",
+    "//third_party/openal:linux_x86",
+    "//third_party/jinput:linux_x86",
 ]
 
 LINUX_X64_NATIVES = [
-    "//lib/lwjgl:linux_x64",
-    "//lib/openal:linux_x64",
-    "//lib/jinput:linux_x64",
+    "//third_party/lwjgl:linux_x64",
+    "//third_party/openal:linux_x64",
+    "//third_party/jinput:linux_x64",
 ]
 
 MAC_NATIVES = [
-    "//lib/lwjgl:mac",
-    "//lib/openal:mac",
-    "//lib/jinput:mac",
+    "//third_party/lwjgl:mac",
+    "//third_party/openal:mac",
+    "//third_party/jinput:mac",
 ]
 
 BELIEVE_RES = [

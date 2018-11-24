@@ -7,8 +7,8 @@ java_library(
         "//test/believe:believe_tests",
     ],
     deps = [
-        "//lib/slick",
         "//src/believe/levelFlow/component",
         "//src/believe/levelFlow/parsing/exceptions",
+        "//third_party/slick",
     ],
 )

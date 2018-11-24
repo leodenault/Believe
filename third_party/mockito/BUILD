@@ -1,3 +1,5 @@
+licenses(["notice"])
+
 java_library(
     name = "mockito",
     visibility = ["//:believe_test_pkgs"],

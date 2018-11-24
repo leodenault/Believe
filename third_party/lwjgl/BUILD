@@ -1,3 +1,5 @@
+licenses(["notice"])
+
 package(
     default_visibility = ["//:__pkg__"],
 )
@@ -7,7 +9,7 @@ java_import(
     jars = ["lwjgl.jar"],
     visibility = [
         "//:believe_all_pkgs",
-        "//lib/slick:__pkg__",
+        "//third_party/slick:__pkg__",
     ],
 )
 

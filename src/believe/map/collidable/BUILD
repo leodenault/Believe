@@ -8,10 +8,10 @@ java_library(
         "//test/believe:believe_tests",
     ],
     deps = [
-        "//lib/slick",
         "//src/believe/geometry",
         "//src/believe/map/io:map_entity_generator",
         "//src/believe/physics/collision",
         "//src/believe/statemachine",
+        "//third_party/slick",
     ],
 )

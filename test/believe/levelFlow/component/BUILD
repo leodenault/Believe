@@ -3,11 +3,11 @@ java_test(
     srcs = ["ComboSyncherTest.java"],
     test_class = "believe.levelFlow.component.ComboSyncherTest",
     deps = [
-        "//lib/junit",
-        "//lib/mockito",
-        "//lib/slick",
         "//src/believe/core",
         "//src/believe/levelFlow/component",
+        "//third_party/junit",
+        "//third_party/mockito",
+        "//third_party/slick",
     ],
 )
 
@@ -16,11 +16,11 @@ java_test(
     srcs = ["BeatTest.java"],
     test_class = "believe.levelFlow.component.BeatTest",
     deps = [
-        "//lib/hamcrest",
-        "//lib/junit",
-        "//lib/mockito",
-        "//lib/slick",
         "//src/believe/levelFlow/component",
+        "//third_party/hamcrest",
+        "//third_party/junit",
+        "//third_party/mockito",
+        "//third_party/slick",
     ],
 )
 
@@ -29,11 +29,11 @@ java_test(
     srcs = ["FlowComponentIntegrationTest.java"],
     test_class = "believe.levelFlow.component.FlowComponentIntegrationTest",
     deps = [
-        "//lib/hamcrest",
-        "//lib/junit",
-        "//lib/mockito",
-        "//lib/slick",
         "//src/believe/levelFlow/component",
+        "//third_party/hamcrest",
+        "//third_party/junit",
+        "//third_party/mockito",
+        "//third_party/slick",
     ],
 )
 
@@ -42,11 +42,11 @@ java_test(
     srcs = ["FlowComponentTest.java"],
     test_class = "believe.levelFlow.component.FlowComponentTest",
     deps = [
-        "//lib/hamcrest",
-        "//lib/junit",
-        "//lib/mockito",
-        "//lib/slick",
         "//src/believe/levelFlow/component",
+        "//third_party/hamcrest",
+        "//third_party/junit",
+        "//third_party/mockito",
+        "//third_party/slick",
     ],
 )
 
@@ -55,10 +55,10 @@ java_test(
     srcs = ["LaneTest.java"],
     test_class = "believe.levelFlow.component.LaneTest",
     deps = [
-        "//lib/hamcrest",
-        "//lib/junit",
-        "//lib/mockito",
-        "//lib/slick",
         "//src/believe/levelFlow/component",
+        "//third_party/hamcrest",
+        "//third_party/junit",
+        "//third_party/mockito",
+        "//third_party/slick",
     ],
 )

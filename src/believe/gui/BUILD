@@ -9,10 +9,10 @@ java_library(
         "//test/believe:believe_tests",
     ],
     deps = [
-        "//lib/slick",
         "//src/believe/core",
         "//src/believe/core/display",
         "//src/believe/geometry",
         "//src/believe/util",
+        "//third_party/slick",
     ],
 )

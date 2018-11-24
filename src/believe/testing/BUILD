@@ -6,7 +6,7 @@ java_library(
     name = "testing",
     srcs = glob(["*.java"]),
     deps = [
-        "//lib/lwjgl",
-        "//lib/slick",
+        "//third_party/lwjgl",
+        "//third_party/slick",
     ],
 )

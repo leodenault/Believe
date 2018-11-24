@@ -13,7 +13,7 @@ public class Util {
 
   private static final String DEFAULT_DIRECTORY = "customFlowFiles";
   private static final String FILE_EXTENSION = ".lfl";
-  private static final String NATIVE_PATH = "lib/lwjgl";
+  private static final String NATIVE_PATH = "third_party/lwjgl";
 
   public static File[] getFlowFiles() throws SecurityException {
     File parent = new File(DEFAULT_DIRECTORY);

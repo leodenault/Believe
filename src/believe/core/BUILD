@@ -10,7 +10,7 @@ java_library(
         "//test/believe:believe_tests",
     ],
     deps = [
-        "//lib/slick",
         "//src/believe/xml",
+        "//third_party/slick",
     ],
 )

@@ -11,5 +11,5 @@ java_library(
         "//src/believe/util:__pkg__",
         "//test/believe:believe_tests",
     ],
-    deps = ["//lib/slick"],
+    deps = ["//third_party/slick"],
 )

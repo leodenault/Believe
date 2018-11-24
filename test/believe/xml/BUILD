@@ -3,11 +3,11 @@ java_test(
     srcs = ["XMLBooleanTest.java"],
     test_class = "believe.xml.XMLBooleanTest",
     deps = [
-        "//lib/hamcrest",
-        "//lib/junit",
-        "//lib/mockito",
-        "//lib/slick",
         "//src/believe/xml",
+        "//third_party/hamcrest",
+        "//third_party/junit",
+        "//third_party/mockito",
+        "//third_party/slick",
     ],
 )
 
@@ -16,11 +16,11 @@ java_test(
     srcs = ["XMLCompoundTest.java"],
     test_class = "believe.xml.XMLCompoundTest",
     deps = [
-        "//lib/hamcrest",
-        "//lib/junit",
-        "//lib/mockito",
-        "//lib/slick",
         "//src/believe/xml",
+        "//third_party/hamcrest",
+        "//third_party/junit",
+        "//third_party/mockito",
+        "//third_party/slick",
     ],
 )
 
@@ -29,11 +29,11 @@ java_test(
     srcs = ["XMLIntegerTest.java"],
     test_class = "believe.xml.XMLIntegerTest",
     deps = [
-        "//lib/hamcrest",
-        "//lib/junit",
-        "//lib/mockito",
-        "//lib/slick",
         "//src/believe/xml",
+        "//third_party/hamcrest",
+        "//third_party/junit",
+        "//third_party/mockito",
+        "//third_party/slick",
     ],
 )
 
@@ -42,11 +42,11 @@ java_test(
     srcs = ["XMLListTest.java"],
     test_class = "believe.xml.XMLListTest",
     deps = [
-        "//lib/hamcrest",
-        "//lib/junit",
-        "//lib/mockito",
-        "//lib/slick",
         "//src/believe/xml",
+        "//third_party/hamcrest",
+        "//third_party/junit",
+        "//third_party/mockito",
+        "//third_party/slick",
     ],
 )
 
@@ -55,9 +55,9 @@ java_test(
     srcs = ["XMLNodeFactoryTest.java"],
     test_class = "believe.xml.XMLNodeFactoryTest",
     deps = [
-        "//lib/hamcrest",
-        "//lib/junit",
         "//src/believe/xml",
+        "//third_party/hamcrest",
+        "//third_party/junit",
     ],
 )
 
@@ -66,10 +66,10 @@ java_test(
     srcs = ["XMLStringTest.java"],
     test_class = "believe.xml.XMLStringTest",
     deps = [
-        "//lib/hamcrest",
-        "//lib/junit",
-        "//lib/mockito",
-        "//lib/slick",
         "//src/believe/xml",
+        "//third_party/hamcrest",
+        "//third_party/junit",
+        "//third_party/mockito",
+        "//third_party/slick",
     ],
 )

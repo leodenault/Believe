@@ -3,10 +3,10 @@ java_test(
     srcs = ["MapPropertiesTest.java"],
     test_class = "believe.map.io.MapPropertiesTest",
     deps = [
-        "//lib/hamcrest",
-        "//lib/junit",
-        "//lib/mockito",
-        "//lib/slick",
         "//src/believe/map/io:properties",
+        "//third_party/hamcrest",
+        "//third_party/junit",
+        "//third_party/mockito",
+        "//third_party/slick",
     ],
 )

@@ -1,3 +1,5 @@
+licenses(["notice"])
+
 java_library(
     name = "hamcrest",
     visibility = ["//:believe_test_pkgs"],

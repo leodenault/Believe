@@ -17,7 +17,6 @@ java_library(
     srcs = ["Character.java"],
     deps = [
         ":faction",
-        "//lib/slick",
         "//src/believe/core/display",
         "//src/believe/geometry",
         "//src/believe/gui",
@@ -25,6 +24,7 @@ java_library(
         "//src/believe/physics/collision:handlers",
         "//src/believe/statemachine",
         "//src/believe/util",
+        "//third_party/slick",
     ],
 )
 
