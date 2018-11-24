@@ -4,11 +4,11 @@ java_test(
     test_class = "believe.levelFlow.parsing.FlowComponentBuilderTest",
     deps = [
         "//lib",
+        "//lib:hamcrest",
+        "//lib:junit",
         "//lib:mockito",
         "//src/believe/levelFlow/parsing",
         "//src/believe/levelFlow/parsing/exceptions",
-        "@hamcrest//jar",
-        "@junit//jar",
     ],
 )
 
@@ -18,10 +18,10 @@ java_test(
     test_class = "believe.levelFlow.parsing.FlowFileParserIntegrationTest",
     deps = [
         "//lib",
+        "//lib:hamcrest",
+        "//lib:junit",
         "//src/believe/levelFlow/parsing",
         "//src/believe/levelFlow/parsing/exceptions",
-        "@hamcrest//jar",
-        "@junit//jar",
     ],
 )
 
@@ -31,11 +31,11 @@ java_test(
     test_class = "believe.levelFlow.parsing.FlowFileParserTest",
     deps = [
         "//lib",
+        "//lib:hamcrest",
+        "//lib:junit",
         "//lib:mockito",
         "//src/believe/levelFlow/parsing",
         "//src/believe/levelFlow/parsing/exceptions",
-        "@hamcrest//jar",
-        "@junit//jar",
     ],
 )
 
@@ -44,9 +44,9 @@ java_test(
     srcs = ["FlowFileTokenizerTest.java"],
     test_class = "believe.levelFlow.parsing.FlowFileTokenizerTest",
     deps = [
+        "//lib:hamcrest",
+        "//lib:junit",
         "//src/believe/levelFlow/parsing",
-        "@hamcrest//jar",
-        "@junit//jar",
     ],
 )
 
@@ -55,9 +55,9 @@ java_test(
     srcs = ["LineParserTest.java"],
     test_class = "believe.levelFlow.parsing.LineParserTest",
     deps = [
+        "//lib:hamcrest",
+        "//lib:junit",
         "//src/believe/levelFlow/parsing",
         "//src/believe/levelFlow/parsing/exceptions",
-        "@hamcrest//jar",
-        "@junit//jar",
     ],
 )

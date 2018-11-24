@@ -1,5 +1,5 @@
 maven_jar(
-    name = "hamcrest",
+    name = "hamcrest_maven",
     artifact = "org.hamcrest:hamcrest-library:1.3",
 )
 
@@ -9,22 +9,22 @@ maven_jar(
 )
 
 maven_jar(
-    name = "junit",
+    name = "junit_maven",
     artifact = "junit:junit:4.12",
 )
 
 maven_jar(
-    name = "bytebuddy",
+    name = "bytebuddy_maven",
     artifact = "net.bytebuddy:byte-buddy:1.7.9",
 )
 
 maven_jar(
-    name = "bytebuddy_agent",
+    name = "bytebuddy_agent_maven",
     artifact = "net.bytebuddy:byte-buddy-agent:1.7.9",
 )
 
 maven_jar(
-    name = "objenesis",
+    name = "objenesis_maven",
     artifact = "org.objenesis:objenesis:2.6",
 )
 

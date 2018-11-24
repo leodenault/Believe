@@ -4,10 +4,10 @@ java_test(
     test_class = "believe.xml.XMLBooleanTest",
     deps = [
         "//lib",
+        "//lib:hamcrest",
+        "//lib:junit",
         "//lib:mockito",
         "//src/believe/xml",
-        "@hamcrest//jar",
-        "@junit//jar",
     ],
 )
 
@@ -17,10 +17,10 @@ java_test(
     test_class = "believe.xml.XMLCompoundTest",
     deps = [
         "//lib",
+        "//lib:hamcrest",
+        "//lib:junit",
         "//lib:mockito",
         "//src/believe/xml",
-        "@hamcrest//jar",
-        "@junit//jar",
     ],
 )
 
@@ -30,10 +30,10 @@ java_test(
     test_class = "believe.xml.XMLIntegerTest",
     deps = [
         "//lib",
+        "//lib:hamcrest",
+        "//lib:junit",
         "//lib:mockito",
         "//src/believe/xml",
-        "@hamcrest//jar",
-        "@junit//jar",
     ],
 )
 
@@ -43,10 +43,10 @@ java_test(
     test_class = "believe.xml.XMLListTest",
     deps = [
         "//lib",
+        "//lib:hamcrest",
+        "//lib:junit",
         "//lib:mockito",
         "//src/believe/xml",
-        "@hamcrest//jar",
-        "@junit//jar",
     ],
 )
 
@@ -55,9 +55,9 @@ java_test(
     srcs = ["XMLNodeFactoryTest.java"],
     test_class = "believe.xml.XMLNodeFactoryTest",
     deps = [
+        "//lib:hamcrest",
+        "//lib:junit",
         "//src/believe/xml",
-        "@hamcrest//jar",
-        "@junit//jar",
     ],
 )
 
@@ -67,9 +67,9 @@ java_test(
     test_class = "believe.xml.XMLStringTest",
     deps = [
         "//lib",
+        "//lib:hamcrest",
+        "//lib:junit",
         "//lib:mockito",
         "//src/believe/xml",
-        "@hamcrest//jar",
-        "@junit//jar",
     ],
 )

@@ -4,10 +4,10 @@ java_test(
     test_class = "believe.util.UtilTest",
     deps = [
         "//lib",
+        "//lib:hamcrest",
+        "//lib:junit",
         "//lib:mockito",
         "//src/believe/geometry",
         "//src/believe/util",
-        "@hamcrest//jar",
-        "@junit//jar",
     ],
 )

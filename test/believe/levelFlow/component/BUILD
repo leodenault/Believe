@@ -4,10 +4,10 @@ java_test(
     test_class = "believe.levelFlow.component.ComboSyncherTest",
     deps = [
         "//lib",
+        "//lib:junit",
         "//lib:mockito",
         "//src/believe/core",
         "//src/believe/levelFlow/component",
-        "@junit//jar",
     ],
 )
 
@@ -17,10 +17,10 @@ java_test(
     test_class = "believe.levelFlow.component.BeatTest",
     deps = [
         "//lib",
+        "//lib:hamcrest",
+        "//lib:junit",
         "//lib:mockito",
         "//src/believe/levelFlow/component",
-        "@hamcrest//jar",
-        "@junit//jar",
     ],
 )
 
@@ -30,10 +30,10 @@ java_test(
     test_class = "believe.levelFlow.component.FlowComponentIntegrationTest",
     deps = [
         "//lib",
+        "//lib:hamcrest",
+        "//lib:junit",
         "//lib:mockito",
         "//src/believe/levelFlow/component",
-        "@hamcrest//jar",
-        "@junit//jar",
     ],
 )
 
@@ -43,10 +43,10 @@ java_test(
     test_class = "believe.levelFlow.component.FlowComponentTest",
     deps = [
         "//lib",
+        "//lib:hamcrest",
+        "//lib:junit",
         "//lib:mockito",
         "//src/believe/levelFlow/component",
-        "@hamcrest//jar",
-        "@junit//jar",
     ],
 )
 
@@ -56,9 +56,9 @@ java_test(
     test_class = "believe.levelFlow.component.LaneTest",
     deps = [
         "//lib",
+        "//lib:hamcrest",
+        "//lib:junit",
         "//lib:mockito",
         "//src/believe/levelFlow/component",
-        "@hamcrest//jar",
-        "@junit//jar",
     ],
 )

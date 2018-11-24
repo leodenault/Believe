@@ -3,11 +3,11 @@ java_test(
     srcs = ["TileCollisionHandlerTest.java"],
     test_class = "believe.physics.collision.TileCollisionHandlerTest",
     deps = [
+        "//lib:junit",
         "//lib:mockito",
         "//src/believe/geometry",
         "//src/believe/map/collidable",
         "//src/believe/physics/collision",
         "//src/believe/physics/collision:handlers",
-        "@junit//jar",
     ],
 )
