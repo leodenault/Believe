@@ -39,7 +39,7 @@ public class OptionsMenuState extends GameStateBase {
     scrollPanel.addChild(flowSpeed);
     back.addListener((component) -> {
       options.save();
-      new ChangeStateAction(MainMenuState.class, game).componentActivated(component);
+      new ChangeStateAction<>(MainMenuState.class, game).componentActivated(component);
     });
   }
 

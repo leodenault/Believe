@@ -25,7 +25,9 @@ public class Believe {
             FlowFilePickerMenuState::new,
             (container, game) -> new PlayFlowFileState(game),
             (container, game) -> {
-              ChangeStateAction exitPausedState = new ChangeStateAction(MainMenuState.class, game);
+              ChangeStateAction
+                  exitPausedState =
+                  new ChangeStateAction<>(MainMenuState.class, game);
               return new GamePausedOverlay(container,
                   game,
                   () -> exitPausedState.componentActivated(null));

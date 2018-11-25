@@ -113,7 +113,7 @@ public class GamePausedOverlay extends GameStateBase implements OverlayState {
 
     restartAction = (ComponentListener) (component) -> {
       pausedState.reset();
-      new ChangeStateAction(pausedState.getClass(), game).componentActivated(null);
+      new ChangeStateAction<>(pausedState.getClass(), game).componentActivated(null);
     };
     resume.addListener(resumeAction);
     restart.addListener(restartAction);
@@ -145,6 +145,6 @@ public class GamePausedOverlay extends GameStateBase implements OverlayState {
           backgroundImage,
           PAUSED_TO_STATE_TRANSITION_LENGTH);
     }, EmptyTransition::new);
-    resumeAction = new ChangeStateAction(pausedState.getClass(), game, transitionPairFactory);
+    resumeAction = new ChangeStateAction<>(pausedState.getClass(), game, transitionPairFactory);
   }
 }

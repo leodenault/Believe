@@ -156,7 +156,7 @@ public abstract class LevelState extends GameStateBase implements PausableState,
   @Override
   public void damageInflicted(float currentFocus, Faction inflictor) {
     if (currentFocus <= 0 && inflictor != Faction.NONE && inflictor != player.getFaction()) {
-      new ChangeStateAction(GameOverState.class, game).componentActivated(/* component= */ null);
+      new ChangeStateAction<>(GameOverState.class, game).componentActivated(/* component= */ null);
     }
   }
 }

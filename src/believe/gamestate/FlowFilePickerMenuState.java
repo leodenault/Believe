@@ -30,7 +30,7 @@ public class FlowFilePickerMenuState extends GameStateBase {
     scrollPanel = new VerticalKeyboardScrollpanel(container, (int)(cWidth * 0.37), cHeight / 80,
         (int)(cWidth * 0.6), cHeight / 8, (int)(cHeight * 0.95));
 
-    back.addListener(new ChangeStateAction(MainMenuState.class, game));
+    back.addListener(new ChangeStateAction<>(MainMenuState.class, game));
   }
 
   @Override
@@ -97,7 +97,7 @@ public class FlowFilePickerMenuState extends GameStateBase {
 
           MenuSelection selection = new MenuSelection(container, name);
           selection.addListener(
-              new ExternalLoadGameAction(
+              new ExternalLoadGameAction<>(
                   PlayFlowFileState.class, file.getCanonicalPath(), game));
           scrollPanel.addChild(selection);
         }

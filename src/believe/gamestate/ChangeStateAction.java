@@ -9,7 +9,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-public class ChangeStateAction implements ComponentListener {
+public class ChangeStateAction<StateT extends GameState> implements ComponentListener {
   private static final int DEFAULT_TRANSITION_LENGTH = 65;
   private static final GraphicsTransitionPairFactory
       DEFAULT_TRANSITIONS =
@@ -19,15 +19,15 @@ public class ChangeStateAction implements ComponentListener {
 
   private final GraphicsTransitionPairFactory transitions;
 
-  protected Class<? extends GameState> state;
+  protected Class<StateT> state;
   protected StateBasedGame game;
 
-  public ChangeStateAction(Class<? extends GameState> state, StateBasedGame game) {
+  public ChangeStateAction(Class<StateT> state, StateBasedGame game) {
     this(state, game, DEFAULT_TRANSITIONS);
   }
 
   public ChangeStateAction(
-      Class<? extends GameState> state,
+      Class<StateT> state,
       StateBasedGame game,
       GraphicsTransitionPairFactory graphicsTransitionPairFactory) {
     this.state = state;

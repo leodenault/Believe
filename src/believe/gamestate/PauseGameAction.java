@@ -11,12 +11,12 @@ public class PauseGameAction {
     void setPausedStateInfo(PausableState state, Image backgroundImage);
   }
 
-  private final ChangeStateAction changeStateAction;
+  private final ChangeStateAction<? extends OverlayState> changeStateAction;
   private final PausableState pausableState;
 
   public PauseGameAction(
       Class<? extends OverlayState> overlay, PausableState state, StateBasedGame game) {
-    changeStateAction = new ChangeStateAction(
+    changeStateAction = new ChangeStateAction<>(
         overlay,
         game,
         new GraphicsTransitionPairFactory(EmptyTransition::new, EmptyTransition::new));
@@ -24,7 +24,7 @@ public class PauseGameAction {
   }
 
   public void pause(Image backgroundImage) {
-    OverlayState overlay = (OverlayState) GameStateBase.getStateInstance(changeStateAction.state);
+    OverlayState overlay = GameStateBase.getStateInstance(changeStateAction.state);
     overlay.setPausedStateInfo(pausableState, backgroundImage);
 
     changeStateAction.componentActivated(null);

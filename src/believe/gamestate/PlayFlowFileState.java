@@ -116,7 +116,7 @@ public class PlayFlowFileState
 
   @Override
   public void songEnded() {
-    new ChangeStateAction(MainMenuState.class, game).componentActivated(null);
+    new ChangeStateAction<>(MainMenuState.class, game).componentActivated(null);
   }
 
   @Override

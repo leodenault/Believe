@@ -29,10 +29,10 @@ public class MainMenuState extends GameStateBase {
     panel.addChild(options);
     panel.addChild(exit);
 
-    playPlatformingLevel.addListener(new ChangeStateAction(PlatformingState.class, game));
-    playArcadeLevel.addListener(new ChangeStateAction(ArcadeState.class, game));
-    playFlowFile.addListener(new ChangeStateAction(FlowFilePickerMenuState.class, game));
-    options.addListener(new ChangeStateAction(OptionsMenuState.class, game));
+    playPlatformingLevel.addListener(new ChangeStateAction<>(PlatformingState.class, game));
+    playArcadeLevel.addListener(new ChangeStateAction<>(ArcadeState.class, game));
+    playFlowFile.addListener(new ChangeStateAction<>(FlowFilePickerMenuState.class, game));
+    options.addListener(new ChangeStateAction<>(OptionsMenuState.class, game));
     exit.addListener((component) -> container.exit());
 
     this.selections = new MenuSelectionGroup();
