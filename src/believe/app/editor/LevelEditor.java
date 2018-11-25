@@ -7,6 +7,7 @@ import believe.app.Launcher;
 import believe.app.flag_parsers.CommandLineParser;
 import believe.app.flags.AppFlags;
 import believe.core.io.ReloadableFileSystemLocation;
+import believe.gamestate.GameOverState;
 import believe.gamestate.GamePausedOverlay;
 import believe.gamestate.PlatformingState;
 import believe.map.gui.MapManager;
@@ -33,14 +34,13 @@ public class LevelEditor {
 
     Launcher.setUpAndLaunch(
         "Believe Level Editor",
-        Arrays.asList(
-            (container, game) -> new PlatformingState(container,
+        Arrays.asList((container, game) -> new PlatformingState(container,
                 game,
                 MapManager.defaultManager(),
-                hashMapOf(entry(
-                    Input.KEY_R,
-                    state -> LevelEditor.resetLevel(state, container, game)))),
-            (container, game) -> new GamePausedOverlay(container, game, () -> container.exit())),
+                hashMapOf(entry(Input.KEY_R, state -> LevelEditor.resetLevel(state, container,
+                    game)))),
+            (container, game) -> new GamePausedOverlay(container, game, container::exit),
+            (container, game) -> new GameOverState(container, game, container::exit)),
         flags.width(),
         flags.height(),
         flags.windowed());

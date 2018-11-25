@@ -1,6 +1,5 @@
 package believe.gamestate;
 
-import believe.gamestate.PauseGameAction.OverlayState;
 import believe.graphics_transitions.CrossFadeTransition;
 import believe.graphics_transitions.GraphicsTransitionPairFactory;
 import believe.gui.DirectionalPanel;
@@ -17,46 +16,45 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.EmptyTransition;
 import org.newdawn.slick.util.Log;
 
-public class GamePausedOverlay extends GameStateBase implements OverlayState {
-  public interface ExitPausedStateAction {
-    void exitPausedState();
-  }
-
+public class GamePausedOverlay extends GameStateBase
+    implements TemporaryState<OverlayablePrecedingState> {
   private static final int PAUSED_TO_STATE_TRANSITION_LENGTH = 500; // In milliseconds.
 
   private final GameContainer gameContainer;
+  private final ExitTemporaryStateAction exitPauseStateAction;
+  private final MenuSelection resume;
+  private final MenuSelection restart;
+  private final MenuSelection exitLevel;
 
   private MenuSelectionGroup selections;
   private DirectionalPanel panel;
   private StateBasedGame game;
-  private PausableState pausedState;
-  private MenuSelection resume;
-  private MenuSelection restart;
   @Nullable
-  private ChangeStateAction resumeAction;
+  private PrecedingState pausedState;
+  @Nullable
+  private ChangeStateAction<?> resumeAction;
+  @Nullable
   private ComponentListener restartAction;
+  @Nullable
+  private ComponentListener exitSelectedAction;
 
   @Nullable
   private Image backgroundImage;
 
   public GamePausedOverlay(
-      GameContainer container, StateBasedGame game, ExitPausedStateAction exitPausedStateAction)
+      GameContainer container, StateBasedGame game, ExitTemporaryStateAction exitPauseStateAction)
       throws SlickException {
     this.game = game;
     this.gameContainer = container;
+    this.exitPauseStateAction = exitPauseStateAction;
+    this.resume = new MenuSelection(container, "Resume");
+    this.restart = new MenuSelection(container, "Restart");
+    this.exitLevel = new MenuSelection(container, "Exit Level");
     panel =
         new DirectionalPanel(container,
             container.getWidth() / 2,
             (container.getHeight() - 200) / 3,
             50);
-    resume = new MenuSelection(container, "Resume");
-    restart = new MenuSelection(container, "Restart");
-    MenuSelection exitLevel = new MenuSelection(container, "Exit Level");
-
-    exitLevel.addListener(component -> {
-      pausedState.exitFromPausedState();
-      exitPausedStateAction.exitPausedState();
-    });
 
     panel.addChild(resume);
     panel.addChild(restart);
@@ -81,7 +79,11 @@ public class GamePausedOverlay extends GameStateBase implements OverlayState {
         this.selections.selectPrevious();
         break;
       case Input.KEY_ESCAPE:
-        resumeAction.componentActivated(null);
+        if (resumeAction != null) {
+          resumeAction.componentActivated(null);
+        } else {
+          Log.error("Could not find an action for resuming the game.");
+        }
         break;
     }
   }
@@ -110,34 +112,30 @@ public class GamePausedOverlay extends GameStateBase implements OverlayState {
   public void enter(GameContainer container, final StateBasedGame game) throws SlickException {
     super.enter(container, game);
     this.selections.select(0);
-
-    restartAction = (ComponentListener) (component) -> {
-      pausedState.reset();
-      new ChangeStateAction<>(pausedState.getClass(), game).componentActivated(null);
-    };
-    resume.addListener(resumeAction);
-    restart.addListener(restartAction);
   }
 
   @Override
   public void leave(GameContainer container, StateBasedGame game) throws SlickException {
     super.leave(container, game);
-    resume.removeListener(resumeAction);
-    restart.removeListener(restartAction);
   }
 
-  @Override
-  public void setPausedStateInfo(PausableState state, Image backgroundImage) {
-    this.pausedState = state;
-    this.backgroundImage = backgroundImage;
 
+  @Override
+  public void setPrecedingState(OverlayablePrecedingState state) {
+    this.pausedState = state;
     GraphicsTransitionPairFactory transitionPairFactory;
+    try {
+      backgroundImage = state.getCurrentScreenshot();
+    } catch (SlickException e) {
+      Log.error("Failed to fetch screenshot for background image used activate overlay.");
+    }
+
     transitionPairFactory = new GraphicsTransitionPairFactory(() -> {
       Image pauseOverlayScreenshot;
       try {
         pauseOverlayScreenshot = new Image(gameContainer.getWidth(), gameContainer.getHeight());
       } catch (SlickException e) {
-        Log.error("Failed to fetch pause overlay screenshot.", e);
+        Log.error("Failed to fetch screenshot for activate overlay.", e);
         return new EmptyTransition();
       }
       gameContainer.getGraphics().copyArea(pauseOverlayScreenshot, 0, 0);
@@ -145,6 +143,31 @@ public class GamePausedOverlay extends GameStateBase implements OverlayState {
           backgroundImage,
           PAUSED_TO_STATE_TRANSITION_LENGTH);
     }, EmptyTransition::new);
+
+    if (resumeAction != null) {
+      resume.removeListener(resumeAction);
+    }
+    if (restartAction != null) {
+      restart.removeListener(restartAction);
+    }
+    if (exitSelectedAction != null) {
+      exitLevel.removeListener(exitSelectedAction);
+    }
+
     resumeAction = new ChangeStateAction<>(pausedState.getClass(), game, transitionPairFactory);
+    restartAction = (component) -> {
+      if (pausedState != null) {
+        pausedState.reset();
+        new ChangeStateAction<>(pausedState.getClass(), game).componentActivated(null);
+      }
+    };
+    exitSelectedAction = component -> {
+      pausedState.exitingFollowingState();
+      exitPauseStateAction.exitTemporaryState();
+    };
+
+    resume.addListener(resumeAction);
+    restart.addListener(restartAction);
+    exitLevel.addListener(exitSelectedAction);
   }
 }

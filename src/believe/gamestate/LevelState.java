@@ -19,10 +19,13 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import java.util.List;
 
-public abstract class LevelState extends GameStateBase implements PausableState, DamageListener {
+public abstract class LevelState extends GameStateBase
+    implements OverlayablePrecedingState, DamageListener {
 
   private final MapManager mapManager;
   private final GameContainer container;
+  private final ChangeToTemporaryStateAction<OverlayablePrecedingState> pauseAction;
+  private final ChangeToTemporaryStateAction<PrecedingState> gameOverAction;
 
   private boolean enteringFromPauseMenu;
   @Nullable
@@ -30,8 +33,6 @@ public abstract class LevelState extends GameStateBase implements PausableState,
   private ProgressBar focusBar;
   @Nullable
   private PhysicsManager physics;
-  @Nullable
-  private Graphics graphics;
 
   protected StateBasedGame game;
   @Nullable
@@ -42,6 +43,8 @@ public abstract class LevelState extends GameStateBase implements PausableState,
   public LevelState(GameContainer container, StateBasedGame game, MapManager mapManager) {
     this.mapManager = mapManager;
     this.container = container;
+    this.pauseAction = new ChangeToTemporaryStateAction<>(GamePausedOverlay.class, this, game);
+    this.gameOverAction = new ChangeToTemporaryStateAction<>(GameOverState.class, this, game);
     this.game = game;
     this.focusBar = new ProgressBar(container);
   }
@@ -54,7 +57,6 @@ public abstract class LevelState extends GameStateBase implements PausableState,
   public void render(GameContainer container, StateBasedGame game, Graphics g)
       throws SlickException {
     playArea.render(container, g);
-    graphics = g;
   }
 
   @Override
@@ -74,14 +76,7 @@ public abstract class LevelState extends GameStateBase implements PausableState,
     switch (key) {
       case Input.KEY_ESCAPE:
         enteringFromPauseMenu = true;
-        Image backgroundImage = null;
-        try {
-          backgroundImage = new Image(container.getWidth(), container.getHeight());
-        } catch (SlickException e) {
-          e.printStackTrace();
-        }
-        graphics.copyArea(backgroundImage, 0, 0);
-        new PauseGameAction(GamePausedOverlay.class, this, game).pause(backgroundImage);
+        pauseAction.activate();
         break;
     }
   }
@@ -125,7 +120,7 @@ public abstract class LevelState extends GameStateBase implements PausableState,
   }
 
   @Override
-  public void exitFromPausedState() {
+  public void exitingFollowingState() {
     this.enteringFromPauseMenu = false;
   }
 
@@ -139,6 +134,13 @@ public abstract class LevelState extends GameStateBase implements PausableState,
     physics.addCollidable(player);
     physics.addGravityObject(player);
     physics.addGravityObjects(enemies);
+  }
+
+  @Override
+  public Image getCurrentScreenshot() throws SlickException {
+    Image screenshot = new Image(container.getWidth(), container.getHeight());
+    container.getGraphics().copyArea(screenshot, 0, 0);
+    return screenshot;
   }
 
   protected abstract boolean isOnRails();
@@ -156,7 +158,7 @@ public abstract class LevelState extends GameStateBase implements PausableState,
   @Override
   public void damageInflicted(float currentFocus, Faction inflictor) {
     if (currentFocus <= 0 && inflictor != Faction.NONE && inflictor != player.getFaction()) {
-      new ChangeStateAction<>(GameOverState.class, game).componentActivated(/* component= */ null);
+      gameOverAction.activate();
     }
   }
 }

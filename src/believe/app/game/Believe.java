@@ -12,10 +12,15 @@ import believe.gamestate.MainMenuState;
 import believe.gamestate.OptionsMenuState;
 import believe.gamestate.PlatformingState;
 import believe.gamestate.PlayFlowFileState;
+import javax.annotation.Nullable;
+import org.newdawn.slick.state.StateBasedGame;
 
 import java.util.Arrays;
 
 public class Believe {
+  @Nullable
+  private static ChangeStateAction<MainMenuState> returnToMainMenuAction;
+
   public static void main(String[] args) {
     AppFlags flags = CommandLineParser.parse(AppFlags.class, args);
     Launcher.setUpAndLaunch(
@@ -23,20 +28,25 @@ public class Believe {
         Arrays.asList(MainMenuState::new,
             OptionsMenuState::new,
             FlowFilePickerMenuState::new,
-            (container, game) -> new PlayFlowFileState(game),
-            (container, game) -> {
-              ChangeStateAction
-                  exitPausedState =
-                  new ChangeStateAction<>(MainMenuState.class, game);
-              return new GamePausedOverlay(container,
-                  game,
-                  () -> exitPausedState.componentActivated(null));
-            },
+            PlayFlowFileState::new,
+            (container, game) -> new GamePausedOverlay(container,
+                game,
+                () -> getOrCreateExitToMainMenuAction(game).componentActivated(null)),
             PlatformingState::new,
             ArcadeState::new,
-            (container, game) -> new GameOverState()),
+            (container, game) -> new GameOverState(container,
+                game,
+                () -> getOrCreateExitToMainMenuAction(game).componentActivated(null))),
         flags.width(),
         flags.height(),
         flags.windowed());
+  }
+
+  private static ChangeStateAction<MainMenuState> getOrCreateExitToMainMenuAction(
+      StateBasedGame game) {
+    if (returnToMainMenuAction == null) {
+      returnToMainMenuAction = new ChangeStateAction<>(MainMenuState.class, game);
+    }
+    return returnToMainMenuAction;
   }
 }
