@@ -3,12 +3,14 @@ package believe.character.playable;
 import believe.character.Character;
 import believe.character.Faction;
 import believe.core.SynchedComboPattern;
+import believe.core.display.SpriteSheetManager;
 import believe.physics.collision.Collidable;
 import believe.physics.collision.CommandCollidable;
 import believe.physics.collision.CommandCollisionHandler;
 import believe.statemachine.State;
 import believe.statemachine.State.Action;
 import believe.util.MapEntry;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
@@ -23,6 +25,7 @@ public class PlayableCharacter extends Character implements CommandCollidable {
     void activateCombo(SynchedComboPattern pattern);
   }
 
+  private static final String SPRITE_SHEET_NAME = "stickFigure";
   private static final Map<Integer, Action>
       BASE_KEY_PRESSED_MAP =
       immutableMapOf(entry(Input.KEY_LEFT, Action.SELECT_LEFT),
@@ -41,6 +44,7 @@ public class PlayableCharacter extends Character implements CommandCollidable {
               entry(Input.KEY_RIGHT, Action.SELECT_LEFT))),
       entry(movingLeftState, hashSetOf(entry(Input.KEY_LEFT, Action.STOP))),
       entry(movingRightState, hashSetOf(entry(Input.KEY_RIGHT, Action.STOP))));
+  private final DamageProjection damageProjection;
 
   private boolean onRails;
   private Map<Integer, Action> keyPressedActionMap;
@@ -53,6 +57,11 @@ public class PlayableCharacter extends Character implements CommandCollidable {
   public PlayableCharacter(
       GUIContext container, DamageListener damageListener, boolean onRails, int x, int y) {
     super(container, damageListener, x, y);
+    this.damageProjection =
+        new DamageProjection(SpriteSheetManager
+            .getInstance()
+            .getAnimationSet(SPRITE_SHEET_NAME)
+            .get("damage"), 100, 10);
     this.onRails = onRails;
     pattern = new SynchedComboPattern();
     pattern.addAction(0, 's');
@@ -60,10 +69,18 @@ public class PlayableCharacter extends Character implements CommandCollidable {
     pattern.addAction(2, 'a');
     pattern.addAction(2.5f, 'd');
     pattern.addAction(3, 'a');
-    comboListeners = new LinkedList<SynchedComboListener>();
+    comboListeners = new LinkedList<>();
     commandHandler = new CommandCollisionHandler();
-    keyPressedActionMap = new HashMap<Integer, Action>(BASE_KEY_PRESSED_MAP);
+    keyPressedActionMap = new HashMap<>(BASE_KEY_PRESSED_MAP);
     keyReleasedActionMap = hashMapOf();
+  }
+
+  @Override
+  protected void renderComponent(GUIContext context, Graphics g) throws SlickException {
+    if (!damageProjection.isStopped()) {
+      damageProjection.render();
+    }
+    super.renderComponent(context, g);
   }
 
   public void addComboListener(SynchedComboListener listener) {
@@ -81,6 +98,9 @@ public class PlayableCharacter extends Character implements CommandCollidable {
   @Override
   public void update(int delta) {
     super.update(delta);
+    if (!damageProjection.isStopped()) {
+      damageProjection.update(delta);
+    }
   }
 
   @Override
@@ -128,8 +148,14 @@ public class PlayableCharacter extends Character implements CommandCollidable {
   }
 
   @Override
+  public void inflictDamage(float damage, Faction inflictor) {
+    super.inflictDamage(damage, inflictor);
+    damageProjection.trigger(orientation, getX(), getY());
+  }
+
+  @Override
   protected String getSheetName() {
-    return "stickFigure";
+    return SPRITE_SHEET_NAME;
   }
 
   public Faction getFaction() {

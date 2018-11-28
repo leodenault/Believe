@@ -16,14 +16,12 @@ import believe.physics.collision.TileCollisionHandler.TileCollidable;
 import believe.statemachine.ConcurrentStateMachine;
 import believe.statemachine.State;
 import believe.statemachine.State.Action;
-import believe.util.MapEntry;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -35,6 +33,10 @@ public abstract class Character extends ComponentBase
     DamageListener NONE = (currentFocus, inflictor) -> {};
 
     void damageInflicted(float currentFocus, Faction inflictor);
+  }
+
+  public enum Orientation {
+    RIGHT, LEFT
   }
 
   private static final float JUMP_SPEED = -0.5f;
@@ -52,19 +54,19 @@ public abstract class Character extends ComponentBase
   private final DamageListener damageListener;
 
   private float focus;
-  private int direction;
   private float verticalSpeed;
-  protected float horizontalSpeed;
   private TileCollisionHandler tileHandler;
   private DamageHandler damageHandler;
 
+  protected Orientation orientation;
   protected AnimationSet animSet;
   protected Animation anim;
+  protected float horizontalSpeed;
 
   public Character(GUIContext container, DamageListener damageListener, int x, int y) {
     super(container, x, y);
     this.damageListener = damageListener;
-    direction = 1;
+    orientation = Orientation.RIGHT;
     verticalSpeed = 0;
     horizontalSpeed = 0;
     tileHandler = new TileCollisionHandler();
@@ -161,7 +163,10 @@ public abstract class Character extends ComponentBase
 
   @Override
   protected void renderComponent(GUIContext context, Graphics g) throws SlickException {
-    anim.getCurrentFrame().getFlippedCopy(direction == -1, false).draw(rect.getX(), rect.getY());
+    anim
+        .getCurrentFrame()
+        .getFlippedCopy(orientation == Orientation.LEFT, false)
+        .draw(rect.getX(), rect.getY());
   }
 
   public float getFocus() {
@@ -184,7 +189,7 @@ public abstract class Character extends ComponentBase
     }
     horizontalSpeed = orientation * Camera.SCROLL_SPEED;
     if (orientation != 0) {
-      direction = orientation;
+      this.orientation = orientation > 0 ? Orientation.RIGHT : Orientation.LEFT;
     }
   }
 
