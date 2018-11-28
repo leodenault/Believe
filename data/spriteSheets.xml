@@ -30,6 +30,14 @@
 				<looping>false</looping>
 				<pingPong>false</pingPong>
 			</sequence>
+			<sequence>
+				<name>damage</name>
+				<start>30</start>
+				<end>34</end>
+				<frameLength>80</frameLength>
+				<looping>false</looping>
+				<pingPong>false</pingPong>
+			</sequence>
 		</frameSequences>
 	</spriteSheet>
 	<spriteSheet>
