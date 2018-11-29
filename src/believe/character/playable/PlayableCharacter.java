@@ -67,7 +67,7 @@ public class PlayableCharacter extends Character implements CommandCollidable {
         new DamageProjection(SpriteSheetManager
             .getInstance()
             .getAnimationSet(SPRITE_SHEET_NAME)
-            .get("damage"), physicsManager, 100);
+            .get("damage"), physicsManager, 150);
     physicsManager.addGravityObject(damageProjection);
     this.onRails = onRails;
     pattern = new SynchedComboPattern();

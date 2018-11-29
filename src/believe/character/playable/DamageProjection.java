@@ -10,16 +10,22 @@ import java.util.Arrays;
 
 /** A projection created by the character when they are damaged. */
 final class DamageProjection implements GravityObject {
-  private static final Color ANIMATION_FILTER = new Color(0.2f, 0.2f, 0.75f, 0.66f);
+  private static final float RED_FILTER = 0.4f;
+  private static final float GREEN_FILTER = 0.4f;
+  private static final float BLUE_FILTER = 0.9f;
+  private static final float MAX_ALPHA = 0.7f;
 
   private final Animation animation;
   private final PhysicsManager physicsManager;
   private final float recoilXRate;
+  private final float coefficientA;
+  private final float coefficientB;
 
   private Orientation orientation;
   private float x;
   private float y;
   private float verticalSpeed;
+  private int elapsedTime;
   private boolean active;
 
   DamageProjection(Animation animation, PhysicsManager physicsManager, int recoilX) {
@@ -30,6 +36,11 @@ final class DamageProjection implements GravityObject {
     int animationLength = Arrays.stream(animation.getDurations()).sum();
     this.recoilXRate = recoilX / (float) animationLength;
     this.active = false;
+
+    // We want the transparency of the projection to follow a parabolic curve, so we set the
+    // coefficents here.
+    coefficientA = -4 * MAX_ALPHA / (animationLength * animationLength);
+    coefficientB = 4 * MAX_ALPHA / animationLength;
   }
 
   /**
@@ -45,12 +56,14 @@ final class DamageProjection implements GravityObject {
     setLocation(x, y);
 
     animation.restart();
+    elapsedTime = 0;
     active = true;
     physicsManager.addGravityObject(this);
   }
 
   /** Updates the animation if it is still active. */
   void update(int delta) {
+    elapsedTime += delta;
     if (orientation == Orientation.RIGHT) {
       x -= Math.round(recoilXRate * delta);
     } else {
@@ -66,10 +79,15 @@ final class DamageProjection implements GravityObject {
 
   /** Renders the animation */
   void render() {
+    // ax^2 + bx
+    float
+        transparencyFunctionResult =
+        coefficientA * elapsedTime * elapsedTime + coefficientB * elapsedTime;
+    Color filter = new Color(RED_FILTER, GREEN_FILTER, BLUE_FILTER, transparencyFunctionResult);
     if (orientation == Orientation.RIGHT) {
-      animation.draw(x, y, ANIMATION_FILTER);
+      animation.draw(x, y, filter);
     } else {
-      animation.getCurrentFrame().getFlippedCopy(true, false).draw(x, y, ANIMATION_FILTER);
+      animation.getCurrentFrame().getFlippedCopy(true, false).draw(x, y, filter);
     }
   }
 
