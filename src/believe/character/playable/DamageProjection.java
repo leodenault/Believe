@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 /** A projection created by the character when they are damaged. */
 final class DamageProjection {
-  private static final Color ANIMATION_FILTER = new Color(0f, 0f, 1f);
+  private static final Color ANIMATION_FILTER = new Color(0.2f, 0.2f, 0.75f, 0.66f);
 
   private final Animation animation;
   private final float recoilXRate;
