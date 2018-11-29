@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import believe.map.gui.MapManager;
+import believe.physics.manager.PhysicsManager;
 import believe.testing.FakeGameContainer;
 import believe.util.MapEntry;
 import believe.util.Util;
@@ -27,6 +28,7 @@ public class PlatformingStateTest {
   private GameContainer container;
 
   @Mock private StateBasedGame game;
+  @Mock private PhysicsManager physicsManager;
   @Mock private Function<PlatformingState, Void> singleEventAction;
 
   @Before
@@ -37,6 +39,7 @@ public class PlatformingStateTest {
         container,
         game,
         MapManager.defaultManager(),
+        physicsManager,
         hashMapOf(entry(Input.KEY_LEFT, singleEventAction)));
   }
 

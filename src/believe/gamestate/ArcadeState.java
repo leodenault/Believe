@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 
 import believe.character.Faction;
 import believe.map.gui.MapManager;
+import believe.physics.manager.PhysicsManager;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -33,8 +34,8 @@ public class ArcadeState extends LevelState implements FlowComponentListener {
 
   private FlowComponent component;
 
-  public ArcadeState(GameContainer container, StateBasedGame game) throws SlickException {
-    super(container, game, MapManager.defaultManager());
+  public ArcadeState(GameContainer container, StateBasedGame game, PhysicsManager physicsManager) throws SlickException {
+    super(container, game, MapManager.defaultManager(), physicsManager);
     FlowComponentBuilder builder = new FlowComponentBuilder(container, (int)(0.2 * container.getWidth()));
     try {
       new FlowFileParser(

@@ -1,30 +1,35 @@
 package believe.character.playable;
 
 import believe.character.Character.Orientation;
+import believe.physics.gravity.GravityObject;
+import believe.physics.manager.PhysicsManager;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 
 import java.util.Arrays;
 
 /** A projection created by the character when they are damaged. */
-final class DamageProjection {
+final class DamageProjection implements GravityObject {
   private static final Color ANIMATION_FILTER = new Color(0.2f, 0.2f, 0.75f, 0.66f);
 
   private final Animation animation;
+  private final PhysicsManager physicsManager;
   private final float recoilXRate;
-  private final float recoilYRate;
 
   private Orientation orientation;
-  private int x;
-  private int y;
+  private float x;
+  private float y;
+  private float verticalSpeed;
+  private boolean active;
 
-  DamageProjection(Animation animation, int recoilX, int recoilY) {
+  DamageProjection(Animation animation, PhysicsManager physicsManager, int recoilX) {
     this.animation = animation;
+    this.physicsManager = physicsManager;
     this.animation.setAutoUpdate(false);
 
     int animationLength = Arrays.stream(animation.getDurations()).sum();
     this.recoilXRate = recoilX / (float) animationLength;
-    this.recoilYRate = recoilY / (float) animationLength;
+    this.active = false;
   }
 
   /**
@@ -36,23 +41,27 @@ final class DamageProjection {
    */
   void trigger(Orientation orientation, int x, int y) {
     this.orientation = orientation;
-    this.x = x;
-    this.y = y;
+    setVerticalSpeed(0);
+    setLocation(x, y);
 
     animation.restart();
+    active = true;
+    physicsManager.addGravityObject(this);
   }
 
   /** Updates the animation if it is still active. */
   void update(int delta) {
     if (orientation == Orientation.RIGHT) {
       x -= Math.round(recoilXRate * delta);
-      y += Math.round(recoilYRate * delta);
     } else {
       x += Math.round(recoilXRate * delta);
-      y += Math.round(recoilYRate * delta);
     }
 
     animation.update(delta);
+    if (animation.isStopped() && active) {
+      active = false;
+      physicsManager.removeGravityObject(this);
+    }
   }
 
   /** Renders the animation */
@@ -67,5 +76,31 @@ final class DamageProjection {
   /** Indicates whether the animation has reached the last frame. */
   boolean isStopped() {
     return animation.isStopped();
+  }
+
+  @Override
+  public float getVerticalSpeed() {
+    return verticalSpeed;
+  }
+
+  @Override
+  public void setVerticalSpeed(float speed) {
+    verticalSpeed = speed;
+  }
+
+  @Override
+  public void setLocation(float x, float y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  @Override
+  public float getFloatX() {
+    return x;
+  }
+
+  @Override
+  public float getFloatY() {
+    return y;
   }
 }

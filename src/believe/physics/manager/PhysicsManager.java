@@ -67,6 +67,10 @@ public class PhysicsManager {
     this.gravityObjects.addAll(gravityObjects);
   }
 
+  public boolean removeGravityObject(GravityObject gravityObject) {
+    return gravityObjects.remove(gravityObject);
+  }
+
   /**
    * All collidables added here will interact with all other collidables
    */

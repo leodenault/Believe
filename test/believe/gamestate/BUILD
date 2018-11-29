@@ -6,6 +6,7 @@ java_test(
         "//src/believe/gamestate",
         "//src/believe/gamestate:package-info",
         "//src/believe/map/gui",
+        "//src/believe/physics/manager",
         "//src/believe/testing",
         "//src/believe/util",
         "//third_party/junit",

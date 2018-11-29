@@ -12,6 +12,7 @@ import believe.gamestate.MainMenuState;
 import believe.gamestate.OptionsMenuState;
 import believe.gamestate.PlatformingState;
 import believe.gamestate.PlayFlowFileState;
+import believe.physics.manager.PhysicsManager;
 import javax.annotation.Nullable;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -23,6 +24,7 @@ public class Believe {
 
   public static void main(String[] args) {
     AppFlags flags = CommandLineParser.parse(AppFlags.class, args);
+    PhysicsManager physicsManager = PhysicsManager.getInstance();
     Launcher.setUpAndLaunch(
         "Believe",
         Arrays.asList(MainMenuState::new,
@@ -32,8 +34,8 @@ public class Believe {
             (container, game) -> new GamePausedOverlay(container,
                 game,
                 () -> getOrCreateExitToMainMenuAction(game).componentActivated(null)),
-            PlatformingState::new,
-            ArcadeState::new,
+            (container, game) -> new PlatformingState(container, game, physicsManager),
+            (container, game) -> new ArcadeState(container, game, physicsManager),
             (container, game) -> new GameOverState(container,
                 game,
                 () -> getOrCreateExitToMainMenuAction(game).componentActivated(null))),

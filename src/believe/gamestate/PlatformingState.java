@@ -1,6 +1,7 @@
 package believe.gamestate;
 
 import believe.map.gui.MapManager;
+import believe.physics.manager.PhysicsManager;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -31,16 +32,20 @@ public class PlatformingState extends LevelState implements SynchedComboListener
 
   private Music music;
 
-  public PlatformingState(GameContainer container, StateBasedGame game) {
-    this(container, game, MapManager.defaultManager(), Collections.emptyMap());
+  public PlatformingState(
+      GameContainer container,
+      StateBasedGame game,
+      PhysicsManager physicsManager) {
+    this(container, game, MapManager.defaultManager(), physicsManager, Collections.emptyMap());
   }
 
   public PlatformingState(
       GameContainer container,
       StateBasedGame game,
       MapManager mapManager,
+      PhysicsManager physicsManager,
       Map<Integer, Function<PlatformingState, Void>> eventActions) {
-    super(container, game, mapManager);
+    super(container, game, mapManager, physicsManager);
     this.comboSyncher = new ComboSyncher(container, BPM);
     this.eventActions = eventActions;
   }

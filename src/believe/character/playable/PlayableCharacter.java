@@ -7,6 +7,7 @@ import believe.core.display.SpriteSheetManager;
 import believe.physics.collision.Collidable;
 import believe.physics.collision.CommandCollidable;
 import believe.physics.collision.CommandCollisionHandler;
+import believe.physics.manager.PhysicsManager;
 import believe.statemachine.State;
 import believe.statemachine.State.Action;
 import believe.util.MapEntry;
@@ -55,13 +56,19 @@ public class PlayableCharacter extends Character implements CommandCollidable {
   private CommandCollisionHandler commandHandler;
 
   public PlayableCharacter(
-      GUIContext container, DamageListener damageListener, boolean onRails, int x, int y) {
+      GUIContext container,
+      DamageListener damageListener,
+      PhysicsManager physicsManager,
+      boolean onRails,
+      int x,
+      int y) {
     super(container, damageListener, x, y);
     this.damageProjection =
         new DamageProjection(SpriteSheetManager
             .getInstance()
             .getAnimationSet(SPRITE_SHEET_NAME)
-            .get("damage"), 100, 10);
+            .get("damage"), physicsManager, 100);
+    physicsManager.addGravityObject(damageProjection);
     this.onRails = onRails;
     pattern = new SynchedComboPattern();
     pattern.addAction(0, 's');

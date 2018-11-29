@@ -12,6 +12,7 @@ java_library(
         "//src/believe/core/io",
         "//src/believe/gamestate",
         "//src/believe/map/gui",
+        "//src/believe/physics/manager",
         "//src/believe/util",
         "//third_party/slick",
     ],

@@ -11,6 +11,7 @@ import believe.gamestate.GameOverState;
 import believe.gamestate.GamePausedOverlay;
 import believe.gamestate.PlatformingState;
 import believe.map.gui.MapManager;
+import believe.physics.manager.PhysicsManager;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -37,6 +38,7 @@ public class LevelEditor {
         Arrays.asList((container, game) -> new PlatformingState(container,
                 game,
                 MapManager.defaultManager(),
+                PhysicsManager.getInstance(),
                 hashMapOf(entry(Input.KEY_R, state -> LevelEditor.resetLevel(state, container,
                     game)))),
             (container, game) -> new GamePausedOverlay(container, game, container::exit),

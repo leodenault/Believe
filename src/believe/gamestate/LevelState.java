@@ -26,6 +26,7 @@ public abstract class LevelState extends GameStateBase
   private final GameContainer container;
   private final ChangeToTemporaryStateAction<OverlayablePrecedingState> pauseAction;
   private final ChangeToTemporaryStateAction<PrecedingState> gameOverAction;
+  private final PhysicsManager physicsManager;
 
   private boolean enteringFromPauseMenu;
   @Nullable
@@ -40,12 +41,17 @@ public abstract class LevelState extends GameStateBase
   @Nullable
   protected PlayableCharacter player;
 
-  public LevelState(GameContainer container, StateBasedGame game, MapManager mapManager) {
-    this.mapManager = mapManager;
+  public LevelState(
+      GameContainer container,
+      StateBasedGame game,
+      MapManager mapManager,
+      PhysicsManager physicsManager) {
     this.container = container;
+    this.game = game;
+    this.mapManager = mapManager;
+    this.physicsManager = physicsManager;
     this.pauseAction = new ChangeToTemporaryStateAction<>(GamePausedOverlay.class, this, game);
     this.gameOverAction = new ChangeToTemporaryStateAction<>(GameOverState.class, this, game);
-    this.game = game;
     this.focusBar = new ProgressBar(container);
   }
 
@@ -65,7 +71,7 @@ public abstract class LevelState extends GameStateBase
     playArea.update(delta);
     map.update(delta);
     player.update(delta);
-    physics.update(delta);
+    physicsManager.update(delta);
     focusBar.setProgress(player.getFocus());
   }
 
@@ -98,6 +104,7 @@ public abstract class LevelState extends GameStateBase
       player =
           new PlayableCharacter(container,
               this,
+              physicsManager,
               isOnRails(),
               map.getPlayerStartX(),
               map.getPlayerStartY());
@@ -125,15 +132,14 @@ public abstract class LevelState extends GameStateBase
   }
 
   private void initPhysics() {
-    physics = PhysicsManager.getInstance();
-    physics.reset();
-    physics.addStaticCollidables(map.getCollidableTiles());
-    physics.addStaticCollidables(map.getCommands());
+    physicsManager.reset();
+    physicsManager.addStaticCollidables(map.getCollidableTiles());
+    physicsManager.addStaticCollidables(map.getCommands());
     List<EnemyCharacter> enemies = map.getEnemies();
-    physics.addCollidables(enemies);
-    physics.addCollidable(player);
-    physics.addGravityObject(player);
-    physics.addGravityObjects(enemies);
+    physicsManager.addCollidables(enemies);
+    physicsManager.addCollidable(player);
+    physicsManager.addGravityObject(player);
+    physicsManager.addGravityObjects(enemies);
   }
 
   @Override

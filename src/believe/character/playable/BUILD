@@ -12,6 +12,7 @@ java_library(
         "//src/believe/map/io:map_entity_generator",
         "//src/believe/physics/collision",
         "//src/believe/physics/collision:handlers",
+        "//src/believe/physics/gravity",
         "//src/believe/physics/manager",
         "//src/believe/statemachine",
         "//src/believe/util",

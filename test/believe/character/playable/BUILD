@@ -5,6 +5,7 @@ java_test(
     deps = [
         "//src/believe/character",
         "//src/believe/character/playable",
+        "//src/believe/physics/manager",
         "//third_party/hamcrest",
         "//third_party/junit",
         "//third_party/mockito",
