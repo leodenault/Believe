@@ -14,6 +14,7 @@ final class DamageProjection implements GravityObject {
   private static final float GREEN_FILTER = 0.4f;
   private static final float BLUE_FILTER = 0.9f;
   private static final float MAX_ALPHA = 0.7f;
+  private static final float INITIAL_VERTICAL_SPEED = -0.225f;
 
   private final Animation animation;
   private final PhysicsManager physicsManager;
@@ -52,7 +53,7 @@ final class DamageProjection implements GravityObject {
    */
   void trigger(Orientation orientation, int x, int y) {
     this.orientation = orientation;
-    setVerticalSpeed(0);
+    setVerticalSpeed(INITIAL_VERTICAL_SPEED);
     setLocation(x, y);
 
     animation.restart();

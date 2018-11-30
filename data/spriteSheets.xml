@@ -34,7 +34,7 @@
 				<name>damage</name>
 				<start>30</start>
 				<end>34</end>
-				<frameLength>65</frameLength>
+				<frameLength>100</frameLength>
 				<looping>false</looping>
 				<pingPong>false</pingPong>
 			</sequence>
