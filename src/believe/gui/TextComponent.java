@@ -8,7 +8,6 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.GUIContext;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -57,8 +56,9 @@ public class TextComponent extends ComponentBase {
   private WrappingMode wrappingMode;
   private HorizontalTextAlignment horizontalTextAlignment;
   private VerticalTextAlignment verticalTextAlignment;
+  private int borderPadding;
+  private int textPadding;
 
-  protected int padding;
   protected ColorSet colorSet;
   protected int textHeight;
 
@@ -77,7 +77,8 @@ public class TextComponent extends ComponentBase {
     this.verticalTextAlignment = VerticalTextAlignment.MIDDLE;
     this.textHeight = calculateTextHeight(this.font);
     this.colorSet = DEFAULT_COLOR_SET;
-    this.padding = DEFAULT_PADDING;
+    this.borderPadding = DEFAULT_PADDING;
+    this.textPadding = borderPadding + DEFAULT_PADDING;
     chopText(text);
   }
 
@@ -101,7 +102,7 @@ public class TextComponent extends ComponentBase {
   }
 
   public void setVerticalTextAlignment(VerticalTextAlignment verticalTextAlignment) {
-    this.verticalTextAlignment= verticalTextAlignment;
+    this.verticalTextAlignment = verticalTextAlignment;
     chopText(String.join(" ", textFragments));
   }
 
@@ -141,7 +142,7 @@ public class TextComponent extends ComponentBase {
         return textFragment -> (int) rect.getCenterX() - font.getWidth(textFragment) / 2;
       case LEFT:
       default:
-        return textFragment -> getX();
+        return textFragment -> getX() + textPadding;
     }
   }
 
@@ -151,11 +152,11 @@ public class TextComponent extends ComponentBase {
         return (int) rect.getCenterY() - textHeight / 2;
       case TOP:
       default:
-        return getY();
+        return getY() + textPadding;
     }
   }
 
-  protected void layoutChoppedText(
+  private void layoutChoppedText(
       Graphics g, Function<String, Integer> xPositionCalculator, int y) {
     int cumulativeHeight = 0;
 
@@ -176,8 +177,12 @@ public class TextComponent extends ComponentBase {
 
     // Colour the border
     g.setColor(new Color(colorSet.borderColor));
-    g.setLineWidth(padding);
-    g.drawRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
+    g.setLineWidth(borderPadding);
+    g.drawRect(
+        rect.getX() + borderPadding / 2,
+        rect.getY() + borderPadding / 2,
+        rect.getWidth() - borderPadding,
+        rect.getHeight() - borderPadding);
   }
 
   private void chopText(String text) {
@@ -199,7 +204,7 @@ public class TextComponent extends ComponentBase {
 
   private String generateFragment(String text) {
     int textWidth = font.getWidth(text);
-    int componentWidth = getWidth();
+    int componentWidth = getWidth() - 2 * textPadding;
     if (textWidth <= componentWidth || componentWidth <= 0) {
       return text;
     }
