@@ -20,15 +20,31 @@ public class FlowFilePickerMenuState extends GameStateBase {
   private TextComponent noFilesMessage;
   private VerticalKeyboardScrollpanel scrollPanel;
 
-  public FlowFilePickerMenuState(GameContainer container, StateBasedGame game) throws SlickException {
+  public FlowFilePickerMenuState(GameContainer container, StateBasedGame game)
+      throws SlickException {
     int cWidth = container.getWidth();
     int cHeight = container.getHeight();
 
-    back = new MenuSelection(container, cWidth / 80, cHeight / 80, cWidth / 4, cHeight / 12, "Back");
-    noFilesMessage =
-        new TextComponent(container, (int)(cWidth * 0.37), cHeight / 80, (int)(cWidth * 0.6), cHeight / 8, "");
-    scrollPanel = new VerticalKeyboardScrollpanel(container, (int)(cWidth * 0.37), cHeight / 80,
-        (int)(cWidth * 0.6), cHeight / 8, (int)(cHeight * 0.95));
+    back = new MenuSelection(container,
+        container.getGraphics().getFont(),
+        cWidth / 80,
+        cHeight / 80,
+        cWidth / 4,
+        cHeight / 12,
+        "Back");
+    noFilesMessage = new TextComponent(container,
+        container.getGraphics().getFont(),
+        (int) (cWidth * 0.37),
+        cHeight / 80,
+        (int) (cWidth * 0.6),
+        cHeight / 8,
+        "");
+    scrollPanel = new VerticalKeyboardScrollpanel(container,
+        (int) (cWidth * 0.37),
+        cHeight / 80,
+        (int) (cWidth * 0.6),
+        cHeight / 8,
+        (int) (cHeight * 0.95));
 
     back.addListener(new ChangeStateAction<>(MainMenuState.class, game));
   }
@@ -65,13 +81,11 @@ public class FlowFilePickerMenuState extends GameStateBase {
   }
 
   @Override
-  public void init(GameContainer container, StateBasedGame game)
-      throws SlickException {
+  public void init(GameContainer container, StateBasedGame game) throws SlickException {
   }
 
   @Override
-  public void enter(GameContainer container, StateBasedGame game)
-      throws SlickException {
+  public void enter(GameContainer container, StateBasedGame game) throws SlickException {
     super.enter(container, game);
 
     try {
@@ -95,10 +109,12 @@ public class FlowFilePickerMenuState extends GameStateBase {
         for (File file : files) {
           final String name = file.getName().substring(0, file.getName().lastIndexOf("."));
 
-          MenuSelection selection = new MenuSelection(container, name);
-          selection.addListener(
-              new ExternalLoadGameAction<>(
-                  PlayFlowFileState.class, file.getCanonicalPath(), game));
+          MenuSelection
+              selection =
+              new MenuSelection(container, container.getGraphics().getFont(), name);
+          selection.addListener(new ExternalLoadGameAction<>(PlayFlowFileState.class,
+              file.getCanonicalPath(),
+              game));
           scrollPanel.addChild(selection);
         }
       }
@@ -112,8 +128,7 @@ public class FlowFilePickerMenuState extends GameStateBase {
   }
 
   @Override
-  public void render(GameContainer context, StateBasedGame game, Graphics g)
-      throws SlickException {
+  public void render(GameContainer context, StateBasedGame game, Graphics g) throws SlickException {
     back.render(context, g);
     noFilesMessage.render(context, g);
     scrollPanel.render(context, g);

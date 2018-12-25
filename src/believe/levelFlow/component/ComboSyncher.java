@@ -141,6 +141,7 @@ public class ComboSyncher extends ComponentBase implements Layerable {
       g.setColor(new Color(0xffffff));
       g.drawRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
 
+      Font previousFont = g.getFont();
       g.setFont(font);
       for (TimeKeyPair action : actions) {
         g.setColor(actionColors.get(action));
@@ -150,6 +151,7 @@ public class ComboSyncher extends ComponentBase implements Layerable {
         g.drawString(key, getActionLocation(action) - centerX,
             rect.getCenterY() - centerY);
       }
+      g.setFont(previousFont);
     }
   }
 

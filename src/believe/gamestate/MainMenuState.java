@@ -16,13 +16,24 @@ public class MainMenuState extends GameStateBase {
   private MenuSelectionGroup selections;
 
   public MainMenuState(GameContainer container, StateBasedGame game) throws SlickException {
-    MenuSelection playPlatformingLevel = new MenuSelection(container, "Play Platforming Level");
-    MenuSelection playArcadeLevel = new MenuSelection(container, "Play Arcade Level");
-    MenuSelection playFlowFile = new MenuSelection(container, "Play Flow File");
-    MenuSelection options = new MenuSelection(container, "Options");
-    MenuSelection exit = new MenuSelection(container, "Exit");
-    panel = new DirectionalPanel(
-        container, container.getWidth() / 2, (container.getHeight() - 250) / 5, 50);
+    MenuSelection
+        playPlatformingLevel =
+        new MenuSelection(container, container.getGraphics().getFont(), "Play Platforming Level");
+    MenuSelection
+        playArcadeLevel =
+        new MenuSelection(container, container.getGraphics().getFont(), "Play Arcade Level");
+    MenuSelection
+        playFlowFile =
+        new MenuSelection(container, container.getGraphics().getFont(), "Play Flow File");
+    MenuSelection
+        options =
+        new MenuSelection(container, container.getGraphics().getFont(), "Options");
+    MenuSelection exit = new MenuSelection(container, container.getGraphics().getFont(), "Exit");
+    panel =
+        new DirectionalPanel(container,
+            container.getWidth() / 2,
+            (container.getHeight() - 250) / 5,
+            50);
     panel.addChild(playPlatformingLevel);
     panel.addChild(playArcadeLevel);
     panel.addChild(playFlowFile);
@@ -59,8 +70,7 @@ public class MainMenuState extends GameStateBase {
   }
 
   @Override
-  public void init(final GameContainer container, StateBasedGame game)
-      throws SlickException {
+  public void init(final GameContainer container, StateBasedGame game) throws SlickException {
   }
 
   @Override
@@ -75,8 +85,7 @@ public class MainMenuState extends GameStateBase {
   }
 
   @Override
-  public void enter(GameContainer container, StateBasedGame game)
-      throws SlickException {
+  public void enter(GameContainer container, StateBasedGame game) throws SlickException {
     super.enter(container, game);
     this.selections.select(0);
   }

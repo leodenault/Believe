@@ -1,5 +1,7 @@
 package believe.gui;
 
+import org.newdawn.slick.Font;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.gui.ComponentListener;
@@ -16,22 +18,44 @@ public class MenuSelection extends TextComponent {
 
   protected Sound activationSound;
 
-  public MenuSelection(GUIContext container, String text) throws SlickException {
-    this(container, 0, 0, 0, 0, text);
+  public MenuSelection(GUIContext container, Font font, String text) throws SlickException {
+    this(container, font, 0, 0, 0, 0, text);
   }
 
-  public MenuSelection(GUIContext container, int x, int y, int width, int height, String text)
-    throws SlickException {
-    this(container, x, y, width, height, text, new Sound(DEFAULT_SELECTION_SOUND), new Sound(DEFAULT_ACTIVATION_SOUND));
+  public MenuSelection(
+      GUIContext container,
+      Font font,
+      int x,
+      int y,
+      int width,
+      int height,
+      String text) throws SlickException {
+    this(
+        container,
+        font,
+        x,
+        y,
+        width,
+        height,
+        text,
+        new Sound(DEFAULT_SELECTION_SOUND),
+        new Sound(DEFAULT_ACTIVATION_SOUND));
   }
 
   /**
    * Used for testing.
    */
-  protected MenuSelection(GUIContext container, int x, int y, int width, int height,
-      String text, Sound selectionSound, Sound activationSound)
-      throws SlickException {
-    super(container, x, y, width, height, text);
+  protected MenuSelection(
+      GUIContext container,
+      Font font,
+      int x,
+      int y,
+      int width,
+      int height,
+      String text,
+      Sound selectionSound,
+      Sound activationSound) throws SlickException {
+    super(container, font, x, y, width, height, text);
     this.colorSet = INACTIVE;
     this.selectionSound = selectionSound;
     this.activationSound = activationSound;
@@ -56,7 +80,7 @@ public class MenuSelection extends TextComponent {
   public void activate() {
     activationSound.play();
     for (Object listener : listeners) {
-      ((ComponentListener)listener).componentActivated(this);
+      ((ComponentListener) listener).componentActivated(this);
     }
   }
 

@@ -21,10 +21,8 @@ public final class GameOverState extends GameStateBase implements TemporaryState
   private final MenuSelectionGroup menuSelections;
   private final DirectionalPanel directionalPanel;
 
-  @Nullable
-  private ChangeStateAction<?> returnToPreviousStateAction;
-  @Nullable
-  private ComponentListener exitSelectedAction;
+  @Nullable private ChangeStateAction<?> returnToPreviousStateAction;
+  @Nullable private ComponentListener exitSelectedAction;
 
   public GameOverState(
       GameContainer gameContainer,
@@ -32,10 +30,14 @@ public final class GameOverState extends GameStateBase implements TemporaryState
       ExitTemporaryStateAction exitGameOverStateAction) throws SlickException {
     this.game = game;
     this.exitGameOverStateAction = exitGameOverStateAction;
-    this.retrySelection = new MenuSelection(gameContainer, "Retry");
-    this.exitSelection = new MenuSelection(gameContainer, "Exit");
+    this.retrySelection =
+        new MenuSelection(gameContainer, gameContainer.getGraphics().getFont(), "Retry");
+    this.exitSelection =
+        new MenuSelection(gameContainer, gameContainer.getGraphics().getFont(), "Exit");
 
-    TextComponent title = new TextComponent(gameContainer, "Game Over");
+    TextComponent
+        title =
+        new TextComponent(gameContainer, gameContainer.getGraphics().getFont(), "Game Over");
 
     directionalPanel =
         new DirectionalPanel(gameContainer,

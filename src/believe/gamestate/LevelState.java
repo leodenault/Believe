@@ -29,17 +29,13 @@ public abstract class LevelState extends GameStateBase
   private final PhysicsManager physicsManager;
 
   private boolean enteringFromPauseMenu;
-  @Nullable
-  private LevelMap map;
+  @Nullable private LevelMap map;
   private ProgressBar focusBar;
-  @Nullable
-  private PhysicsManager physics;
+  @Nullable private PhysicsManager physics;
 
   protected StateBasedGame game;
-  @Nullable
-  protected PlayArea playArea;
-  @Nullable
-  protected PlayableCharacter player;
+  @Nullable protected PlayArea playArea;
+  @Nullable protected PlayableCharacter player;
 
   public LevelState(
       GameContainer container,
@@ -52,7 +48,7 @@ public abstract class LevelState extends GameStateBase
     this.physicsManager = physicsManager;
     this.pauseAction = new ChangeToTemporaryStateAction<>(GamePausedOverlay.class, this, game);
     this.gameOverAction = new ChangeToTemporaryStateAction<>(GameOverState.class, this, game);
-    this.focusBar = new ProgressBar(container);
+    this.focusBar = new ProgressBar(container, container.getGraphics().getFont());
   }
 
   @Override
@@ -101,13 +97,13 @@ public abstract class LevelState extends GameStateBase
     super.enter(container, game);
     if (!enteringFromPauseMenu) {
       map = mapManager.getMap(getMapName(), container, false);
-      player =
-          new PlayableCharacter(container,
-              this,
-              physicsManager,
-              isOnRails(),
-              map.getPlayerStartX(),
-              map.getPlayerStartY());
+      player = new PlayableCharacter(
+          container,
+          this,
+          physicsManager,
+          isOnRails(),
+          map.getPlayerStartX(),
+          map.getPlayerStartY());
       playArea = providePlayArea(container, map, player);
       focusBar.setText("Focus");
       playArea.addHudChild(focusBar, 0.02f, 0.05f, 0.15f, 0.07f);

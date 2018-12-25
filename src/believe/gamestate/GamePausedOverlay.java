@@ -29,17 +29,12 @@ public class GamePausedOverlay extends GameStateBase
   private MenuSelectionGroup selections;
   private DirectionalPanel panel;
   private StateBasedGame game;
-  @Nullable
-  private PrecedingState pausedState;
-  @Nullable
-  private ChangeStateAction<?> resumeAction;
-  @Nullable
-  private ComponentListener restartAction;
-  @Nullable
-  private ComponentListener exitSelectedAction;
+  @Nullable private PrecedingState pausedState;
+  @Nullable private ChangeStateAction<?> resumeAction;
+  @Nullable private ComponentListener restartAction;
+  @Nullable private ComponentListener exitSelectedAction;
 
-  @Nullable
-  private Image backgroundImage;
+  @Nullable private Image backgroundImage;
 
   public GamePausedOverlay(
       GameContainer container, StateBasedGame game, ExitTemporaryStateAction exitPauseStateAction)
@@ -47,9 +42,9 @@ public class GamePausedOverlay extends GameStateBase
     this.game = game;
     this.gameContainer = container;
     this.exitPauseStateAction = exitPauseStateAction;
-    this.resume = new MenuSelection(container, "Resume");
-    this.restart = new MenuSelection(container, "Restart");
-    this.exitLevel = new MenuSelection(container, "Exit Level");
+    this.resume = new MenuSelection(container, container.getGraphics().getFont(), "Resume");
+    this.restart = new MenuSelection(container, container.getGraphics().getFont(), "Restart");
+    this.exitLevel = new MenuSelection(container, container.getGraphics().getFont(), "Exit Level");
     panel =
         new DirectionalPanel(container,
             container.getWidth() / 2,

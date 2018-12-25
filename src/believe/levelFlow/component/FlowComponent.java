@@ -1,10 +1,8 @@
 package believe.levelFlow.component;
 
-import java.awt.Font;
-
 import believe.gui.AbstractContainer;
-
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.MusicListener;
@@ -90,7 +88,7 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
    * @see org.newdawn.slick.Input
    */
   public FlowComponent(GUIContext container, Music song, char[] inputKeys, int numLanes, int width, int subdivision, double bpm, double offset, int x, int y, int height) {
-    this(container, song, inputKeys, numLanes, width, subdivision, bpm, offset, x, y, height, new TrueTypeFont(new Font("Verdana", Font.PLAIN, 50), true));
+    this(container, song, inputKeys, numLanes, width, subdivision, bpm, offset, x, y, height, new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.PLAIN, 50), true));
   }
 
   /**
@@ -240,6 +238,7 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
     g.drawLine(this.getX(), middle, this.getX() + this.getWidth(), middle);
 
     // Render the letters
+    Font previousFont = g.getFont();
     g.setColor(Color.white);
     g.setFont(KEY_FONT);
 
@@ -247,12 +246,13 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
 
     for (int i = 0; i < inputKeys.length; i++) {
       String key = String.valueOf(Character.toUpperCase(inputKeys[i]));
-      int width = g.getFont().getWidth(key);
-      int height = g.getFont().getHeight(key);
+      int width = KEY_FONT.getWidth(key);
+      int height = KEY_FONT.getHeight(key);
 
       g.drawString(key, lanes[i].getX() + (lanes[i].getWidth() - width) / 2, bufferY - height / 2);
     }
 
+    g.setFont(previousFont);
     super.renderComponent(container, g);
   }
 

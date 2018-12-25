@@ -1,26 +1,23 @@
 package believe.gui;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Polygon;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.gui.GUIContext;
 
-import believe.util.Util;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class NumberPicker extends MenuSelection {
 
-  @SuppressWarnings("serial")
-  private static final Polygon ARROW = new Polygon() {{
+  @SuppressWarnings("serial") private static final Polygon ARROW = new Polygon() {{
     addPoint(-0.5f, 0);
     addPoint(0.5f, -1);
     addPoint(0.5f, 1);
@@ -38,22 +35,35 @@ public class NumberPicker extends MenuSelection {
   private int max;
   private Sound pressSound;
 
-  public NumberPicker(GUIContext container, String text, int value) throws SlickException {
-    this(container, text, value, Integer.MIN_VALUE, Integer.MAX_VALUE);
+  public NumberPicker(GUIContext container, Font font, String text, int value)
+      throws SlickException {
+    this(container, font, text, value, Integer.MIN_VALUE, Integer.MAX_VALUE);
   }
 
-  public NumberPicker(GUIContext container, String text, int value, int min, int max) throws SlickException {
-    this(container, 0, 0, 0, 0, text, value, min, max);
+  public NumberPicker(
+      GUIContext container, Font font, String text, int value, int min, int max)
+      throws SlickException {
+    this(container, font, 0, 0, 0, 0, text, value, min, max);
   }
 
-  public NumberPicker(GUIContext container, int x, int y, int width,
-      int height, String text, int value) throws SlickException {
-    this(container, x, y, width, height, text, value, Integer.MIN_VALUE, Integer.MAX_VALUE);
+  public NumberPicker(
+      GUIContext container, Font font, int x, int y, int width, int height, String text, int value)
+      throws SlickException {
+    this(container, font, x, y, width, height, text, value, Integer.MIN_VALUE, Integer.MAX_VALUE);
   }
 
-  public NumberPicker(GUIContext container, int x, int y, int width,
-      int height, String text, int value, int min, int max) throws SlickException {
-    super(container, x, y, width, height, text);
+  public NumberPicker(
+      GUIContext container,
+      Font font,
+      int x,
+      int y,
+      int width,
+      int height,
+      String text,
+      int value,
+      int min,
+      int max) throws SlickException {
+    super(container, font, x, y, width, height, text);
     this.value = value;
     this.activated = false;
     this.min = min;
@@ -64,10 +74,21 @@ public class NumberPicker extends MenuSelection {
   /**
    * Used for testing.
    */
-  protected NumberPicker(GUIContext container, int x, int y, int width,
-      int height, String text, int value, int min, int max,
-      Sound selectionSound,  Sound activationSound, Sound pressSound) throws SlickException {
-    super(container, x, y, width, height, text, selectionSound, activationSound);
+  protected NumberPicker(
+      GUIContext container,
+      Font font,
+      int x,
+      int y,
+      int width,
+      int height,
+      String text,
+      int value,
+      int min,
+      int max,
+      Sound selectionSound,
+      Sound activationSound,
+      Sound pressSound) throws SlickException {
+    super(container, font, x, y, width, height, text, selectionSound, activationSound);
     this.value = value;
     this.activated = false;
     this.min = min;
@@ -103,48 +124,45 @@ public class NumberPicker extends MenuSelection {
   }
 
   @Override
-  protected void drawText(GUIContext context, Graphics g) {
-      Rectangle oldClip = Util.changeClipContext(g, rect);
+  protected int calculateYPosition() {
+    return (int) rect.getCenterY() - textHeight;
+  }
 
-      // Draw the text
-      g.setColor(new Color(colorSet.textColor));
-      int textWidth = g.getFont().getWidth(text);
-      int textHeight = g.getFont().getHeight(text);
+  @Override
+  protected void drawAuxiliaryText(Graphics g, Font font) {
+    // Draw the value
+    String stringValue = String.valueOf(value);
+    int valueWidth = font.getWidth(stringValue);
+    int valueHeight = font.getHeight(stringValue);
 
-      g.pushTransform();
-      g.translate(-textWidth/2, -textHeight);
-      g.drawString(text, rect.getCenterX(), rect.getCenterY());
-      g.popTransform();
+    g.pushTransform();
+    g.translate(-valueWidth / 2, valueHeight);
+    g.drawString(stringValue, rect.getCenterX(), rect.getCenterY());
+    g.popTransform();
 
-      // Draw the value
-      String stringValue = String.valueOf(value);
-      int valueWidth = g.getFont().getWidth(stringValue);
-      int valueHeight = g.getFont().getHeight(stringValue);
+    // Draw the plus and minus signs if the component is active
+    if (activated) {
 
-      g.pushTransform();
-      g.translate(-valueWidth/2, valueHeight);
-      g.drawString(stringValue, rect.getCenterX(), rect.getCenterY());
-      g.popTransform();
-
-      // Draw the plus and minus signs if the component is active
-      if (activated) {
-
-        if (value > min) {
-          g.setColor(arrowColor(leftPressed));
-          Shape left = ARROW.transform(Transform.createScaleTransform(rect.getWidth() / 20, rect.getHeight() * 0.75f / ARROW.getHeight()))
-              .transform(Transform.createTranslateTransform(rect.getX() + rect.getWidth() / 10, rect.getCenterY()));
-          g.fill(left);
-        }
-
-        if (value < max) {
-          g.setColor(arrowColor(rightPressed));
-          Shape right = ARROW.transform(Transform.createScaleTransform(-rect.getWidth() / 20, rect.getHeight() * 0.75f / ARROW.getHeight()))
-              .transform(Transform.createTranslateTransform(rect.getMaxX() - rect.getWidth() / 10, rect.getCenterY()));
-          g.fill(right);
-        }
+      if (value > min) {
+        g.setColor(arrowColor(leftPressed));
+        Shape left = ARROW
+            .transform(Transform.createScaleTransform(rect.getWidth() / 20,
+                rect.getHeight() * 0.75f / ARROW.getHeight()))
+            .transform(Transform.createTranslateTransform(rect.getX() + rect.getWidth() / 10,
+                rect.getCenterY()));
+        g.fill(left);
       }
 
-      Util.resetClipContext(g, oldClip);
+      if (value < max) {
+        g.setColor(arrowColor(rightPressed));
+        Shape right = ARROW
+            .transform(Transform.createScaleTransform(-rect.getWidth() / 20,
+                rect.getHeight() * 0.75f / ARROW.getHeight()))
+            .transform(Transform.createTranslateTransform(rect.getMaxX() - rect.getWidth() / 10,
+                rect.getCenterY()));
+        g.fill(right);
+      }
+    }
   }
 
   private void schedulePressTimer(final boolean left, boolean pressed) {

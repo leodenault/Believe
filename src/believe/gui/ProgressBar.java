@@ -1,11 +1,11 @@
 package believe.gui;
 
+import believe.gui.TextComponent.ColorSet;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
-
-import believe.gui.TextComponent.ColorSet;
 
 public class ProgressBar extends AbstractContainer {
 
@@ -20,18 +20,18 @@ public class ProgressBar extends AbstractContainer {
   private Color background;
   private TextComponent text;
 
-  public ProgressBar(GUIContext container) {
-    this(container, 0, 0, 0, 0, "");
+  public ProgressBar(GUIContext container, Font font) {
+    this(container, font, 0, 0, 0, 0, "");
   }
 
-  public ProgressBar(GUIContext container, int x, int y, int width,
-      int height, String text) {
+  public ProgressBar(
+      GUIContext container, Font font, int x, int y, int width, int height, String text) {
     super(container, x, y, width, height);
     this.padding = DEFAULT_PADDING;
     this.progress = 0f;
     this.foreground = DEFAULT_FOREGROUND_COLOUR;
     this.background = DEFAULT_BACKGROUND_COLOUR;
-    this.text = new TextComponent(container, x, y, width, height, text);
+    this.text = new TextComponent(container, font, x, y, width, height, text);
     this.text.setColorSet(DEFAULT_TEXT_COLOR);
     this.children.add(this.text);
   }
@@ -66,8 +66,7 @@ public class ProgressBar extends AbstractContainer {
   public void resetLayout() {}
 
   @Override
-  protected void renderComponent(GUIContext context, Graphics g)
-      throws SlickException {
+  protected void renderComponent(GUIContext context, Graphics g) throws SlickException {
     float x = getX();
     float y = getY();
     float width = getWidth();

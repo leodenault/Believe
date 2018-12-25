@@ -23,11 +23,11 @@ public class OptionsMenuState extends GameStateBase {
     final Options options = Options.getInstance();
     scrollPanelFocused = false;
 
-    back = new MenuSelection(container, cWidth / 80, cHeight / 80, cWidth / 4, cHeight / 12, "Back");
+    back = new MenuSelection(container, container.getGraphics().getFont(), cWidth / 80, cHeight / 80, cWidth / 4, cHeight / 12, "Back");
     scrollPanel = new VerticalKeyboardScrollpanel(container, (int)(cWidth * 0.37), cHeight / 80,
         (int)(cWidth * 0.6), cHeight / 8, (int)(cHeight * 0.95));
 
-    final NumberPicker flowSpeed = new NumberPicker(container, "Flow Speed", options.flowSpeed, 1, 20);
+    final NumberPicker flowSpeed = new NumberPicker(container, container.getGraphics().getFont(), "Flow Speed", options.flowSpeed, 1, 20);
     flowSpeed.addListener((component) -> {
       if (scrollPanelFocused) {
         options.flowSpeed = flowSpeed.getValue();
