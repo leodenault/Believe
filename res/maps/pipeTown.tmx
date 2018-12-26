@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="250" height="50" tilewidth="32" tileheight="32">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="250" height="100" tilewidth="32" tileheight="32" nextobjectid="1">
  <properties>
   <property name="playerStartX" value="3"/>
   <property name="playerStartY" value="46"/>
  </properties>
- <tileset firstgid="1" name="Pipe Town" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="Pipe Town" tilewidth="32" tileheight="32" tilecount="16" columns="4">
   <image source="tilesets/pipeTown.png" width="128" height="128"/>
   <tile id="1">
    <properties>
@@ -12,10 +12,10 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="17" name="Collision" tilewidth="32" tileheight="32">
+ <tileset firstgid="17" name="Collision" tilewidth="32" tileheight="32" tilecount="1" columns="1">
   <image source="tilesets/collision.png" width="32" height="32"/>
  </tileset>
- <tileset firstgid="18" name="Commands" tilewidth="32" tileheight="32">
+ <tileset firstgid="18" name="Commands" tilewidth="32" tileheight="32" tilecount="4" columns="2">
   <image source="tilesets/commands.png" width="64" height="64"/>
   <tile id="0">
    <properties>
@@ -38,46 +38,46 @@
    </properties>
   </tile>
  </tileset>
- <layer name="Commands" width="250" height="50">
+ <layer name="Commands" width="250" height="100">
   <properties>
    <property name="commands" value=""/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3WsQ0AIAgAQWcwuv+qjqAGo5LctTRPBaUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUf11AACwxe0GAIB76mSe6T//qfWnlpMy7pWxeVV7HQAAAIQMNfFH/lDDAAA=
+   H4sIAAAAAAAAA+3WMQ4AEAxAUWcQ7n9VmxUhaPLe2uV3alMCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAdtXXAQDAErcbAADuyYN5pP/8p9afWk6KuFfE5lnldQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABdA0gU8G6ghgEA
   </data>
  </layer>
- <layer name="Collision" width="250" height="50">
+ <layer name="Collision" width="250" height="100">
   <properties>
    <property name="collision" value=""/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3VsQ2AMBAEQbfg/pslJYAII1urGenyT1Y/BgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwFnm7gOApZ6a1jm06Bz6dA59Ooc+nUOfzqFP59Cnc+jTOfTpHPp0Dn06hz6dQ98fnc/bgP38c+j72rnfDefzz6FP59D31rmZtQYAdFx0aBeYUMMAAA==
+   H4sIAAAAAAAAA+3VsQ2AMBAEQbfg/pslJYAII1urGenyT1Y/BgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwFnm7gOApZ6a1jm06Bz6dA59Ooc+nUOfzqFP59Cnc+jTOfTpHPp0Dn06hz6dQ98fnc/bgP38c+j72rnfDefzz6FP59D31rmZtQYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwJkuDrLFPKCGAQA=
   </data>
  </layer>
- <layer name="Back Ridge" width="250" height="50">
+ <layer name="Back Ridge" width="250" height="100">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3KsQkAAAjAMDf9/2K9QhQS6NYIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADYkVN5PJ73DwAAcF8DnU61AFDDAAA=
+   H4sIAAAAAAAAA+3KsQkAAAgEse90/4l1CkFI4LpLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgRm3t8XjePwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANwaMYCyXqCGAQA=
   </data>
  </layer>
- <layer name="Pipe" width="250" height="50">
+ <layer name="Pipe" width="250" height="100">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3DoQ0AQAgEMBCIF7//uiyBurRJqwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4E6r8UeN/9T4X42/dt+IC1DDAAA=
+   H4sIAAAAAAAAA+3DoQ0AIBAAsUcgEOy/LkugLm3SGQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+Gep+VvNP2r+VfMBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABoedmgRaOghgEA
   </data>
  </layer>
- <layer name="Enemies" width="250" height="50">
+ <layer name="Enemies" width="250" height="100">
   <properties>
    <property name="enemies" value=""/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3OAQ0AAAgDoFewf1ljXDdIQAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP9MOwAAAACHLeIBfPZQwwAA
+   H4sIAAAAAAAAA+3OAQ0AAAgDoFewf1lb3LlBAhIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPhnrgMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJQsog4AkoIYBAA==
   </data>
  </layer>
- <layer name="Front" width="250" height="50">
+ <layer name="Front" width="250" height="100">
   <properties>
    <property name="front" value=""/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3VsQqDMBiFUWmtQ4e+/+Nqt1AcEqzk53IOuMht7PKRZQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKjlPfsPAH911rTOIYvOIZ/OIZ/OIZ/OIZ/OIZ/OIZ/OIZ/OIZ/OIZ/OIZ/OIZ/OId8dnb+aB5jPfQ75rnbu7ob63OeQb6TzR8d5NjY29TYjnW8d37Cxsam3Gen89/3zeNbO3zrHOc6Zc87Iu69PxzdsbGzqbdqmd7eHyQBQwwAA
+   H4sIAAAAAAAAA+3YsQqDMBiF0VCtg4Pv/7i1WykOCbbk53IOuMhtdPkQ2hoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAt++wXAH7qqmmdQxadQz6dQz6dQz6dQz6dQz6dQz6dQz6dQz6dQz6dQz6dQz6dQ75/dP78uID5fM8h393OfbuhPt9zyDfS+aPjPBsbm3qbkc63jmfY2NjU24x0/n1/Oa+187fOcY5z5pwzcu/t6HiGjY1NvY3/3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHK9AL2ma7aghgEA
   </data>
  </layer>
 </map>

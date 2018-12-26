@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="250" height="50" tilewidth="32" tileheight="32" nextobjectid="1">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="250" height="50" tilewidth="32" tileheight="32" nextobjectid="1">
  <properties>
   <property name="playerStartX" value="1"/>
-  <property name="playerStartY" value="48"/>
+  <property name="playerStartY" value="33"/>
  </properties>
- <tileset firstgid="1" name="Snow" tilewidth="32" tileheight="32" tilecount="16">
+ <tileset firstgid="1" name="Snow" tilewidth="32" tileheight="32" tilecount="16" columns="4">
   <image source="tilesets/snow.png" width="128" height="128"/>
  </tileset>
- <tileset firstgid="17" name="collision" tilewidth="32" tileheight="32" tilecount="1">
+ <tileset firstgid="17" name="collision" tilewidth="32" tileheight="32" tilecount="1" columns="1">
   <image source="tilesets/collision.png" width="32" height="32"/>
  </tileset>
  <layer name="Collision" width="250" height="50">
@@ -15,7 +15,7 @@
    <property name="collision" value=""/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3YMQoAIAwDQL/g/z/r6lbEUB3uIJtTWwg4BgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANBtbgEAes0i1XsA4N5pp+rhHmZMknv6k72QVN2T/n7DzElyT3+yF5Kq/3J5F0hZF+gybFDDAAA=
+   H4sIAAAAAAAAA+3YMQoAIAwDQL/g/z/r6lbEUB3uIJtTWwg4BgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABJcwsA0GsWqd4DAPdOO1UP9zBjktzTn+yFpOqe9PcbZk6Se/qTvZBU/ZfLuwAAAAAAAAAAAAAAAAAAAHRabJn721DDAAA=
   </data>
  </layer>
  <layer name="Front" width="250" height="50">
@@ -23,7 +23,7 @@
    <property name="front" value=""/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3YMQoAIQwEQK/w/18Wu+vCcUu0mIHtrGJkwTEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAbvMVAKDXLFKdBwD++9qperiHGZNkn+7kXkiq9kl/n2HmJO19euS6eOckVf/lci6QsgD6gN6SUMMAAA==
+   H4sIAAAAAAAAA+3YMQrDMBQD0HTIkPtfuGTrUDClX1aG90BbBpNIGHIcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEw6PwIA7HUusnoeAPjfr3eqe3gP75hJV/sAfOW7MGnVJ/d3h50z6e7TSx4XO2fS3afVP3PZHztn0iWPDUxpd1nsnLx2l8XOyWt3WeycvHaXxc7Ja3dZ7Jy8dpfFzslrd1nsnLx2l8XOyWt3WeycvHaXxc7Ja3dZ7Jy8dpfFzslrd1nsnLx2l8XOyXsDNSzp3FDDAAA=
   </data>
  </layer>
  <layer name="Enemies" width="250" height="50">
@@ -31,15 +31,7 @@
    <property name="enemies" value=""/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3OAQ0AAAgDoFewf1ljXDdIQAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA9007AACPLFxhUnhQwwAA
-  </data>
- </layer>
- <layer name="Tile Layer 4" width="250" height="50">
-  <properties>
-   <property name="lol" value=""/>
-  </properties>
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3BAQ0AAADCoPdPbQ8HFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE8GJbO3FlDDAAA=
+   H4sIAAAAAAAAA+3OAQkAAAwDoFV4/7KPMRiawAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoOvaAQAAAAAAAAAAAAAAAAAAAIAxD2Uai7tQwwAA
   </data>
  </layer>
 </map>
