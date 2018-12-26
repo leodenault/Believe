@@ -8,6 +8,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.newdawn.slick.Font;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
@@ -19,12 +21,13 @@ public class NumberPickerTest {
   @Mock private GUIContext container;
   @Mock private Input input;
   @Mock private Sound sound;
+  @Mock private Font font;
 
   @Before
   public void setUp() throws SlickException {
     initMocks(this);
     when(container.getInput()).thenReturn(input);
-    picker = new NumberPicker(container, 0, 0, 0, 0, "", 3, 1, 5, sound, sound, sound);
+    picker = new NumberPicker(container, font, 0, 0, 0, 0, "", 3, 1, 5, sound, sound, sound);
   }
 
   @Test

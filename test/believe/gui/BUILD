@@ -4,6 +4,7 @@ java_test(
     test_class = "believe.gui.CharacterDialogueTest",
     deps = [
         "//src/believe/gui",
+        "//src/believe/gui:package-info",
         "//third_party/junit",
         "//third_party/slick",
     ],
@@ -15,6 +16,7 @@ java_test(
     test_class = "believe.gui.DirectionalPanelTest",
     deps = [
         "//src/believe/gui",
+        "//src/believe/gui:package-info",
         "//third_party/hamcrest",
         "//third_party/junit",
         "//third_party/mockito",
@@ -28,6 +30,7 @@ java_test(
     test_class = "believe.gui.MenuSelectionGroupTest",
     deps = [
         "//src/believe/gui",
+        "//src/believe/gui:package-info",
         "//third_party/hamcrest",
         "//third_party/junit",
         "//third_party/mockito",
@@ -40,6 +43,7 @@ java_test(
     test_class = "believe.gui.NumberPickerTest",
     deps = [
         "//src/believe/gui",
+        "//src/believe/gui:package-info",
         "//third_party/hamcrest",
         "//third_party/junit",
         "//third_party/mockito",
