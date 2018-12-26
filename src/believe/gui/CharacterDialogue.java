@@ -66,6 +66,6 @@ public final class CharacterDialogue extends ComponentBase {
   }
 
   public void scroll() {
-
+    text.scroll();
   }
 }

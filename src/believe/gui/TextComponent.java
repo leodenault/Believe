@@ -58,6 +58,7 @@ public class TextComponent extends ComponentBase {
   private VerticalTextAlignment verticalTextAlignment;
   private int borderPadding;
   private int textPadding;
+  private int currentFragmentIndex;
 
   protected ColorSet colorSet;
   protected int textHeight;
@@ -75,7 +76,7 @@ public class TextComponent extends ComponentBase {
     this.wrappingMode = WrappingMode.WRAP;
     this.horizontalTextAlignment = HorizontalTextAlignment.CENTERED;
     this.verticalTextAlignment = VerticalTextAlignment.MIDDLE;
-    this.textHeight = calculateTextHeight(this.font);
+    this.textHeight = calculateTextHeight();
     this.colorSet = DEFAULT_COLOR_SET;
     this.borderPadding = DEFAULT_PADDING;
     this.textPadding = borderPadding + DEFAULT_PADDING;
@@ -88,7 +89,7 @@ public class TextComponent extends ComponentBase {
 
   public void setText(String text) {
     chopText(text);
-    this.textHeight = calculateTextHeight(font);
+    this.textHeight = calculateTextHeight();
   }
 
   public void setWrappingMode(WrappingMode wrappingMode) {
@@ -110,11 +111,18 @@ public class TextComponent extends ComponentBase {
   public void setWidth(int width) {
     super.setWidth(width);
     chopText(String.join(" ", textFragments));
-    textHeight = calculateTextHeight(font);
+    textHeight = calculateTextHeight();
   }
 
   @Override
   public void resetLayout() {}
+
+  public void scroll() {
+    int numDisplayedLines = calculateNumDisplayedLines();
+    if (numDisplayedLines + currentFragmentIndex < textFragments.size()) {
+      currentFragmentIndex += numDisplayedLines;
+    }
+  }
 
   @Override
   protected void renderComponent(GUIContext context, Graphics graphics) {
@@ -132,9 +140,7 @@ public class TextComponent extends ComponentBase {
     Util.resetClipContext(graphics, oldClip);
   }
 
-  protected void drawAuxiliaryText(Graphics graphics, Font font) {
-    layoutChoppedText(graphics, createXPositionCalculator(), calculateYPosition());
-  }
+  protected void drawAuxiliaryText(Graphics graphics, Font font) {}
 
   protected Function<String, Integer> createXPositionCalculator() {
     switch (horizontalTextAlignment) {
@@ -160,13 +166,38 @@ public class TextComponent extends ComponentBase {
       Graphics g, Function<String, Integer> xPositionCalculator, int y) {
     int cumulativeHeight = 0;
 
-    for (String choppedText : textFragments) {
+    int i = currentFragmentIndex;
+    String choppedText;
+    while (i < textFragments.size()
+        && cumulativeHeight + font.getHeight((choppedText = textFragments.get(i)))
+        < getPaddedHeight()) {
       g.drawString(choppedText, xPositionCalculator.apply(choppedText), y + cumulativeHeight);
-      cumulativeHeight += g.getFont().getHeight(choppedText);
+      cumulativeHeight += font.getHeight(choppedText);
+      i++;
     }
   }
 
-  private int calculateTextHeight(Font font) {
+  private int calculateNumDisplayedLines() {
+    int numDisplayedLines = 0;
+    int cumulativeHeight = 0;
+    while (currentFragmentIndex + numDisplayedLines < textFragments.size() && (
+        cumulativeHeight +=
+            font.getHeight(textFragments.get(currentFragmentIndex + numDisplayedLines)))
+        < getPaddedHeight()) {
+      numDisplayedLines++;
+    }
+    return numDisplayedLines;
+  }
+
+  private int getPaddedHeight() {
+    return getHeight() - 2 * textPadding;
+  }
+
+  private int getPaddedWidth() {
+    return getWidth() - 2 * textPadding;
+  }
+
+  private int calculateTextHeight() {
     return textFragments.stream().mapToInt(font::getHeight).sum();
   }
 
@@ -187,6 +218,7 @@ public class TextComponent extends ComponentBase {
 
   private void chopText(String text) {
     textFragments.clear();
+    currentFragmentIndex = 0;
 
     if (wrappingMode == WrappingMode.OVERFLOW) {
       textFragments.add(text);
@@ -204,7 +236,7 @@ public class TextComponent extends ComponentBase {
 
   private String generateFragment(String text) {
     int textWidth = font.getWidth(text);
-    int componentWidth = getWidth() - 2 * textPadding;
+    int componentWidth = getPaddedWidth();
     if (textWidth <= componentWidth || componentWidth <= 0) {
       return text;
     }
