@@ -39,6 +39,7 @@ public class GamePausedOverlay extends GameStateBase
   public GamePausedOverlay(
       GameContainer container, StateBasedGame game, ExitTemporaryStateAction exitPauseStateAction)
       throws SlickException {
+    super(container);
     this.game = game;
     this.gameContainer = container;
     this.exitPauseStateAction = exitPauseStateAction;

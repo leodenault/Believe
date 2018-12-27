@@ -43,6 +43,7 @@ public abstract class LevelState extends GameStateBase
       StateBasedGame game,
       MapManager mapManager,
       PhysicsManager physicsManager) {
+    super(container);
     this.container = container;
     this.game = game;
     this.mapManager = mapManager;

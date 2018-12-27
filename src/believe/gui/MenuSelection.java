@@ -1,7 +1,6 @@
 package believe.gui;
 
 import org.newdawn.slick.Font;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.gui.ComponentListener;

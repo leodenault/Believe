@@ -27,7 +27,7 @@ public class FontLoader {
 
   public void load() {
     baseFont = new Font("verdana", Font.PLAIN, 20);
-    verdana = new TrueTypeFont(new Font("verdana", Font.PLAIN, 20), /* antiAlias= */ true);
+    verdana = new TrueTypeFont(new Font("verdana", Font.PLAIN, 30), /* antiAlias= */ true);
   }
 
   public TrueTypeFont getBaseFont() {

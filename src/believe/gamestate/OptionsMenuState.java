@@ -18,6 +18,7 @@ public class OptionsMenuState extends GameStateBase {
   private VerticalKeyboardScrollpanel scrollPanel;
 
   public OptionsMenuState(GameContainer container, StateBasedGame game) throws SlickException {
+    super(container);
     int cWidth = container.getWidth();
     int cHeight = container.getHeight();
     final Options options = Options.getInstance();

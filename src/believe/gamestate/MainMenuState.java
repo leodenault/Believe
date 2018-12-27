@@ -16,6 +16,7 @@ public class MainMenuState extends GameStateBase {
   private MenuSelectionGroup selections;
 
   public MainMenuState(GameContainer container, StateBasedGame game) throws SlickException {
+    super(container);
     MenuSelection
         playPlatformingLevel =
         new MenuSelection(container, container.getGraphics().getFont(), "Play Platforming Level");

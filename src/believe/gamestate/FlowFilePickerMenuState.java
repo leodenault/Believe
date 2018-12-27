@@ -22,6 +22,7 @@ public class FlowFilePickerMenuState extends GameStateBase {
 
   public FlowFilePickerMenuState(GameContainer container, StateBasedGame game)
       throws SlickException {
+    super(container);
     int cWidth = container.getWidth();
     int cHeight = container.getHeight();
 
