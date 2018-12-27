@@ -6,13 +6,16 @@ import java.util.HashMap;
 import org.newdawn.slick.TrueTypeFont;
 
 public class FontLoader {
+  interface FontFactory {
+    Font create();
+  }
+
   private static FontLoader INSTANCE;
 
-  private HashMap<String, TrueTypeFont> fonts;
+  private Font baseFont;
+  private TrueTypeFont verdana;
 
-  private FontLoader() {
-    fonts = new HashMap<String, TrueTypeFont>();
-  }
+  private FontLoader() {}
 
   public static FontLoader getInstance() {
     if (INSTANCE == null) {
@@ -23,10 +26,15 @@ public class FontLoader {
   }
 
   public void load() {
-    fonts.put("verdana", new TrueTypeFont(new Font("Verdana", Font.PLAIN, 20), true));
+    baseFont = new Font("verdana", Font.PLAIN, 20);
+    verdana = new TrueTypeFont(new Font("verdana", Font.PLAIN, 20), /* antiAlias= */ true);
   }
 
-  public TrueTypeFont getFont(String name) {
-    return fonts.get(name);
+  public TrueTypeFont getBaseFont() {
+    return verdana;
+  }
+
+  public TrueTypeFont getBaseFontAtSize(float size) {
+    return new TrueTypeFont(baseFont.deriveFont(size), /* antiAlias= */ true);
   }
 }

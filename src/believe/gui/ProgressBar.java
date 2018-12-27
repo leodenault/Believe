@@ -50,6 +50,14 @@ public class ProgressBar extends AbstractContainer {
     this.text.setText(text);
   }
 
+  public void setBorderSize(int borderSize) {
+    text.setBorderSize(borderSize);
+  }
+
+  public void setTextPadding(int textPadding) {
+    text.setTextPadding(textPadding);
+  }
+
   @Override
   public void setHeight(int height) {
     super.setHeight(height);

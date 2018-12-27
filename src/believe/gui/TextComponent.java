@@ -56,7 +56,7 @@ public class TextComponent extends ComponentBase {
   private WrappingMode wrappingMode;
   private HorizontalTextAlignment horizontalTextAlignment;
   private VerticalTextAlignment verticalTextAlignment;
-  private int borderPadding;
+  private int borderSize;
   private int textPadding;
   private int currentFragmentIndex;
 
@@ -78,8 +78,8 @@ public class TextComponent extends ComponentBase {
     this.verticalTextAlignment = VerticalTextAlignment.MIDDLE;
     this.textHeight = calculateTextHeight();
     this.colorSet = DEFAULT_COLOR_SET;
-    this.borderPadding = DEFAULT_PADDING;
-    this.textPadding = borderPadding + DEFAULT_PADDING;
+    this.borderSize = DEFAULT_PADDING;
+    this.textPadding = borderSize + DEFAULT_PADDING;
     chopText(text);
   }
 
@@ -104,6 +104,16 @@ public class TextComponent extends ComponentBase {
 
   public void setVerticalTextAlignment(VerticalTextAlignment verticalTextAlignment) {
     this.verticalTextAlignment = verticalTextAlignment;
+    chopText(String.join(" ", textFragments));
+  }
+
+  public void setBorderSize(int borderSize) {
+    this.borderSize = borderSize;
+    chopText(String.join(" ", textFragments));
+  }
+
+  public void setTextPadding(int textPadding) {
+    this.textPadding = textPadding;
     chopText(String.join(" ", textFragments));
   }
 
@@ -208,12 +218,12 @@ public class TextComponent extends ComponentBase {
 
     // Colour the border
     g.setColor(new Color(colorSet.borderColor));
-    g.setLineWidth(borderPadding);
+    g.setLineWidth(borderSize);
     g.drawRect(
-        rect.getX() + borderPadding / 2,
-        rect.getY() + borderPadding / 2,
-        rect.getWidth() - borderPadding,
-        rect.getHeight() - borderPadding);
+        rect.getX() + borderSize / 2,
+        rect.getY() + borderSize / 2,
+        rect.getWidth() - borderSize,
+        rect.getHeight() - borderSize);
   }
 
   private void chopText(String text) {

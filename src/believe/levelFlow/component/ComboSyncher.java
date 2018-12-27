@@ -8,6 +8,7 @@ import believe.gui.ComponentBase;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.gui.GUIContext;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,15 +47,29 @@ public class ComboSyncher extends ComponentBase implements Layerable {
     this(container, new SynchedComboPattern(), bpm, 0, 0, 0, 0);
   }
 
-  public ComboSyncher(GUIContext container, SynchedComboPattern pattern, int bpm, int x, int y, int width, int height) {
-    this(container, pattern, FontLoader.getInstance().getFont("verdana"),
-        bpm, x, y, width, height);
+  public ComboSyncher(
+      GUIContext container,
+      SynchedComboPattern pattern,
+      int bpm,
+      int x,
+      int y,
+      int width,
+      int height) {
+    this(container, pattern, FontLoader.getInstance().getBaseFont(), bpm, x, y, width, height);
   }
 
   /**
    * Used for testing
    */
-  protected ComboSyncher(GUIContext container, SynchedComboPattern pattern, TrueTypeFont font, int bpm, int x, int y, int width, int height) {
+  protected ComboSyncher(
+      GUIContext container,
+      SynchedComboPattern pattern,
+      TrueTypeFont font,
+      int bpm,
+      int x,
+      int y,
+      int width,
+      int height) {
     super(container, x, y, width, height);
     this.bpm = bpm;
     this.pattern = pattern;
@@ -90,7 +105,7 @@ public class ComboSyncher extends ComponentBase implements Layerable {
         actionsLeft.remove();
         for (Object listener : listeners) {
           if (listener instanceof FlowComponentListener) {
-            ((FlowComponentListener)listener).beatMissed();
+            ((FlowComponentListener) listener).beatMissed();
           }
         }
       }
@@ -119,10 +134,11 @@ public class ComboSyncher extends ComponentBase implements Layerable {
         float start = x - pulseLength;
         float end = x + pulseLength;
         if (trackerX >= start && trackerX < end) {
-          float relPosSq = (float)Math.pow(trackerX - x, 2);
-          float pulseLengthSq = (float)Math.pow(pulseLength, 2);
-          float progress = 1 + (relPosSq / (3 * pulseLengthSq))
-              * (((4 * relPosSq) / pulseLengthSq) - 7);
+          float relPosSq = (float) Math.pow(trackerX - x, 2);
+          float pulseLengthSq = (float) Math.pow(pulseLength, 2);
+          float
+              progress =
+              1 + (relPosSq / (3 * pulseLengthSq)) * (((4 * relPosSq) / pulseLengthSq) - 7);
           Color pulseColour = new Color(BAR_PULSE);
           Color normalColour = new Color(BAR_NORMAL);
           pulseColour.scale(progress);
@@ -148,8 +164,7 @@ public class ComboSyncher extends ComponentBase implements Layerable {
         String key = String.valueOf(Character.toUpperCase(action.key));
         int centerX = font.getWidth(String.valueOf(action.key)) / 2;
         int centerY = g.getFont().getHeight(key) / 2;
-        g.drawString(key, getActionLocation(action) - centerX,
-            rect.getCenterY() - centerY);
+        g.drawString(key, getActionLocation(action) - centerX, rect.getCenterY() - centerY);
       }
       g.setFont(previousFont);
     }
@@ -161,24 +176,23 @@ public class ComboSyncher extends ComponentBase implements Layerable {
 
     if (music != null && !actionsLeft.isEmpty()) {
       TimeKeyPair current = actionsLeft.peek();
-        int index = actions.indexOf(current);
+      int index = actions.indexOf(current);
 
-        if (current.key == c &&
-            Math.abs(tracker.getX() - getActionLocation(current)) < errorWidth) {
-          actionsLeft.remove();
-          actionColors.put(current, SUCCESS);
+      if (current.key == c && Math.abs(tracker.getX() - getActionLocation(current)) < errorWidth) {
+        actionsLeft.remove();
+        actionColors.put(current, SUCCESS);
 
-          for (Object listener : listeners) {
-            if (listener instanceof FlowComponentListener) {
-              ((FlowComponentListener)listener).beatSuccess(index);
-            }
+        for (Object listener : listeners) {
+          if (listener instanceof FlowComponentListener) {
+            ((FlowComponentListener) listener).beatSuccess(index);
           }
-          return;
         }
+        return;
+      }
 
       for (Object listener : listeners) {
         if (listener instanceof FlowComponentListener) {
-          ((FlowComponentListener)listener).beatFailed();
+          ((FlowComponentListener) listener).beatFailed();
         }
       }
     }
@@ -213,7 +227,7 @@ public class ComboSyncher extends ComponentBase implements Layerable {
         music = null;
         for (Object listener : listeners) {
           if (listener instanceof FlowComponentListener) {
-            ((FlowComponentListener)listener).songEnded();
+            ((FlowComponentListener) listener).songEnded();
           }
         }
       }

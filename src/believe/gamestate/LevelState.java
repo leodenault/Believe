@@ -4,6 +4,7 @@ import believe.character.Character.DamageListener;
 import believe.character.Faction;
 import believe.character.playable.EnemyCharacter;
 import believe.character.playable.PlayableCharacter;
+import believe.core.io.FontLoader;
 import believe.gui.ProgressBar;
 import believe.map.gui.LevelMap;
 import believe.map.gui.MapManager;
@@ -48,7 +49,9 @@ public abstract class LevelState extends GameStateBase
     this.physicsManager = physicsManager;
     this.pauseAction = new ChangeToTemporaryStateAction<>(GamePausedOverlay.class, this, game);
     this.gameOverAction = new ChangeToTemporaryStateAction<>(GameOverState.class, this, game);
-    this.focusBar = new ProgressBar(container, container.getGraphics().getFont());
+    this.focusBar = new ProgressBar(container, FontLoader.getInstance().getBaseFontAtSize(15));
+    this.focusBar.setBorderSize(1);
+    this.focusBar.setTextPadding(0);
   }
 
   @Override
