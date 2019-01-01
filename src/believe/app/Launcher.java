@@ -73,6 +73,12 @@ public class Launcher extends StateBasedGame {
     }
   }
 
+  @Override
+  protected void preUpdateState(GameContainer container, int delta) throws SlickException {
+    super.preUpdateState(container, delta);
+    container.getGraphics().setFont(fontLoader.getBaseFont());
+  }
+
   private void loadResources(GameContainer container) {
     Log.info("Loading resources...");
     fontLoader = new FontLoader(container.getWidth(), container.getHeight());
