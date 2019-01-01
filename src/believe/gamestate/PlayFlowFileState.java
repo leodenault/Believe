@@ -31,7 +31,6 @@ public class PlayFlowFileState extends GameStateBase
   private StateBasedGame game;
 
   public PlayFlowFileState(GameContainer gameContainer, StateBasedGame game) {
-    super(gameContainer);
     this.gameContainer = gameContainer;
     this.pauseAction = new ChangeToTemporaryStateAction<>(GamePausedOverlay.class, this, game);
     enteringFromPauseMenu = false;

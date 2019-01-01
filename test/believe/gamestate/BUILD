@@ -3,6 +3,7 @@ java_test(
     srcs = ["PlatformingStateTest.java"],
     test_class = "believe.gamestate.PlatformingStateTest",
     deps = [
+        "//src/believe/core/io",
         "//src/believe/gamestate",
         "//src/believe/gamestate:package-info",
         "//src/believe/map/gui",

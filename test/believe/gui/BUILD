@@ -1,16 +1,4 @@
 java_test(
-    name = "CharacterDialogueTest",
-    srcs = ["CharacterDialogueTest.java"],
-    test_class = "believe.gui.CharacterDialogueTest",
-    deps = [
-        "//src/believe/gui",
-        "//src/believe/gui:package-info",
-        "//third_party/junit",
-        "//third_party/slick",
-    ],
-)
-
-java_test(
     name = "DirectionalPanelTest",
     srcs = ["DirectionalPanelTest.java"],
     test_class = "believe.gui.DirectionalPanelTest",

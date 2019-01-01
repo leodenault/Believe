@@ -76,11 +76,11 @@ public class TextComponent extends ComponentBase {
     this.wrappingMode = WrappingMode.WRAP;
     this.horizontalTextAlignment = HorizontalTextAlignment.CENTERED;
     this.verticalTextAlignment = VerticalTextAlignment.MIDDLE;
-    this.textHeight = calculateTextHeight();
     this.colorSet = DEFAULT_COLOR_SET;
     this.borderSize = DEFAULT_PADDING;
     this.textPadding = borderSize + DEFAULT_PADDING;
     chopText(text);
+    this.textHeight = calculateTextHeight();
   }
 
   public void setColorSet(ColorSet set) {

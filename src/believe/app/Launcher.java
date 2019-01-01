@@ -16,6 +16,8 @@ public class Launcher extends StateBasedGame {
   private final AppGameContainer gameContainer;
   private final List<StateInstantiator> gameStates;
 
+  private FontLoader fontLoader;
+
   private Launcher(
       String title, List<StateInstantiator> gameStates, int width, int height, boolean windowed)
       throws SlickException {
@@ -64,15 +66,17 @@ public class Launcher extends StateBasedGame {
 
   @Override
   public void initStatesList(GameContainer container) throws SlickException {
-    loadResources();
+    loadResources(container);
+    container.getGraphics().setFont(fontLoader.getBaseFont());
     for (StateInstantiator instantiator : gameStates) {
-      addState(instantiator.create(container, this));
+      addState(instantiator.create(container, this, fontLoader));
     }
   }
 
-  private void loadResources() {
+  private void loadResources(GameContainer container) {
     Log.info("Loading resources...");
-    FontLoader.getInstance().load();
+    fontLoader = new FontLoader(container.getWidth(), container.getHeight());
+    fontLoader.load();
     Log.info("Finished loading resources.");
   }
 }

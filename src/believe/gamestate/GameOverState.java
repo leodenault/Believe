@@ -28,7 +28,6 @@ public final class GameOverState extends GameStateBase implements TemporaryState
       GameContainer gameContainer,
       StateBasedGame game,
       ExitTemporaryStateAction exitGameOverStateAction) throws SlickException {
-    super(gameContainer);
     this.game = game;
     this.exitGameOverStateAction = exitGameOverStateAction;
     this.retrySelection =

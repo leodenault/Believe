@@ -6,6 +6,7 @@ import static believe.util.Util.hashMapOf;
 import believe.app.Launcher;
 import believe.app.flag_parsers.CommandLineParser;
 import believe.app.flags.AppFlags;
+import believe.core.io.FontLoader;
 import believe.core.io.ReloadableFileSystemLocation;
 import believe.gamestate.GameOverState;
 import believe.gamestate.GamePausedOverlay;
@@ -23,7 +24,6 @@ import org.newdawn.slick.util.ResourceLoader;
 import java.util.Arrays;
 
 public class LevelEditor {
-
   public static void main(String[] args) {
     AppFlags flags = CommandLineParser.parse(AppFlags.class, args);
 
@@ -35,21 +35,23 @@ public class LevelEditor {
 
     Launcher.setUpAndLaunch(
         "Believe Level Editor",
-        Arrays.asList((container, game) -> new PlatformingState(container,
+        Arrays.asList((container, game, fontLoader) -> new PlatformingState(container,
                 game,
                 MapManager.defaultManager(),
                 PhysicsManager.getInstance(),
-                hashMapOf(entry(Input.KEY_R, state -> LevelEditor.resetLevel(state, container,
-                    game)))),
-            (container, game) -> new GamePausedOverlay(container, game, container::exit),
-            (container, game) -> new GameOverState(container, game, container::exit)),
+                hashMapOf(entry(Input.KEY_R, state -> LevelEditor.resetLevel(state, container))),
+                fontLoader),
+            (container, game, fontLoader) -> new GamePausedOverlay(container,
+                game,
+                container::exit),
+            (container, game, fontLoader) -> new GameOverState(container, game, container::exit)),
         flags.width(),
         flags.height(),
         flags.windowed());
   }
 
   private static Void resetLevel(
-      PlatformingState state, GameContainer container, StateBasedGame game) {
+      PlatformingState state, GameContainer container) {
     try {
       state.reloadLevel(container);
     } catch (SlickException e) {

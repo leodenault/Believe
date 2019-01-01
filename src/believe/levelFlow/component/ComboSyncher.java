@@ -25,7 +25,7 @@ public class ComboSyncher extends ComponentBase implements Layerable {
   protected static final float ERROR_LENGTH = 0.15f; // In seconds
   protected static final float BUFFER_TIME = 2.5f; // In seconds
 
-  private final TrueTypeFont font;
+  private final Font font;
 
   private int bpm;
   private float max;
@@ -43,28 +43,14 @@ public class ComboSyncher extends ComponentBase implements Layerable {
   private Queue<TimeKeyPair> actionsLeft;
   private HashMap<TimeKeyPair, Color> actionColors;
 
-  public ComboSyncher(GUIContext container, int bpm) {
-    this(container, new SynchedComboPattern(), bpm, 0, 0, 0, 0);
+  public ComboSyncher(GUIContext container, Font font, int bpm) {
+    this(container, new SynchedComboPattern(), font, bpm, 0, 0, 0, 0);
   }
 
   public ComboSyncher(
       GUIContext container,
       SynchedComboPattern pattern,
-      int bpm,
-      int x,
-      int y,
-      int width,
-      int height) {
-    this(container, pattern, FontLoader.getInstance().getBaseFont(), bpm, x, y, width, height);
-  }
-
-  /**
-   * Used for testing
-   */
-  protected ComboSyncher(
-      GUIContext container,
-      SynchedComboPattern pattern,
-      TrueTypeFont font,
+      Font font,
       int bpm,
       int x,
       int y,

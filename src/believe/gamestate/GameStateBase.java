@@ -1,15 +1,12 @@
 package believe.gamestate;
 
-import believe.core.io.FontLoader;
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.GameState;
 
 public abstract class GameStateBase extends BasicGameState {
 
-  public GameStateBase(GameContainer gameContainer) {
+  public GameStateBase() {
     GameStateRegistry.getInstance().addEntry(this);
-    gameContainer.getGraphics().setFont(FontLoader.getInstance().getBaseFont());
   }
 
   public static int getStateID(Class<? extends GameState> state) {

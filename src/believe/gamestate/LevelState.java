@@ -42,15 +42,15 @@ public abstract class LevelState extends GameStateBase
       GameContainer container,
       StateBasedGame game,
       MapManager mapManager,
-      PhysicsManager physicsManager) {
-    super(container);
+      PhysicsManager physicsManager,
+      FontLoader fontLoader) {
     this.container = container;
     this.game = game;
     this.mapManager = mapManager;
     this.physicsManager = physicsManager;
     this.pauseAction = new ChangeToTemporaryStateAction<>(GamePausedOverlay.class, this, game);
     this.gameOverAction = new ChangeToTemporaryStateAction<>(GameOverState.class, this, game);
-    this.focusBar = new ProgressBar(container, FontLoader.getInstance().getBaseFontAtSize(15));
+    this.focusBar = new ProgressBar(container, fontLoader.getBaseFontAtSize(15));
     this.focusBar.setBorderSize(1);
     this.focusBar.setTextPadding(0);
   }

@@ -17,6 +17,7 @@ java_library(
         "//src/believe/character:faction",
         "//src/believe/character/playable",
         "//src/believe/core",
+        "//src/believe/core/io",
         "//src/believe/graphics_transitions",
         "//src/believe/gui",
         "//src/believe/levelFlow/component",

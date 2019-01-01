@@ -19,24 +19,29 @@ import org.newdawn.slick.state.StateBasedGame;
 import java.util.Arrays;
 
 public class Believe {
-  @Nullable
-  private static ChangeStateAction<MainMenuState> returnToMainMenuAction;
+  @Nullable private static ChangeStateAction<MainMenuState> returnToMainMenuAction;
 
   public static void main(String[] args) {
     AppFlags flags = CommandLineParser.parse(AppFlags.class, args);
     PhysicsManager physicsManager = PhysicsManager.getInstance();
     Launcher.setUpAndLaunch(
         "Believe",
-        Arrays.asList(MainMenuState::new,
-            OptionsMenuState::new,
-            FlowFilePickerMenuState::new,
-            PlayFlowFileState::new,
-            (container, game) -> new GamePausedOverlay(container,
+        Arrays.asList((container, game, fontLoader) -> new MainMenuState(container, game),
+            (container, game, fontLoader) -> new OptionsMenuState(container, game),
+            (container, game, fontLoader) -> new FlowFilePickerMenuState(container, game),
+            (container, game, fontLoader) -> new PlayFlowFileState(container, game),
+            (container, game, fontLoader) -> new GamePausedOverlay(container,
                 game,
                 () -> getOrCreateExitToMainMenuAction(game).componentActivated(null)),
-            (container, game) -> new PlatformingState(container, game, physicsManager),
-            (container, game) -> new ArcadeState(container, game, physicsManager),
-            (container, game) -> new GameOverState(container,
+            (container, game, fontLoader) -> new PlatformingState(container,
+                game,
+                physicsManager,
+                fontLoader),
+            (container, game, fontLoader) -> new ArcadeState(container,
+                game,
+                physicsManager,
+                fontLoader),
+            (container, game, fontLoader) -> new GameOverState(container,
                 game,
                 () -> getOrCreateExitToMainMenuAction(game).componentActivated(null))),
         flags.width(),

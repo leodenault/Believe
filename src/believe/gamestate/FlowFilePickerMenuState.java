@@ -1,18 +1,17 @@
 package believe.gamestate;
 
-import java.io.File;
-import java.io.IOException;
-
 import believe.gui.MenuSelection;
 import believe.gui.TextComponent;
 import believe.gui.VerticalKeyboardScrollpanel;
 import believe.util.Util;
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+
+import java.io.File;
+import java.io.IOException;
 
 public class FlowFilePickerMenuState extends GameStateBase {
 
@@ -22,7 +21,6 @@ public class FlowFilePickerMenuState extends GameStateBase {
 
   public FlowFilePickerMenuState(GameContainer container, StateBasedGame game)
       throws SlickException {
-    super(container);
     int cWidth = container.getWidth();
     int cHeight = container.getHeight();
 
