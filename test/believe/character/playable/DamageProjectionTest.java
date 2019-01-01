@@ -46,7 +46,7 @@ public final class DamageProjectionTest {
 
     assertThat(projection.getFloatX(), is(equalTo(200f)));
     assertThat(projection.getFloatY(), is(equalTo(400f)));
-    assertThat(projection.getVerticalSpeed(), is(equalTo(0f)));
+    assertThat(projection.getVerticalSpeed(), is(equalTo(-0.225f)));
   }
 
   @Test
