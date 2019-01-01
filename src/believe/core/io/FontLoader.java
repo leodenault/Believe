@@ -35,11 +35,11 @@ public class FontLoader {
     baseSize = calculateFontSize(screenWidth, screenHeight);
   }
 
-  public TrueTypeFont getBaseFont() {
+  public org.newdawn.slick.Font getBaseFont() {
     return verdana;
   }
 
-  public TrueTypeFont getBaseFontAtSize(float size) {
+  public org.newdawn.slick.Font getBaseFontAtSize(float size) {
     return new TrueTypeFont(baseFont.deriveFont(size), /* antiAlias= */ true);
   }
 
