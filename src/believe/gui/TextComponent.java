@@ -127,11 +127,17 @@ public class TextComponent extends ComponentBase {
   @Override
   public void resetLayout() {}
 
-  public void scroll() {
+  /**
+   * Scrolls the text contain within this component. If there is no text left to scroll up, return
+   * false. Otherwise, return true.
+   */
+  public boolean scroll() {
     int numDisplayedLines = calculateNumDisplayedLines();
     if (numDisplayedLines + currentFragmentIndex < textFragments.size()) {
       currentFragmentIndex += numDisplayedLines;
+      return true;
     }
+    return false;
   }
 
   @Override
