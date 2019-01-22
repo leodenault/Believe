@@ -43,12 +43,12 @@ BELIEVE_RES = [
 
 package_group(
     name = "believe_src_pkgs",
-    packages = ["//src/..."],
+    packages = ["//java/..."],
 )
 
 package_group(
     name = "believe_test_pkgs",
-    packages = ["//test/..."],
+    packages = ["//javatests/..."],
 )
 
 package_group(
@@ -65,7 +65,7 @@ believe_binary(
     jar_name = "Believe.jar",
     main_class = BELIEVE_MAIN_CLASS,
     resources = BELIEVE_RES,
-    runtime_deps = ["//src/believe/app/game"],
+    runtime_deps = ["//java/believe/app/game"],
 )
 
 pkg_zip(
@@ -79,7 +79,7 @@ believe_binary(
     jar_name = "Believe.jar",
     main_class = BELIEVE_MAIN_CLASS,
     resources = BELIEVE_RES,
-    runtime_deps = ["//src/believe/app/game"],
+    runtime_deps = ["//java/believe/app/game"],
 )
 
 pkg_zip(
@@ -93,7 +93,7 @@ believe_binary(
     jar_name = "Believe.jar",
     main_class = BELIEVE_MAIN_CLASS,
     resources = BELIEVE_RES,
-    runtime_deps = ["//src/believe/app/game"],
+    runtime_deps = ["//java/believe/app/game"],
 )
 
 pkg_zip(
@@ -107,7 +107,7 @@ believe_binary(
     jar_name = "Believe.jar",
     main_class = BELIEVE_MAIN_CLASS,
     resources = BELIEVE_RES,
-    runtime_deps = ["//src/believe/app/game"],
+    runtime_deps = ["//java/believe/app/game"],
 )
 
 pkg_zip(
@@ -121,7 +121,7 @@ believe_binary(
     jar_name = "Believe.jar",
     main_class = BELIEVE_MAIN_CLASS,
     resources = BELIEVE_RES,
-    runtime_deps = ["//src/believe/app/game"],
+    runtime_deps = ["//java/believe/app/game"],
 )
 
 pkg_zip(
@@ -144,7 +144,7 @@ believe_binary(
         "//res/music",
         "//res/sfx",
     ],
-    runtime_deps = ["//src/believe/app/editor"],
+    runtime_deps = ["//java/believe/app/editor"],
 )
 
 pkg_zip(
@@ -162,7 +162,7 @@ believe_binary(
         "//res/music",
         "//res/sfx",
     ],
-    runtime_deps = ["//src/believe/app/editor"],
+    runtime_deps = ["//java/believe/app/editor"],
 )
 
 pkg_zip(
