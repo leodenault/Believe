@@ -2,6 +2,7 @@ licenses(["notice"])
 
 java_library(
     name = "truth",
+    testonly = 1,
     visibility = [
         "//:believe_test_pkgs",
         "//java/believe/logging/testing:__subpackages__",
