@@ -4,8 +4,7 @@ java_library(
     name = "junit",
     testonly = 1,
     visibility = [
-        "//:believe_test_pkgs",
-        "//java/believe/logging/testing:__pkg__",
+        "//:believe_all_pkgs",
     ],
     exports = [
         "@junit_jupiter_api//jar",
