@@ -11,11 +11,13 @@ java_library(
     srcs = [
         "LogMessage.java",
         "VerifiableLogSystem.java",
+        "VerifiableLogSystemExtension.java",
     ],
     deps = [
         ":package_info",
         "//third_party/auto_value",
         "//third_party/javax:annotations",
+        "//third_party/junit",
         "//third_party/slick",
     ],
 )

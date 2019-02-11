@@ -1,3 +1,4 @@
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 maven_jar(
@@ -10,14 +11,41 @@ maven_jar(
     artifact = "org.mockito:mockito-core:2.13.0",
 )
 
+# This is unfortunately required because of a bug in JUnit 5 where it requires
+# org.junit.ComparisonFailure.
 maven_jar(
-    name = "junit_maven",
+    name = "junit",
+    artifact = "junit:junit:4.12",
+)
+
+maven_jar(
+    name = "junit_jupiter_api",
     artifact = "org.junit.jupiter:junit-jupiter-api:5.3.2",
 )
 
 maven_jar(
-    name = "junit_commons",
-    artifact = "org.junit.platform:junit-platform-commons:1.3.2",
+    name = "junit_jupiter_engine",
+    artifact = "org.junit.jupiter:junit-jupiter-engine:5.3.2",
+)
+
+maven_jar(
+    name = "junit_platform_commons",
+    artifact = "org.junit.platform:junit-platform-commons:1.4.0",
+)
+
+maven_jar(
+    name = "junit_platform_console",
+    artifact = "org.junit.platform:junit-platform-console:1.4.0",
+)
+
+maven_jar(
+    name = "junit_platform_engine",
+    artifact = "org.junit.platform:junit-platform-engine:1.4.0",
+)
+
+maven_jar(
+    name = "junit_platform_launcher",
+    artifact = "org.junit.platform:junit-platform-launcher:1.4.0",
 )
 
 maven_jar(
@@ -75,4 +103,10 @@ maven_jar(
 maven_jar(
     name = "diff_utils",
     artifact = "com.googlecode.java-diff-utils:diffutils:1.2",
+)
+
+git_repository(
+    name = "junit5_bazel_support",
+    remote = "https://github.com/junit-team/junit5-samples.git",
+    tag = "prototype-1",
 )

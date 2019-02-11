@@ -4,6 +4,19 @@ package(
 )
 
 java_test(
+    name = "VerifiableLogSystemExtensionTest",
+    srcs = ["VerifiableLogSystemExtensionTest.java"],
+    deps = [
+        "//java/believe/logging/testing",
+        "//java/believe/logging/testing:package_info",
+        "//third_party/junit",
+        "//third_party/mockito",
+        "//third_party/slick",
+        "//third_party/truth",
+    ],
+)
+
+java_test(
     name = "VerifiableLogSystemTest",
     srcs = ["VerifiableLogSystemTest.java"],
     deps = [
