@@ -12,6 +12,7 @@ java_library(
     deps = [
         ":package_info",
         "//java/believe/logging/testing",
+        "//third_party/junit",
         "//third_party/truth",
     ],
 )

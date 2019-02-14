@@ -22,7 +22,6 @@ public final class VerifiableLogSystem implements LogSystem {
 
   public List<LogMessage> getLogMessages() {
     return new ArrayList<>(logMessages);
-    // return Collections.unmodifiableList(logMessages);
   }
 
   @Override
