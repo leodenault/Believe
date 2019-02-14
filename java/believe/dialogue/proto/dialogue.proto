@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package believe.dialogue.proto;
+
+option java_package = "believe.dialogue.proto";
+option java_outer_classname = "DialogueProto";
+
+// A single response within a dialogue that is spoken by a character.
+message Response {
+  // The text representing what a character is saying.
+  optional string response_text = 1;
+  // The portrait that should be displayed when displaying this response. If
+  // empty, no portrait will be displayed.
+  optional string portrait_location = 2;
+}
+
+// A series of responses between multiple characters speaking to each other.
+message Dialogue {
+  // The set of responses between the characters. The order in which the
+  // responses are defined determines the order in which they're displayed.
+  repeated Response responses = 1;
+}
+
+// A map of dialogues between characters for easy storage with the names of the
+// dialogues as keys and the dialogues as values.
+message DialogueMap {
+  // The dialogues that will be stored and loaded into the game.
+  map<string, Dialogue> dialogues = 1;
+}
