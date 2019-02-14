@@ -1,16 +1,28 @@
 licenses(["notice"])
 
+package(
+    default_testonly = True,
+    default_visibility = ["//:believe_all_pkgs"],
+)
+
 java_library(
     name = "truth",
-    testonly = 1,
-    visibility = [
-        "//:believe_test_pkgs",
-        "//java/believe/logging/testing:__subpackages__",
-        "//java/believe/logging/truth:__subpackages__",
-    ],
     exports = [
-        "@diff_utils//jar",
         "@google_guava//jar",
         "@google_truth//jar",
+    ],
+    runtime_deps = [
+        "@diff_utils//jar",
+    ],
+)
+
+java_library(
+    name = "truth8",
+    exports = [
+        "@google_guava//jar",
+        "@google_truth_java8//jar",
+    ],
+    runtime_deps = [
+        "@diff_utils//jar",
     ],
 )

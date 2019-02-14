@@ -86,6 +86,11 @@ maven_jar(
 )
 
 maven_jar(
+    name = "google_truth_java8",
+    artifact = "com.google.truth.extensions:truth-java8-extension:0.42",
+)
+
+maven_jar(
     name = "google_auto_value_annotations",
     artifact = "com.google.auto.value:auto-value-annotations:1.6.2",
 )
