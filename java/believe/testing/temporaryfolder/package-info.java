@@ -1,0 +1,6 @@
+@ParametersAreNonnullByDefault @ReturnTypesAreNonnulByDefault @FieldsAreNonnulByDefault
+package believe.testing.temporaryfolder;
+
+import believe.app.annotation.Nullability.FieldsAreNonnulByDefault;
+import believe.app.annotation.Nullability.ReturnTypesAreNonnulByDefault;
+import javax.annotation.ParametersAreNonnullByDefault;
