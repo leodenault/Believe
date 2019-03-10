@@ -6,17 +6,15 @@ import believe.dialogue.proto.DialogueProto.Dialogue;
 import believe.dialogue.proto.DialogueProto.DialogueMap;
 import believe.dialogue.proto.DialogueProto.Response;
 import believe.logging.testing.VerifiableLogSystem;
+import believe.logging.testing.VerifiableLogSystem.LogSeverity;
 import believe.logging.testing.VerifiableLogSystemExtension;
 import believe.logging.truth.VerifiableLogSystemSubject;
 import believe.testing.temporaryfolder.TemporaryFolder;
 import believe.testing.temporaryfolder.UsesTemporaryFolder;
 import com.google.common.truth.Truth8;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -40,8 +38,8 @@ public final class DialogueManagerTest {
   @ExtendWith(VerifiableLogSystemExtension.class)
   public void loadDialogueMap_mapExists_correctlyLoads(
       TemporaryFolder temporaryFolder, VerifiableLogSystem logSystem) throws IOException {
-    DIALOGUE_MAP.writeTo(new FileOutputStream(temporaryFolder.location() + "/some_mapping.pb"));
-    DialogueManager manager = new DialogueManager(temporaryFolder.location());
+    DIALOGUE_MAP.writeTo(temporaryFolder.writeToFile("some_mapping.pb"));
+    DialogueManager manager = new DialogueManager(temporaryFolder.getFolder());
 
     manager.loadDialogueMap("some_mapping");
 
@@ -52,18 +50,44 @@ public final class DialogueManagerTest {
 
   @Test
   @UsesTemporaryFolder
-  public void loadDialogueMap_mapDoesNotExist_throwsIoException(TemporaryFolder temporaryFolder) {
-    DialogueManager manager = new DialogueManager(temporaryFolder.location());
+  @ExtendWith(VerifiableLogSystemExtension.class)
+  public void loadDialogueMap_fileIsNotAFolder_logsError(
+      TemporaryFolder temporaryFolder, VerifiableLogSystem logSystem) throws IOException {
+    temporaryFolder.writeToFile("some_mapping.pb").close();
+    DialogueManager manager = new DialogueManager(temporaryFolder.getFile("some_mapping.pb"));
 
-    Assertions.assertThrows(IOException.class, () -> manager.loadDialogueMap("non-existent map"));
+    manager.loadDialogueMap("irrelevant_file.pb");
+
+    VerifiableLogSystemSubject
+        .assertThat(logSystem)
+        .loggedAtLeastOneMessageThat()
+        .hasPattern(".*directory is actually a file.*")
+        .hasSeverity(LogSeverity.ERROR);
+  }
+
+  @Test
+  @UsesTemporaryFolder
+  @ExtendWith(VerifiableLogSystemExtension.class)
+  public void loadDialogueMap_mapDoesNotExist_logsError(
+      TemporaryFolder temporaryFolder, VerifiableLogSystem logSystem) throws IOException {
+    temporaryFolder.writeToFile("some_mapping.txt").close();
+    DialogueManager manager = new DialogueManager(temporaryFolder.getFolder());
+
+    manager.loadDialogueMap("some_mapping");
+
+    VerifiableLogSystemSubject
+        .assertThat(logSystem)
+        .loggedAtLeastOneMessageThat()
+        .hasPattern("some_mapping.pb does not exist.")
+        .hasSeverity(LogSeverity.ERROR);
   }
 
   @Test
   @UsesTemporaryFolder
   public void getDialogue_returnsDialogueForGivenName(TemporaryFolder temporaryFolder)
       throws IOException {
-    DIALOGUE_MAP.writeTo(new FileOutputStream(temporaryFolder.location() + "/some_mapping.pb"));
-    DialogueManager manager = new DialogueManager(temporaryFolder.location());
+    DIALOGUE_MAP.writeTo(temporaryFolder.writeToFile("some_mapping.pb"));
+    DialogueManager manager = new DialogueManager(temporaryFolder.getFolder());
 
     Optional<Dialogue> dialogue = manager.getDialogue("some_mapping", DIALOGUE_NAME);
 
@@ -76,14 +100,14 @@ public final class DialogueManagerTest {
   @ExtendWith(VerifiableLogSystemExtension.class)
   public void getDialogue_dialogueMapDoesNotExist_logsErrorAndReturnsEmpty(
       TemporaryFolder temporaryFolder, VerifiableLogSystem logSystem) {
-    DialogueManager manager = new DialogueManager(temporaryFolder.location());
+    DialogueManager manager = new DialogueManager(temporaryFolder.getFolder());
 
     Optional<Dialogue> dialogue = manager.getDialogue("non-existent map", DIALOGUE_NAME);
 
     VerifiableLogSystemSubject
         .assertThat(logSystem)
         .loggedAtLeastOneMessageThat()
-        .hasPattern("Could not find dialogue map.*");
+        .hasPattern("non-existent map.pb does not exist.");
     Truth8.assertThat(dialogue).isEmpty();
   }
 
@@ -92,10 +116,8 @@ public final class DialogueManagerTest {
   @ExtendWith(VerifiableLogSystemExtension.class)
   public void getDialogue_dialogueDoesNotExist_logsErrorAndReturnsEmpty(
       TemporaryFolder temporaryFolder, VerifiableLogSystem logSystem) throws IOException {
-    DialogueMap
-        .getDefaultInstance()
-        .writeTo(new FileOutputStream(temporaryFolder.location() + "/some_mapping.pb"));
-    DialogueManager manager = new DialogueManager(temporaryFolder.location());
+    DialogueMap.getDefaultInstance().writeTo(temporaryFolder.writeToFile("some_mapping.pb"));
+    DialogueManager manager = new DialogueManager(temporaryFolder.getFolder());
 
     Optional<Dialogue> dialogue = manager.getDialogue("some_mapping", "bogus name");
 

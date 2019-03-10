@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
-import org.newdawn.slick.util.Log;
 
 import java.io.IOException;
 
@@ -15,23 +14,19 @@ import java.io.IOException;
 public final class TemporaryFolderExtension implements ParameterResolver, AfterEachCallback {
   private static final String DEFAULT_DIRECTORY_LOCATION = "test_data";
 
-  private final String directoryLocation;
-  private final TemporaryFolderManager temporaryFolderManager;
+  private final InstantiableTemporaryFolder temporaryFolder;
 
   public TemporaryFolderExtension() {
-    this(DEFAULT_DIRECTORY_LOCATION, new TemporaryFolderManagerImpl());
+    this(new TemporaryFolderImpl(DEFAULT_DIRECTORY_LOCATION));
   }
 
-  TemporaryFolderExtension(
-      String directoryLocation,
-      TemporaryFolderManager temporaryFolderManager) {
-    this.directoryLocation = directoryLocation;
-    this.temporaryFolderManager = temporaryFolderManager;
+  TemporaryFolderExtension(InstantiableTemporaryFolder temporaryFolder) {
+    this.temporaryFolder = temporaryFolder;
   }
 
   @Override
   public void afterEach(ExtensionContext context) {
-    temporaryFolderManager.cleanUp();
+    temporaryFolder.remove();
   }
 
   @Override
@@ -46,10 +41,10 @@ public final class TemporaryFolderExtension implements ParameterResolver, AfterE
       ParameterContext parameterContext, ExtensionContext extensionContext)
       throws ParameterResolutionException {
     try {
-      return temporaryFolderManager.create(directoryLocation);
+      temporaryFolder.create();
+      return temporaryFolder;
     } catch (IOException e) {
-      Log.error("Could not create temporary folder '" + directoryLocation + "'.", e);
+      throw new RuntimeException("Could not create temporary folder.", e);
     }
-    return null;
   }
 }

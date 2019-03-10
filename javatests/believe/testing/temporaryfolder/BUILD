@@ -9,8 +9,6 @@ java_junit5_test(
     name = "TemporaryFolderExtensionTest",
     srcs = ["TemporaryFolderExtensionTest.java"],
     deps = [
-        "//java/believe/logging/testing",
-        "//java/believe/logging/truth",
         "//java/believe/testing/mockito",
         "//java/believe/testing/temporaryfolder",
         "//third_party/junit",
@@ -20,8 +18,8 @@ java_junit5_test(
 )
 
 java_junit5_test(
-    name = "TemporaryFolderManagerImplTest",
-    srcs = ["TemporaryFolderManagerImplTest.java"],
+    name = "TemporaryFolderImplTest",
+    srcs = ["TemporaryFolderImplTest.java"],
     deps = [
         "//java/believe/testing/temporaryfolder",
         "//third_party/junit",

@@ -6,10 +6,10 @@ package(
 java_library(
     name = "temporaryfolder",
     srcs = [
+        "InstantiableTemporaryFolder.java",
         "TemporaryFolder.java",
         "TemporaryFolderExtension.java",
-        "TemporaryFolderManager.java",
-        "TemporaryFolderManagerImpl.java",
+        "TemporaryFolderImpl.java",
         "UsesTemporaryFolder.java",
         "package-info.java",
     ],
