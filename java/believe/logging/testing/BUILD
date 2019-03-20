@@ -12,6 +12,7 @@ java_library(
         "LogMessage.java",
         "VerifiableLogSystem.java",
         "VerifiableLogSystemExtension.java",
+        "VerifiesLoggingCalls.java",
     ],
     deps = [
         ":package_info",
