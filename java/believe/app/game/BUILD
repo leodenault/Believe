@@ -9,14 +9,48 @@ java_library(
     name = "game",
     srcs = ["Believe.java"],
     deps = [
+        "package-info",
+        ":dagger",
+        "//java/believe/app",
+        "//third_party/slick",
+    ],
+)
+
+java_library(
+    name = "internal",
+    srcs = [
+        "BelieveGame.java",
+        "Qualifiers.java",
+    ],
+    deps = [
+        ":package-info",
+        "//java/believe/app",
+        "//java/believe/app/flag_parsers",
+        "//java/believe/app/flags",
+        "//java/believe/core/io",
+        "//java/believe/gamestate",
+        "//java/believe/physics/manager",
+        "//java/believe/util",
+        "//third_party/javax:annotations",
+        "//third_party/slick",
+    ],
+)
+
+java_library(
+    name = "dagger",
+    srcs = [
+        "BelieveComponent.java",
+        "BelieveGameModule.java",
+    ],
+    deps = [
+        ":internal",
         ":package-info",
         "//java/believe/app",
         "//java/believe/app/flag_parsers",
         "//java/believe/app/flags",
         "//java/believe/gamestate",
         "//java/believe/physics/manager",
-        "//java/believe/util",
-        "//third_party/javax:annotations",
+        "//third_party/dagger",
         "//third_party/slick",
     ],
 )

@@ -78,30 +78,4 @@ public class Util {
   public static <K, V> Map<K, V> immutableMapOf(MapEntry<K, V>... entries) {
     return Collections.unmodifiableMap(hashMapOf(entries));
   }
-
-  public static void setNativePath() throws NoSuchFieldException, IllegalAccessException {
-    // IMPORTANT CODE FOR LOADING NATIVES!
-    final Field usrPathsField = ClassLoader.class.getDeclaredField("usr_paths");
-    usrPathsField.setAccessible(true);
-
-    //get array of paths
-    final String[] paths = (String[])usrPathsField.get(null);
-
-    //check if the path to add is already present
-    boolean pathExists = false;
-    for(String path : paths) {
-      if(path.equals(NATIVE_PATH)) {
-        pathExists = true;
-        break;
-      }
-    }
-
-    if (!pathExists) {
-      //add the new path
-      final String[] newPaths = Arrays.copyOf(paths, paths.length + 1);
-      newPaths[newPaths.length - 1] = NATIVE_PATH;
-      Log.info("Resetting java.library.path to contain natives");
-      usrPathsField.set(null, newPaths);
-    }
-  }
 }

@@ -13,7 +13,12 @@ package_group(
 
 java_library(
     name = "app",
-    srcs = glob(["*.java"]),
+    srcs = [
+        "AppUtil.java",
+        "ApplicationComponent.java",
+        "Launcher.java",
+        "StateInstantiator.java",
+    ],
     deps = [
         "//java/believe/core/io",
         "//java/believe/gamestate",

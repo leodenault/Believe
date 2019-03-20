@@ -82,6 +82,7 @@ def _believe_binary_impl(ctx):
                 third_party_libs.append(file)
             else:
                 generated_libs.append(file)
+    third_party_lib_paths = [file.path for file in third_party_libs]
 
     # Gather the data files which will reside outside of the final jar file.
     data_files = []
@@ -92,13 +93,14 @@ def _believe_binary_impl(ctx):
                 openal_files.append(file)
             else:
                 data_files.append(file)
+    data_file_paths = [file.short_path for file in data_files]
 
     # Gather the resource files which will be put into the final jar file.
     resource_files = [file for dep in ctx.attr.resources for file in dep.files]
 
     # Set up the manifest file contents.
     manifest_main_class = "Main-Class: " + ctx.attr.main_class
-    manifest_classpath = "Class-Path: " + " ".join([file.short_path for file in data_files + third_party_libs])
+    manifest_classpath = "Class-Path: " + " ".join(data_file_paths + third_party_lib_paths)
     manifest_content = manifest_main_class + "\n" + _normalize_classpath(manifest_classpath) + "\n"
 
     ctx.file_action(
@@ -213,6 +215,35 @@ def java_junit5_test(name = "", srcs = [], test_class = "", deps = []):
         main_class = "org.junit.platform.console.ConsoleLauncher",
         use_testrunner = False,
         deps = deps,
+    )
+
+def textproto(name = "", srcs = [], java_outer_class_name = "", proto_message = "", deps = []):
+    """Defines a set of protos written as textprotos and converts them to binary at build time.
+    """
+
+    outs = [(val[:val.rfind(".")] + ".pb") for val in srcs]
+    escaped_java_outer_class_name = java_outer_class_name.replace("$", "\\$$")
+    src_args = " ".join(["$(location " + src + ")" for src in srcs])
+    binary_name = name + "_proto_file_serializer"
+
+    native.java_binary(
+        name = binary_name,
+        main_class = "believe.tools.ProtoFileSerializer",
+        runtime_deps = ["//java/believe/tools:proto_file_serializer"] + deps,
+    )
+
+    cmd = "$(location :{binary_name}) {escaped_java_outer_class_name} $(@D) {src_args}".format(
+        binary_name = binary_name,
+        escaped_java_outer_class_name = escaped_java_outer_class_name,
+        src_args = src_args,
+    )
+
+    native.genrule(
+        name = name,
+        srcs = srcs,
+        outs = outs,
+        cmd = cmd,
+        tools = [":" + binary_name],
     )
 
 believe_binary = rule(

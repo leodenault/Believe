@@ -51,7 +51,7 @@ public class Launcher extends StateBasedGame {
   public static void setUpAndLaunch(
       String title, List<StateInstantiator> gameStates, int width, int height, boolean windowed) {
     try {
-      Util.setNativePath();
+      AppUtil.setNativesOnJavaLibraryPath();
       Launcher launcher = new Launcher(title, gameStates, width, height, windowed);
       launcher.launch();
     } catch (Exception e) {
