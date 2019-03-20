@@ -1,6 +1,17 @@
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
+# Load common Bazel targets defined by Google.
+http_archive(
+    name = "google_bazel_common",
+    strip_prefix = "bazel-common-1c225e62390566a9e88916471948ddd56e5f111c",
+    urls = ["https://github.com/google/bazel-common/archive/1c225e62390566a9e88916471948ddd56e5f111c.zip"],
+)
+
+load("@google_bazel_common//:workspace_defs.bzl", "google_common_workspace_rules")
+
+google_common_workspace_rules()
+
 maven_jar(
     name = "hamcrest_maven",
     artifact = "org.hamcrest:hamcrest-library:1.3",
@@ -110,8 +121,12 @@ maven_jar(
     artifact = "com.googlecode.java-diff-utils:diffutils:1.2",
 )
 
-git_repository(
-    name = "junit5_bazel_support",
-    remote = "https://github.com/junit-team/junit5-samples.git",
-    tag = "prototype-1",
+# We need this specific commit number because of a bug in the Dagger library at API v21.
+# See https://github.com/google/dagger/pull/1366#issuecomment-470016185 for context on the issue.
+DAGGER_VERSION_NUM = "9e0baea74aa2b2ef83f78898bac44851b9840f30"
+
+http_archive(
+    name = "google_dagger",
+    strip_prefix = "dagger-" + DAGGER_VERSION_NUM,
+    urls = ["https://github.com/google/dagger/archive/" + DAGGER_VERSION_NUM + ".zip"],
 )
