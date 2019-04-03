@@ -22,10 +22,11 @@ java_library(
     name = "internal",
     srcs = [
         "BelieveGame.java",
-        "InternalQualifiers.java",
     ],
     deps = [
+        ":internal_qualifiers",
         ":package-info",
+        ":qualifiers",
         "//java/believe/app",
         "//java/believe/app/flag_parsers",
         "//java/believe/app/flags",
@@ -56,14 +57,13 @@ java_library(
 
 java_library(
     name = "dagger_module",
-    srcs = [
-        "BelieveGameModule.java",
-        "GameStateInstantiators.java",
-    ],
+    srcs = ["BelieveGameModule.java"],
     visibility = ["//:believe_all_pkgs"],
     deps = [
         ":internal",
+        ":internal_qualifiers",
         ":package-info",
+        ":qualifiers",
         "//java/believe/app",
         "//java/believe/app/flag_parsers",
         "//java/believe/app/flags",
@@ -73,6 +73,23 @@ java_library(
         "//third_party/dagger",
         "//third_party/slick",
     ],
+)
+
+java_library(
+    name = "qualifiers",
+    srcs = [
+        "FirstState.java",
+        "GameStateInstantiators.java",
+    ],
+    visibility = ["//:believe_all_pkgs"],
+    deps = ["//third_party/javax:annotations"],
+)
+
+java_library(
+    name = "internal_qualifiers",
+    srcs = ["InternalQualifiers.java"],
+    visibility = ["//visibility:private"],
+    deps = ["//third_party/javax:annotations"],
 )
 
 java_library(

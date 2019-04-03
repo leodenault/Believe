@@ -58,7 +58,7 @@ java_library(
         ":gamestate",
         ":package-info",
         "//java/believe/app",
-        "//java/believe/app/game:dagger_module",
+        "//java/believe/app/game:qualifiers",
         "//third_party/dagger",
     ],
 )

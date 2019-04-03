@@ -2,6 +2,7 @@ package believe.app.game;
 
 import believe.app.StateInstantiator;
 import believe.app.game.InternalQualifiers.ApplicationTitle;
+import believe.app.game.InternalQualifiers.ModulePrivate;
 import believe.core.io.FontLoader;
 import believe.gamestate.ChangeStateAction;
 import believe.gamestate.ExitTemporaryStateAction;
@@ -58,13 +59,19 @@ abstract class BelieveGameModule {
   }
 
   @Provides
-  static List<StateInstantiator> provideStateInstantiators(
+  @FirstState
+  static StateInstantiator provideFirstStateInstantiator() {
+    return (container, game, fontLoader) -> new MainMenuState(container, game);
+  }
+
+  @Provides
+  @ModulePrivate
+  static Set<StateInstantiator> provideStateInstantiators(
       PhysicsManager physicsManager,
       ExitTemporaryStateAction exitTemporaryStateAction,
       @GameStateInstantiators Set<StateInstantiator> stateInstantiators) {
     return Stream.concat(
             Stream.of(
-                (container, game, fontLoader) -> new MainMenuState(container, game),
                 (container, game, fontLoader) ->
                     new GamePausedOverlay(container, game, exitTemporaryStateAction),
                 (container, game, fontLoader) ->
@@ -72,7 +79,7 @@ abstract class BelieveGameModule {
                 (container, game, fontLoader) ->
                     new GameOverState(container, game, exitTemporaryStateAction)),
             stateInstantiators.stream())
-        .collect(Collectors.toList());
+        .collect(Collectors.toSet());
   }
 
   @Binds
