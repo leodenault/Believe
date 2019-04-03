@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package believe.testing.proto;
+
+option java_package = "believe.testing.proto";
+option java_outer_classname = "TestProto";
+
+// Proto message used for testing.
+message TestMessage {
+  optional string content = 1;
+}
