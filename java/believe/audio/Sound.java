@@ -5,7 +5,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.Log;
 
 /** Wrapper for {@link org.newdawn.slick.Sound} instances. */
-public final class Sound {
+public class Sound {
   @Nullable private org.newdawn.slick.Sound slickSound;
 
   public Sound(String location) {
