@@ -1,6 +1,7 @@
 package believe.gamestate;
 
-import believe.core.Options;
+import believe.app.proto.GameOptionsProto.GameOptions;
+import believe.datamodel.DataProvider;
 import believe.gamestate.ExternalLoadGameAction.LoadableState;
 import believe.levelFlow.component.FlowComponent;
 import believe.levelFlow.component.FlowComponentListener;
@@ -8,6 +9,7 @@ import believe.levelFlow.parsing.FlowComponentBuilder;
 import believe.levelFlow.parsing.FlowFileParser;
 import believe.levelFlow.parsing.exceptions.FlowComponentBuilderException;
 import believe.levelFlow.parsing.exceptions.FlowFileParserException;
+import javax.inject.Inject;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -25,14 +27,17 @@ public class PlayFlowFileState extends GameStateBase
     implements FlowComponentListener, OverlayablePrecedingState, LoadableState {
   private final GameContainer gameContainer;
   private final ChangeToTemporaryStateAction<OverlayablePrecedingState> pauseAction;
+  private final DataProvider<GameOptions> gameOptions;
 
   boolean enteringFromPauseMenu;
   private FlowComponent component;
   private StateBasedGame game;
 
-  public PlayFlowFileState(GameContainer gameContainer, StateBasedGame game) {
+  @Inject
+  public PlayFlowFileState(GameContainer gameContainer, StateBasedGame game, DataProvider<GameOptions> gameOptions) {
     this.gameContainer = gameContainer;
     this.pauseAction = new ChangeToTemporaryStateAction<>(GamePausedOverlay.class, this, game);
+    this.gameOptions = gameOptions;
     enteringFromPauseMenu = false;
     this.game = game;
   }
@@ -47,9 +52,9 @@ public class PlayFlowFileState extends GameStateBase
     FlowFileParser parser = new FlowFileParser(reader, builder);
     parser.parse();
     this.component = builder.buildFlowComponent();
-    this.component.setSpeedMultiplier(Options.getInstance().flowSpeed);
-    this.component.setLocation((container.getWidth() - component.getWidth()) / 2,
-        container.getHeight() / 15);
+    this.component.setSpeedMultiplier(gameOptions.get().getGameplayOptions().getFlowSpeed());
+    this.component.setLocation(
+        (container.getWidth() - component.getWidth()) / 2, container.getHeight() / 15);
     this.component.setHeight(container.getHeight());
     this.component.addListener(this);
   }
@@ -69,8 +74,7 @@ public class PlayFlowFileState extends GameStateBase
   }
 
   @Override
-  public void init(GameContainer container, StateBasedGame game) throws SlickException {
-  }
+  public void init(GameContainer container, StateBasedGame game) throws SlickException {}
 
   @Override
   public void render(GameContainer container, StateBasedGame game, Graphics g)

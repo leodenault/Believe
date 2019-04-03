@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package believe.app.proto;
+
+option java_package = "believe.app.proto";
+option java_outer_classname = "GameOptionsProto";
+
+// Contains various options about running the game.
+message GameOptions {
+  // BinaryProtoFileUtil relating to how the player plays the game.
+  optional GameplayOptions gameplay_options = 1;
+}
+
+// BinaryProtoFileUtil relating to how the player plays the game.
+message GameplayOptions {
+  // The speed at which notes scroll up when playing a flow file.
+  optional int32 flow_speed = 1;
+}

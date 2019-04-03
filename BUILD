@@ -1,10 +1,12 @@
-load("//bzl:rules.bzl", "believe_binary", "pkg_all", "pkg_zip")
+load("//bzl:rules.bzl", "believe_binary", "pkg_all", "pkg_zip", "textproto")
 
 BELIEVE_MAIN_CLASS = "believe.app.game.Believe"
 
+# Files which should be stored outside of the JAR file.
 BELIEVE_DATA_FILES = [
     "//customFlowFiles:custom_flow_files",
     "//customSongs:custom_songs",
+    "game_options.pb",
 ]
 
 WINDOWS_X86_NATIVES = [
@@ -35,10 +37,17 @@ MAC_NATIVES = [
     "//third_party/jinput:mac",
 ]
 
+# Files that should be stored inside the JAR as resources. These should be immutable as we shouldn't
+# be writing to resources within the JAR file.
 BELIEVE_RES = [
     "//data",
     "//levelFlowFiles:level_flow_files",
     "//res",
+]
+
+RUNTIME_DEPS = [
+    ":game_options_textproto",
+    "//java/believe/app/game",
 ]
 
 package_group(
@@ -53,10 +62,15 @@ package_group(
 
 package_group(
     name = "believe_all_pkgs",
-    includes = [
-        ":believe_src_pkgs",
-        ":believe_test_pkgs",
-    ],
+    packages = ["//..."],
+)
+
+textproto(
+    name = "game_options_textproto",
+    srcs = ["game_options.textproto"],
+    java_outer_class_name = "believe.app.proto.GameOptionsProto",
+    proto_message = "GameOptions",
+    deps = ["//java/believe/app/proto:game_options_java_proto"],
 )
 
 believe_binary(
@@ -65,7 +79,7 @@ believe_binary(
     jar_name = "Believe.jar",
     main_class = BELIEVE_MAIN_CLASS,
     resources = BELIEVE_RES,
-    runtime_deps = ["//java/believe/app/game"],
+    runtime_deps = RUNTIME_DEPS,
 )
 
 pkg_zip(
@@ -79,7 +93,7 @@ believe_binary(
     jar_name = "Believe.jar",
     main_class = BELIEVE_MAIN_CLASS,
     resources = BELIEVE_RES,
-    runtime_deps = ["//java/believe/app/game"],
+    runtime_deps = RUNTIME_DEPS,
 )
 
 pkg_zip(
@@ -93,7 +107,7 @@ believe_binary(
     jar_name = "Believe.jar",
     main_class = BELIEVE_MAIN_CLASS,
     resources = BELIEVE_RES,
-    runtime_deps = ["//java/believe/app/game"],
+    runtime_deps = RUNTIME_DEPS,
 )
 
 pkg_zip(
@@ -107,7 +121,7 @@ believe_binary(
     jar_name = "Believe.jar",
     main_class = BELIEVE_MAIN_CLASS,
     resources = BELIEVE_RES,
-    runtime_deps = ["//java/believe/app/game"],
+    runtime_deps = RUNTIME_DEPS,
 )
 
 pkg_zip(
@@ -121,7 +135,7 @@ believe_binary(
     jar_name = "Believe.jar",
     main_class = BELIEVE_MAIN_CLASS,
     resources = BELIEVE_RES,
-    runtime_deps = ["//java/believe/app/game"],
+    runtime_deps = RUNTIME_DEPS,
 )
 
 pkg_zip(

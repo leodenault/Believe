@@ -1,11 +1,11 @@
 package believe.gui;
 
+import believe.audio.Sound;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
@@ -14,14 +14,18 @@ import org.newdawn.slick.gui.GUIContext;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 public class NumberPicker extends MenuSelection {
 
-  @SuppressWarnings("serial") private static final Polygon ARROW = new Polygon() {{
-    addPoint(-0.5f, 0);
-    addPoint(0.5f, -1);
-    addPoint(0.5f, 1);
-  }};
+  @SuppressWarnings("serial")
+  private static final Polygon ARROW =
+      new Polygon() {
+        {
+          addPoint(-0.5f, 0);
+          addPoint(0.5f, -1);
+          addPoint(0.5f, 1);
+        }
+      };
+
   private static final Color ARROW_DEPRESSED = Color.white;
   private static final Color ARROW_PRESSED = new Color(0x999999);
   private static final int PRESS_DELAY = 100;
@@ -35,20 +39,23 @@ public class NumberPicker extends MenuSelection {
   private int max;
   private Sound pressSound;
 
-  public NumberPicker(GUIContext container, Font font, String text, int value)
-      throws SlickException {
+  public NumberPicker(GUIContext container, Font font, String text, int value) {
     this(container, font, text, value, Integer.MIN_VALUE, Integer.MAX_VALUE);
   }
 
-  public NumberPicker(
-      GUIContext container, Font font, String text, int value, int min, int max)
-      throws SlickException {
+  public NumberPicker(GUIContext container, Font font, String text, int value, int min, int max) {
     this(container, font, 0, 0, 0, 0, text, value, min, max);
   }
 
   public NumberPicker(
-      GUIContext container, Font font, int x, int y, int width, int height, String text, int value)
-      throws SlickException {
+      GUIContext container,
+      Font font,
+      int x,
+      int y,
+      int width,
+      int height,
+      String text,
+      int value) {
     this(container, font, x, y, width, height, text, value, Integer.MIN_VALUE, Integer.MAX_VALUE);
   }
 
@@ -62,7 +69,7 @@ public class NumberPicker extends MenuSelection {
       String text,
       int value,
       int min,
-      int max) throws SlickException {
+      int max) {
     super(container, font, x, y, width, height, text);
     this.value = value;
     this.activated = false;
@@ -71,9 +78,7 @@ public class NumberPicker extends MenuSelection {
     this.pressSound = new Sound(DEFAULT_PRESS_SOUND);
   }
 
-  /**
-   * Used for testing.
-   */
+  /** Used for testing. */
   protected NumberPicker(
       GUIContext container,
       Font font,
@@ -87,7 +92,7 @@ public class NumberPicker extends MenuSelection {
       int max,
       Sound selectionSound,
       Sound activationSound,
-      Sound pressSound) throws SlickException {
+      Sound pressSound) {
     super(container, font, x, y, width, height, text, selectionSound, activationSound);
     this.value = value;
     this.activated = false;
@@ -145,21 +150,27 @@ public class NumberPicker extends MenuSelection {
 
       if (value > min) {
         g.setColor(arrowColor(leftPressed));
-        Shape left = ARROW
-            .transform(Transform.createScaleTransform(rect.getWidth() / 20,
-                rect.getHeight() * 0.75f / ARROW.getHeight()))
-            .transform(Transform.createTranslateTransform(rect.getX() + rect.getWidth() / 10,
-                rect.getCenterY()));
+        Shape left =
+            ARROW
+                .transform(
+                    Transform.createScaleTransform(
+                        rect.getWidth() / 20, rect.getHeight() * 0.75f / ARROW.getHeight()))
+                .transform(
+                    Transform.createTranslateTransform(
+                        rect.getX() + rect.getWidth() / 10, rect.getCenterY()));
         g.fill(left);
       }
 
       if (value < max) {
         g.setColor(arrowColor(rightPressed));
-        Shape right = ARROW
-            .transform(Transform.createScaleTransform(-rect.getWidth() / 20,
-                rect.getHeight() * 0.75f / ARROW.getHeight()))
-            .transform(Transform.createTranslateTransform(rect.getMaxX() - rect.getWidth() / 10,
-                rect.getCenterY()));
+        Shape right =
+            ARROW
+                .transform(
+                    Transform.createScaleTransform(
+                        -rect.getWidth() / 20, rect.getHeight() * 0.75f / ARROW.getHeight()))
+                .transform(
+                    Transform.createTranslateTransform(
+                        rect.getMaxX() - rect.getWidth() / 10, rect.getCenterY()));
         g.fill(right);
       }
     }
@@ -172,16 +183,19 @@ public class NumberPicker extends MenuSelection {
       } else {
         rightPressed = true;
       }
-      new Timer().schedule(new TimerTask() {
-        @Override
-        public void run() {
-          if (left) {
-            leftPressed = false;
-          } else {
-            rightPressed = false;
-          }
-        }
-      }, PRESS_DELAY);
+      new Timer()
+          .schedule(
+              new TimerTask() {
+                @Override
+                public void run() {
+                  if (left) {
+                    leftPressed = false;
+                  } else {
+                    rightPressed = false;
+                  }
+                }
+              },
+              PRESS_DELAY);
     }
   }
 

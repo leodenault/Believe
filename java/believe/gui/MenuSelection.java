@@ -1,8 +1,8 @@
 package believe.gui;
 
+import believe.audio.Sound;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.Sound;
 import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.GUIContext;
 
@@ -22,13 +22,7 @@ public class MenuSelection extends TextComponent {
   }
 
   public MenuSelection(
-      GUIContext container,
-      Font font,
-      int x,
-      int y,
-      int width,
-      int height,
-      String text) throws SlickException {
+      GUIContext container, Font font, int x, int y, int width, int height, String text) {
     this(
         container,
         font,
@@ -41,9 +35,7 @@ public class MenuSelection extends TextComponent {
         new Sound(DEFAULT_ACTIVATION_SOUND));
   }
 
-  /**
-   * Used for testing.
-   */
+  /** Used for testing. */
   protected MenuSelection(
       GUIContext container,
       Font font,
@@ -53,7 +45,7 @@ public class MenuSelection extends TextComponent {
       int height,
       String text,
       Sound selectionSound,
-      Sound activationSound) throws SlickException {
+      Sound activationSound) {
     super(container, font, x, y, width, height, text);
     this.colorSet = INACTIVE;
     this.selectionSound = selectionSound;

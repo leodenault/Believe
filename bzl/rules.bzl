@@ -1,5 +1,13 @@
-# Private constants
+#####################
+# Private constants #
+#####################
 _MAX_CLASSPATH_LINE_LENGTH = 70
+
+# Selection of full or short path when copying files.
+_FULL_PATH = 0
+_SHORT_PATH = 1
+
+#####################
 
 def _normalize_classpath(classpath):
     """
@@ -20,16 +28,33 @@ def _make_dir_and_copy_file(file, dest_dir, dest_file_name = None):
     Generates commands for making a directory for a file and copying the file into the directory.
     """
     dest_name = dest_file_name if dest_file_name else file.basename
+    out_file = dest_dir + "/" + dest_name
     cmd = "mkdir -p " + dest_dir + "\n"
-    cmd += "cp " + file.path + " " + dest_dir + "/" + dest_name
+    cmd += "cp " + file.path + " " + out_file
+
+    if file.path.startswith("bazel-out"):
+        cmd += "\nchmod 755 " + out_file
+
     return cmd
 
-def _make_dirs_and_copy_files(files, dest_dir, file_dir_override = None):
+def _make_dirs_and_copy_files(files, dest_dir):
     """
     Generates commands for making directories for a set of files and copying the files into the
     directories.
     """
-    return "\n".join([_make_dir_and_copy_file(file, dest_dir + "/" + file.dirname) for file in files])
+    commands = []
+    for file in files:
+        if file.dirname.startswith("bazel-out"):
+            # Make sure to skip the Bazel output file path prefix if it exists.
+            last_slash_index = file.short_path.rfind("/")
+            if last_slash_index < 0:
+                file_dir_name = ""
+            else:
+                file_dir_name = "/" + file.short_path[:last_slash_index]
+        else:
+            file_dir_name = "/" + file.dirname
+        commands.append(_make_dir_and_copy_file(file, dest_dir + file_dir_name))
+    return "\n".join(commands)
 
 def _generate_run_script(basename, jar_name):
     return "\n".join([
@@ -82,6 +107,7 @@ def _believe_binary_impl(ctx):
                 third_party_libs.append(file)
             else:
                 generated_libs.append(file)
+
     third_party_lib_paths = [file.path for file in third_party_libs]
 
     # Gather the data files which will reside outside of the final jar file.
@@ -115,6 +141,7 @@ def _believe_binary_impl(ctx):
     cmd += "".join([
         "unzip -q " + jar.path + " -d " + build_dir + " -x META-INF/*\n"
         for jar in generated_libs
+        if jar.path.endswith(".jar")
     ])
 
     # Then copy the resources and the manifest in the build directory to include them in the jar, too.
@@ -222,7 +249,7 @@ def textproto(name = "", srcs = [], java_outer_class_name = "", proto_message = 
     """
 
     outs = [(val[:val.rfind(".")] + ".pb") for val in srcs]
-    escaped_java_outer_class_name = java_outer_class_name.replace("$", "\\$$")
+    proto_class = java_outer_class_name + "\\$$" + proto_message
     src_args = " ".join(["$(location " + src + ")" for src in srcs])
     binary_name = name + "_proto_file_serializer"
 
@@ -232,9 +259,9 @@ def textproto(name = "", srcs = [], java_outer_class_name = "", proto_message = 
         runtime_deps = ["//java/believe/tools:proto_file_serializer"] + deps,
     )
 
-    cmd = "$(location :{binary_name}) {escaped_java_outer_class_name} $(@D) {src_args}".format(
+    cmd = "$(location :{binary_name}) {proto_class} $(@D) {src_args}".format(
         binary_name = binary_name,
-        escaped_java_outer_class_name = escaped_java_outer_class_name,
+        proto_class = proto_class,
         src_args = src_args,
     )
 

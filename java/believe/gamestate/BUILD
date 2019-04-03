@@ -7,17 +7,37 @@ package(
 
 java_library(
     name = "gamestate",
-    srcs = glob(
-        ["*.java"],
-        exclude = ["package-info.java"],
-    ),
+    srcs = [
+        "ArcadeState.java",
+        "ChangeStateAction.java",
+        "ChangeToTemporaryStateAction.java",
+        "ExitTemporaryStateAction.java",
+        "ExternalLoadGameAction.java",
+        "FlowFilePickerMenuState.java",
+        "GameOverState.java",
+        "GamePausedOverlay.java",
+        "GameStateBase.java",
+        "GameStateRegistry.java",
+        "LevelState.java",
+        "MainMenuState.java",
+        "OptionsMenuState.java",
+        "OverlayablePrecedingState.java",
+        "PlatformingState.java",
+        "PlayFlowFileState.java",
+        "PrecedingState.java",
+        "TemporaryState.java",
+    ],
     deps = [
         ":package-info",
+        "//java/believe/app:dagger_module",
+        "//java/believe/app/proto:game_options_java_proto",
+        "//java/believe/audio",
         "//java/believe/character",
         "//java/believe/character:faction",
         "//java/believe/character/playable",
         "//java/believe/core",
         "//java/believe/core/io",
+        "//java/believe/datamodel",
         "//java/believe/graphics_transitions",
         "//java/believe/gui",
         "//java/believe/levelFlow/component",
@@ -28,6 +48,22 @@ java_library(
         "//java/believe/util",
         "//third_party/javax:annotations",
         "//third_party/slick",
+    ],
+)
+
+java_library(
+    name = "dagger_module",
+    srcs = [
+        "ArcadeStateInstantiator.java",
+        "GamestateModule.java",
+        "OptionsMenuStateInstantiator.java",
+        "PlayFlowFileStateInstantiator.java",
+    ],
+    deps = [
+        ":gamestate",
+        ":package-info",
+        "//java/believe/app",
+        "//third_party/dagger",
     ],
 )
 

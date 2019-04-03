@@ -10,7 +10,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import believe.character.playable.PlayableCharacter;
 import believe.character.playable.PlayableCharacter.SynchedComboListener;
-import believe.core.Music;
+import believe.audio.Music;
 import believe.core.SynchedComboPattern;
 import believe.levelFlow.component.ComboSyncher;
 import believe.map.gui.PlayArea;

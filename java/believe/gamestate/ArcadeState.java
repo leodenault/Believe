@@ -1,9 +1,10 @@
 package believe.gamestate;
 
+import believe.app.proto.GameOptionsProto.GameOptions;
 import believe.character.Faction;
 import believe.character.playable.PlayableCharacter;
-import believe.core.Options;
 import believe.core.io.FontLoader;
+import believe.datamodel.DataProvider;
 import believe.levelFlow.component.FlowComponent;
 import believe.levelFlow.component.FlowComponentListener;
 import believe.levelFlow.parsing.FlowComponentBuilder;
@@ -14,6 +15,7 @@ import believe.map.gui.LevelMap;
 import believe.map.gui.MapManager;
 import believe.map.gui.PlayArea;
 import believe.physics.manager.PhysicsManager;
+import javax.inject.Inject;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -29,38 +31,42 @@ import java.io.InputStreamReader;
 public class ArcadeState extends LevelState implements FlowComponentListener {
 
   private static final float FOCUS_RECHARGE_TIME = 45f; // Time in seconds for draining focus fully
-  private static final float
-      FOCUS_RECHARGE_RATE =
+  private static final float FOCUS_RECHARGE_RATE =
       PlayableCharacter.MAX_FOCUS / (FOCUS_RECHARGE_TIME * 1000f);
   private static final float HEALTH_PER_SUCCESS = 0.01f;
   private static final float DAMAGE_PER_FAILURE = 0.03f;
 
   private FlowComponent component;
 
+  @Inject
   public ArcadeState(
       GameContainer container,
       StateBasedGame game,
       PhysicsManager physicsManager,
-      FontLoader fontLoader) throws SlickException {
+      FontLoader fontLoader,
+      DataProvider<GameOptions> gameOptions) {
     super(container, game, MapManager.defaultManager(), physicsManager, fontLoader);
-    FlowComponentBuilder
-        builder =
+    FlowComponentBuilder builder =
         new FlowComponentBuilder(container, (int) (0.2 * container.getWidth()));
     try {
-      new FlowFileParser(new InputStreamReader(ResourceLoader.getResourceAsStream(
-          "levelFlowFiles/Drive.lfl")), builder).parse();
+      new FlowFileParser(
+              new InputStreamReader(ResourceLoader.getResourceAsStream("levelFlowFiles/Drive.lfl")),
+              builder)
+          .parse();
       component = builder.buildFlowComponent();
-      component.setSpeedMultiplier(Options.getInstance().flowSpeed);
+      component.setSpeedMultiplier(gameOptions.get().getGameplayOptions().getFlowSpeed());
       component.setLocation((int) (0.8 * container.getWidth()), 0);
       component.setHeight(container.getHeight());
       component.addListener(this);
-    } catch (IOException | FlowFileParserException | FlowComponentBuilderException e) {
-      throw new RuntimeException(String.format(
-          "Could not start arcade state because of the following exception:\n\n %s\n%s",
-          e.getMessage(),
-          e.getStackTrace()));
+    } catch (IOException
+        | FlowFileParserException
+        | FlowComponentBuilderException
+        | SlickException e) {
+      throw new RuntimeException(
+          String.format(
+              "Could not start arcade state because of the following exception:\n\n %s\n%s",
+              e.getMessage(), e.getStackTrace()));
     }
-    Image jacobPortrait = new Image("/res/graphics/sprites/testProfile.png");
   }
 
   @Override

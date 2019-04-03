@@ -24,6 +24,7 @@ java_library(
     ],
     deps = [
         ":package-info",
+        "//java/believe/audio",
         "//java/believe/core",
         "//java/believe/core/display",
         "//java/believe/geometry",

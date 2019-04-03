@@ -1,3 +1,10 @@
+load("//bzl:rules.bzl", "java_junit5_test")
+
+package(
+    default_testonly = True,
+    default_visibility = ["//visibility:private"],
+)
+
 java_test(
     name = "UtilTest",
     srcs = ["UtilTest.java"],

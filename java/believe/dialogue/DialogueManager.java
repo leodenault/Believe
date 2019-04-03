@@ -5,7 +5,6 @@ import believe.dialogue.proto.DialogueProto.DialogueMap;
 import javax.annotation.Nullable;
 import org.newdawn.slick.util.Log;
 
-import java.awt.Dialog;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

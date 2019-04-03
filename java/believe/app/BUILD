@@ -1,9 +1,7 @@
+load("//bzl:rules.bzl", "textproto")
+
 package(
-    default_visibility = [
-        "//:__pkg__",
-        "//java/believe/app:app_pkg",
-        "//javatests/believe:believe_tests",
-    ],
+    default_visibility = ["//:believe_all_pkgs"],
 )
 
 package_group(
@@ -15,7 +13,6 @@ java_library(
     name = "app",
     srcs = [
         "AppUtil.java",
-        "ApplicationComponent.java",
         "Launcher.java",
         "StateInstantiator.java",
     ],
@@ -23,6 +20,29 @@ java_library(
         "//java/believe/core/io",
         "//java/believe/gamestate",
         "//java/believe/util",
+        "//third_party/slick",
+    ],
+)
+
+java_library(
+    name = "dagger_component",
+    srcs = ["ApplicationComponent.java"],
+    deps = [
+        "//third_party/dagger",
+        "//third_party/slick",
+    ],
+)
+
+java_library(
+    name = "dagger_module",
+    srcs = ["ApplicationModule.java"],
+    deps = [
+        "//java/believe/app/flag_parsers",
+        "//java/believe/app/flags",
+        "//java/believe/app/proto:game_options_java_proto",
+        "//java/believe/datamodel",
+        "//java/believe/datamodel/protodata",
+        "//third_party/dagger",
         "//third_party/slick",
     ],
 )

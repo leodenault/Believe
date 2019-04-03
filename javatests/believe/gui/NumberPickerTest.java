@@ -5,14 +5,12 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+import believe.audio.Sound;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.newdawn.slick.Font;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.Sound;
 import org.newdawn.slick.gui.GUIContext;
 
 public class NumberPickerTest {
@@ -24,7 +22,7 @@ public class NumberPickerTest {
   @Mock private Font font;
 
   @Before
-  public void setUp() throws SlickException {
+  public void setUp() {
     initMocks(this);
     when(container.getInput()).thenReturn(input);
     picker = new NumberPicker(container, font, 0, 0, 0, 0, "", 3, 1, 5, sound, sound, sound);
