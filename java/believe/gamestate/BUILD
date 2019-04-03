@@ -53,17 +53,12 @@ java_library(
 
 java_library(
     name = "dagger_module",
-    srcs = [
-        "ArcadeStateInstantiator.java",
-        "FlowFilePickerMenuStateInstantiator.java",
-        "GamestateModule.java",
-        "OptionsMenuStateInstantiator.java",
-        "PlayFlowFileStateInstantiator.java",
-    ],
+    srcs = ["GamestateModule.java"],
     deps = [
         ":gamestate",
         ":package-info",
         "//java/believe/app",
+        "//java/believe/app/game:dagger_module",
         "//third_party/dagger",
     ],
 )

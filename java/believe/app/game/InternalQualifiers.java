@@ -8,8 +8,8 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Qualifiers used within the context of the Believe video game.
  */
-final class Qualifiers {
-  private Qualifiers() {}
+final class InternalQualifiers {
+  private InternalQualifiers() {}
 
   /**
    * Qualifier for the title of the application.

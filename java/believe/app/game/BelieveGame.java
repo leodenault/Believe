@@ -1,7 +1,7 @@
 package believe.app.game;
 
 import believe.app.StateInstantiator;
-import believe.app.game.Qualifiers.ApplicationTitle;
+import believe.app.game.InternalQualifiers.ApplicationTitle;
 import believe.core.io.FontLoader;
 import believe.core.io.JarClasspathLocation;
 import dagger.Lazy;

@@ -1,19 +1,14 @@
 package believe.app.game;
 
 import believe.app.StateInstantiator;
-import believe.app.game.Qualifiers.ApplicationTitle;
+import believe.app.game.InternalQualifiers.ApplicationTitle;
 import believe.core.io.FontLoader;
-import believe.gamestate.ArcadeStateInstantiator;
 import believe.gamestate.ChangeStateAction;
 import believe.gamestate.ExitTemporaryStateAction;
-import believe.gamestate.FlowFilePickerMenuState;
-import believe.gamestate.FlowFilePickerMenuStateInstantiator;
 import believe.gamestate.GameOverState;
 import believe.gamestate.GamePausedOverlay;
 import believe.gamestate.MainMenuState;
-import believe.gamestate.OptionsMenuStateInstantiator;
 import believe.gamestate.PlatformingState;
-import believe.gamestate.PlayFlowFileStateInstantiator;
 import believe.physics.manager.PhysicsManager;
 import dagger.Binds;
 import dagger.Lazy;
@@ -25,7 +20,11 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /** Dagger module for the application running the elieve video game. */
 @Module
@@ -62,22 +61,18 @@ abstract class BelieveGameModule {
   static List<StateInstantiator> provideStateInstantiators(
       PhysicsManager physicsManager,
       ExitTemporaryStateAction exitTemporaryStateAction,
-      @OptionsMenuStateInstantiator StateInstantiator optionsMenuStateInstantiator,
-      @ArcadeStateInstantiator StateInstantiator arcadeStateInstantiator,
-      @PlayFlowFileStateInstantiator StateInstantiator playFlowFileStateInstantiator,
-      @FlowFilePickerMenuStateInstantiator StateInstantiator flowFilePickerMenuStateInstantiator) {
-    return Arrays.asList(
-        (container, game, fontLoader) -> new MainMenuState(container, game),
-        optionsMenuStateInstantiator,
-        flowFilePickerMenuStateInstantiator,
-        playFlowFileStateInstantiator,
-        (container, game, fontLoader) ->
-            new GamePausedOverlay(container, game, exitTemporaryStateAction),
-        (container, game, fontLoader) ->
-            new PlatformingState(container, game, physicsManager, fontLoader),
-        arcadeStateInstantiator,
-        (container, game, fontLoader) ->
-            new GameOverState(container, game, exitTemporaryStateAction));
+      @GameStateInstantiators Set<StateInstantiator> stateInstantiators) {
+    return Stream.concat(
+            Stream.of(
+                (container, game, fontLoader) -> new MainMenuState(container, game),
+                (container, game, fontLoader) ->
+                    new GamePausedOverlay(container, game, exitTemporaryStateAction),
+                (container, game, fontLoader) ->
+                    new PlatformingState(container, game, physicsManager, fontLoader),
+                (container, game, fontLoader) ->
+                    new GameOverState(container, game, exitTemporaryStateAction)),
+            stateInstantiators.stream())
+        .collect(Collectors.toList());
   }
 
   @Binds
