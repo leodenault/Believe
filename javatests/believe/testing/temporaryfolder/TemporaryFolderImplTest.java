@@ -171,6 +171,22 @@ public final class TemporaryFolderImplTest {
     assertThat(folder.getFolder().exists()).isFalse();
   }
 
+  @Test
+  public void getPathToFile_prependsFileNameWithFolderPath() throws IOException {
+    folder.create();
+
+    assertThat(folder.getPathToFile("some/file/somehwere.png")).isEqualTo(folder
+        .getFolder()
+        .getCanonicalPath() + "/" + "some/file/somehwere.png");
+  }
+
+  @Test
+  public void getPathToFile_folderNotCreatedYet_throwsIllegalStateException() {
+    assertThrows(
+        IllegalStateException.class,
+        () -> folder.getPathToFile("some/file/somehwere.png"));
+  }
+
   private OutputStream createFile(String path) throws IOException {
     return new FileOutputStream(folder.getFolder().getCanonicalPath() + "/" + path);
   }

@@ -68,6 +68,12 @@ final class TemporaryFolderImpl implements InstantiableTemporaryFolder {
     return file;
   }
 
+  @Override
+  public String getPathToFile(String location) throws IOException {
+    checkFolderExists();
+    return notNull(folder).getCanonicalPath() + "/" + location;
+  }
+
   private void removeChildren(File parent) {
     File[] files = parent.listFiles();
     if (files != null) {

@@ -44,4 +44,13 @@ public interface TemporaryFolder {
    * @throws IOException if there is an error finding the file.
    */
   File getFile(String location) throws IOException;
+
+  /**
+   * Returns the path name to the file found at {@code location}, whether the file actually exists
+   * there or not.
+   *
+   * @param location the location of the file, relative to the temporary folder, for which to
+   * retrieve the full path name.
+   */
+  String getPathToFile(String location) throws IOException;
 }
