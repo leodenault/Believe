@@ -1,4 +1,4 @@
-package believe.core;
+package believe.audio;
 
 import org.newdawn.slick.SlickException;
 
