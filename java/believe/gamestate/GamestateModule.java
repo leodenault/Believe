@@ -30,4 +30,11 @@ public abstract class GamestateModule {
       Lazy<PlayFlowFileState> playFlowFileState) {
     return (container, game, fontLoader) -> playFlowFileState.get();
   }
+
+  @Provides
+  @FlowFilePickerMenuStateInstantiator
+  static StateInstantiator provideFlowFilePickerMenuStateInstantiator(
+      Lazy<FlowFilePickerMenuState> flowFilePickerMenuState) {
+    return (container, game, fontLoader) -> flowFilePickerMenuState.get();
+  }
 }

@@ -7,6 +7,7 @@ import believe.gamestate.ArcadeStateInstantiator;
 import believe.gamestate.ChangeStateAction;
 import believe.gamestate.ExitTemporaryStateAction;
 import believe.gamestate.FlowFilePickerMenuState;
+import believe.gamestate.FlowFilePickerMenuStateInstantiator;
 import believe.gamestate.GameOverState;
 import believe.gamestate.GamePausedOverlay;
 import believe.gamestate.MainMenuState;
@@ -63,11 +64,12 @@ abstract class BelieveGameModule {
       ExitTemporaryStateAction exitTemporaryStateAction,
       @OptionsMenuStateInstantiator StateInstantiator optionsMenuStateInstantiator,
       @ArcadeStateInstantiator StateInstantiator arcadeStateInstantiator,
-      @PlayFlowFileStateInstantiator StateInstantiator playFlowFileStateInstantiator) {
+      @PlayFlowFileStateInstantiator StateInstantiator playFlowFileStateInstantiator,
+      @FlowFilePickerMenuStateInstantiator StateInstantiator flowFilePickerMenuStateInstantiator) {
     return Arrays.asList(
         (container, game, fontLoader) -> new MainMenuState(container, game),
         optionsMenuStateInstantiator,
-        (container, game, fontLoader) -> new FlowFilePickerMenuState(container, game),
+        flowFilePickerMenuStateInstantiator,
         playFlowFileStateInstantiator,
         (container, game, fontLoader) ->
             new GamePausedOverlay(container, game, exitTemporaryStateAction),

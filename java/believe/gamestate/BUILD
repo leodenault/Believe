@@ -55,6 +55,7 @@ java_library(
     name = "dagger_module",
     srcs = [
         "ArcadeStateInstantiator.java",
+        "FlowFilePickerMenuStateInstantiator.java",
         "GamestateModule.java",
         "OptionsMenuStateInstantiator.java",
         "PlayFlowFileStateInstantiator.java",
