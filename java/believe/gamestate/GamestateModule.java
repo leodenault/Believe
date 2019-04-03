@@ -1,6 +1,7 @@
 package believe.gamestate;
 
 import believe.app.StateInstantiator;
+import believe.app.game.FirstState;
 import believe.app.game.GameStateInstantiators;
 import dagger.Lazy;
 import dagger.Module;
@@ -12,6 +13,12 @@ import dagger.multibindings.IntoSet;
 public abstract class GamestateModule {
   // We need states to be lazily injected because there's a dependency cycle between many
   // states and GameContainer/StateBasedGame instances. This should ideally be broken up.
+  @Provides
+  @FirstState
+  static StateInstantiator provideMainMenuStateInstantiator(Lazy<MainMenuState> mainMenuState) {
+    return (container, game, fontLoader) -> mainMenuState.get();
+  }
+
   @Provides
   @IntoSet
   @GameStateInstantiators

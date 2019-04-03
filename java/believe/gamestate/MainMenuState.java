@@ -1,5 +1,6 @@
 package believe.gamestate;
 
+import javax.inject.Inject;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -15,25 +16,20 @@ public class MainMenuState extends GameStateBase {
   private DirectionalPanel panel;
   private MenuSelectionGroup selections;
 
-  public MainMenuState(GameContainer container, StateBasedGame game) throws SlickException {
-    MenuSelection
-        playPlatformingLevel =
+  @Inject
+  public MainMenuState(GameContainer container, StateBasedGame game) {
+    MenuSelection playPlatformingLevel =
         new MenuSelection(container, container.getGraphics().getFont(), "Play Platforming Level");
-    MenuSelection
-        playArcadeLevel =
+    MenuSelection playArcadeLevel =
         new MenuSelection(container, container.getGraphics().getFont(), "Play Arcade Level");
-    MenuSelection
-        playFlowFile =
+    MenuSelection playFlowFile =
         new MenuSelection(container, container.getGraphics().getFont(), "Play Flow File");
-    MenuSelection
-        options =
+    MenuSelection options =
         new MenuSelection(container, container.getGraphics().getFont(), "Options");
     MenuSelection exit = new MenuSelection(container, container.getGraphics().getFont(), "Exit");
     panel =
-        new DirectionalPanel(container,
-            container.getWidth() / 2,
-            (container.getHeight() - 250) / 5,
-            50);
+        new DirectionalPanel(
+            container, container.getWidth() / 2, (container.getHeight() - 250) / 5, 50);
     panel.addChild(playPlatformingLevel);
     panel.addChild(playArcadeLevel);
     panel.addChild(playFlowFile);
@@ -70,8 +66,7 @@ public class MainMenuState extends GameStateBase {
   }
 
   @Override
-  public void init(final GameContainer container, StateBasedGame game) throws SlickException {
-  }
+  public void init(final GameContainer container, StateBasedGame game) throws SlickException {}
 
   @Override
   public void render(GameContainer container, StateBasedGame game, Graphics g)
@@ -80,9 +75,7 @@ public class MainMenuState extends GameStateBase {
   }
 
   @Override
-  public void update(GameContainer container, StateBasedGame game, int delta)
-      throws SlickException {
-  }
+  public void update(GameContainer container, StateBasedGame game, int delta) {}
 
   @Override
   public void enter(GameContainer container, StateBasedGame game) throws SlickException {

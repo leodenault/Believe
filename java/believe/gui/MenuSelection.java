@@ -2,7 +2,6 @@ package believe.gui;
 
 import believe.audio.Sound;
 import org.newdawn.slick.Font;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.GUIContext;
 
@@ -17,7 +16,7 @@ public class MenuSelection extends TextComponent {
 
   protected Sound activationSound;
 
-  public MenuSelection(GUIContext container, Font font, String text) throws SlickException {
+  public MenuSelection(GUIContext container, Font font, String text) {
     this(container, font, 0, 0, 0, 0, text);
   }
 

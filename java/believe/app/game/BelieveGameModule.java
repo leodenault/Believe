@@ -59,12 +59,6 @@ abstract class BelieveGameModule {
   }
 
   @Provides
-  @FirstState
-  static StateInstantiator provideFirstStateInstantiator() {
-    return (container, game, fontLoader) -> new MainMenuState(container, game);
-  }
-
-  @Provides
   @ModulePrivate
   static Set<StateInstantiator> provideStateInstantiators(
       PhysicsManager physicsManager,
