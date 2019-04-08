@@ -1,0 +1,8 @@
+directories:
+  .
+
+targets:
+  //...:all
+
+test_sources:
+  javatests/
