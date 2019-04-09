@@ -57,4 +57,11 @@ public abstract class GamestateModule {
       Lazy<PlatformingState> platformingState) {
     return (container, game, fontLoader) -> platformingState.get();
   }
+
+  @Provides
+  @IntoSet
+  @GameStateInstantiators
+  static StateInstantiator provideGamePausedOverlay(Lazy<GamePausedOverlay> gamePausedOverlay) {
+    return (container, game, fontLoader) -> gamePausedOverlay.get();
+  }
 }

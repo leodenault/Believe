@@ -6,6 +6,7 @@ import believe.gui.DirectionalPanel;
 import believe.gui.MenuSelection;
 import believe.gui.MenuSelectionGroup;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -36,9 +37,9 @@ public class GamePausedOverlay extends GameStateBase
 
   @Nullable private Image backgroundImage;
 
+  @Inject
   public GamePausedOverlay(
-      GameContainer container, StateBasedGame game, ExitTemporaryStateAction exitPauseStateAction)
-      throws SlickException {
+      GameContainer container, StateBasedGame game, ExitTemporaryStateAction exitPauseStateAction) {
     this.game = game;
     this.gameContainer = container;
     this.exitPauseStateAction = exitPauseStateAction;

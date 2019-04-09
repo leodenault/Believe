@@ -7,7 +7,6 @@ import believe.core.io.FontLoader;
 import believe.gamestate.ChangeStateAction;
 import believe.gamestate.ExitTemporaryStateAction;
 import believe.gamestate.GameOverState;
-import believe.gamestate.GamePausedOverlay;
 import believe.gamestate.MainMenuState;
 import believe.physics.manager.PhysicsManager;
 import dagger.Binds;
@@ -61,8 +60,6 @@ abstract class BelieveGameModule {
       @GameStateInstantiators Set<StateInstantiator> stateInstantiators) {
     return Stream.concat(
             Stream.of(
-                (container, game, fontLoader) ->
-                    new GamePausedOverlay(container, game, exitTemporaryStateAction),
                 (container, game, fontLoader) ->
                     new GameOverState(container, game, exitTemporaryStateAction)),
             stateInstantiators.stream())
