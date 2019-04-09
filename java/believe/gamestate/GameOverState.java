@@ -5,6 +5,7 @@ import believe.gui.MenuSelection;
 import believe.gui.MenuSelectionGroup;
 import believe.gui.TextComponent;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -24,10 +25,11 @@ public final class GameOverState extends GameStateBase implements TemporaryState
   @Nullable private ChangeStateAction<?> returnToPreviousStateAction;
   @Nullable private ComponentListener exitSelectedAction;
 
+  @Inject
   public GameOverState(
       GameContainer gameContainer,
       StateBasedGame game,
-      ExitTemporaryStateAction exitGameOverStateAction) throws SlickException {
+      ExitTemporaryStateAction exitGameOverStateAction) {
     this.game = game;
     this.exitGameOverStateAction = exitGameOverStateAction;
     this.retrySelection =
@@ -35,15 +37,12 @@ public final class GameOverState extends GameStateBase implements TemporaryState
     this.exitSelection =
         new MenuSelection(gameContainer, gameContainer.getGraphics().getFont(), "Exit");
 
-    TextComponent
-        title =
+    TextComponent title =
         new TextComponent(gameContainer, gameContainer.getGraphics().getFont(), "Game Over");
 
     directionalPanel =
-        new DirectionalPanel(gameContainer,
-            gameContainer.getWidth() / 2,
-            (gameContainer.getHeight() - 200) / 3,
-            50);
+        new DirectionalPanel(
+            gameContainer, gameContainer.getWidth() / 2, (gameContainer.getHeight() - 200) / 3, 50);
     menuSelections = new MenuSelectionGroup();
 
     directionalPanel.addChild(title);
@@ -54,8 +53,7 @@ public final class GameOverState extends GameStateBase implements TemporaryState
   }
 
   @Override
-  public void init(GameContainer container, StateBasedGame game) throws SlickException {
-  }
+  public void init(GameContainer container, StateBasedGame game) throws SlickException {}
 
   @Override
   public void render(GameContainer container, StateBasedGame game, Graphics g)
@@ -65,9 +63,7 @@ public final class GameOverState extends GameStateBase implements TemporaryState
 
   @Override
   public void update(GameContainer container, StateBasedGame game, int delta)
-      throws SlickException {
-
-  }
+      throws SlickException {}
 
   @Override
   public void keyPressed(int key, char c) {
@@ -94,10 +90,11 @@ public final class GameOverState extends GameStateBase implements TemporaryState
     }
 
     returnToPreviousStateAction = new ChangeStateAction<>(state.getClass(), game);
-    exitSelectedAction = listener -> {
-      state.exitingFollowingState();
-      exitGameOverStateAction.exitTemporaryState();
-    };
+    exitSelectedAction =
+        listener -> {
+          state.exitingFollowingState();
+          exitGameOverStateAction.exitTemporaryState();
+        };
 
     retrySelection.addListener(returnToPreviousStateAction);
     exitSelection.addListener(exitSelectedAction);

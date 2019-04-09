@@ -25,7 +25,7 @@ final class BelieveGame extends StateBasedGame {
   BelieveGame(
       @ApplicationTitle String title,
       @FirstState StateInstantiator firstState,
-      @ModulePrivate Set<StateInstantiator> otherGameStates,
+      @GameStateInstantiators Set<StateInstantiator> otherGameStates,
       Lazy<FontLoader> fontLoader) {
     super(title);
     this.firstState = firstState;
