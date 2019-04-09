@@ -3,6 +3,7 @@ package believe.gamestate;
 import believe.core.io.FontLoader;
 import believe.map.gui.MapManager;
 import believe.physics.manager.PhysicsManager;
+import javax.inject.Inject;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -24,8 +25,7 @@ public class PlatformingState extends LevelState implements SynchedComboListener
 
   private static final int BPM = 150;
   private static final float FOCUS_DRAIN_TIME = 60f; // Time in seconds for recharging focus fully
-  private static final float
-      FOCUS_DRAIN_RATE =
+  private static final float FOCUS_DRAIN_RATE =
       PlayableCharacter.MAX_FOCUS / (FOCUS_DRAIN_TIME * 1000f);
 
   private final ComboSyncher comboSyncher;
@@ -33,6 +33,7 @@ public class PlatformingState extends LevelState implements SynchedComboListener
 
   private Music music;
 
+  @Inject
   public PlatformingState(
       GameContainer container,
       StateBasedGame game,

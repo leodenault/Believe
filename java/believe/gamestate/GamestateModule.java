@@ -49,4 +49,12 @@ public abstract class GamestateModule {
       Lazy<FlowFilePickerMenuState> flowFilePickerMenuState) {
     return (container, game, fontLoader) -> flowFilePickerMenuState.get();
   }
+
+  @Provides
+  @IntoSet
+  @GameStateInstantiators
+  static StateInstantiator providePlatformingStateInstantiator(
+      Lazy<PlatformingState> platformingState) {
+    return (container, game, fontLoader) -> platformingState.get();
+  }
 }

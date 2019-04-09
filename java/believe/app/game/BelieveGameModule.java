@@ -9,7 +9,6 @@ import believe.gamestate.ExitTemporaryStateAction;
 import believe.gamestate.GameOverState;
 import believe.gamestate.GamePausedOverlay;
 import believe.gamestate.MainMenuState;
-import believe.gamestate.PlatformingState;
 import believe.physics.manager.PhysicsManager;
 import dagger.Binds;
 import dagger.Lazy;
@@ -20,9 +19,6 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -61,15 +57,12 @@ abstract class BelieveGameModule {
   @Provides
   @ModulePrivate
   static Set<StateInstantiator> provideStateInstantiators(
-      PhysicsManager physicsManager,
       ExitTemporaryStateAction exitTemporaryStateAction,
       @GameStateInstantiators Set<StateInstantiator> stateInstantiators) {
     return Stream.concat(
             Stream.of(
                 (container, game, fontLoader) ->
                     new GamePausedOverlay(container, game, exitTemporaryStateAction),
-                (container, game, fontLoader) ->
-                    new PlatformingState(container, game, physicsManager, fontLoader),
                 (container, game, fontLoader) ->
                     new GameOverState(container, game, exitTemporaryStateAction)),
             stateInstantiators.stream())
