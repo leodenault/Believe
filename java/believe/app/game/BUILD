@@ -13,6 +13,7 @@ java_library(
         ":dagger_module",
         "//java/believe/app",
         "//java/believe/app:dagger_module",
+        "//java/believe/app:util",
         "//java/believe/app/game:dagger_component",
         "//third_party/slick",
     ],

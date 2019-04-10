@@ -54,7 +54,7 @@ public final class AppGameContainerSupplier implements Supplier<AppGameContainer
     return appGameContainer;
   }
 
-  public void initAppGameContainer(String[] commandLineArgs, StateBasedGame game)
+  void initAppGameContainer(String[] commandLineArgs, StateBasedGame game)
       throws SlickException {
     AppFlags appFlags = CommandLineParser.parse(AppFlags.class, commandLineArgs);
     appGameContainer = new AppGameContainer(game);

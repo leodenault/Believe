@@ -6,9 +6,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Qualifies a {@link believe.gamestate.GameStateBase} instance as the first state that should be
- * run in the app.
+ * Qualifies a mapping of keyboard keys to actions affecting a {@link
+ * believe.gamestate.PlatformingState}.
  */
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)
-public @interface FirstState {}
+public @interface EventActions {}

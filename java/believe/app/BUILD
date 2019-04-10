@@ -12,16 +12,11 @@ package_group(
 java_library(
     name = "app",
     srcs = [
-        "AppGameContainerSupplier.java",
-        "AppUtil.java",
         "Application.java",
-        "Launcher.java",
-        "StateInstantiator.java",
     ],
     deps = [
+        ":game_container_supplier",
         ":qualifiers",
-        "//java/believe/app/flag_parsers",
-        "//java/believe/app/flags",
         "//java/believe/core/io",
         "//java/believe/gamestate",
         "//java/believe/util",
@@ -31,10 +26,33 @@ java_library(
 )
 
 java_library(
+    name = "game_container_supplier",
+    srcs = ["AppGameContainerSupplier.java"],
+    deps = [
+        "//java/believe/app/flag_parsers",
+        "//java/believe/app/flags",
+        "//third_party/javax:annotations",
+        "//third_party/slick",
+    ],
+)
+
+java_library(
+    name = "util",
+    srcs = ["AppUtil.java"],
+    deps = [
+        ":dagger_component",
+        ":game_container_supplier",
+        "//java/believe/util",
+        "//third_party/slick",
+    ],
+)
+
+java_library(
     name = "dagger_component",
     srcs = ["ApplicationComponent.java"],
     deps = [
         ":app",
+        ":game_container_supplier",
         "//third_party/dagger",
         "//third_party/slick",
     ],
@@ -45,11 +63,14 @@ java_library(
     srcs = ["ApplicationModule.java"],
     deps = [
         ":app",
+        ":game_container_supplier",
+        ":qualifiers",
         "//java/believe/app/proto:game_options_java_proto",
         "//java/believe/core/io",
         "//java/believe/datamodel",
         "//java/believe/datamodel/protodata",
         "//java/believe/gamestate",
+        "//java/believe/map/gui",
         "//java/believe/physics/manager",
         "//third_party/dagger",
         "//third_party/slick",
@@ -60,6 +81,7 @@ java_library(
     name = "qualifiers",
     srcs = [
         "ApplicationTitle.java",
+        "EventActions.java",
         "FirstState.java",
         "GameStates.java",
     ],

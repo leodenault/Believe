@@ -1,5 +1,6 @@
 package believe.gamestate;
 
+import believe.app.EventActions;
 import believe.core.io.FontLoader;
 import believe.map.gui.MapManager;
 import believe.physics.manager.PhysicsManager;
@@ -37,23 +38,9 @@ public class PlatformingState extends LevelState implements SynchedComboListener
   public PlatformingState(
       GameContainer container,
       StateBasedGame game,
-      PhysicsManager physicsManager,
-      FontLoader fontLoader) {
-    this(
-        container,
-        game,
-        MapManager.defaultManager(),
-        physicsManager,
-        Collections.emptyMap(),
-        fontLoader);
-  }
-
-  public PlatformingState(
-      GameContainer container,
-      StateBasedGame game,
       MapManager mapManager,
       PhysicsManager physicsManager,
-      Map<Integer, Function<PlatformingState, Void>> eventActions,
+      @EventActions Map<Integer, Function<PlatformingState, Void>> eventActions,
       FontLoader fontLoader) {
     super(container, game, mapManager, physicsManager, fontLoader);
     this.comboSyncher = new ComboSyncher(container, fontLoader.getBaseFont(), BPM);

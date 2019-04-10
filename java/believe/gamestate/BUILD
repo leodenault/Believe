@@ -29,6 +29,7 @@ java_library(
     ],
     deps = [
         ":package-info",
+        "//java/believe/app:qualifiers",
         "//java/believe/app/proto:game_options_java_proto",
         "//java/believe/audio",
         "//java/believe/character",

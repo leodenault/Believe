@@ -1,6 +1,7 @@
 package believe.app;
 
 import believe.util.Util;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.Log;
 
 import java.lang.reflect.Field;
@@ -9,13 +10,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Utilities used at the application level.
- */
+/** Utilities used at the application level. */
 public final class AppUtil {
   // Find a more dynamic way of setting the java.library.path variable if there's a need for it.
-  private static final Set<String>
-      NATIVE_PATHS =
+  private static final Set<String> NATIVE_PATHS =
       Util.hashSetOf("third_party/jinput", "third_party/lwjgl", "third_party/openal");
 
   public static void setNativesOnJavaLibraryPath()
@@ -39,5 +37,16 @@ public final class AppUtil {
     fullPathsList.addAll(pathsToAdd);
     Log.info("Resetting java.library.path to contain natives.");
     javaLibraryPathField.set(null, fullPathsList.toArray(new String[0]));
+  }
+
+  public static void startApplication(
+      String[] commandLineArguments, ApplicationComponent applicationComponent)
+      throws NoSuchFieldException, IllegalAccessException, SlickException {
+    setNativesOnJavaLibraryPath();
+    AppGameContainerSupplier appGameContainerSupplier =
+        applicationComponent.appGameContainerSupplier();
+    appGameContainerSupplier.initAppGameContainer(
+        commandLineArguments, applicationComponent.game());
+    appGameContainerSupplier.get().start();
   }
 }
