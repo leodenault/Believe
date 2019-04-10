@@ -1,4 +1,4 @@
-package believe.app.game;
+package believe.app;
 
 import javax.inject.Qualifier;
 
@@ -6,9 +6,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Qualifies a {@link believe.app.StateInstantiator} as the first state that should be run in the
- * app.
+ * Qualifies a set of {@link believe.app.StateInstantiator} instances that will be called at
+ * startup.
  */
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)
-public @interface FirstState {}
+public @interface GameStateInstantiators {}

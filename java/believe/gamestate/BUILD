@@ -29,7 +29,6 @@ java_library(
     ],
     deps = [
         ":package-info",
-        "//java/believe/app:dagger_module",
         "//java/believe/app/proto:game_options_java_proto",
         "//java/believe/audio",
         "//java/believe/character",
@@ -58,7 +57,7 @@ java_library(
         ":gamestate",
         ":package-info",
         "//java/believe/app",
-        "//java/believe/app/game:qualifiers",
+        "//java/believe/app:qualifiers",
         "//third_party/dagger",
     ],
 )

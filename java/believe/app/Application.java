@@ -1,8 +1,5 @@
-package believe.app.game;
+package believe.app;
 
-import believe.app.StateInstantiator;
-import believe.app.game.InternalQualifiers.ApplicationTitle;
-import believe.app.game.InternalQualifiers.ModulePrivate;
 import believe.core.io.FontLoader;
 import believe.core.io.JarClasspathLocation;
 import dagger.Lazy;
@@ -16,13 +13,13 @@ import org.newdawn.slick.util.ResourceLoader;
 import java.util.Set;
 
 @Singleton
-final class BelieveGame extends StateBasedGame {
+final class Application extends StateBasedGame {
   private final StateInstantiator firstState;
   private final Set<StateInstantiator> gameStates;
   private final Lazy<FontLoader> fontLoader;
 
   @Inject
-  BelieveGame(
+  Application(
       @ApplicationTitle String title,
       @FirstState StateInstantiator firstState,
       @GameStateInstantiators Set<StateInstantiator> otherGameStates,

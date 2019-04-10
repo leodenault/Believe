@@ -1,8 +1,8 @@
 package believe.gamestate;
 
 import believe.app.StateInstantiator;
-import believe.app.game.FirstState;
-import believe.app.game.GameStateInstantiators;
+import believe.app.FirstState;
+import believe.app.GameStateInstantiators;
 import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
