@@ -61,7 +61,7 @@ java_library(
     srcs = [
         "ApplicationTitle.java",
         "FirstState.java",
-        "GameStateInstantiators.java",
+        "GameStates.java",
     ],
     deps = ["//third_party/javax:annotations"],
 )

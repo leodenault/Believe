@@ -51,18 +51,6 @@ java_library(
 )
 
 java_library(
-    name = "dagger_module",
-    srcs = ["GamestateModule.java"],
-    deps = [
-        ":gamestate",
-        ":package-info",
-        "//java/believe/app",
-        "//java/believe/app:qualifiers",
-        "//third_party/dagger",
-    ],
-)
-
-java_library(
     name = "package-info",
     srcs = ["package-info.java"],
     visibility = ["//:believe_test_pkgs"],

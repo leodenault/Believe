@@ -2,6 +2,7 @@ package believe.app;
 
 import believe.core.io.FontLoader;
 import believe.core.io.JarClasspathLocation;
+import believe.gamestate.GameStateBase;
 import dagger.Lazy;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -14,15 +15,15 @@ import java.util.Set;
 
 @Singleton
 final class Application extends StateBasedGame {
-  private final StateInstantiator firstState;
-  private final Set<StateInstantiator> gameStates;
+  private final Lazy<GameStateBase> firstState;
+  private final Lazy<Set<GameStateBase>> gameStates;
   private final Lazy<FontLoader> fontLoader;
 
   @Inject
   Application(
       @ApplicationTitle String title,
-      @FirstState StateInstantiator firstState,
-      @GameStateInstantiators Set<StateInstantiator> otherGameStates,
+      @FirstState Lazy<GameStateBase> firstState,
+      @GameStates Lazy<Set<GameStateBase>> otherGameStates,
       Lazy<FontLoader> fontLoader) {
     super(title);
     this.firstState = firstState;
@@ -33,11 +34,11 @@ final class Application extends StateBasedGame {
   }
 
   @Override
-  public void initStatesList(GameContainer container) throws SlickException {
+  public void initStatesList(GameContainer container) {
     container.getGraphics().setFont(fontLoader.get().getBaseFont());
-    addState(firstState.create(container, this, fontLoader.get()));
-    for (StateInstantiator instantiator : gameStates) {
-      addState(instantiator.create(container, this, fontLoader.get()));
+    addState(firstState.get());
+    for (GameStateBase gameState : gameStates.get()) {
+      addState(gameState);
     }
   }
 
