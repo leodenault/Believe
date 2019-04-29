@@ -6,14 +6,13 @@ package(
 )
 
 java_junit5_test(
-    name = "DialogueManagerTest",
-    srcs = ["DialogueManagerTest.java"],
+    name = "DialogueSupplierTest",
+    srcs = ["DialogueSupplierTest.java"],
     deps = [
         "//java/believe/dialogue",
         "//java/believe/dialogue/proto:dialogue_java_proto",
         "//java/believe/logging/testing",
         "//java/believe/logging/truth",
-        "//java/believe/testing/temporaryfolder",
         "//third_party/junit",
         "//third_party/truth",
         "//third_party/truth:truth8",

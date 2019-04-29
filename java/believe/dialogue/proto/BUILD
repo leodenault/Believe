@@ -1,7 +1,6 @@
 package(
     default_visibility = [
-        "//:believe_test_pkgs",
-        "//java/believe/dialogue:__subpackages__",
+        "//:believe_all_pkgs",
     ],
 )
 

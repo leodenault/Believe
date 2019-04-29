@@ -5,12 +5,13 @@ package(
 java_library(
     name = "dialogue",
     srcs = [
-        "DialogueManager.java",
+        "DialogueSupplier.java",
         "package-info.java",
     ],
     deps = [
         "//java/believe/app/annotation",
         "//java/believe/dialogue/proto:dialogue_java_proto",
+        "//third_party/dagger",
         "//third_party/javax:annotations",
         "//third_party/slick",
     ],
