@@ -2,7 +2,7 @@ package believe.gamestate;
 
 import believe.app.proto.GameOptionsProto.GameOptions;
 import believe.app.proto.GameOptionsProto.GameplayOptions;
-import believe.datamodel.DataCommitter;
+import believe.datamodel.MutableDataCommitter;
 import believe.gui.MenuSelection;
 import believe.gui.NumberPicker;
 import believe.gui.VerticalKeyboardScrollpanel;
@@ -20,7 +20,7 @@ public class OptionsMenuState extends GameStateBase {
 
   @Inject
   public OptionsMenuState(
-      GameContainer container, StateBasedGame game, DataCommitter<GameOptions> gameOptions) {
+      GameContainer container, StateBasedGame game, MutableDataCommitter<GameOptions> gameOptions) {
     int cWidth = container.getWidth();
     int cHeight = container.getHeight();
     scrollPanelFocused = false;

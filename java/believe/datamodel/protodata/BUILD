@@ -6,7 +6,7 @@ java_library(
     name = "protodata",
     srcs = [
         "BinaryProtoFileUtil.java",
-        "ProtoDataCommitter.java",
+        "MutableProtoDataCommitter.java",
     ],
     deps = [
         "//java/believe/datamodel",

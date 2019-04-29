@@ -6,6 +6,7 @@ java_library(
     name = "datamodel",
     srcs = [
         "DataCommitter.java",
-        "DataProvider.java",
+        "MutableData.java",
+        "MutableDataCommitter.java",
     ],
 )

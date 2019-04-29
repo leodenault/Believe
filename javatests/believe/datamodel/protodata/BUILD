@@ -23,7 +23,7 @@ java_junit5_test(
 
 java_junit5_test(
     name = "ProtoDataProviderTest",
-    srcs = ["ProtoDataCommitterTest.java"],
+    srcs = ["MutableProtoDataCommitterTest.java"],
     deps = [
         "//java/believe/datamodel/protodata",
         "//java/believe/testing/proto:test_java_proto",

@@ -1,7 +1,6 @@
 package believe.gamestate;
 
 import believe.app.proto.GameOptionsProto.GameOptions;
-import believe.datamodel.DataProvider;
 import believe.gamestate.ExternalLoadGameAction.LoadableState;
 import believe.levelFlow.component.FlowComponent;
 import believe.levelFlow.component.FlowComponentListener;
@@ -9,6 +8,10 @@ import believe.levelFlow.parsing.FlowComponentBuilder;
 import believe.levelFlow.parsing.FlowFileParser;
 import believe.levelFlow.parsing.exceptions.FlowComponentBuilderException;
 import believe.levelFlow.parsing.exceptions.FlowFileParserException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.function.Supplier;
 import javax.inject.Inject;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -19,22 +22,19 @@ import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ResourceLoader;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 public class PlayFlowFileState extends GameStateBase
     implements FlowComponentListener, OverlayablePrecedingState, LoadableState {
   private final GameContainer gameContainer;
   private final ChangeToTemporaryStateAction<OverlayablePrecedingState> pauseAction;
-  private final DataProvider<GameOptions> gameOptions;
+  private final Supplier<GameOptions> gameOptions;
 
   boolean enteringFromPauseMenu;
   private FlowComponent component;
   private StateBasedGame game;
 
   @Inject
-  public PlayFlowFileState(GameContainer gameContainer, StateBasedGame game, DataProvider<GameOptions> gameOptions) {
+  public PlayFlowFileState(
+      GameContainer gameContainer, StateBasedGame game, Supplier<GameOptions> gameOptions) {
     this.gameContainer = gameContainer;
     this.pauseAction = new ChangeToTemporaryStateAction<>(GamePausedOverlay.class, this, game);
     this.gameOptions = gameOptions;

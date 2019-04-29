@@ -1,11 +1,7 @@
 package believe.datamodel;
 
-/**
- * A {@link DataProvider} with the ability to commit its contents to disk.
- *
- * @param <T> the type of data this class provides.
- */
-public interface DataCommitter<T> extends DataProvider<T> {
-  /** Commits the data held by this {@link DataProvider} to disk. */
+/** Model data whose contents can be committed to disk by calling {@link #commit()}. */
+public interface DataCommitter {
+  /** Commits the data held by this {@link MutableData} to disk. */
   void commit();
 }

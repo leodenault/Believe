@@ -1,24 +1,23 @@
 package believe.datamodel.protodata;
 
-import believe.datamodel.DataCommitter;
-import believe.datamodel.DataProvider;
+import believe.datamodel.MutableDataCommitter;
 import com.google.protobuf.Message;
 import com.google.protobuf.Parser;
-
 import java.util.Optional;
 
 /**
- * A {@link DataProvider} that provides proto instances.
+ * A {@link MutableDataCommitter} that handles proto instances.
  *
  * @param <M> the type of the proto message.
  */
-public final class ProtoDataCommitter<M extends Message> implements DataCommitter<M> {
+public final class MutableProtoDataCommitter<M extends Message> implements MutableDataCommitter<M> {
   private final String dataLocation;
   private final Parser<M> messageParser;
 
   private M data;
 
-  public ProtoDataCommitter(String dataLocation, Parser<M> messageParser, M defaultInstance) {
+  public MutableProtoDataCommitter(
+      String dataLocation, Parser<M> messageParser, M defaultInstance) {
     this.dataLocation = dataLocation;
     this.messageParser = messageParser;
     data = defaultInstance;

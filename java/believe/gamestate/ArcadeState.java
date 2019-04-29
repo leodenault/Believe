@@ -4,7 +4,6 @@ import believe.app.proto.GameOptionsProto.GameOptions;
 import believe.character.Faction;
 import believe.character.playable.PlayableCharacter;
 import believe.core.io.FontLoader;
-import believe.datamodel.DataProvider;
 import believe.levelFlow.component.FlowComponent;
 import believe.levelFlow.component.FlowComponentListener;
 import believe.levelFlow.parsing.FlowComponentBuilder;
@@ -15,18 +14,17 @@ import believe.map.gui.LevelMap;
 import believe.map.gui.MapManager;
 import believe.map.gui.PlayArea;
 import believe.physics.manager.PhysicsManager;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.function.Supplier;
 import javax.inject.Inject;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ResourceLoader;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class ArcadeState extends LevelState implements FlowComponentListener {
 
@@ -44,7 +42,7 @@ public class ArcadeState extends LevelState implements FlowComponentListener {
       StateBasedGame game,
       PhysicsManager physicsManager,
       FontLoader fontLoader,
-      DataProvider<GameOptions> gameOptions) {
+      Supplier<GameOptions> gameOptions) {
     super(container, game, MapManager.defaultManager(), physicsManager, fontLoader);
     FlowComponentBuilder builder =
         new FlowComponentBuilder(container, (int) (0.2 * container.getWidth()));
