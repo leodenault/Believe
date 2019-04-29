@@ -13,15 +13,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-/**
- * Manages fetching dialogue and loading it from disk.
- */
+/** Manages fetching dialogue and loading it from disk. */
 public final class DialogueManager {
-  private final File dialogueDirectory;
+  private final String dialogueDirectoryName;
   private final Map<String, DialogueMap> loadedDialogueMaps;
 
-  public DialogueManager(File dialogueDirectory) {
-    this.dialogueDirectory = dialogueDirectory;
+  public DialogueManager(String dialogueDirectoryName) {
+    this.dialogueDirectoryName = dialogueDirectoryName;
     loadedDialogueMaps = new HashMap<>();
   }
 
@@ -37,16 +35,20 @@ public final class DialogueManager {
 
   @Nullable
   private DialogueMap innerLoadDialogueMap(String mapName) {
+    File dialogueDirectory = new File(dialogueDirectoryName);
+    if (!dialogueDirectory.exists()) {
+      Log.error("The directory '" + dialogueDirectoryName + "' does not exist.");
+      return DialogueMap.getDefaultInstance();
+    }
+
     File[] files = dialogueDirectory.listFiles();
     if (files == null) {
       Log.error("Could not load dialogue map. Provided directory is actually a file.");
       return DialogueMap.getDefaultInstance();
     }
 
-    Optional<File>
-        dialogueMapFile =
-        Stream
-            .of(files)
+    Optional<File> dialogueMapFile =
+        Stream.of(files)
             .filter(file -> file.getName().equals(mapName + ".pb"))
             .findFirst(); // There should only be a single file.
 
@@ -73,11 +75,10 @@ public final class DialogueManager {
    * @param mapName the name of the set from which to fetch the {@link Dialogue} instance.
    * @param name the name of the {@link Dialogue} instance to be fetched.
    * @return an {@link Optional} {@link Dialogue} if a {@link Dialogue} with named {@code name}
-   * exists. Otherwise, {@link Optional#empty()}.
+   *     exists. Otherwise, {@link Optional#empty()}.
    */
   public Optional<Dialogue> getDialogue(String mapName, String name) {
-    DialogueMap
-        dialogueMap =
+    DialogueMap dialogueMap =
         loadedDialogueMaps.computeIfAbsent(mapName, unused -> innerLoadDialogueMap(mapName));
 
     if (dialogueMap == null) {
@@ -86,11 +87,12 @@ public final class DialogueManager {
 
     Optional<Dialogue> dialogue = Optional.ofNullable(dialogueMap.getDialoguesMap().get(name));
     if (!dialogue.isPresent()) {
-      Log.error("Could not find dialogue with name '"
-          + name
-          + "' within dialogue map named '"
-          + mapName
-          + "'.");
+      Log.error(
+          "Could not find dialogue with name '"
+              + name
+              + "' within dialogue map named '"
+              + mapName
+              + "'.");
     }
     return dialogue;
   }
