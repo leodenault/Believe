@@ -36,11 +36,9 @@ public abstract class ApplicationModule {
     return optionsProvider;
   }
 
-  @Provides
-  static Supplier<GameOptions> provideGameOptionsProvider(
-      MutableDataCommitter<GameOptions> gameOptions) {
-    return gameOptions;
-  }
+  @Binds
+  abstract Supplier<GameOptions> provideGameOptionsProvider(
+      MutableDataCommitter<GameOptions> gameOptions);
 
   @Provides
   static PhysicsManager providePhysicsManager() {
