@@ -1,4 +1,4 @@
-package believe.gamestate;
+package believe.gamestate.levelstate;
 
 import believe.action.ChangeToTemporaryStateAction;
 import believe.character.Character.DamageListener;
@@ -6,6 +6,7 @@ import believe.character.Faction;
 import believe.character.playable.EnemyCharacter;
 import believe.character.playable.PlayableCharacter;
 import believe.core.io.FontLoader;
+import believe.gamestate.GameStateBase;
 import believe.gamestate.temporarystate.GameOverState;
 import believe.gamestate.temporarystate.GamePausedOverlay;
 import believe.gamestate.temporarystate.OverlayablePrecedingState;

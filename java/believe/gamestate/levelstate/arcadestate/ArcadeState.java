@@ -1,9 +1,10 @@
-package believe.gamestate;
+package believe.gamestate.levelstate.arcadestate;
 
 import believe.app.proto.GameOptionsProto.GameOptions;
 import believe.character.Faction;
 import believe.character.playable.PlayableCharacter;
 import believe.core.io.FontLoader;
+import believe.gamestate.levelstate.LevelState;
 import believe.levelFlow.component.FlowComponent;
 import believe.levelFlow.component.FlowComponentListener;
 import believe.levelFlow.parsing.FlowComponentBuilder;
@@ -14,9 +15,6 @@ import believe.map.gui.LevelMap;
 import believe.map.gui.MapManager;
 import believe.map.gui.PlayArea;
 import believe.physics.manager.PhysicsManager;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.function.Supplier;
 import javax.inject.Inject;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -25,6 +23,10 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ResourceLoader;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.function.Supplier;
 
 public class ArcadeState extends LevelState implements FlowComponentListener {
 

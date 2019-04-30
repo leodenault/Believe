@@ -1,4 +1,4 @@
-package believe.gamestate;
+package believe.gamestate.levelstate.platformingstate;
 
 import static believe.util.MapEntry.entry;
 import static believe.util.Util.hashMapOf;
@@ -23,37 +23,32 @@ import java.util.function.Function;
 
 public class PlatformingStateTest {
   private static final class FakeFontLoader extends FontLoader {
-      private static final Font FONT = new Font() {
-        @Override
-        public int getWidth(String s) {
-          return 0;
-        }
+    private static final Font FONT =
+        new Font() {
+          @Override
+          public int getWidth(String s) {
+            return 0;
+          }
 
-        @Override
-        public int getHeight(String s) {
-          return 0;
-        }
+          @Override
+          public int getHeight(String s) {
+            return 0;
+          }
 
-        @Override
-        public int getLineHeight() {
-          return 0;
-        }
+          @Override
+          public int getLineHeight() {
+            return 0;
+          }
 
-        @Override
-        public void drawString(float v, float v1, String s) {
+          @Override
+          public void drawString(float v, float v1, String s) {}
 
-        }
+          @Override
+          public void drawString(float v, float v1, String s, Color color) {}
 
-        @Override
-        public void drawString(float v, float v1, String s, Color color) {
-
-        }
-
-        @Override
-        public void drawString(float v, float v1, String s, Color color, int i, int i1) {
-
-        }
-      };
+          @Override
+          public void drawString(float v, float v1, String s, Color color, int i, int i1) {}
+        };
 
     FakeFontLoader() {
       super(500, 500);
@@ -84,13 +79,14 @@ public class PlatformingStateTest {
     container = new FakeGameContainer(game);
     FontLoader fontLoader = new FakeFontLoader();
 
-    state = new PlatformingState(
-        container,
-        game,
-        MapManager.defaultManager(),
-        physicsManager,
-        hashMapOf(entry(Input.KEY_LEFT, singleEventAction)),
-        fontLoader);
+    state =
+        new PlatformingState(
+            container,
+            game,
+            MapManager.defaultManager(),
+            physicsManager,
+            hashMapOf(entry(Input.KEY_LEFT, singleEventAction)),
+            fontLoader);
   }
 
   @Test

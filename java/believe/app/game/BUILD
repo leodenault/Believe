@@ -47,6 +47,8 @@ java_library(
         "//java/believe/core/io",
         "//java/believe/gamestate",
         "//java/believe/gamestate:impl",
+        "//java/believe/gamestate/levelstate/arcadestate",
+        "//java/believe/gamestate/levelstate/platformingstate",
         "//java/believe/gamestate/temporarystate:impl",
         "//java/believe/physics/manager",
         "//java/believe/util",

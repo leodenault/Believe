@@ -17,12 +17,9 @@ java_library(
 java_library(
     name = "impl",
     srcs = [
-        "ArcadeState.java",
         "FlowFilePickerMenuState.java",
-        "LevelState.java",
         "MainMenuState.java",
         "OptionsMenuState.java",
-        "PlatformingState.java",
         "PlayFlowFileState.java",
     ],
     deps = [
@@ -38,6 +35,8 @@ java_library(
         "//java/believe/core",
         "//java/believe/core/io",
         "//java/believe/datamodel",
+        "//java/believe/gamestate/levelstate/arcadestate",
+        "//java/believe/gamestate/levelstate/platformingstate",
         "//java/believe/gamestate/temporarystate",
         "//java/believe/gamestate/temporarystate:impl",
         "//java/believe/graphicstransitions",

@@ -2,14 +2,14 @@ package believe.app.editor;
 
 import believe.app.ApplicationModule;
 import believe.app.ApplicationTitle;
-import believe.app.EventActions;
+import believe.gamestate.levelstate.platformingstate.EventActions;
 import believe.app.FirstState;
 import believe.app.GameStates;
 import believe.action.ExitTemporaryStateAction;
 import believe.gamestate.temporarystate.GameOverState;
 import believe.gamestate.temporarystate.GamePausedOverlay;
 import believe.gamestate.GameStateBase;
-import believe.gamestate.PlatformingState;
+import believe.gamestate.levelstate.platformingstate.PlatformingState;
 import believe.util.Util;
 import dagger.Binds;
 import dagger.Module;

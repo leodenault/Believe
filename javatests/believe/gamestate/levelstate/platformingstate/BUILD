@@ -3,9 +3,8 @@ java_test(
     srcs = ["PlatformingStateTest.java"],
     deps = [
         "//java/believe/core/io",
-        "//java/believe/gamestate",
-        "//java/believe/gamestate:impl",
-        "//java/believe/gamestate:package-info",
+        "//java/believe/gamestate/levelstate/platformingstate",
+        "//java/believe/gamestate/levelstate/platformingstate:package-info",
         "//java/believe/map/gui",
         "//java/believe/physics/manager",
         "//java/believe/testing",

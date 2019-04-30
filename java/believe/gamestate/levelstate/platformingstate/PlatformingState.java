@@ -1,8 +1,15 @@
-package believe.gamestate;
+package believe.gamestate.levelstate.platformingstate;
 
-import believe.app.EventActions;
+import believe.audio.Music;
+import believe.character.playable.PlayableCharacter;
+import believe.character.playable.PlayableCharacter.SynchedComboListener;
+import believe.core.SynchedComboPattern;
 import believe.core.io.FontLoader;
+import believe.gamestate.levelstate.LevelState;
+import believe.levelFlow.component.ComboSyncher;
+import believe.map.gui.LevelMap;
 import believe.map.gui.MapManager;
+import believe.map.gui.PlayArea;
 import believe.physics.manager.PhysicsManager;
 import javax.inject.Inject;
 import org.newdawn.slick.GameContainer;
@@ -10,15 +17,6 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import believe.character.playable.PlayableCharacter;
-import believe.character.playable.PlayableCharacter.SynchedComboListener;
-import believe.audio.Music;
-import believe.core.SynchedComboPattern;
-import believe.levelFlow.component.ComboSyncher;
-import believe.map.gui.PlayArea;
-import believe.map.gui.LevelMap;
-
-import java.util.Collections;
 import java.util.Map;
 import java.util.function.Function;
 

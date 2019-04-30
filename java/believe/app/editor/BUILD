@@ -46,6 +46,8 @@ java_library(
         "//java/believe/app:qualifiers",
         "//java/believe/gamestate",
         "//java/believe/gamestate:impl",
+        "//java/believe/gamestate/levelstate/platformingstate",
+        "//java/believe/gamestate/levelstate/platformingstate:qualifiers",
         "//java/believe/gamestate/temporarystate:impl",
         "//java/believe/util",
         "//third_party/dagger",

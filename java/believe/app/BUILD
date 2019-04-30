@@ -71,6 +71,8 @@ java_library(
         "//java/believe/datamodel",
         "//java/believe/datamodel/protodata",
         "//java/believe/gamestate:impl",
+        "//java/believe/gamestate/levelstate/platformingstate",
+        "//java/believe/gamestate/levelstate/platformingstate:qualifiers",
         "//java/believe/map/gui",
         "//java/believe/physics/manager",
         "//third_party/dagger",
@@ -82,7 +84,6 @@ java_library(
     name = "qualifiers",
     srcs = [
         "ApplicationTitle.java",
-        "EventActions.java",
         "FirstState.java",
         "GameStates.java",
     ],

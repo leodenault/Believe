@@ -1,6 +1,8 @@
 package believe.gamestate;
 
 import believe.action.ChangeStateAction;
+import believe.gamestate.levelstate.arcadestate.ArcadeState;
+import believe.gamestate.levelstate.platformingstate.PlatformingState;
 import javax.inject.Inject;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;

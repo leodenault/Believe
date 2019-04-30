@@ -1,12 +1,10 @@
+package(
+    default_visibility = ["//:believe_all_pkgs"],
+)
+
 java_library(
     name = "component",
     srcs = glob(["*.java"]),
-    visibility = [
-        "//java/believe/gamestate:__pkg__",
-        "//java/believe/gui:__pkg__",
-        "//java/believe/levelFlow/parsing:__pkg__",
-        "//javatests/believe:believe_tests",
-    ],
     deps = [
         "//java/believe/core",
         "//java/believe/core/display",
