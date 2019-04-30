@@ -1,5 +1,5 @@
 @ParametersAreNonnullByDefault @ReturnTypesAreNonnulByDefault @FieldsAreNonnulByDefault
-package believe.graphics_transitions;
+package believe.gamestate.temporarystate;
 
 import believe.app.annotation.Nullability.FieldsAreNonnulByDefault;
 import believe.app.annotation.Nullability.ReturnTypesAreNonnulByDefault;

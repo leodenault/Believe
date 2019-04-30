@@ -1,4 +1,4 @@
-package believe.gamestate;
+package believe.gamestate.temporarystate;
 
 import org.newdawn.slick.state.GameState;
 

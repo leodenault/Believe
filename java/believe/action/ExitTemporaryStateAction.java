@@ -1,4 +1,6 @@
-package believe.gamestate;
+package believe.action;
+
+import believe.gamestate.temporarystate.TemporaryState;
 
 /** Callback executed when exiting a {@link TemporaryState}. */
 public interface ExitTemporaryStateAction {

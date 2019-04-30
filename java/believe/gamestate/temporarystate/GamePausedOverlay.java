@@ -1,7 +1,10 @@
-package believe.gamestate;
+package believe.gamestate.temporarystate;
 
-import believe.graphics_transitions.CrossFadeTransition;
-import believe.graphics_transitions.GraphicsTransitionPairFactory;
+import believe.action.ChangeStateAction;
+import believe.action.ExitTemporaryStateAction;
+import believe.gamestate.GameStateBase;
+import believe.graphicstransitions.CrossFadeTransition;
+import believe.graphicstransitions.GraphicsTransitionPairFactory;
 import believe.gui.DirectionalPanel;
 import believe.gui.MenuSelection;
 import believe.gui.MenuSelectionGroup;

@@ -1,5 +1,7 @@
 package believe.gamestate;
 
+import believe.action.ChangeStateAction;
+import believe.action.ExternalLoadGameAction;
 import believe.gui.MenuSelection;
 import believe.gui.TextComponent;
 import believe.gui.VerticalKeyboardScrollpanel;

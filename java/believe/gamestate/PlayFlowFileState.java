@@ -1,7 +1,11 @@
 package believe.gamestate;
 
+import believe.action.ChangeStateAction;
+import believe.action.ChangeToTemporaryStateAction;
 import believe.app.proto.GameOptionsProto.GameOptions;
-import believe.gamestate.ExternalLoadGameAction.LoadableState;
+import believe.action.ExternalLoadGameAction.LoadableState;
+import believe.gamestate.temporarystate.GamePausedOverlay;
+import believe.gamestate.temporarystate.OverlayablePrecedingState;
 import believe.levelFlow.component.FlowComponent;
 import believe.levelFlow.component.FlowComponentListener;
 import believe.levelFlow.parsing.FlowComponentBuilder;

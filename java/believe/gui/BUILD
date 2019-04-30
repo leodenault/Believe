@@ -1,3 +1,7 @@
+package(
+    default_visibility = ["//:believe_all_pkgs"],
+)
+
 java_library(
     name = "gui",
     srcs = [
@@ -14,13 +18,6 @@ java_library(
         "ScrollBar.java",
         "TextComponent.java",
         "VerticalKeyboardScrollpanel.java",
-    ],
-    visibility = [
-        "//java/believe/character:character_pkg",
-        "//java/believe/gamestate:__pkg__",
-        "//java/believe/levelFlow/component:__pkg__",
-        "//java/believe/map/gui:__pkg__",
-        "//javatests/believe:believe_tests",
     ],
     deps = [
         ":package-info",

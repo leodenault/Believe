@@ -1,5 +1,6 @@
 package believe.gamestate;
 
+import believe.action.ChangeStateAction;
 import believe.app.proto.GameOptionsProto.GameOptions;
 import believe.app.proto.GameOptionsProto.GameplayOptions;
 import believe.datamodel.MutableDataCommitter;

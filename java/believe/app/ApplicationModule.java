@@ -4,7 +4,7 @@ import believe.app.proto.GameOptionsProto.GameOptions;
 import believe.core.io.FontLoader;
 import believe.datamodel.MutableDataCommitter;
 import believe.datamodel.protodata.MutableProtoDataCommitter;
-import believe.gamestate.ChangeStateAction;
+import believe.action.ChangeStateAction;
 import believe.gamestate.MainMenuState;
 import believe.gamestate.PlatformingState;
 import believe.map.gui.MapManager;

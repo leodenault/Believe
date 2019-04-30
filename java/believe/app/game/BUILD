@@ -38,6 +38,7 @@ java_library(
     visibility = ["//:believe_all_pkgs"],
     deps = [
         ":package-info",
+        "//java/believe/action",
         "//java/believe/app",
         "//java/believe/app:dagger_module",
         "//java/believe/app:qualifiers",
@@ -45,6 +46,8 @@ java_library(
         "//java/believe/app/flags",
         "//java/believe/core/io",
         "//java/believe/gamestate",
+        "//java/believe/gamestate:impl",
+        "//java/believe/gamestate/temporarystate:impl",
         "//java/believe/physics/manager",
         "//java/believe/util",
         "//third_party/dagger",

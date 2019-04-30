@@ -1,20 +1,20 @@
 package believe.app.game;
 
+import believe.action.ChangeStateAction;
+import believe.action.ExitTemporaryStateAction;
 import believe.app.ApplicationModule;
 import believe.app.ApplicationTitle;
 import believe.app.FirstState;
 import believe.app.GameStates;
 import believe.gamestate.ArcadeState;
-import believe.gamestate.ChangeStateAction;
-import believe.gamestate.ExitTemporaryStateAction;
 import believe.gamestate.FlowFilePickerMenuState;
-import believe.gamestate.GameOverState;
-import believe.gamestate.GamePausedOverlay;
 import believe.gamestate.GameStateBase;
 import believe.gamestate.MainMenuState;
 import believe.gamestate.OptionsMenuState;
 import believe.gamestate.PlatformingState;
 import believe.gamestate.PlayFlowFileState;
+import believe.gamestate.temporarystate.GameOverState;
+import believe.gamestate.temporarystate.GamePausedOverlay;
 import believe.util.Util;
 import dagger.Binds;
 import dagger.Lazy;

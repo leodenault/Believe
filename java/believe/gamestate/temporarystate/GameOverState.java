@@ -1,5 +1,8 @@
-package believe.gamestate;
+package believe.gamestate.temporarystate;
 
+import believe.action.ChangeStateAction;
+import believe.action.ExitTemporaryStateAction;
+import believe.gamestate.GameStateBase;
 import believe.gui.DirectionalPanel;
 import believe.gui.MenuSelection;
 import believe.gui.MenuSelectionGroup;

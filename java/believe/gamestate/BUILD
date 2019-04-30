@@ -1,34 +1,34 @@
 package(
-    default_visibility = [
-        "//java/believe/app:app_pkg",
-        "//javatests/believe:believe_tests",
-    ],
+    default_visibility = ["//:believe_all_pkgs"],
 )
 
 java_library(
     name = "gamestate",
     srcs = [
-        "ArcadeState.java",
-        "ChangeStateAction.java",
-        "ChangeToTemporaryStateAction.java",
-        "ExitTemporaryStateAction.java",
-        "ExternalLoadGameAction.java",
-        "FlowFilePickerMenuState.java",
-        "GameOverState.java",
-        "GamePausedOverlay.java",
         "GameStateBase.java",
         "GameStateRegistry.java",
-        "LevelState.java",
-        "MainMenuState.java",
-        "OptionsMenuState.java",
-        "OverlayablePrecedingState.java",
-        "PlatformingState.java",
-        "PlayFlowFileState.java",
-        "PrecedingState.java",
-        "TemporaryState.java",
     ],
     deps = [
         ":package-info",
+        "//third_party/slick",
+    ],
+)
+
+java_library(
+    name = "impl",
+    srcs = [
+        "ArcadeState.java",
+        "FlowFilePickerMenuState.java",
+        "LevelState.java",
+        "MainMenuState.java",
+        "OptionsMenuState.java",
+        "PlatformingState.java",
+        "PlayFlowFileState.java",
+    ],
+    deps = [
+        ":gamestate",
+        ":package-info",
+        "//java/believe/action",
         "//java/believe/app:qualifiers",
         "//java/believe/app/proto:game_options_java_proto",
         "//java/believe/audio",
@@ -38,7 +38,9 @@ java_library(
         "//java/believe/core",
         "//java/believe/core/io",
         "//java/believe/datamodel",
-        "//java/believe/graphics_transitions",
+        "//java/believe/gamestate/temporarystate",
+        "//java/believe/gamestate/temporarystate:impl",
+        "//java/believe/graphicstransitions",
         "//java/believe/gui",
         "//java/believe/levelFlow/component",
         "//java/believe/levelFlow/parsing",

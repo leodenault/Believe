@@ -1,5 +1,5 @@
 java_library(
-    name = "graphics_transitions",
+    name = "graphicstransitions",
     srcs = [
         "CrossFadeTransition.java",
         "GraphicsTransitionPairFactory.java",

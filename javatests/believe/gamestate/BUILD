@@ -4,6 +4,7 @@ java_test(
     deps = [
         "//java/believe/core/io",
         "//java/believe/gamestate",
+        "//java/believe/gamestate:impl",
         "//java/believe/gamestate:package-info",
         "//java/believe/map/gui",
         "//java/believe/physics/manager",

@@ -1,4 +1,4 @@
-package believe.graphics_transitions;
+package believe.graphicstransitions;
 
 import org.newdawn.slick.state.transition.Transition;
 

@@ -41,9 +41,12 @@ java_library(
     srcs = ["LevelEditorModule.java"],
     deps = [
         ":package-info",
+        "//java/believe/action",
         "//java/believe/app:dagger_module",
         "//java/believe/app:qualifiers",
         "//java/believe/gamestate",
+        "//java/believe/gamestate:impl",
+        "//java/believe/gamestate/temporarystate:impl",
         "//java/believe/util",
         "//third_party/dagger",
         "//third_party/slick",
