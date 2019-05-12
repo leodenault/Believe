@@ -117,6 +117,11 @@ maven_jar(
 )
 
 maven_jar(
+    name = "google_auto_factory",
+    artifact = "com.google.auto.factory:auto-factory:1.0-beta6",
+)
+
+maven_jar(
     name = "diff_utils",
     artifact = "com.googlecode.java-diff-utils:diffutils:1.2",
 )
