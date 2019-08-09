@@ -1,74 +1,83 @@
 package believe.map.gui;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import believe.map.collidable.Command;
-import believe.map.io.MapProperties;
-import believe.map.collidable.Tile;
+import believe.core.Updatable;
+import believe.core.display.Camera.Layerable;
+import believe.core.display.Renderable;
+import believe.gui.ComponentBase;
+import believe.map.data.LayerData;
+import believe.map.data.MapData;
+import com.google.auto.factory.AutoFactory;
+import com.google.auto.factory.Provided;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
-import org.newdawn.slick.tiled.TiledMap;
 
-import believe.character.Character;
-import believe.character.playable.EnemyCharacter;
-import believe.core.display.Camera.Layerable;
-import believe.gui.ComponentBase;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+@AutoFactory
 public class LevelMap extends ComponentBase implements Layerable {
-  public static final int TARGET_WIDTH = 1600;
-  public static final int TARGET_HEIGHT = 900;
+  static final int TARGET_WIDTH = 1600;
+  static final int TARGET_HEIGHT = 900;
 
-  private final String location;
-  private final String tileSetLocation;
+  private final List<MapLayerComponent> rearLayers;
+  private final List<MapLayerComponent> frontLayers;
+  private final Set<Renderable> renderables;
+  private final Set<Updatable> updatables;
+  private final List<MapBackground> mapBackgrounds;
 
-  private TiledMap map;
-  private MapProperties properties;
-  private ComponentBase focus;
-  private List<EnemyCharacter> enemies;
-  private List<MapBackground> backgrounds;
+  @Nullable private ComponentBase focus;
 
-  public LevelMap(GUIContext container, String location, String tileSetLocation)
-      throws SlickException {
+  @Inject
+  public LevelMap(
+      @Provided GUIContext container,
+      @Provided MapLayerComponentFactory mapLayerComponentFactory,
+      MapData mapData) {
     super(container, 0, 0);
-    this.location = location;
-    this.tileSetLocation = tileSetLocation;
-    setupMap(container, location, tileSetLocation);
-  }
-
-  public void setupMap(GUIContext container, String location, String tileSetLocation)
-      throws SlickException {
-    map = new TiledMap(location, tileSetLocation);
-    properties = MapProperties.create(map, container);
-    enemies = properties.enemies;
-    rect.setSize(map.getWidth() * map.getTileWidth(), map.getHeight() * map.getTileHeight());
-    backgrounds = new LinkedList<MapBackground>();
+    renderables =
+        mapData.layers().stream()
+            .map(LayerData::generatedMapEntityData)
+            .flatMap(generatedMapEntityData -> generatedMapEntityData.renderables().stream())
+            .collect(Collectors.toSet());
+    updatables =
+        mapData.layers().stream()
+            .map(LayerData::generatedMapEntityData)
+            .flatMap(generatedMapEntityData -> generatedMapEntityData.updatables().stream())
+            .collect(Collectors.toSet());
+    rect.setSize(mapData.width(), mapData.height());
     setLocation(0, 0);
+
+    rearLayers = new ArrayList<>();
+    frontLayers = new ArrayList<>();
+    for (LayerData layer : mapData.layers()) {
+      if (!layer.isVisible()) {
+        continue;
+      }
+
+      if (layer.isFrontLayer()) {
+        frontLayers.add(mapLayerComponentFactory.create(layer));
+      } else {
+        rearLayers.add(mapLayerComponentFactory.create(layer));
+      }
+    }
+    mapBackgrounds =
+        mapData.backgroundScenes().stream()
+            .map(
+                backgroundSceneData ->
+                    new MapBackground(
+                        container,
+                        backgroundSceneData.image(),
+                        backgroundSceneData.layer(),
+                        backgroundSceneData.yPosition()))
+            .collect(Collectors.toList());
   }
 
   public void reset() {
     setLocation(0, 0);
-  }
-
-  public int getPlayerStartX() {
-    return properties.startX * map.getTileWidth();
-  }
-
-  public int getPlayerStartY() {
-    return (properties.startY + 1) * map.getTileHeight();
-  }
-
-  public List<Tile> getCollidableTiles() {
-    return properties.collidableTiles;
-  }
-
-  public List<EnemyCharacter> getEnemies() {
-    return enemies;
-  }
-
-  public List<Command> getCommands() {
-    return properties.commands;
   }
 
   /**
@@ -81,17 +90,13 @@ public class LevelMap extends ComponentBase implements Layerable {
   }
 
   public void update(int delta) {
-    for (EnemyCharacter enemy : enemies) {
-      enemy.update(delta);
+    for (Updatable updatable : updatables) {
+      updatable.update(delta);
     }
   }
 
-  public void addBackground(String image, int layer, int y) throws SlickException {
-    this.backgrounds.add(new MapBackground(container, image, layer, y * map.getTileHeight()));
-  }
-
   public List<MapBackground> getBackgrounds() {
-    return backgrounds;
+    return mapBackgrounds;
   }
 
   @Override
@@ -109,22 +114,21 @@ public class LevelMap extends ComponentBase implements Layerable {
   }
 
   @Override
-  protected void renderComponent(GUIContext context, Graphics g)
-      throws SlickException {
-    for (Integer layer : properties.rearLayers) {
-      map.render(getX(), getY(), layer);
+  protected void renderComponent(GUIContext context, Graphics g) throws SlickException {
+    for (MapLayerComponent rearLayer : rearLayers) {
+      rearLayer.renderComponent(context, g);
     }
 
-    for (Character enemy : enemies) {
-      enemy.render(context, g);
+    for (Renderable renderable : renderables) {
+      renderable.render(context, g);
     }
 
     if (focus != null) {
       focus.render(context, g);
     }
 
-    for (Integer layer : properties.frontLayers) {
-      map.render(getX(), getY(), layer);
+    for (MapLayerComponent frontLayer : frontLayers) {
+      frontLayer.renderComponent(context, g);
     }
   }
 }

@@ -3,8 +3,8 @@ package believe.gamestate.levelstate;
 import believe.action.ChangeToTemporaryStateAction;
 import believe.character.Character.DamageListener;
 import believe.character.Faction;
-import believe.character.playable.EnemyCharacter;
 import believe.character.playable.PlayableCharacter;
+import believe.character.playable.PlayableCharacterFactory;
 import believe.core.io.FontLoader;
 import believe.gamestate.GameStateBase;
 import believe.gamestate.temporarystate.GameOverState;
@@ -12,9 +12,9 @@ import believe.gamestate.temporarystate.GamePausedOverlay;
 import believe.gamestate.temporarystate.OverlayablePrecedingState;
 import believe.gamestate.temporarystate.PrecedingState;
 import believe.gui.ProgressBar;
-import believe.map.gui.LevelMap;
-import believe.map.gui.MapManager;
+import believe.map.data.MapData;
 import believe.map.gui.PlayArea;
+import believe.map.io.MapManager;
 import believe.physics.manager.PhysicsManager;
 import javax.annotation.Nullable;
 import org.newdawn.slick.GameContainer;
@@ -24,8 +24,6 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import java.util.List;
-
 public abstract class LevelState extends GameStateBase
     implements OverlayablePrecedingState, DamageListener {
 
@@ -33,12 +31,12 @@ public abstract class LevelState extends GameStateBase
   private final GameContainer container;
   private final ChangeToTemporaryStateAction<OverlayablePrecedingState> pauseAction;
   private final ChangeToTemporaryStateAction<PrecedingState> gameOverAction;
+  private final PlayableCharacterFactory playableCharacterFactory;
   private final PhysicsManager physicsManager;
 
   private boolean enteringFromPauseMenu;
-  @Nullable private LevelMap map;
+  @Nullable private MapData mapData;
   private ProgressBar focusBar;
-  @Nullable private PhysicsManager physics;
 
   protected StateBasedGame game;
   @Nullable protected PlayArea playArea;
@@ -49,21 +47,22 @@ public abstract class LevelState extends GameStateBase
       StateBasedGame game,
       MapManager mapManager,
       PhysicsManager physicsManager,
-      FontLoader fontLoader) {
+      FontLoader fontLoader,
+      PlayableCharacterFactory playableCharacterFactory) {
     this.container = container;
     this.game = game;
     this.mapManager = mapManager;
     this.physicsManager = physicsManager;
     this.pauseAction = new ChangeToTemporaryStateAction<>(GamePausedOverlay.class, this, game);
     this.gameOverAction = new ChangeToTemporaryStateAction<>(GameOverState.class, this, game);
+    this.playableCharacterFactory = playableCharacterFactory;
     this.focusBar = new ProgressBar(container, fontLoader.getBaseFontAtSize(15));
     this.focusBar.setBorderSize(1);
     this.focusBar.setTextPadding(0);
   }
 
   @Override
-  public void init(GameContainer container, StateBasedGame game) throws SlickException {
-  }
+  public void init(GameContainer container, StateBasedGame game) throws SlickException {}
 
   @Override
   public void render(GameContainer container, StateBasedGame game, Graphics g)
@@ -75,7 +74,6 @@ public abstract class LevelState extends GameStateBase
   public void update(GameContainer container, StateBasedGame game, int delta)
       throws SlickException {
     playArea.update(delta);
-    map.update(delta);
     player.update(delta);
     physicsManager.update(delta);
     focusBar.setProgress(player.getFocus());
@@ -95,10 +93,10 @@ public abstract class LevelState extends GameStateBase
 
   @Override
   public void reset() {
-    map.reset();
-    player.setLocation(map.getPlayerStartX(), map.getPlayerStartY() - player.getHeight());
+    player.setLocation(mapData.playerStartX(), mapData.playerStartY() - player.getHeight());
     player.setVerticalSpeed(0);
     player.heal(1f);
+    playArea.resetLayout();
     initPhysics();
   }
 
@@ -106,15 +104,11 @@ public abstract class LevelState extends GameStateBase
   public void enter(GameContainer container, StateBasedGame game) throws SlickException {
     super.enter(container, game);
     if (!enteringFromPauseMenu) {
-      map = mapManager.getMap(getMapName(), container, false);
-      player = new PlayableCharacter(
-          container,
-          this,
-          physicsManager,
-          isOnRails(),
-          map.getPlayerStartX(),
-          map.getPlayerStartY());
-      playArea = providePlayArea(container, map, player);
+      mapData = mapManager.getMap(getMapName());
+      player =
+          playableCharacterFactory.create(
+              this, isOnRails(), mapData.playerStartX(), mapData.playerStartY());
+      playArea = providePlayArea(mapData, player);
       focusBar.setText("Focus");
       playArea.addHudChild(focusBar, 0.02f, 0.05f, 0.15f, 0.07f);
       initPhysics();
@@ -126,8 +120,8 @@ public abstract class LevelState extends GameStateBase
   public void reloadLevel(GameContainer container) throws SlickException {
     int playerX = player.getX();
     int playerY = player.getY();
-    map = mapManager.getMap(getMapName(), container, true);
-    playArea.reloadMap(map);
+    mapData = mapManager.getMap(getMapName());
+    playArea.reloadMap(mapData);
     reset();
     player.setLocation(playerX, playerY);
   }
@@ -139,13 +133,10 @@ public abstract class LevelState extends GameStateBase
 
   private void initPhysics() {
     physicsManager.reset();
-    physicsManager.addStaticCollidables(map.getCollidableTiles());
-    physicsManager.addStaticCollidables(map.getCommands());
-    List<EnemyCharacter> enemies = map.getEnemies();
-    physicsManager.addCollidables(enemies);
-    physicsManager.addCollidable(player);
-    physicsManager.addGravityObject(player);
-    physicsManager.addGravityObjects(enemies);
+    mapData.layers().stream()
+        .flatMap(layerData -> layerData.generatedMapEntityData().physicsManageables().stream())
+        .forEach(entity -> entity.addToPhysicsManager(physicsManager));
+    player.addToPhysicsManager(physicsManager);
   }
 
   @Override
@@ -161,8 +152,7 @@ public abstract class LevelState extends GameStateBase
 
   protected abstract String getMusicLocation();
 
-  protected abstract PlayArea providePlayArea(
-      GameContainer container, LevelMap map, PlayableCharacter player);
+  protected abstract PlayArea providePlayArea(MapData mapData, PlayableCharacter player);
 
   protected abstract void levelEnter(GameContainer container, StateBasedGame game)
       throws SlickException;

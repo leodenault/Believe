@@ -1,37 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="250" height="50" tilewidth="32" tileheight="32" nextobjectid="1">
  <properties>
-  <property name="playerStartX" value="1"/>
-  <property name="playerStartY" value="33"/>
+  <property name="player_start_x" value="1"/>
+  <property name="player_start_y" value="33"/>
  </properties>
- <tileset firstgid="1" name="Snow" tilewidth="32" tileheight="32" tilecount="16" columns="4">
-  <image source="tilesets/snow.png" width="128" height="128"/>
- </tileset>
- <tileset firstgid="17" name="collision" tilewidth="32" tileheight="32" tilecount="1" columns="1">
-  <image source="tilesets/collision.png" width="32" height="32"/>
- </tileset>
+ <tileset firstgid="1" source="tilesets/snow.tsx"/>
+ <tileset firstgid="17" source="tilesets/entities.tsx"/>
  <layer name="Collision" width="250" height="50">
   <properties>
-   <property name="collision" value=""/>
+   <property name="is_visible" value="false"/>
   </properties>
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAA+3YMQoAIAwDQL/g/z/r6lbEUB3uIJtTWwg4BgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABJcwsA0GsWqd4DAPdOO1UP9zBjktzTn+yFpOqe9PcbZk6Se/qTvZBU/ZfLuwAAAAAAAAAAAAAAAAAAAHRabJn721DDAAA=
   </data>
  </layer>
+ <layer name="Enemies" width="250" height="50">
+  <properties>
+   <property name="is_visible" value="false"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3OAQkAAAwDoGV4/7CPMRiawAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoOvaAQAAAAAAAAAAAAAAAAAAAIAxD6WdFqVQwwAA
+  </data>
+ </layer>
  <layer name="Front" width="250" height="50">
   <properties>
-   <property name="front" value=""/>
+   <property name="is_front_layer" value="true"/>
   </properties>
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAA+3YMQrDMBQD0HTIkPtfuGTrUDClX1aG90BbBpNIGHIcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEw6PwIA7HUusnoeAPjfr3eqe3gP75hJV/sAfOW7MGnVJ/d3h50z6e7TSx4XO2fS3afVP3PZHztn0iWPDUxpd1nsnLx2l8XOyWt3WeycvHaXxc7Ja3dZ7Jy8dpfFzslrd1nsnLx2l8XOyWt3WeycvHaXxc7Ja3dZ7Jy8dpfFzslrd1nsnLx2l8XOyXsDNSzp3FDDAAA=
-  </data>
- </layer>
- <layer name="Enemies" width="250" height="50">
-  <properties>
-   <property name="enemies" value=""/>
-  </properties>
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3OAQkAAAwDoFV4/7KPMRiawAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoOvaAQAAAAAAAAAAAAAAAAAAAIAxD2Uai7tQwwAA
   </data>
  </layer>
 </map>

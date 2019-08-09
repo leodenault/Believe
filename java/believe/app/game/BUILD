@@ -48,6 +48,7 @@ java_library(
         "//java/believe/gamestate",
         "//java/believe/gamestate:impl",
         "//java/believe/gamestate/levelstate/arcadestate",
+        "//java/believe/gamestate/levelstate/arcadestate:dagger_module",
         "//java/believe/gamestate/levelstate/platformingstate",
         "//java/believe/gamestate/temporarystate:impl",
         "//java/believe/physics/manager",

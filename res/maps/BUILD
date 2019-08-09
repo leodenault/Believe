@@ -17,5 +17,5 @@ filegroup(
 
 filegroup(
     name = "tilesets",
-    srcs = glob(["tilesets/*png"]),
+    srcs = glob(["tilesets/*"]),
 )

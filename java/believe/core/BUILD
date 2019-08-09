@@ -4,7 +4,11 @@ package(
 
 java_library(
     name = "core",
-    srcs = glob(["*.java"]),
+    srcs = [
+        "SynchedComboPattern.java",
+        "Timer.java",
+        "Updatable.java",
+    ],
     deps = [
         "//java/believe/xml",
         "//third_party/slick",

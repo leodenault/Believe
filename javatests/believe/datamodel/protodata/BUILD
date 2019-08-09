@@ -14,7 +14,6 @@ java_junit5_test(
         "//java/believe/logging/truth",
         "//java/believe/testing/proto:test_java_proto",
         "//java/believe/testing/temporaryfolder",
-        "//third_party/junit",
         "//third_party/proto",
         "//third_party/truth",
         "//third_party/truth:truth8",
@@ -28,7 +27,6 @@ java_junit5_test(
         "//java/believe/datamodel/protodata",
         "//java/believe/testing/proto:test_java_proto",
         "//java/believe/testing/temporaryfolder",
-        "//third_party/junit",
         "//third_party/truth",
     ],
 )

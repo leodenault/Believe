@@ -3,47 +3,46 @@ package believe.character.playable;
 import believe.character.Character;
 import believe.character.Faction;
 import believe.core.Timer;
-import believe.map.io.MapEntityGenerator;
-import believe.physics.collision.DamageBox;
+import believe.physics.collision.Collidable;
+import believe.physics.collision.CollisionHandler;
+import believe.physics.damage.DamageBox;
+import believe.physics.damage.DamageBoxFactory;
 import believe.physics.manager.PhysicsManager;
+import com.google.auto.factory.AutoFactory;
+import com.google.auto.factory.Provided;
+import javax.annotation.Nullable;
 import org.newdawn.slick.Animation;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
-import org.newdawn.slick.tiled.TiledMap;
 
-public class EnemyCharacter extends Character {
-  public static class Generator implements MapEntityGenerator<EnemyCharacter> {
-    @Override
-    public EnemyCharacter generateMapEntity(
-        TiledMap map,
-        GUIContext container,
-        int tileId,
-        int x,
-        int y,
-        int tileWidth,
-        int tileHeight,
-        int layer)
-            throws SlickException {
-      return new EnemyCharacter(container, x * tileWidth, (y + 1) * tileHeight /* Assumes that
-      enemy height is x2 that of a tile, and the tile is placed where the enemy's feet are.
-      TODO: Fix this crappy assumption. */);
-    }
-  }
+import java.util.Set;
+
+@AutoFactory
+public class EnemyCharacter extends Character<EnemyCharacter> {
 
   private static final int PUNCH_PERIOD = 1500; // Period in ms
 
+  private final Timer punchTimer;
+  private final Animation idle;
+  private final Animation punch;
+  private final PhysicsManager physicsManager;
+  private final DamageBoxFactory damageBoxFactory;
+
+  private float verticalSpeed;
   private boolean attacking;
   private boolean damaging;
-  private float verticalSpeed;
-  private Timer punchTimer;
-  private Animation idle;
-  private Animation punch;
-  private DamageBox dmg;
-  private PhysicsManager manager;
+  @Nullable private DamageBox dmg;
 
-  public EnemyCharacter(GUIContext container, int x, int y)
-      throws SlickException {
-    super(container, DamageListener.NONE, x, y);
+  EnemyCharacter(
+      @Provided GUIContext container,
+      @Provided PhysicsManager physicsManager,
+      @Provided DamageBoxFactory damageBoxFactory,
+      @Provided
+          Set<CollisionHandler<? extends Collidable<?>, ? super EnemyCharacter>>
+              rightCompatibleHandlers,
+      int x,
+      int y) {
+    super(container, DamageListener.NONE, rightCompatibleHandlers, x, y);
+    this.damageBoxFactory = damageBoxFactory;
     this.attacking = false;
     this.damaging = false;
     this.verticalSpeed = 0f;
@@ -51,7 +50,7 @@ public class EnemyCharacter extends Character {
     this.punchTimer.play();
     this.idle = animSet.get("idle");
     this.punch = animSet.get("punch");
-    this.manager = PhysicsManager.getInstance();
+    this.physicsManager = physicsManager;
     anim.start();
   }
 
@@ -76,12 +75,12 @@ public class EnemyCharacter extends Character {
       anim.start();
       punchTimer.stop();
       attacking = true;
-      dmg = new DamageBox(getFaction(), getFloatX() + 9, getFloatY() + 43, 4, 3, 0.1f);
+      dmg = damageBoxFactory.create(getFaction(), getFloatX() + 9, getFloatY() + 43, 4, 3, 0.1f);
     }
 
     if (attacking) {
       if (anim.getFrame() >= 2 && !damaging) {
-        manager.addStaticCollidable(dmg);
+        physicsManager.addStaticCollidable(dmg);
         damaging = true;
       }
 
@@ -92,7 +91,7 @@ public class EnemyCharacter extends Character {
         punchTimer.play();
         attacking = false;
         damaging = false;
-        manager.removeCollidable(dmg);
+        physicsManager.removeCollidable(dmg);
       }
     }
 

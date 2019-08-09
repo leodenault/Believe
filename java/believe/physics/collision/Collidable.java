@@ -2,21 +2,28 @@ package believe.physics.collision;
 
 import believe.geometry.Rectangle;
 
-public interface Collidable {
-  public enum CollidableType {
-    TILE, CHARACTER, DAMAGE_BOX, COMMAND
-  }
+import java.util.Set;
+
+/**
+ * An entity which can be a participant in a collision.
+ *
+ * @param <CollidableT> the type of the implementor of this interface.
+ */
+public interface Collidable<CollidableT extends Collidable<CollidableT>> {
+  /**
+   * Returns the set of {@link CollisionHandler} instances that are compatible with this {@link
+   * Collidable} where this collidable's type is compatible with the first type parameter of the
+   * {@link CollisionHandler} instances .
+   */
+  Set<CollisionHandler<? super CollidableT, ? extends Collidable<?>>> leftCompatibleHandlers();
 
   /**
-   * Formal implementations of this method should be fulfilled by entities that define a
-   * consequence for themselves. For example, a character colliding with a tile will readjust its
-   * position. A breakable box with a missile would break itself, and the missile would also
-   * detect the box and make itself explode.
-   *
-   * @param other The other {@link Collidable} that this {@link Collidable} will use to determine
-   * how to react.
+   * Returns the set of {@link CollisionHandler} instances that are compatible with this {@link
+   * Collidable} where this collidable's type is compatible with the second type parameter of the
+   * {@link CollisionHandler} instances.
    */
-  void collision(Collidable other);
-  CollidableType getType();
-  Rectangle getRect();
+  Set<CollisionHandler<? extends Collidable<?>, ? super CollidableT>> rightCompatibleHandlers();
+
+  /** Returns the bounding rectangle of this {@link Collidable} instance. */
+  Rectangle rect();
 }

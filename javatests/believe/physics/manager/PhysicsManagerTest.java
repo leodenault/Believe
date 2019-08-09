@@ -1,14 +1,18 @@
 package believe.physics.manager;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import believe.physics.collision.Collidable;
+import believe.physics.collision.CollisionHandlerExecutor;
 import believe.physics.gravity.GravityObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,11 +20,12 @@ public class PhysicsManagerTest {
 
   @Mock private GravityObject gravity;
   @Mock private Collidable coll;
+  @Mock private CollisionHandlerExecutor collisionHandlerExecutor;
 
   private PhysicsManager manager;
   private Set<GravityObject> gravityObjects;
-  private Set<Collidable> collidables;
-  private Set<Collidable> staticCollidables;
+  private Set<Collidable<?>> collidables;
+  private Set<Collidable<?>> staticCollidables;
 
   @Before
   public void setUp() {
@@ -28,7 +33,9 @@ public class PhysicsManagerTest {
     gravityObjects = new HashSet<>();
     collidables = new HashSet<>();
     staticCollidables = new HashSet<>();
-    manager = new PhysicsManager(gravityObjects, collidables, staticCollidables);
+    manager =
+        new PhysicsManager(
+            collisionHandlerExecutor, gravityObjects, collidables, staticCollidables);
   }
 
   @Test

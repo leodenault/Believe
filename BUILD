@@ -6,7 +6,7 @@ BELIEVE_MAIN_CLASS = "believe.app.game.Believe"
 BELIEVE_DATA_FILES = [
     "//customFlowFiles:custom_flow_files",
     "//customSongs:custom_songs",
-    "game_options.pb",
+    ":game_options_textproto",
 ]
 
 WINDOWS_X86_NATIVES = [
@@ -46,7 +46,6 @@ BELIEVE_RES = [
 ]
 
 RUNTIME_DEPS = [
-    ":game_options_textproto",
     "//java/believe/app/game",
 ]
 

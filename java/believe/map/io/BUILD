@@ -1,25 +1,44 @@
 package(
-    default_visibility = [
-        "//java/believe/character:character_pkg",
-        "//java/believe/map/collidable:__pkg__",
-        "//java/believe/map/gui:__pkg__",
-        "//javatests/believe:believe_tests",
-    ],
+    default_visibility = ["//:believe_all_pkgs"],
 )
 
 java_library(
-    name = "properties",
-    srcs = ["MapProperties.java"],
+    name = "io",
+    srcs = [
+        "MapManager.java",
+        "MapManagerImpl.java",
+        "TileParser.java",
+        "TiledMapLayerParser.java",
+        "TiledMapLayerParserImpl.java",
+        "TiledMapParser.java",
+    ],
     deps = [
-        ":map_entity_generator",
-        "//java/believe/character/playable",
-        "//java/believe/map/collidable",
+        ":internal_qualifiers",
+        "//java/believe/app/annotation",
+        "//java/believe/map/data",
+        "//java/believe/map/tiled",
+        "//java/believe/physics/manager",
+        "//java/believe/xml",
+        "//third_party/auto_value",
+        "//third_party/dagger",
+        "//third_party/javax:annotations",
         "//third_party/slick",
     ],
 )
 
 java_library(
-    name = "map_entity_generator",
-    srcs = ["MapEntityGenerator.java"],
-    deps = ["//third_party/slick"],
+    name = "dagger_module",
+    srcs = ["MapParsingDaggerModule.java"],
+    deps = [
+        ":internal_qualifiers",
+        ":io",
+        "//third_party/dagger",
+    ],
+)
+
+java_library(
+    name = "internal_qualifiers",
+    srcs = ["InternalQualifiers.java"],
+    visibility = ["//visibility:private"],
+    deps = ["//third_party/dagger"],
 )

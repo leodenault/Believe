@@ -1,5 +1,6 @@
 package believe.gui;
 
+import believe.core.display.Renderable;
 import believe.geometry.Rectangle;
 
 import org.newdawn.slick.Graphics;
@@ -7,7 +8,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.GUIContext;
 
-public abstract class ComponentBase extends AbstractComponent {
+public abstract class ComponentBase extends AbstractComponent implements Renderable {
 
   protected boolean rendering;
   protected Rectangle rect;
@@ -87,7 +88,7 @@ public abstract class ComponentBase extends AbstractComponent {
     }
   }
 
-  public Rectangle getRect() {
+  public Rectangle rect() {
     return rect;
   }
 

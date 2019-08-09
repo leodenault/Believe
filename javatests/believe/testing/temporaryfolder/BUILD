@@ -11,7 +11,6 @@ java_junit5_test(
     deps = [
         "//java/believe/testing/mockito",
         "//java/believe/testing/temporaryfolder",
-        "//third_party/junit",
         "//third_party/mockito",
         "//third_party/truth",
     ],
@@ -22,7 +21,6 @@ java_junit5_test(
     srcs = ["TemporaryFolderImplTest.java"],
     deps = [
         "//java/believe/testing/temporaryfolder",
-        "//third_party/junit",
         "//third_party/truth",
     ],
 )

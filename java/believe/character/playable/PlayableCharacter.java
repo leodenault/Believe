@@ -1,50 +1,67 @@
 package believe.character.playable;
 
+import static believe.util.MapEntry.entry;
+import static believe.util.Util.hashMapOf;
+import static believe.util.Util.hashSetOf;
+import static believe.util.Util.immutableMapOf;
+
 import believe.character.Character;
 import believe.character.Faction;
 import believe.core.SynchedComboPattern;
 import believe.core.display.SpriteSheetManager;
+import believe.map.collidable.command.CommandCollidable;
 import believe.physics.collision.Collidable;
-import believe.physics.collision.CommandCollidable;
-import believe.physics.collision.CommandCollisionHandler;
+import believe.physics.collision.CollisionHandler;
 import believe.physics.manager.PhysicsManager;
 import believe.statemachine.State;
 import believe.statemachine.State.Action;
 import believe.util.MapEntry;
+import com.google.auto.factory.AutoFactory;
+import com.google.auto.factory.Provided;
+import javax.inject.Inject;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import static believe.util.MapEntry.entry;
-import static believe.util.Util.*;
-
-public class PlayableCharacter extends Character implements CommandCollidable {
+@AutoFactory(allowSubclasses = true)
+public class PlayableCharacter extends Character<PlayableCharacter>
+    implements CommandCollidable<PlayableCharacter> {
   public interface SynchedComboListener {
     void activateCombo(SynchedComboPattern pattern);
   }
 
   private static final String SPRITE_SHEET_NAME = "stickFigure";
-  private static final Map<Integer, Action>
-      BASE_KEY_PRESSED_MAP =
-      immutableMapOf(entry(Input.KEY_LEFT, Action.SELECT_LEFT),
+  private static final Map<Integer, Action> BASE_KEY_PRESSED_MAP =
+      immutableMapOf(
+          entry(Input.KEY_LEFT, Action.SELECT_LEFT),
           entry(Input.KEY_RIGHT, Action.SELECT_RIGHT),
           entry(Input.KEY_SPACE, Action.JUMP));
 
-  private final Map<State, Set<MapEntry<Integer, Action>>> KEY_PRESSED_MODS = immutableMapOf(
-      entry(standingState,
-          hashSetOf(entry(Input.KEY_LEFT, Action.SELECT_LEFT),
-              entry(Input.KEY_RIGHT, Action.SELECT_RIGHT))),
-      entry(movingLeftState, hashSetOf(entry(Input.KEY_RIGHT, Action.STOP))),
-      entry(movingRightState, hashSetOf(entry(Input.KEY_LEFT, Action.STOP))));
-  private final Map<State, Set<MapEntry<Integer, Action>>> KEY_RELEASED_MODS = immutableMapOf(
-      entry(standingState,
-          hashSetOf(entry(Input.KEY_LEFT, Action.SELECT_RIGHT),
-              entry(Input.KEY_RIGHT, Action.SELECT_LEFT))),
-      entry(movingLeftState, hashSetOf(entry(Input.KEY_LEFT, Action.STOP))),
-      entry(movingRightState, hashSetOf(entry(Input.KEY_RIGHT, Action.STOP))));
+  private final Map<State, Set<MapEntry<Integer, Action>>> KEY_PRESSED_MODS =
+      immutableMapOf(
+          entry(
+              standingState,
+              hashSetOf(
+                  entry(Input.KEY_LEFT, Action.SELECT_LEFT),
+                  entry(Input.KEY_RIGHT, Action.SELECT_RIGHT))),
+          entry(movingLeftState, hashSetOf(entry(Input.KEY_RIGHT, Action.STOP))),
+          entry(movingRightState, hashSetOf(entry(Input.KEY_LEFT, Action.STOP))));
+  private final Map<State, Set<MapEntry<Integer, Action>>> KEY_RELEASED_MODS =
+      immutableMapOf(
+          entry(
+              standingState,
+              hashSetOf(
+                  entry(Input.KEY_LEFT, Action.SELECT_RIGHT),
+                  entry(Input.KEY_RIGHT, Action.SELECT_LEFT))),
+          entry(movingLeftState, hashSetOf(entry(Input.KEY_LEFT, Action.STOP))),
+          entry(movingRightState, hashSetOf(entry(Input.KEY_RIGHT, Action.STOP))));
   private final DamageProjection damageProjection;
 
   private boolean onRails;
@@ -53,21 +70,23 @@ public class PlayableCharacter extends Character implements CommandCollidable {
 
   private SynchedComboPattern pattern;
   private List<SynchedComboListener> comboListeners;
-  private CommandCollisionHandler commandHandler;
 
+  @Inject
   public PlayableCharacter(
-      GUIContext container,
+      @Provided GUIContext container,
+      @Provided PhysicsManager physicsManager,
+      @Provided Set<CollisionHandler<? extends Collidable<?>, ? super PlayableCharacter>>
+          rightCompatibleHandlers,
       DamageListener damageListener,
-      PhysicsManager physicsManager,
       boolean onRails,
       int x,
       int y) {
-    super(container, damageListener, x, y);
+    super(container, damageListener, rightCompatibleHandlers, x, y);
     this.damageProjection =
-        new DamageProjection(SpriteSheetManager
-            .getInstance()
-            .getAnimationSet(SPRITE_SHEET_NAME)
-            .get("damage"), physicsManager, 150);
+        new DamageProjection(
+            SpriteSheetManager.getInstance().getAnimationSet(SPRITE_SHEET_NAME).get("damage"),
+            physicsManager,
+            150);
     physicsManager.addGravityObject(damageProjection);
     this.onRails = onRails;
     pattern = new SynchedComboPattern();
@@ -77,7 +96,6 @@ public class PlayableCharacter extends Character implements CommandCollidable {
     pattern.addAction(2.5f, 'd');
     pattern.addAction(3, 'a');
     comboListeners = new LinkedList<>();
-    commandHandler = new CommandCollisionHandler();
     keyPressedActionMap = new HashMap<>(BASE_KEY_PRESSED_MAP);
     keyReleasedActionMap = hashMapOf();
   }
@@ -92,14 +110,6 @@ public class PlayableCharacter extends Character implements CommandCollidable {
 
   public void addComboListener(SynchedComboListener listener) {
     this.comboListeners.add(listener);
-  }
-
-  @Override
-  public void collision(Collidable other) {
-    super.collision(other);
-    if (onRails) {
-      commandHandler.handleCollision(this, other);
-    }
   }
 
   @Override
@@ -167,10 +177,5 @@ public class PlayableCharacter extends Character implements CommandCollidable {
 
   public Faction getFaction() {
     return Faction.GOOD;
-  }
-
-  @Override
-  public void executeCommand(Action command) {
-    machine.transition(command);
   }
 }

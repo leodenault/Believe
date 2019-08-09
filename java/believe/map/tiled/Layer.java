@@ -12,7 +12,7 @@ import java.util.Properties;
 import java.util.zip.GZIPInputStream;
 
 /** Adaptation of {@link org.newdawn.slick.tiled.Layer} for bug fixing. */
-final class Layer {
+public final class Layer {
   /** The code used to decode Base64 encoding */
   private static byte[] baseCodes = new byte[256];
 

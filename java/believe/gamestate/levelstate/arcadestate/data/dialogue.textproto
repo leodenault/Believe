@@ -1,0 +1,11 @@
+dialogues {
+  key: "testing"
+  value {
+    responses {
+      response_text: "We can do it!"
+    }
+    responses {
+      response_text: "We have the technology!"
+    }
+  }
+}

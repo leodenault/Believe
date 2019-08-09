@@ -3,13 +3,15 @@ package believe.gamestate.levelstate.platformingstate;
 import believe.audio.Music;
 import believe.character.playable.PlayableCharacter;
 import believe.character.playable.PlayableCharacter.SynchedComboListener;
+import believe.character.playable.PlayableCharacterFactory;
 import believe.core.SynchedComboPattern;
 import believe.core.io.FontLoader;
 import believe.gamestate.levelstate.LevelState;
 import believe.levelFlow.component.ComboSyncher;
-import believe.map.gui.LevelMap;
-import believe.map.gui.MapManager;
+import believe.map.data.MapData;
+import believe.map.io.MapManager;
 import believe.map.gui.PlayArea;
+import believe.map.gui.PlayAreaFactory;
 import believe.physics.manager.PhysicsManager;
 import javax.inject.Inject;
 import org.newdawn.slick.GameContainer;
@@ -29,6 +31,7 @@ public class PlatformingState extends LevelState implements SynchedComboListener
 
   private final ComboSyncher comboSyncher;
   private final Map<Integer, Function<PlatformingState, Void>> eventActions;
+  private final PlayAreaFactory playAreaFactory;
 
   private Music music;
 
@@ -39,8 +42,11 @@ public class PlatformingState extends LevelState implements SynchedComboListener
       MapManager mapManager,
       PhysicsManager physicsManager,
       @EventActions Map<Integer, Function<PlatformingState, Void>> eventActions,
-      FontLoader fontLoader) {
-    super(container, game, mapManager, physicsManager, fontLoader);
+      FontLoader fontLoader,
+      PlayAreaFactory playAreaFactory,
+      PlayableCharacterFactory playableCharacterFactory) {
+    super(container, game, mapManager, physicsManager, fontLoader, playableCharacterFactory);
+    this.playAreaFactory = playAreaFactory;
     this.comboSyncher = new ComboSyncher(container, fontLoader.getBaseFont(), BPM);
     this.eventActions = eventActions;
   }
@@ -116,8 +122,7 @@ public class PlatformingState extends LevelState implements SynchedComboListener
   }
 
   @Override
-  protected PlayArea providePlayArea(
-      GameContainer container, LevelMap map, PlayableCharacter player) {
-    return new PlayArea(container, map, player);
+  protected PlayArea providePlayArea(MapData map, PlayableCharacter player) {
+    return playAreaFactory.create(map, player, 1f, 1f);
   }
 }

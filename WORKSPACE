@@ -66,12 +66,12 @@ maven_jar(
 
 maven_jar(
     name = "bytebuddy_maven",
-    artifact = "net.bytebuddy:byte-buddy:1.7.9",
+    artifact = "net.bytebuddy:byte-buddy:1.9.7",
 )
 
 maven_jar(
     name = "bytebuddy_agent_maven",
-    artifact = "net.bytebuddy:byte-buddy-agent:1.7.9",
+    artifact = "net.bytebuddy:byte-buddy-agent:1.9.7",
 )
 
 maven_jar(
@@ -86,10 +86,13 @@ maven_jar(
 
 http_archive(
     name = "com_google_protobuf",
-    sha256 = "cef7f1b5a7c5fba672bec2a319246e8feba471f04dcebfe362d55930ee7c1c30",
-    strip_prefix = "protobuf-3.5.0",
-    urls = ["https://github.com/google/protobuf/archive/v3.5.0.zip"],
+    strip_prefix = "protobuf-master",
+    urls = ["https://github.com/protocolbuffers/protobuf/archive/master.zip"],
 )
+
+load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
+
+protobuf_deps()
 
 maven_jar(
     name = "google_truth",

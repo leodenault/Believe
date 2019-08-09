@@ -15,7 +15,6 @@ java_junit5_test(
         "//java/believe/testing/proto:test_java_proto",
         "//java/believe/testing/temporaryfolder",
         "//java/believe/tools:proto_file_serializer",
-        "//third_party/junit",
         "//third_party/mockito",
         "//third_party/proto",
         "//third_party/truth",

@@ -1,11 +1,14 @@
+package(
+    default_visibility = ["//:believe_all_pkgs"],
+)
+
 java_library(
     name = "display",
-    srcs = glob(["*.java"]),
-    visibility = [
-        "//java/believe/character:character_pkg",
-        "//java/believe/gui:__pkg__",
-        "//java/believe/levelFlow/component:__pkg__",
-        "//java/believe/map/gui:__pkg__",
+    srcs = [
+        "AnimationSet.java",
+        "Camera.java",
+        "Renderable.java",
+        "SpriteSheetManager.java",
     ],
     deps = [
         "//java/believe/geometry",

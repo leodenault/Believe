@@ -16,7 +16,12 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Properties;
 
-/** Adaptation of {@link org.newdawn.slick.tiled.TileSet} for fixing bugs. */
+/**
+ * Adaptation of {@link org.newdawn.slick.tiled.TileSet} for fixing bugs.
+ *
+ * <p>See http://slick.ninjacave.com/license/ for license and copyright information on the original
+ * source.
+ */
 final class TileSet {
   /** The index of the tile set */
   public int index;
@@ -54,15 +59,16 @@ final class TileSet {
    * @throws SlickException Indicates a failure to parse the tileset
    */
   public TileSet(TiledMap map, Element element, boolean loadImage) throws SlickException {
-    /* The map this tileset was loaded as part of */ /** The map this tileset was loaded as part
-     of */
+    /* The map this tileset was loaded as part of */
+    /** The map this tileset was loaded as part of */
     name = element.getAttribute("name");
     firstGID = Integer.parseInt(element.getAttribute("firstgid"));
     String source = element.getAttribute("source");
 
     if ((source != null) && (!source.equals(""))) {
       try {
-        InputStream in = ResourceLoader.getResourceAsStream(map.getTilesLocation() + "/" + source);
+        InputStream in =
+            ResourceLoader.getResourceAsStream(map.getMapDirectory() + "/" + source);
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document doc = builder.parse(in);
         Element docElement = doc.getDocumentElement();
@@ -71,7 +77,7 @@ final class TileSet {
       } catch (Exception e) {
         Log.error(e);
         throw new SlickException(
-            "Unable to load or parse sourced tileset: " + map.tilesLocation + "/" + source);
+            "Unable to load or parse sourced tileset: " + map.getMapDirectory() + "/" + source);
       }
     }
     String tileWidthString = element.getAttribute("tilewidth");
@@ -108,7 +114,7 @@ final class TileSet {
 
     if (loadImage) {
       Image image =
-          new Image(map.getTilesLocation() + "/" + ref, false, Image.FILTER_NEAREST, trans);
+          new Image(map.getTileSetsLocation() + "/" + ref, false, Image.FILTER_NEAREST, trans);
       setTileSetImage(image);
     }
 

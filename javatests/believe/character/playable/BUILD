@@ -4,6 +4,7 @@ java_test(
     deps = [
         "//java/believe/character",
         "//java/believe/character/playable",
+        "//java/believe/character/playable:package-info",
         "//java/believe/physics/manager",
         "//third_party/hamcrest",
         "//third_party/junit",

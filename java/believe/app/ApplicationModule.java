@@ -1,29 +1,41 @@
 package believe.app;
 
+import believe.action.ChangeStateAction;
 import believe.app.proto.GameOptionsProto.GameOptions;
+import believe.character.playable.PlayableDaggerModule;
 import believe.core.io.FontLoader;
 import believe.datamodel.MutableDataCommitter;
 import believe.datamodel.protodata.MutableProtoDataCommitter;
-import believe.action.ChangeStateAction;
 import believe.gamestate.MainMenuState;
 import believe.gamestate.levelstate.platformingstate.EventActions;
 import believe.gamestate.levelstate.platformingstate.PlatformingState;
-import believe.map.gui.MapManager;
-import believe.physics.manager.PhysicsManager;
+import believe.map.collidable.command.CommandDaggerModule;
+import believe.map.collidable.tile.CollidableTileDaggerModule;
+import believe.map.io.MapParsingDaggerModule;
+import believe.physics.collision.CollisionDaggerModule;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
 import dagger.multibindings.Multibinds;
+import javax.inject.Singleton;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.gui.GUIContext;
+import org.newdawn.slick.state.StateBasedGame;
+
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import javax.inject.Singleton;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.state.StateBasedGame;
 
 /** Dagger module used in all application components. */
-@Module
+@Module(
+    includes = {
+      CollidableTileDaggerModule.class,
+      CollisionDaggerModule.class,
+      CommandDaggerModule.class,
+      MapParsingDaggerModule.class,
+      PlayableDaggerModule.class
+    })
 public abstract class ApplicationModule {
   private static final String GAME_OPTIONS_FILE_NAME = "game_options.pb";
 
@@ -41,16 +53,6 @@ public abstract class ApplicationModule {
   abstract Supplier<GameOptions> provideGameOptionsProvider(
       MutableDataCommitter<GameOptions> gameOptions);
 
-  @Provides
-  static PhysicsManager providePhysicsManager() {
-    return PhysicsManager.getInstance();
-  }
-
-  @Provides
-  static MapManager provideMapManager() {
-    return MapManager.defaultManager();
-  }
-
   @Multibinds
   @Reusable
   @EventActions
@@ -63,6 +65,9 @@ public abstract class ApplicationModule {
   static GameContainer provideGameContainer(AppGameContainerSupplier appGameContainer) {
     return appGameContainer.get();
   }
+
+  @Binds
+  abstract GUIContext bindGuiContext(GameContainer gameContainer);
 
   @Provides
   @Reusable

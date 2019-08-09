@@ -1,41 +1,43 @@
 package(
-    default_visibility = [
-        "//java/believe/character:character_pkg",
-        "//java/believe/map/collidable:__pkg__",
-        "//java/believe/physics/manager:__pkg__",
-        "//javatests/believe:believe_tests",
-    ],
+    default_visibility = ["//:believe_all_pkgs"],
 )
 
 java_library(
     name = "collision",
     srcs = [
         "Collidable.java",
-        "CommandCollidable.java",
-        "DamageBox.java",
-        "DamageBoxCollidable.java",
+        "CollisionHandler.java",
+        "CollisionHandlerExecutor.java",
+        "package-info.java",
     ],
     deps = [
+        "//java/believe/app/annotation",
         "//java/believe/character:faction",
         "//java/believe/geometry",
         "//java/believe/statemachine",
+        "//java/believe/util",
+        "//third_party/dagger",
+        "//third_party/javax:annotations",
+        "//third_party/slick",
     ],
 )
 
 java_library(
-    name = "handlers",
-    srcs = [
-        "CollisionHandler.java",
-        "CommandCollisionHandler.java",
-        "DamageHandler.java",
-        "TileCollisionHandler.java",
-    ],
+    name = "impl",
+    srcs = ["CollisionHandlerExecutorImpl.java"],
     deps = [
         ":collision",
-        "//java/believe/character:faction",
-        "//java/believe/geometry",
-        "//java/believe/map/collidable",
-        "//java/believe/physics/gravity",
-        "//java/believe/physics/manager",
+        "//third_party/dagger",
+        "//third_party/javax:annotations",
+    ],
+)
+
+java_library(
+    name = "dagger_module",
+    srcs = ["CollisionDaggerModule.java"],
+    deps = [
+        ":collision",
+        ":impl",
+        "//third_party/dagger",
     ],
 )

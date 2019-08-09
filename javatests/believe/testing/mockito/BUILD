@@ -10,7 +10,6 @@ java_junit5_test(
     srcs = ["MockitoExtensionTest.java"],
     deps = [
         "//java/believe/testing/mockito",
-        "//third_party/junit",
         "//third_party/mockito",
         "//third_party/truth",
     ],

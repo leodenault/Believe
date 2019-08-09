@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <maps>
 	<map>
-		<name>testMap</name>
-		<location>/res/maps/testMap.tmx</location>
-		<tileSetsLocation>/res/maps</tileSetsLocation>
-		<backgrounds>
-		</backgrounds>
-	</map>
-	<map>
 		<name>pipeTown</name>
 		<location>/res/maps/pipeTown.tmx</location>
-		<tileSetsLocation>/res/maps</tileSetsLocation>
+		<tileSetsLocation>/res/maps/tilesets</tileSetsLocation>
 		<backgrounds>
 			<background>
 				<location>/res/graphics/backgrounds/darkSky.png</location>
@@ -27,7 +20,7 @@
 	<map>
 		<name>snow</name>
 		<location>/res/maps/snow.tmx</location>
-		<tileSetsLocation>/res/maps</tileSetsLocation>
+		<tileSetsLocation>/res/maps/tilesets</tileSetsLocation>
 		<backgrounds>
 			<background>
 				<location>/res/graphics/backgrounds/tree.png</location>

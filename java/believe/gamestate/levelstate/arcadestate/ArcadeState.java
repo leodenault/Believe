@@ -3,21 +3,28 @@ package believe.gamestate.levelstate.arcadestate;
 import believe.app.proto.GameOptionsProto.GameOptions;
 import believe.character.Faction;
 import believe.character.playable.PlayableCharacter;
+import believe.character.playable.PlayableCharacterFactory;
 import believe.core.io.FontLoader;
+import believe.datamodel.protodata.MutableProtoDataCommitter;
+import believe.dialogue.proto.DialogueProto.DialogueMap;
 import believe.gamestate.levelstate.LevelState;
+import believe.gui.CharacterDialogue;
+import believe.gui.CharacterDialogue.DialogueResponse;
 import believe.levelFlow.component.FlowComponent;
 import believe.levelFlow.component.FlowComponentListener;
 import believe.levelFlow.parsing.FlowComponentBuilder;
 import believe.levelFlow.parsing.FlowFileParser;
 import believe.levelFlow.parsing.exceptions.FlowComponentBuilderException;
 import believe.levelFlow.parsing.exceptions.FlowFileParserException;
-import believe.map.gui.LevelMap;
-import believe.map.gui.MapManager;
+import believe.map.data.MapData;
 import believe.map.gui.PlayArea;
+import believe.map.gui.PlayAreaFactory;
+import believe.map.io.MapManager;
 import believe.physics.manager.PhysicsManager;
 import javax.inject.Inject;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
@@ -27,6 +34,7 @@ import org.newdawn.slick.util.ResourceLoader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class ArcadeState extends LevelState implements FlowComponentListener {
 
@@ -36,7 +44,11 @@ public class ArcadeState extends LevelState implements FlowComponentListener {
   private static final float HEALTH_PER_SUCCESS = 0.01f;
   private static final float DAMAGE_PER_FAILURE = 0.03f;
 
+  private final MutableProtoDataCommitter<DialogueMap> dialogueMap;
+  private final PlayAreaFactory playAreaFactory;
+
   private FlowComponent component;
+  private CharacterDialogue characterDialogue;
 
   @Inject
   public ArcadeState(
@@ -44,8 +56,16 @@ public class ArcadeState extends LevelState implements FlowComponentListener {
       StateBasedGame game,
       PhysicsManager physicsManager,
       FontLoader fontLoader,
-      Supplier<GameOptions> gameOptions) {
-    super(container, game, MapManager.defaultManager(), physicsManager, fontLoader);
+      Supplier<GameOptions> gameOptions,
+      MutableProtoDataCommitter<DialogueMap> dialogueMap,
+      MapManager mapManager,
+      PlayAreaFactory playAreaFactory,
+      PlayableCharacterFactory playableCharacterFactory) {
+    super(container, game, mapManager, physicsManager, fontLoader, playableCharacterFactory);
+
+    this.dialogueMap = dialogueMap;
+    this.playAreaFactory = playAreaFactory;
+
     FlowComponentBuilder builder =
         new FlowComponentBuilder(container, (int) (0.2 * container.getWidth()));
     try {
@@ -85,6 +105,7 @@ public class ArcadeState extends LevelState implements FlowComponentListener {
       throws SlickException {
     super.render(container, game, g);
     component.render(container, g);
+    characterDialogue.render(container, g);
   }
 
   @Override
@@ -92,6 +113,10 @@ public class ArcadeState extends LevelState implements FlowComponentListener {
     super.keyPressed(key, c);
     if (key == Input.KEY_ESCAPE) {
       this.component.pause();
+    }
+
+    if (key == Input.KEY_ENTER) {
+      characterDialogue.scroll();
     }
   }
 
@@ -102,8 +127,24 @@ public class ArcadeState extends LevelState implements FlowComponentListener {
   }
 
   @Override
-  public void levelEnter(GameContainer container, StateBasedGame game) throws SlickException {
+  public void levelEnter(GameContainer container, StateBasedGame game) {
     component.stop();
+    dialogueMap.load();
+
+    characterDialogue =
+        new CharacterDialogue(
+            container,
+            container.getGraphics().getFont(),
+            dialogueMap.get().getDialoguesMap().get("testing").getResponsesList().stream()
+                .map(
+                    response -> {
+                      try {
+                        return new DialogueResponse(new Image(0, 0), response.getResponseText());
+                      } catch (SlickException e) {
+                        throw new RuntimeException(e);
+                      }
+                    })
+                .collect(Collectors.toList()));
   }
 
   @Override
@@ -122,9 +163,8 @@ public class ArcadeState extends LevelState implements FlowComponentListener {
   }
 
   @Override
-  protected PlayArea providePlayArea(
-      GameContainer container, LevelMap map, PlayableCharacter player) {
-    return new PlayArea(container, map, player, 0.8f, 1f);
+  protected PlayArea providePlayArea(MapData mapData, PlayableCharacter player) {
+    return playAreaFactory.create(mapData, player, 0.8f, 1f);
   }
 
   @Override

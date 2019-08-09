@@ -14,12 +14,21 @@ import org.xml.sax.InputSource;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Properties;
 
-/** Adaptation of {@link org.newdawn.slick.tiled.TiledMap} with bug fixes. */
-public final class TiledMap {
+/**
+ * Adaptation of {@link org.newdawn.slick.tiled.TiledMap} with bug fixes.
+ *
+ * <p>See http://slick.ninjacave.com/license/ for license and copyright information on the original
+ * source.
+ */
+public class TiledMap {
   /** Indicates if we're running on a headless system */
   private static boolean headless;
+
+  private final String tileMapLocation;
+  private final String tileSetsLocation;
 
   /**
    * Indicate if we're running on a headless system where we'd just like to load the data model.
@@ -39,9 +48,6 @@ public final class TiledMap {
   /** The height of the tiles used on the map */
   protected int tileHeight;
 
-  /** The location prefix where we can find tileset images */
-  protected String tilesLocation;
-
   /** the properties of the map */
   protected Properties props;
 
@@ -60,62 +66,20 @@ public final class TiledMap {
   /** The orientation of this map */
   protected int orientation;
 
-  /** True if we want to load tilesets - including their image data */
-  private boolean loadTileSets = true;
-
   /**
    * Create a new tile map based on a given TMX file
    *
-   * @param ref The location of the tile map to load
-   * @throws SlickException Indicates a failure to load the tilemap
-   */
-  public TiledMap(String ref) throws SlickException {
-    this(ref, true);
-  }
-
-  /**
-   * Create a new tile map based on a given TMX file
-   *
-   * @param ref The location of the tile map to load
-   * @param loadTileSets True if we want to load tilesets - including their image data
-   * @throws SlickException Indicates a failure to load the tilemap
-   */
-  public TiledMap(String ref, boolean loadTileSets) throws SlickException {
-    this.loadTileSets = loadTileSets;
-    ref = ref.replace('\\', '/');
-    load(ResourceLoader.getResourceAsStream(ref), ref.substring(0, ref.lastIndexOf("/")));
-  }
-
-  /**
-   * Create a new tile map based on a given TMX file
-   *
-   * @param ref The location of the tile map to load
+   * @param tileMapLocation The location of the tile map to load
    * @param tileSetsLocation The location where we can find the tileset images and other resources
-   * @throws SlickException Indicates a failure to load the tilemap
    */
-  public TiledMap(String ref, String tileSetsLocation) throws SlickException {
-    load(ResourceLoader.getResourceAsStream(ref), tileSetsLocation);
+  public TiledMap(String tileMapLocation, String tileSetsLocation) {
+    this.tileMapLocation = tileMapLocation;
+    this.tileSetsLocation = tileSetsLocation;
   }
 
-  /**
-   * Load a tile map from an arbitary input stream
-   *
-   * @param in The input stream to load from
-   * @throws SlickException Indicates a failure to load the tilemap
-   */
-  public TiledMap(InputStream in) throws SlickException {
-    load(in, "");
-  }
-
-  /**
-   * Load a tile map from an arbitary input stream
-   *
-   * @param in The input stream to load from
-   * @param tileSetsLocation The location at which we can find tileset images
-   * @throws SlickException Indicates a failure to load the tilemap
-   */
-  public TiledMap(InputStream in, String tileSetsLocation) throws SlickException {
-    load(in, tileSetsLocation);
+  /** Get the directory containing the map. */
+  public String getMapDirectory() {
+    return tileMapLocation.substring(0, tileMapLocation.lastIndexOf("/"));
   }
 
   /**
@@ -123,8 +87,8 @@ public final class TiledMap {
    *
    * @return The location of the tile images specified as a resource reference prefix
    */
-  public String getTilesLocation() {
-    return tilesLocation;
+  public String getTileSetsLocation() {
+    return tileSetsLocation;
   }
 
   /**
@@ -240,13 +204,12 @@ public final class TiledMap {
    * used as part of the default code path in the game loop.
    *
    * @param propertyName The name of the property of the map to retrieve
-   * @param def The default value to return
    * @return The value assigned to the property on the map (or the default value if none is
    *     supplied)
    */
-  public String getMapProperty(String propertyName, String def) {
-    if (props == null) return def;
-    return props.getProperty(propertyName, def);
+  public Optional<String> getMapProperty(String propertyName) {
+    if (props == null) return Optional.empty();
+    return Optional.ofNullable(props.getProperty(propertyName));
   }
 
   /**
@@ -255,14 +218,13 @@ public final class TiledMap {
    *
    * @param layerIndex The index of the layer to retrieve
    * @param propertyName The name of the property of this layer to retrieve
-   * @param def The default value to return
    * @return The value assigned to the property on the layer (or the default value if none is
    *     supplied)
    */
-  public String getLayerProperty(int layerIndex, String propertyName, String def) {
+  public Optional<String> getLayerProperty(int layerIndex, String propertyName) {
     Layer layer = layers.get(layerIndex);
-    if (layer == null || layer.props == null) return def;
-    return layer.props.getProperty(propertyName, def);
+    if (layer == null || layer.props == null) return Optional.empty();
+    return Optional.ofNullable(layer.props.getProperty(propertyName));
   }
 
   /**
@@ -271,22 +233,21 @@ public final class TiledMap {
    *
    * @param tileID The global ID of the tile to retrieve
    * @param propertyName The name of the property to retireve
-   * @param def The default value to return
    * @return The value assigned to the property on the tile (or the default value if none is
    *     supplied)
    */
-  public String getTileProperty(int tileID, String propertyName, String def) {
+  public Optional<String> getTileProperty(int tileID, String propertyName) {
     if (tileID == 0) {
-      return def;
+      return Optional.empty();
     }
 
     TileSet set = findTileSet(tileID);
 
     Properties props = set.getProperties(tileID);
     if (props == null) {
-      return def;
+      return Optional.empty();
     }
-    return props.getProperty(propertyName, def);
+    return Optional.ofNullable(props.getProperty(propertyName));
   }
 
   /**
@@ -497,12 +458,10 @@ public final class TiledMap {
   /**
    * Load a TilED map
    *
-   * @param in The input stream from which to load the map
-   * @param tileSetsLocation The location from which we can retrieve tileset images
    * @throws SlickException Indicates a failure to parse the map or find a tileset
    */
-  private void load(InputStream in, String tileSetsLocation) throws SlickException {
-    tilesLocation = tileSetsLocation;
+  public void load() throws SlickException {
+    InputStream in = ResourceLoader.getResourceAsStream(tileMapLocation);
 
     try {
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -543,24 +502,22 @@ public final class TiledMap {
         }
       }
 
-      if (loadTileSets) {
-        TileSet tileSet;
-        TileSet lastSet = null;
+      TileSet tileSet;
+      TileSet lastSet = null;
 
-        NodeList setNodes = docElement.getElementsByTagName("tileset");
-        for (int i = 0; i < setNodes.getLength(); i++) {
-          Element current = (Element) setNodes.item(i);
+      NodeList setNodes = docElement.getElementsByTagName("tileset");
+      for (int i = 0; i < setNodes.getLength(); i++) {
+        Element current = (Element) setNodes.item(i);
 
-          tileSet = new TileSet(this, current, !headless);
-          tileSet.index = i;
+        tileSet = new TileSet(this, current, !headless);
+        tileSet.index = i;
 
-          if (lastSet != null) {
-            lastSet.setLimit(tileSet.firstGID - 1);
-          }
-          lastSet = tileSet;
-
-          tileSets.add(tileSet);
+        if (lastSet != null) {
+          lastSet.setLimit(tileSet.firstGID - 1);
         }
+        lastSet = tileSet;
+
+        tileSets.add(tileSet);
       }
 
       NodeList layerNodes = docElement.getElementsByTagName("layer");

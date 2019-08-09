@@ -33,8 +33,7 @@ public final class CharacterDialogue extends ComponentBase {
   private Image currentPortrait;
 
   public CharacterDialogue(
-      GUIContext container, Font font, List<DialogueResponse> dialogueResponses)
-      throws SlickException {
+      GUIContext container, Font font, List<DialogueResponse> dialogueResponses) {
     super(container);
     dialogueResponseIterator = dialogueResponses.iterator();
     currentPortrait = EMPTY_IMAGE;
@@ -51,8 +50,7 @@ public final class CharacterDialogue extends ComponentBase {
   public void resetLayout() {}
 
   @Override
-  protected void renderComponent(
-      GUIContext context, Graphics graphics) throws SlickException {
+  protected void renderComponent(GUIContext context, Graphics graphics) throws SlickException {
     if (currentPortrait != EMPTY_IMAGE) {
       int portraitY = context.getHeight() - currentPortrait.getHeight();
       graphics.setColor(Color.black);

@@ -4,15 +4,17 @@ import static believe.util.MapEntry.entry;
 import static believe.util.Util.hashMapOf;
 import static believe.util.Util.hashSetOf;
 
+import believe.core.Updatable;
 import believe.core.display.AnimationSet;
 import believe.core.display.Camera;
 import believe.core.display.SpriteSheetManager;
 import believe.gui.ComponentBase;
+import believe.map.collidable.tile.CollidableTileCollisionHandler.TileCollidable;
 import believe.physics.collision.Collidable;
-import believe.physics.collision.DamageBoxCollidable;
-import believe.physics.collision.DamageHandler;
-import believe.physics.collision.TileCollisionHandler;
-import believe.physics.collision.TileCollisionHandler.TileCollidable;
+import believe.physics.collision.CollisionHandler;
+import believe.physics.damage.DamageBoxCollidable;
+import believe.physics.manager.PhysicsManageable;
+import believe.physics.manager.PhysicsManager;
 import believe.statemachine.ConcurrentStateMachine;
 import believe.statemachine.State;
 import believe.statemachine.State.Action;
@@ -22,12 +24,17 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class Character extends ComponentBase
-    implements TileCollidable, DamageBoxCollidable, ConcurrentStateMachine.Listener {
+public abstract class Character<C extends Character<C>> extends ComponentBase
+    implements TileCollidable<C>,
+        DamageBoxCollidable<C>,
+        PhysicsManageable,
+        Updatable,
+        ConcurrentStateMachine.Listener {
 
   public interface DamageListener {
     DamageListener NONE = (currentFocus, inflictor) -> {};
@@ -36,7 +43,8 @@ public abstract class Character extends ComponentBase
   }
 
   public enum Orientation {
-    RIGHT, LEFT
+    RIGHT,
+    LEFT
   }
 
   private static final float JUMP_SPEED = -0.5f;
@@ -52,25 +60,28 @@ public abstract class Character extends ComponentBase
 
   private final Map<Set<State>, String> animationMap;
   private final DamageListener damageListener;
+  private final Set<CollisionHandler<? extends Collidable<?>, ? super C>> rightCompatibleHandlers;
 
   private float focus;
   private float verticalSpeed;
-  private TileCollisionHandler tileHandler;
-  private DamageHandler damageHandler;
 
   protected Orientation orientation;
   protected AnimationSet animSet;
   protected Animation anim;
   protected float horizontalSpeed;
 
-  public Character(GUIContext container, DamageListener damageListener, int x, int y) {
+  public Character(
+      GUIContext container,
+      DamageListener damageListener,
+      Set<CollisionHandler<? extends Collidable<?>, ? super C>> rightCompatibleHandlers,
+      int x,
+      int y) {
     super(container, x, y);
     this.damageListener = damageListener;
+    this.rightCompatibleHandlers = rightCompatibleHandlers;
     orientation = Orientation.RIGHT;
     verticalSpeed = 0;
     horizontalSpeed = 0;
-    tileHandler = new TileCollisionHandler();
-    damageHandler = new DamageHandler();
     animSet = SpriteSheetManager.getInstance().getAnimationSet(getSheetName());
     anim = animSet.get("idle");
     rect =
@@ -89,26 +100,29 @@ public abstract class Character extends ComponentBase
         new ConcurrentStateMachine(new HashSet<>(Arrays.asList(standingState, groundedState)));
     machine.addListener(this);
 
-    animationMap = hashMapOf(entry(hashSetOf(standingState, groundedState), "idle"),
-        entry(hashSetOf(movingLeftState, groundedState), "move"),
-        entry(hashSetOf(movingRightState, groundedState), "move"),
-        entry(hashSetOf(standingState, jumpingState), "jump"),
-        entry(hashSetOf(movingLeftState, jumpingState), "jump"),
-        entry(hashSetOf(movingRightState, jumpingState), "jump"));
+    animationMap =
+        hashMapOf(
+            entry(hashSetOf(standingState, groundedState), "idle"),
+            entry(hashSetOf(movingLeftState, groundedState), "move"),
+            entry(hashSetOf(movingRightState, groundedState), "move"),
+            entry(hashSetOf(standingState, jumpingState), "jump"),
+            entry(hashSetOf(movingLeftState, jumpingState), "jump"),
+            entry(hashSetOf(movingRightState, jumpingState), "jump"));
   }
 
   private void buildStateMachine() {
-    standingState.addTransition(Action.SELECT_LEFT,
+    standingState.addTransition(
+        Action.SELECT_LEFT,
         () -> updateHorizontalMovement(-1),
-        movingLeftState.addTransition(Action.STOP,
-            () -> updateHorizontalMovement(0),
-            standingState));
-    standingState.addTransition(Action.SELECT_RIGHT,
+        movingLeftState.addTransition(
+            Action.STOP, () -> updateHorizontalMovement(0), standingState));
+    standingState.addTransition(
+        Action.SELECT_RIGHT,
         () -> updateHorizontalMovement(1),
-        movingRightState.addTransition(Action.STOP,
-            () -> updateHorizontalMovement(0),
-            standingState));
-    groundedState.addTransition(Action.JUMP,
+        movingRightState.addTransition(
+            Action.STOP, () -> updateHorizontalMovement(0), standingState));
+    groundedState.addTransition(
+        Action.JUMP,
         () -> verticalSpeed = JUMP_SPEED,
         jumpingState.addTransition(Action.LAND, groundedState));
   }
@@ -132,24 +146,12 @@ public abstract class Character extends ComponentBase
   }
 
   @Override
-  public void collision(Collidable other) {
-    tileHandler.handleCollision(this, other);
-    damageHandler.handleCollision(this, other);
-  }
-
-  @Override
-  public CollidableType getType() {
-    return CollidableType.CHARACTER;
-  }
-
-  @Override
   public void landed() {
     machine.transition(Action.LAND);
   }
 
   @Override
-  public void resetLayout() {
-  }
+  public void resetLayout() {}
 
   @Override
   public float getVerticalSpeed() {
@@ -163,10 +165,19 @@ public abstract class Character extends ComponentBase
 
   @Override
   protected void renderComponent(GUIContext context, Graphics g) throws SlickException {
-    anim
-        .getCurrentFrame()
+    anim.getCurrentFrame()
         .getFlippedCopy(orientation == Orientation.LEFT, false)
         .draw(rect.getX(), rect.getY());
+  }
+
+  @Override
+  public Set<CollisionHandler<? super C, ? extends Collidable<?>>> leftCompatibleHandlers() {
+    return Collections.emptySet();
+  }
+
+  @Override
+  public Set<CollisionHandler<? extends Collidable<?>, ? super C>> rightCompatibleHandlers() {
+    return rightCompatibleHandlers;
   }
 
   public float getFocus() {
@@ -183,6 +194,10 @@ public abstract class Character extends ComponentBase
     focus = Math.min(MAX_FOCUS, focus + health);
   }
 
+  public void transition(Action action) {
+    machine.transition(action);
+  }
+
   private void updateHorizontalMovement(int orientation) {
     if (orientation < -1 || orientation > 1) {
       throw new IllegalArgumentException("Direction supplied must be +/- 1 or 0.");
@@ -193,6 +208,7 @@ public abstract class Character extends ComponentBase
     }
   }
 
+  @Override
   public void update(int delta) {
     if (horizontalSpeed != 0) {
       setLocation(getFloatX() + delta * horizontalSpeed, getFloatY());
@@ -203,6 +219,12 @@ public abstract class Character extends ComponentBase
   @Override
   public void transitionEnded(Set<State> currentStates) {
     anim = animSet.get(animationMap.get(currentStates));
+  }
+
+  @Override
+  public void addToPhysicsManager(PhysicsManager physicsManager) {
+    physicsManager.addCollidable(this);
+    physicsManager.addGravityObject(this);
   }
 
   protected abstract String getSheetName();

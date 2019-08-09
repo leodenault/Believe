@@ -2,10 +2,12 @@ java_test(
     name = "PlatformingStateTest",
     srcs = ["PlatformingStateTest.java"],
     deps = [
+        "//java/believe/character/playable",
         "//java/believe/core/io",
         "//java/believe/gamestate/levelstate/platformingstate",
         "//java/believe/gamestate/levelstate/platformingstate:package-info",
         "//java/believe/map/gui",
+        "//java/believe/map/io",
         "//java/believe/physics/manager",
         "//java/believe/testing",
         "//java/believe/util",

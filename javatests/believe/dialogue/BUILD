@@ -13,7 +13,6 @@ java_junit5_test(
         "//java/believe/dialogue/proto:dialogue_java_proto",
         "//java/believe/logging/testing",
         "//java/believe/logging/truth",
-        "//third_party/junit",
         "//third_party/truth",
         "//third_party/truth:truth8",
     ],

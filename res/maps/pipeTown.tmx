@@ -1,62 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="250" height="100" tilewidth="32" tileheight="32" nextobjectid="1">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="250" height="100" tilewidth="32" tileheight="32" nextobjectid="8">
  <properties>
-  <property name="playerStartX" value="3"/>
-  <property name="playerStartY" value="46"/>
+  <property name="player_start_x" value="1"/>
+  <property name="player_start_y" value="21"/>
  </properties>
- <tileset firstgid="1" name="Pipe Town" tilewidth="32" tileheight="32" tilecount="16" columns="4">
-  <image source="tilesets/pipeTown.png" width="128" height="128"/>
-  <tile id="1">
-   <properties>
-    <property name="front" value=""/>
-   </properties>
-  </tile>
- </tileset>
- <tileset firstgid="17" name="Collision" tilewidth="32" tileheight="32" tilecount="1" columns="1">
-  <image source="tilesets/collision.png" width="32" height="32"/>
- </tileset>
- <tileset firstgid="18" name="Commands" tilewidth="32" tileheight="32" tilecount="4" columns="2">
-  <image source="tilesets/commands.png" width="64" height="64"/>
-  <tile id="0">
-   <properties>
-    <property name="command" value="right"/>
-   </properties>
-  </tile>
-  <tile id="1">
-   <properties>
-    <property name="command" value="left"/>
-   </properties>
-  </tile>
-  <tile id="2">
-   <properties>
-    <property name="command" value="stop"/>
-   </properties>
-  </tile>
-  <tile id="3">
-   <properties>
-    <property name="command" value="jump"/>
-   </properties>
-  </tile>
- </tileset>
- <layer name="Commands" width="250" height="100">
+ <tileset firstgid="1" source="tilesets/pipe_town.tsx"/>
+ <tileset firstgid="17" source="tilesets/commands.tsx"/>
+ <tileset firstgid="29" source="tilesets/entities.tsx"/>
+ <layer name="Entities" width="250" height="100">
   <properties>
-   <property name="commands" value=""/>
+   <property name="is_visible" value="false"/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3WMQ4AEAxAUWcQ7n9VmxUhaPLe2uV3alMCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAdtXXAQDAErcbAADuyYN5pP/8p9afWk6KuFfE5lnldQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABdA0gU8G6ghgEA
-  </data>
- </layer>
- <layer name="Collision" width="250" height="100">
-  <properties>
-   <property name="collision" value=""/>
-  </properties>
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3VsQ2AMBAEQbfg/pslJYAII1urGenyT1Y/BgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwFnm7gOApZ6a1jm06Bz6dA59Ooc+nUOfzqFP59Cnc+jTOfTpHPp0Dn06hz6dQ98fnc/bgP38c+j72rnfDefzz6FP59D31rmZtQYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwJkuDrLFPKCGAQA=
+   H4sIAAAAAAAAA+3cMQ6CQBRAQa9goR3e/5g22hhJREGX50zyCxJCluJlgYLDAQAAAAAAAAAAAAAAAAAAAIB/Md0GaNI39Okc+nQOfffOjz9dBbC1aWaAFl1Dn86hT+fQp3Po0zn06RxanjWtc2jROfTpHPp0Dn06hz6dQ5/OoU/n0Kdz6NM59Okc+nQOfd/o/Lzy9YBltujcf+VgLGt3bu+G8Xzaub0bxuc7HPS92/nS5/PLwvPXNNK7xEhrWdMe72uPa37V6eF4rnNjTGsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABjTFQ6fgX6ghgEA
   </data>
  </layer>
  <layer name="Back Ridge" width="250" height="100">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3KsQkAAAgEse90/4l1CkFI4LpLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgRm3t8XjePwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANwaMYCyXqCGAQA=
+   H4sIAAAAAAAAA+3dKw4AIAxEwTow3P+6BItB8UmZSXBP1KwmAgAAAAAAAAAAAAAAAAAAAACATNrtA4Dt7Bzys3PIb+y8Tg8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOAXJdb/NWg0mvcbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAzuqtA/GMoIYBAA==
   </data>
  </layer>
  <layer name="Pipe" width="250" height="100">
@@ -64,20 +25,12 @@
    H4sIAAAAAAAAA+3DoQ0AIBAAsUcgEOy/LkugLm3SGQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+Gep+VvNP2r+VfMBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABoedmgRaOghgEA
   </data>
  </layer>
- <layer name="Enemies" width="250" height="100">
-  <properties>
-   <property name="enemies" value=""/>
-  </properties>
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3OAQ0AAAgDoFewf1lb3LlBAhIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPhnrgMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJQsog4AkoIYBAA==
-  </data>
- </layer>
  <layer name="Front" width="250" height="100">
   <properties>
-   <property name="front" value=""/>
+   <property name="is_front_layer" value="true"/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3YsQqDMBiF0VCtg4Pv/7i1WykOCbbk53IOuMhtdPkQ2hoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAt++wXAH7qqmmdQxadQz6dQz6dQz6dQz6dQz6dQz6dQz6dQz6dQz6dQz6dQz6dQ75/dP78uID5fM8h393OfbuhPt9zyDfS+aPjPBsbm3qbkc63jmfY2NjU24x0/n1/Oa+187fOcY5z5pwzcu/t6HiGjY1NvY3/3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHK9AL2ma7aghgEA
+   H4sIAAAAAAAAA+3dMQuCUABGUalscOj//9waxSGViB63c+BBxYdO16ClaQIAAAAAAAAA5tUBmnQOfTqHPp1Dn86hT+fQp3Po0zn06Rz6dA59Goc+nUOfzqFv3fllc4CG+c0BGnQNfTqHPp1Dn86hT+fQp3NoWlavdQ5NOoc+nUOfzqFP59Cnc+jTOfTpHPp0Dn06hz6dQ5/OoU/n0PeNzj0vYCy+z6Hv0849G2B8vs+h70znR/6vwcbGZrzNmc7vB+5hY2Mz3uZM58vm/fV1bjsb13Ed1/ntdbaf7XX+OHAPGxub8TZ+h4P/onPo0zn06Rz6dA59Ooc+nUOfzqFP5wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACUPAGx8TgqoIYBAA==
   </data>
  </layer>
 </map>
