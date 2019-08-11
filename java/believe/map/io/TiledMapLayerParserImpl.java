@@ -52,26 +52,26 @@ final class TiledMapLayerParserImpl implements TiledMapLayerParser {
     int mapHeight = tiledMap.getHeight();
     int tileWidth = tiledMap.getTileWidth();
     int tileHeight = tiledMap.getTileHeight();
-    for (int layer = 0; layer < tiledMap.getLayerCount(); layer++) {
-      for (int x = 0; x < mapWidth; x++) {
-        for (int y = 0; y < mapHeight; y++) {
-          int tileId = tiledMap.getTileId(x, y, layer);
-          if (tileId != EMPTY_TILE) {
-            Optional<String> entityType = tiledMap.getTileProperty(tileId, entityTypeProperty);
-            Tile tile =
-                Tile.create(
-                    tiledMap,
-                    entityType.isPresent() ? EntityType.forName(entityType.get()) : EntityType.NONE,
-                    tileId,
-                    x,
-                    y,
-                    tileWidth,
-                    tileHeight,
-                    layer);
-            for (TileParser tileParser : tileParsers) {
-              tileParser.parseTile(tiledMap, tile, generatedMapEntityDataBuilder);
-            }
-          }
+    for (int x = 0; x < mapWidth; x++) {
+      for (int y = 0; y < mapHeight; y++) {
+        int tileId = tiledMap.getTileId(x, y, layerId);
+        if (tileId == EMPTY_TILE) {
+          continue;
+        }
+
+        Optional<String> entityType = tiledMap.getTileProperty(tileId, entityTypeProperty);
+        Tile tile =
+            Tile.create(
+                tiledMap,
+                entityType.isPresent() ? EntityType.forName(entityType.get()) : EntityType.NONE,
+                tileId,
+                x,
+                y,
+                tileWidth,
+                tileHeight,
+                layerId);
+        for (TileParser tileParser : tileParsers) {
+          tileParser.parseTile(tiledMap, tile, generatedMapEntityDataBuilder);
         }
       }
     }

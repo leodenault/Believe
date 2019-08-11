@@ -45,7 +45,7 @@ final class TiledMapLayerParserImplTest {
   @Mock private TiledMap tiledMap;
 
   @Test
-  void parseLayers_propertiesDoNotExist_returnsLayerWithDefaults() {
+  void parseLayer_propertiesDoNotExist_returnsLayerWithDefaults() {
     when(tiledMap.getLayerProperty(/* layerIndex= */ 0, IS_VISIBLE_PROPERTY))
         .thenReturn(Optional.empty());
     when(tiledMap.getLayerProperty(/* layerIndex= */ 0, IS_FRONT_PROPERTY))
@@ -61,7 +61,7 @@ final class TiledMapLayerParserImplTest {
   }
 
   @Test
-  void parseLayers_propertiesHaveErrors_returnsLayerWithDefaults() {
+  void parseLayer_propertiesHaveErrors_returnsLayerWithDefaults() {
     when(tiledMap.getLayerProperty(/* layerIndex= */ 0, IS_FRONT_PROPERTY))
         .thenReturn(Optional.of("987"));
     when(tiledMap.getLayerProperty(/* layerIndex= */ 0, IS_VISIBLE_PROPERTY))
@@ -77,7 +77,7 @@ final class TiledMapLayerParserImplTest {
   }
 
   @Test
-  void parseLayers_propertiesExist_returnsLayerWithValues() {
+  void parseLayer_propertiesExist_returnsLayerWithValues() {
     when(tiledMap.getLayerProperty(/* layerIndex= */ 0, IS_FRONT_PROPERTY))
         .thenReturn(Optional.of("true"));
     when(tiledMap.getLayerProperty(/* layerIndex= */ 0, IS_VISIBLE_PROPERTY))
@@ -105,7 +105,7 @@ final class TiledMapLayerParserImplTest {
   }
 
   @Test
-  void parseLayers_tilesAreParsed_returnsLayerWithTiles() {
+  void parseLayer_tilesAreParsed_returnsLayerWithTiles() {
     when(tiledMap.getLayerCount()).thenReturn(1);
     when(tiledMap.getWidth()).thenReturn(2);
     when(tiledMap.getHeight()).thenReturn(2);
@@ -140,7 +140,7 @@ final class TiledMapLayerParserImplTest {
   }
 
   @Test
-  void parseLayers_tileHasNoEntityType_createsTileDataWithNoneType() {
+  void parseLayer_tileHasNoEntityType_createsTileDataWithNoneType() {
     when(tiledMap.getLayerCount()).thenReturn(1);
     when(tiledMap.getWidth()).thenReturn(1);
     when(tiledMap.getHeight()).thenReturn(1);
