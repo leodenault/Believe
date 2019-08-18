@@ -8,6 +8,7 @@ import believe.logging.testing.VerifiableLogSystem.LogSeverity;
 import believe.logging.testing.VerifiesLoggingCalls;
 import believe.logging.truth.VerifiableLogSystemSubject;
 import believe.testing.mockito.InstantiateMocksIn;
+import believe.testing.proto.TestProto;
 import believe.testing.proto.TestProto.TestMessage;
 import believe.testing.temporaryfolder.TemporaryFolder;
 import believe.testing.temporaryfolder.UsesTemporaryFolder;
@@ -15,9 +16,11 @@ import com.google.protobuf.TextFormat;
 import com.google.protobuf.TextFormat.ParseException;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 
 @InstantiateMocksIn
 public final class ProtoFileSerializerTest {
@@ -158,9 +161,41 @@ public final class ProtoFileSerializerTest {
 
   @Test
   @UsesTemporaryFolder
+  void main_multipleInputFiles_outputsIndependentFiles(TemporaryFolder temporaryFolder)
+      throws IOException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
+          InvocationTargetException {
+    TestMessage expectedMessage1 = TestMessage.newBuilder().addContent("content 1").build();
+    TestMessage expectedMessage2 = TestMessage.newBuilder().addContent("content 2").build();
+    OutputStream outputStream1 = temporaryFolder.writeToFile("some_proto_1.textproto");
+    OutputStream outputStream2 = temporaryFolder.writeToFile("some_proto_2.textproto");
+    TextFormat.printer().print(expectedMessage1, new OutputStreamAppendable(outputStream1));
+    TextFormat.printer().print(expectedMessage2, new OutputStreamAppendable(outputStream2));
+    outputStream1.close();
+    outputStream2.close();
+    String inputFilePath1 = temporaryFolder.getPathToFile("some_proto_1.textproto");
+    String inputFilePath2 = temporaryFolder.getPathToFile("some_proto_2.textproto");
+
+    ProtoFileSerializer.main(
+        new String[] {
+          PROTO_MESSAGE_CLASS,
+          temporaryFolder.getFolder().getCanonicalPath(),
+          inputFilePath1,
+          inputFilePath2
+        });
+
+    InputStream inputStream1 = temporaryFolder.readFile("some_proto_1.pb");
+    InputStream inputStream2 = temporaryFolder.readFile("some_proto_2.pb");
+    TestMessage actualMessage1 = TestMessage.parseFrom(inputStream1);
+    TestMessage actualMessage2 = TestMessage.parseFrom(inputStream2);
+    assertThat(actualMessage1).isEqualTo(expectedMessage1);
+    assertThat(actualMessage2).isEqualTo(expectedMessage2);
+  }
+
+  @Test
+  @UsesTemporaryFolder
   public void convert_producesBinaryProto(TemporaryFolder temporaryFolder) throws IOException {
     ProtoFileSerializer converter = new ProtoFileSerializer();
-    TestMessage inputMessage = TestMessage.newBuilder().setContent("proto contents").build();
+    TestMessage inputMessage = TestMessage.newBuilder().addContent("proto contents").build();
     TextFormat.print(
         inputMessage,
         new OutputStreamAppendable(temporaryFolder.writeToFile("some_proto.textproto")));
@@ -170,7 +205,7 @@ public final class ProtoFileSerializerTest {
     converter.convert(TestMessage.newBuilder(), inputFileContents, outputFileContents);
 
     TestMessage outputMessage = TestMessage.parseFrom(temporaryFolder.readFile("some_proto.pb"));
-    assertThat(outputMessage.getContent()).isEqualTo("proto contents");
+    assertThat(outputMessage.getContent(0)).isEqualTo("proto contents");
   }
 
   @Test

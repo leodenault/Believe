@@ -41,12 +41,17 @@ public class ProtoFileSerializer {
       return;
     }
 
-    Message.Builder builder = verifyProtoClass(args[0]);
+    Class<?> protoClass = Class.forName(args[0]);
+    if (!(Message.class.isAssignableFrom(protoClass))) {
+      throw new IllegalArgumentException("Class '" + args[0] + "' is not a proto message.");
+    }
+
     String outputDir = args[1];
     ProtoFileSerializer serializer = new ProtoFileSerializer();
 
     for (int i = 2; i < args.length; i++) {
       String arg = args[i];
+      Message.Builder builder = (Message.Builder) protoClass.getMethod("newBuilder").invoke(null);
 
       File inputFile = new File(arg);
       if (!inputFile.exists()) {
@@ -73,21 +78,6 @@ public class ProtoFileSerializer {
       return false;
     }
     return true;
-  }
-
-  private static Message.Builder verifyProtoClass(String className) throws
-      ClassNotFoundException,
-      NoSuchMethodException,
-      InvocationTargetException,
-      IllegalAccessException {
-    Class<?> protoClass = Class.forName(className);
-
-    if (!(Message.class.isAssignableFrom(protoClass))) {
-      throw new IllegalArgumentException("Class '" + className + "' is not a proto message.");
-    }
-
-    Object builder = protoClass.getMethod("newBuilder").invoke(null);
-    return (Message.Builder) builder;
   }
 
   void convert(

@@ -7,5 +7,5 @@ option java_outer_classname = "TestProto";
 
 // Proto message used for testing.
 message TestMessage {
-  optional string content = 1;
+  repeated string content = 1;
 }
