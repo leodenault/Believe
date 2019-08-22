@@ -228,7 +228,7 @@ def _pkg_all_impl(ctx):
         use_default_shell_env = True,
     )
 
-def java_junit5_test(name = "", srcs = [], test_class = "", deps = []):
+def java_junit5_test(name = "", srcs = [], data = [], test_class = "", deps = []):
     # In the case there's a single source we can automatically determine the test class.
     if len(srcs) == 1 and test_class == "":
         package = native.package_name()
@@ -248,6 +248,7 @@ def java_junit5_test(name = "", srcs = [], test_class = "", deps = []):
             "--select-class",
             test_class,
         ],
+        data = data,
         main_class = "org.junit.platform.console.ConsoleLauncher",
         use_testrunner = False,
         deps = deps + ["//third_party/junit"],
