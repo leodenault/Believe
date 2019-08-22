@@ -1,43 +1,50 @@
 package believe.map.gui;
 
-import believe.core.display.Camera.Layerable;
-import believe.gui.ComponentBase;
+import believe.core.display.Renderable;
+import believe.geometry.Rectangle;
+import believe.map.data.BackgroundSceneData;
+import believe.react.Observer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
 
-public class MapBackground extends ComponentBase implements Layerable {
-  private Image image;
-  private int layer;
+/**
+ * A GUI wrapper around an {@link Image} for displaying a horizontally repeating image in the
+ * background of the scene.
+ */
+public final class MapBackground implements Observer<Rectangle>, Renderable {
+  private final BackgroundSceneData backgroundSceneData;
+  private final float verticalWindowSpace;
+  private final int mapHeight;
 
-  public MapBackground(GUIContext container, Image image, int layer, int y) {
-    super(container, 0, y);
-    this.image = image;
-    this.layer = layer;
-    rect.setWidth(this.image.getWidth());
-    rect.setHeight(this.image.getHeight());
+  private float xMin;
+  private float xMax;
+  private int y;
+
+  MapBackground(BackgroundSceneData backgroundSceneData, int mapHeight) {
+    this.backgroundSceneData = backgroundSceneData;
+    // The segment of the map through which the image can slide through, expressed as a percentage.
+    verticalWindowSpace =
+        backgroundSceneData.bottomYPosition() - backgroundSceneData.topYPosition();
+    this.mapHeight = mapHeight;
   }
 
   @Override
-  public int getLayer() {
-    return layer;
-  }
-
-  @Override
-  public void resetLayout() {}
-
-  @Override
-  public void renderComponent(GUIContext context, Graphics g, float xMin, float xMax)
-      throws SlickException {
-    float left;
-    for (left = getX() + xMin - (xMin % getWidth()); left < xMax; left += getWidth()) {
-      g.drawImage(image, left, getY());
+  public void render(GUIContext guiContext, Graphics g) {
+    for (float currentImageX = xMin;
+        currentImageX < xMax;
+        currentImageX += backgroundSceneData.image().getWidth()) {
+      g.drawImage(backgroundSceneData.image(), currentImageX, y);
     }
   }
 
   @Override
-  protected void renderComponent(GUIContext context, Graphics g) throws SlickException {
-    renderComponent(context, g, 0, 0);
+  public void valueChanged(Rectangle parentRect) {
+    float parentYPositionPercent = parentRect.getY() / (mapHeight - parentRect.getHeight());
+    float yPercent =
+        verticalWindowSpace * parentYPositionPercent + backgroundSceneData.topYPosition();
+    y = (int) (yPercent * (mapHeight - backgroundSceneData.image().getHeight()));
+    xMin = parentRect.getX() - (parentRect.getX() % backgroundSceneData.image().getWidth());
+    xMax = parentRect.getMaxX();
   }
 }

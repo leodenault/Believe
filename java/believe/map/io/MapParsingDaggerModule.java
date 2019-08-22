@@ -3,7 +3,7 @@ package believe.map.io;
 import believe.map.io.InternalQualifiers.EntityTypeProperty;
 import believe.map.io.InternalQualifiers.IsFrontLayerProperty;
 import believe.map.io.InternalQualifiers.IsVisibleProperty;
-import believe.map.io.InternalQualifiers.MapDefinitionsFile;
+import believe.map.io.InternalQualifiers.MapDefinitionsDirectory;
 import believe.map.io.InternalQualifiers.PlayerStartXProperty;
 import believe.map.io.InternalQualifiers.PlayerStartYProperty;
 import dagger.Binds;
@@ -17,9 +17,9 @@ import java.util.Set;
 @Module
 public abstract class MapParsingDaggerModule {
   @Provides
-  @MapDefinitionsFile
-  static String provideMapDefinitionsFile() {
-    return "/data/maps.xml";
+  @MapDefinitionsDirectory
+  static String provideMapDefinitionsDirectory() {
+    return "/res/maps";
   }
 
   @Provides
@@ -58,6 +58,9 @@ public abstract class MapParsingDaggerModule {
   @Binds
   abstract TiledMapLayerParser bindTiledMapLayerParser(
       TiledMapLayerParserImpl tiledMapLayerParserImpl);
+
+  @Binds
+  abstract TiledMapParser bindTiledMapParser(TiledMapParserImpl tiledMapParserImpl);
 
   @Binds
   abstract MapManager bindMapManager(MapManagerImpl mapManagerImpl);

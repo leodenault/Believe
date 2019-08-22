@@ -3,7 +3,6 @@ java_test(
     srcs = ["CharacterDialogueTest.java"],
     deps = [
         "//java/believe/gui",
-        "//java/believe/gui:package-info",
         "//java/believe/gui/testing",
         "//third_party/junit",
         "//third_party/mockito",
@@ -16,7 +15,6 @@ java_test(
     srcs = ["DirectionalPanelTest.java"],
     deps = [
         "//java/believe/gui",
-        "//java/believe/gui:package-info",
         "//third_party/hamcrest",
         "//third_party/junit",
         "//third_party/mockito",
@@ -29,7 +27,6 @@ java_test(
     srcs = ["MenuSelectionGroupTest.java"],
     deps = [
         "//java/believe/gui",
-        "//java/believe/gui:package-info",
         "//third_party/hamcrest",
         "//third_party/junit",
         "//third_party/mockito",
@@ -42,7 +39,6 @@ java_test(
     deps = [
         "//java/believe/audio",
         "//java/believe/gui",
-        "//java/believe/gui:package-info",
         "//third_party/hamcrest",
         "//third_party/junit",
         "//third_party/mockito",

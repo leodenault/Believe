@@ -1,9 +1,9 @@
 package believe.map.gui;
 
 import believe.core.Updatable;
-import believe.core.display.Camera.Layerable;
 import believe.core.display.Renderable;
 import believe.gui.ComponentBase;
+import believe.map.data.BackgroundSceneData;
 import believe.map.data.LayerData;
 import believe.map.data.MapData;
 import com.google.auto.factory.AutoFactory;
@@ -20,10 +20,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @AutoFactory
-public class LevelMap extends ComponentBase implements Layerable {
-  static final int TARGET_WIDTH = 1600;
-  static final int TARGET_HEIGHT = 900;
-
+public class LevelMap extends ComponentBase {
   private final List<MapLayerComponent> rearLayers;
   private final List<MapLayerComponent> frontLayers;
   private final Set<Renderable> renderables;
@@ -67,12 +64,8 @@ public class LevelMap extends ComponentBase implements Layerable {
     mapBackgrounds =
         mapData.backgroundScenes().stream()
             .map(
-                backgroundSceneData ->
-                    new MapBackground(
-                        container,
-                        backgroundSceneData.image(),
-                        backgroundSceneData.layer(),
-                        backgroundSceneData.yPosition()))
+                (BackgroundSceneData backgroundSceneData) ->
+                    new MapBackground(backgroundSceneData, mapData.height()))
             .collect(Collectors.toList());
   }
 
@@ -100,18 +93,7 @@ public class LevelMap extends ComponentBase implements Layerable {
   }
 
   @Override
-  public int getLayer() {
-    return 0;
-  }
-
-  @Override
   public void resetLayout() {}
-
-  @Override
-  public void renderComponent(GUIContext context, Graphics g, float xMin, float xMax)
-      throws SlickException {
-    renderComponent(context, g);
-  }
 
   @Override
   protected void renderComponent(GUIContext context, Graphics g) throws SlickException {

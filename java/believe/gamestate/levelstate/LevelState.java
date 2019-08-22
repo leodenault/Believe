@@ -24,6 +24,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import java.util.Optional;
+
 public abstract class LevelState extends GameStateBase
     implements OverlayablePrecedingState, DamageListener {
 
@@ -104,7 +106,7 @@ public abstract class LevelState extends GameStateBase
   public void enter(GameContainer container, StateBasedGame game) throws SlickException {
     super.enter(container, game);
     if (!enteringFromPauseMenu) {
-      mapData = mapManager.getMap(getMapName());
+      mapData = getMapData();
       player =
           playableCharacterFactory.create(
               this, isOnRails(), mapData.playerStartX(), mapData.playerStartY());
@@ -117,10 +119,19 @@ public abstract class LevelState extends GameStateBase
     }
   }
 
+  private MapData getMapData() throws SlickException {
+    Optional<MapData> optionalMapData = mapManager.getMap(getMapName());
+    if (!optionalMapData.isPresent()) {
+      // TODO(#16): Show an error screen instead of throwing an exception.
+      throw new IllegalStateException("Cannot initialize level due to missing map.");
+    }
+    return optionalMapData.get();
+  }
+
   public void reloadLevel(GameContainer container) throws SlickException {
     int playerX = player.getX();
     int playerY = player.getY();
-    mapData = mapManager.getMap(getMapName());
+    mapData = getMapData();
     playArea.reloadMap(mapData);
     reset();
     player.setLocation(playerX, playerY);

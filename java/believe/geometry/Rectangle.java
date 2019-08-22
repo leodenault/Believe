@@ -9,6 +9,12 @@ public class Rectangle extends org.newdawn.slick.geom.Rectangle {
     super(x, y, width, height);
   }
 
+  public static Rectangle copyFrom(Rectangle other) {
+    Rectangle rectangle = new Rectangle(/* x= */ 0, /* y= */ 0, /* width= */ 0, /* height= */ 0);
+    rectangle.setBounds(other);
+    return rectangle;
+  }
+
   @Override
   public boolean intersects(org.newdawn.slick.geom.Shape shape) {
     if(shape instanceof Rectangle) {

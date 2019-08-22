@@ -1,0 +1,31 @@
+syntax = "proto2";
+
+package believe.map.data.proto;
+
+option java_package = "believe.map.data.proto";
+option java_outer_classname = "MapMetadataProto";
+
+// Metadata containing information about the location and other details about a
+// map.
+message MapMetadata {
+  // The set of backgrounds displayed behind the map. Backgrounds should be
+  // ordered from top to bottom in layer order.
+  repeated MapBackground map_backgrounds = 3;
+}
+
+// A background displayed behind all other layers in the map.
+message MapBackground {
+  // The file location for the background image.
+  optional string file_location = 1;
+  // A multiplier for the background's horizontal scroll speed, in pixels per
+  // second. A value of 1 will ensure that the image moves by 1 pixel for every
+  //second that the character is moving.
+  optional float horizontal_speed_multiplier = 2;
+  // The vertical position of the background when the game camera is at the top
+  // (y = 0) of the map. Expressed as a value int the range [0, 1].
+  optional float top_y_position = 3;
+  // The vertical position of the background when the game camera is at the
+  // bottom (y = map height) of the map. Expressed as a value in the range
+  // [0, 1].
+  optional float bottom_y_position = 4;
+}

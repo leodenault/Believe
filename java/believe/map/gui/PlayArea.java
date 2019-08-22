@@ -1,13 +1,10 @@
 package believe.map.gui;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import believe.gui.AbstractContainer;
 import believe.gui.CanvasContainer;
 import believe.gui.ComponentBase;
 import believe.map.data.MapData;
+import believe.util.Util;
 import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
 import org.newdawn.slick.Color;
@@ -17,9 +14,8 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.gui.GUIContext;
 
-import believe.core.display.Camera;
-import believe.core.display.Camera.Layerable;
-import believe.util.Util;
+import java.util.LinkedList;
+import java.util.List;
 
 @AutoFactory(allowSubclasses = true)
 public class PlayArea extends AbstractContainer {
@@ -34,6 +30,9 @@ public class PlayArea extends AbstractContainer {
       this.offsetY = offsetY;
     }
   }
+
+  private static final int TARGET_WIDTH = 1600;
+  private static final int TARGET_HEIGHT = 900;
 
   private final LevelMapFactory levelMapFactory;
 
@@ -65,24 +64,21 @@ public class PlayArea extends AbstractContainer {
     int width = convertPercentageToPixels(clipWidth, container.getWidth(), 0);
     int height = convertPercentageToPixels(clipHeight, container.getHeight(), 0);
     border = false;
-    camera = new Camera(width, height);
+    camera = new Camera(width, height, mapData.width(), mapData.height());
     levelMap = levelMapFactory.create(mapData);
     this.focus = focus;
     this.hud = new CanvasContainer(container, 0, 0, width, height);
     handleMap();
     camera.scale(
-        (float) container.getWidth() / LevelMap.TARGET_WIDTH,
-        (float) container.getHeight() / LevelMap.TARGET_HEIGHT);
+        (float) container.getWidth() / TARGET_WIDTH, (float) container.getHeight() / TARGET_HEIGHT);
     this.dynamicHudChildren = new LinkedList<DynamicHudChild>();
   }
 
   private void handleMap() {
+    camera.addAllChildren(levelMap.getBackgrounds());
+    camera.addAllObservers(levelMap.getBackgrounds());
     camera.addChild(levelMap);
     levelMap.setFocus(focus);
-
-    for (MapBackground background : levelMap.getBackgrounds()) {
-      camera.addChild(background);
-    }
   }
 
   public void reloadMap(MapData newMapData) {
@@ -108,10 +104,6 @@ public class PlayArea extends AbstractContainer {
     if (rect != null) {
       rect.setLocation(x, y);
     }
-  }
-
-  public void addChild(Layerable child) {
-    camera.addChild(child);
   }
 
   public void addHudChild(ComponentBase child) {
@@ -163,22 +155,8 @@ public class PlayArea extends AbstractContainer {
 
   public void update(int delta) {
     levelMap.update(delta);
-    Rectangle rect = focus.rect();
-    camera.center(rect.getCenterX(), rect.getCenterY());
-
-    Rectangle camRect = camera.getRect();
-    if (camRect.getX() < 0) {
-      camRect.setX(0);
-    } else if (camRect.getMaxX() > levelMap.getWidth()) {
-      camRect.setX(levelMap.getWidth() - camRect.getWidth());
-    }
-
-    if (camRect.getY() < 0) {
-      camRect.setY(0);
-    } else if (camRect.getMaxY() > levelMap.getHeight()) {
-      camRect.setY(levelMap.getHeight() - camRect.getHeight());
-    }
-
+    Rectangle focusRect = focus.rect();
+    camera.center(focusRect.getCenterX(), focusRect.getCenterY());
     updateDynamicHudChildren();
   }
 

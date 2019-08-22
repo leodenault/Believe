@@ -12,7 +12,7 @@ final class InternalQualifiers {
   /** Qualifies a string as the file location of a file containing the definitions of maps. */
   @Qualifier
   @Retention(RetentionPolicy.RUNTIME)
-  @interface MapDefinitionsFile {}
+  @interface MapDefinitionsDirectory {}
 
   @Qualifier
   @Retention(RetentionPolicy.RUNTIME)

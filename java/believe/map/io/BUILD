@@ -6,16 +6,32 @@ java_library(
     name = "io",
     srcs = [
         "MapManager.java",
-        "MapManagerImpl.java",
         "TileParser.java",
         "TiledMapLayerParser.java",
-        "TiledMapLayerParserImpl.java",
         "TiledMapParser.java",
     ],
     deps = [
-        ":internal_qualifiers",
-        "//java/believe/app/annotation",
         "//java/believe/map/data",
+        "//java/believe/map/tiled",
+        "//third_party/slick",
+    ],
+)
+
+java_library(
+    name = "impl",
+    srcs = [
+        "MapManagerImpl.java",
+        "TiledMapLayerParserImpl.java",
+        "TiledMapParserImpl.java",
+    ],
+    deps = [
+        ":internal_qualifiers",
+        ":io",
+        "//java/believe/app/annotation",
+        "//java/believe/datamodel/protodata",
+        "//java/believe/gui",
+        "//java/believe/map/data",
+        "//java/believe/map/data/proto:map_metadata_java_proto",
         "//java/believe/map/tiled",
         "//java/believe/physics/manager",
         "//java/believe/xml",
@@ -30,6 +46,7 @@ java_library(
     name = "dagger_module",
     srcs = ["MapParsingDaggerModule.java"],
     deps = [
+        ":impl",
         ":internal_qualifiers",
         ":io",
         "//third_party/dagger",

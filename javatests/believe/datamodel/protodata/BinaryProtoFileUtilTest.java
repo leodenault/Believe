@@ -21,7 +21,7 @@ import java.io.OutputStream;
 public final class BinaryProtoFileUtilTest {
   private static final String FILE_NAME = "proto.pb";
   private static final TestMessage PROTO =
-      TestMessage.newBuilder().setContent("proto content").build();
+      TestMessage.newBuilder().addContent("proto content").build();
 
   @Test
   @UsesTemporaryFolder

@@ -1,145 +1,110 @@
 package believe.map.io;
 
-import static believe.app.annotation.Nullability.notNull;
-
+import believe.datamodel.protodata.MutableProtoDataCommitter;
+import believe.gui.ImageSupplier;
 import believe.map.data.BackgroundSceneData;
 import believe.map.data.MapData;
-import believe.map.io.InternalQualifiers.MapDefinitionsFile;
+import believe.map.data.proto.MapMetadataProto.MapBackground;
+import believe.map.data.proto.MapMetadataProto.MapMetadata;
+import believe.map.io.InternalQualifiers.MapDefinitionsDirectory;
 import believe.map.tiled.TiledMap;
-import believe.xml.CompoundDef;
-import believe.xml.ListDef;
-import believe.xml.XMLCompound;
-import believe.xml.XMLDataParser;
-import believe.xml.XMLInteger;
-import believe.xml.XMLList;
-import believe.xml.XMLLoadingException;
-import believe.xml.XMLString;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.Log;
+import org.newdawn.slick.util.ResourceLoader;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /** Default implementation of {@link MapManager}. */
 @Singleton
 public class MapManagerImpl implements MapManager {
-  private static final class MapConfig {
-    private final XMLCompound xmlMap;
-    @Nullable private MapData mapData;
+  private static final class MapBackgroundAndImage {
+    final MapBackground mapBackground;
+    @Nullable final Image image;
 
-    private MapConfig(XMLCompound xmlMap) {
-      this.xmlMap = xmlMap;
-    }
-
-    private void setMapData(MapData mapData) {
-      this.mapData = mapData;
+    MapBackgroundAndImage(MapBackground mapBackground, @Nullable Image image) {
+      this.mapBackground = mapBackground;
+      this.image = image;
     }
   }
-
-  private static final String MAPS_NODE = "maps";
-  private static final String MAP_NODE = "map";
-  private static final String NAME_NODE = "name";
-  private static final String LOCATION_NODE = "location";
-  private static final String TILE_SETS_LOCATION_NODE = "tileSetsLocation";
-  private static final String BACKGROUNDS_NODE = "backgrounds";
-  private static final String BACKGROUND_NODE = "background";
-  private static final String LAYER_NODE = "layer";
-  private static final String Y_NODE = "y";
-  private static final ListDef SCHEMA =
-      new ListDef(
-          MAPS_NODE,
-          new CompoundDef(MAP_NODE)
-              .addString(NAME_NODE)
-              .addString(LOCATION_NODE)
-              .addString(TILE_SETS_LOCATION_NODE)
-              .addList(
-                  BACKGROUNDS_NODE,
-                  new CompoundDef(BACKGROUND_NODE)
-                      .addString(LOCATION_NODE)
-                      .addInteger(LAYER_NODE)
-                      .addInteger(Y_NODE)));
 
   private final TiledMapParser tiledMapParser;
-  private final String mapDefinitionsFile;
-  private final HashMap<String, MapConfig> uninitializedMaps;
-  private final HashMap<String, MapConfig> maps;
-
-  private boolean mapsLoaded;
+  private final String mapDefinitionsDirectory;
+  private final ImageSupplier imageSupplier;
+  private final Map<String, MapData> nameToMapDataMap;
 
   @Inject
-  MapManagerImpl(TiledMapParser tiledMapParser, @MapDefinitionsFile String mapDefinitionsFile) {
-    this.tiledMapParser = tiledMapParser;
-    this.mapDefinitionsFile = mapDefinitionsFile;
-    this.uninitializedMaps = new HashMap<>();
-    this.maps = new HashMap<>();
-    mapsLoaded = false;
+  MapManagerImpl(
+      TiledMapParser tiledMapParser, @MapDefinitionsDirectory String mapDefinitionsDirectory) {
+    this(
+        tiledMapParser,
+        mapDefinitionsDirectory,
+        ref -> {
+          try {
+            return Optional.of(new Image(ref));
+          } catch (SlickException e) {
+            return Optional.empty();
+          }
+        });
   }
 
-  private void loadMaps() {
-    XMLDataParser parser = new XMLDataParser(mapDefinitionsFile, SCHEMA);
-
-    try {
-      XMLList top = parser.loadFile();
-
-      for (XMLCompound map : top.children) {
-        uninitializedMaps.put(map.<XMLString>getValue(NAME_NODE).value, new MapConfig(map));
-      }
-    } catch (SlickException | XMLLoadingException e) {
-      Log.error(
-          String.format(
-              "There was an error attempting to read the map data file named '%s'. The exception is"
-                  + " listed below:\n\n%s",
-              mapDefinitionsFile, e.getMessage()));
-    }
+  MapManagerImpl(
+      TiledMapParser tiledMapParser, String mapDefinitionsDirectory, ImageSupplier imageSupplier) {
+    this.tiledMapParser = tiledMapParser;
+    this.mapDefinitionsDirectory = mapDefinitionsDirectory;
+    this.imageSupplier = imageSupplier;
+    this.nameToMapDataMap = new HashMap<>();
   }
 
   @Override
-  public MapData getMap(String name) throws SlickException {
-    if (!mapsLoaded) {
-      loadMaps();
-      mapsLoaded = true;
+  public Optional<MapData> getMap(String name) throws SlickException {
+    MapData mapData = nameToMapDataMap.get(name);
+    if (mapData != null) {
+      return Optional.of(mapData);
     }
 
-    MapConfig config;
-    if (uninitializedMaps.containsKey(name)) {
-      config = uninitializedMaps.get(name);
-      fetchMap(config);
-      uninitializedMaps.remove(name);
-    } else if (maps.containsKey(name)) {
-      config = maps.get(name);
-      fetchMap(config);
-      maps.remove(name);
-    } else {
-      throw new RuntimeException(
-          "The map '" + name + "' was not defined in the XML configuration.");
+    String mapPrefix = mapDefinitionsDirectory + "/" + name;
+    String tileMapLocation = mapPrefix + ".tmx";
+    String metadataLocation = mapPrefix + ".pb";
+    String tileSetsLocation = mapDefinitionsDirectory + "/tilesets";
+
+    if (!ResourceLoader.resourceExists(tileMapLocation)) {
+      Log.error("Could not find map '" + tileMapLocation + "'.");
+      return Optional.empty();
     }
 
-    maps.put(name, config);
-    return notNull(config.mapData);
-  }
+    TiledMap tiledMap = new TiledMap(tileMapLocation, tileSetsLocation);
+    MutableProtoDataCommitter<MapMetadata> metadataLoader =
+        new MutableProtoDataCommitter<>(
+            metadataLocation, MapMetadata.parser(), MapMetadata.getDefaultInstance());
 
-  private void fetchMap(MapConfig mapConfig) throws SlickException {
-    XMLCompound xmlMap = mapConfig.xmlMap;
-
-    TiledMap tiledMap =
-        new TiledMap(
-            xmlMap.<XMLString>getValue(LOCATION_NODE).value,
-            xmlMap.<XMLString>getValue(TILE_SETS_LOCATION_NODE).value);
     tiledMap.load();
+    metadataLoader.load();
 
-    Set<BackgroundSceneData> backgroundScenes = new HashSet<>();
-    for (XMLCompound background : xmlMap.<XMLList>getValue(BACKGROUNDS_NODE).children) {
-      backgroundScenes.add(
-          BackgroundSceneData.create(
-              new Image(background.<XMLString>getValue(LOCATION_NODE).value),
-              background.<XMLInteger>getValue(LAYER_NODE).value,
-              background.<XMLInteger>getValue(Y_NODE).value));
-    }
-    mapConfig.setMapData(tiledMapParser.parseMap(tiledMap, backgroundScenes));
+    MapMetadata mapMetadata = metadataLoader.get();
+    List<BackgroundSceneData> backgroundSceneData =
+        mapMetadata.getMapBackgroundsList().stream()
+            .map(
+                mapBackground ->
+                    new MapBackgroundAndImage(
+                        mapBackground,
+                        imageSupplier.get(mapBackground.getFileLocation()).orElse(null)))
+            .filter(mapBackgroundAndImage -> mapBackgroundAndImage.image != null)
+            .map(
+                mapBackgroundAndImage ->
+                    BackgroundSceneData.create(
+                        mapBackgroundAndImage.image, mapBackgroundAndImage.mapBackground))
+            .collect(Collectors.toList());
+
+    mapData = tiledMapParser.parseMap(tiledMap, backgroundSceneData);
+    nameToMapDataMap.put(name, mapData);
+    return Optional.of(mapData);
   }
 }

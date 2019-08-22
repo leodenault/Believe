@@ -3,9 +3,6 @@ package believe.map.io;
 import believe.map.data.GeneratedMapEntityData;
 import believe.map.tiled.Tile;
 import believe.map.tiled.TiledMap;
-import believe.physics.manager.PhysicsManageable;
-
-import java.util.Optional;
 
 /** Generates entities on a map based on specially-annotated tiles. */
 public interface TileParser {

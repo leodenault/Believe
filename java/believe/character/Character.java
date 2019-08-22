@@ -6,7 +6,6 @@ import static believe.util.Util.hashSetOf;
 
 import believe.core.Updatable;
 import believe.core.display.AnimationSet;
-import believe.core.display.Camera;
 import believe.core.display.SpriteSheetManager;
 import believe.gui.ComponentBase;
 import believe.map.collidable.tile.CollidableTileCollisionHandler.TileCollidable;
@@ -48,6 +47,7 @@ public abstract class Character<C extends Character<C>> extends ComponentBase
   }
 
   private static final float JUMP_SPEED = -0.5f;
+  private static final float SCROLL_SPEED = 0.2f; // Pixels per millisecond
 
   public static final float MAX_FOCUS = 1.0f;
 
@@ -202,7 +202,7 @@ public abstract class Character<C extends Character<C>> extends ComponentBase
     if (orientation < -1 || orientation > 1) {
       throw new IllegalArgumentException("Direction supplied must be +/- 1 or 0.");
     }
-    horizontalSpeed = orientation * Camera.SCROLL_SPEED;
+    horizontalSpeed = orientation * SCROLL_SPEED;
     if (orientation != 0) {
       this.orientation = orientation > 0 ? Orientation.RIGHT : Orientation.LEFT;
     }

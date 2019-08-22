@@ -1,11 +1,12 @@
 package believe.levelFlow.component;
 
-import believe.core.io.FontLoader;
 import believe.core.SynchedComboPattern;
 import believe.core.SynchedComboPattern.TimeKeyPair;
-import believe.core.display.Camera.Layerable;
 import believe.gui.ComponentBase;
-import org.newdawn.slick.*;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.gui.GUIContext;
 
@@ -14,7 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public class ComboSyncher extends ComponentBase implements Layerable {
+public class ComboSyncher extends ComponentBase {
   private static final Color NOT_ACTIVATED = new Color(0xffffff);
   private static final Color SUCCESS = new Color(0x00ff00);
   private static final Color MISSED = new Color(0xff0000);
@@ -122,8 +123,7 @@ public class ComboSyncher extends ComponentBase implements Layerable {
         if (trackerX >= start && trackerX < end) {
           float relPosSq = (float) Math.pow(trackerX - x, 2);
           float pulseLengthSq = (float) Math.pow(pulseLength, 2);
-          float
-              progress =
+          float progress =
               1 + (relPosSq / (3 * pulseLengthSq)) * (((4 * relPosSq) / pulseLengthSq) - 7);
           Color pulseColour = new Color(BAR_PULSE);
           Color normalColour = new Color(BAR_NORMAL);
@@ -217,19 +217,7 @@ public class ComboSyncher extends ComponentBase implements Layerable {
           }
         }
       }
-
     }
-  }
-
-  @Override
-  public int getLayer() {
-    return 0;
-  }
-
-  @Override
-  public void renderComponent(
-      GUIContext context, Graphics g, float xMin, float xMax) throws SlickException {
-    renderComponent(context, g);
   }
 
   @Override

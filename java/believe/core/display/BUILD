@@ -6,7 +6,6 @@ java_library(
     name = "display",
     srcs = [
         "AnimationSet.java",
-        "Camera.java",
         "Renderable.java",
         "SpriteSheetManager.java",
     ],

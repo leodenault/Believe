@@ -13,7 +13,7 @@ import java.io.IOException;
 public final class MutableProtoDataCommitterTest {
   private static final String DATA_LOCATION = "test_proto.pb";
   private static final TestMessage PROTO_DATA =
-      TestMessage.newBuilder().setContent("initial content").build();
+      TestMessage.newBuilder().addContent("initial content").build();
 
   @Test
   public void get_dataNotLoaded_returnsDefaultProtoData() {

@@ -15,6 +15,7 @@ java_library(
         "//java/believe/app/annotation",
         "//java/believe/core",
         "//java/believe/core/display",
+        "//java/believe/map/data/proto:map_metadata_java_proto",
         "//java/believe/map/tiled",
         "//java/believe/physics/manager",
         "//third_party/auto_value",

@@ -11,6 +11,7 @@ java_library(
         "ComponentBase.java",
         "DebugBeat.java",
         "DirectionalPanel.java",
+        "ImageSupplier.java",
         "MenuSelection.java",
         "MenuSelectionGroup.java",
         "NumberPicker.java",
@@ -18,9 +19,10 @@ java_library(
         "ScrollBar.java",
         "TextComponent.java",
         "VerticalKeyboardScrollpanel.java",
+        "package-info.java",
     ],
     deps = [
-        ":package-info",
+        "//java/believe/app/annotation",
         "//java/believe/audio",
         "//java/believe/core",
         "//java/believe/core/display",
@@ -28,15 +30,5 @@ java_library(
         "//java/believe/util",
         "//third_party/javax:annotations",
         "//third_party/slick",
-    ],
-)
-
-java_library(
-    name = "package-info",
-    srcs = ["package-info.java"],
-    visibility = ["//javatests/believe/gui:__pkg__"],
-    deps = [
-        "//java/believe/app/annotation",
-        "//third_party/javax:annotations",
     ],
 )

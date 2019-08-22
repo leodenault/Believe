@@ -26,7 +26,7 @@ public abstract class MapData {
    * The set of {@link BackgroundSceneData} instances for backgrounds which should be displayed
    * behind the map.
    */
-  public abstract Set<BackgroundSceneData> backgroundScenes();
+  public abstract List<BackgroundSceneData> backgroundScenes();
 
   /** The set of {@link LayerData} instances representing each layer of tiles in the map. */
   public abstract List<LayerData> layers();
@@ -37,13 +37,13 @@ public abstract class MapData {
       int playerStartY,
       int width,
       int height,
-      Set<BackgroundSceneData> backgroundScenes) {
+      List<BackgroundSceneData> backgroundScenes) {
     return new AutoValue_MapData.Builder()
         .setPlayerStartX(playerStartX)
         .setPlayerStartY(playerStartY)
         .setWidth(width)
         .setHeight(height)
-        .setBackgroundScenes(Collections.unmodifiableSet(backgroundScenes));
+        .setBackgroundScenes(Collections.unmodifiableList(backgroundScenes));
   }
 
   /** Builder class for constructing instances of {@link MapData}. */
@@ -59,7 +59,7 @@ public abstract class MapData {
 
     abstract Builder setHeight(int height);
 
-    abstract Builder setBackgroundScenes(Set<BackgroundSceneData> backgroundScenes);
+    abstract Builder setBackgroundScenes(List<BackgroundSceneData> backgroundScenes);
 
     abstract Builder setLayers(List<LayerData> layers);
 
