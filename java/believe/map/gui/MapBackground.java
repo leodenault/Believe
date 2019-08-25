@@ -44,7 +44,12 @@ public final class MapBackground implements Observer<Rectangle>, Renderable {
     float yPercent =
         verticalWindowSpace * parentYPositionPercent + backgroundSceneData.topYPosition();
     y = (int) (yPercent * (mapHeight - backgroundSceneData.image().getHeight()));
-    xMin = parentRect.getX() - (parentRect.getX() % backgroundSceneData.image().getWidth());
+    xMin =
+        parentRect.getX()
+            - backgroundSceneData.horizontalSpeedMultiplier()
+                * (parentRect.getX()
+                    % (backgroundSceneData.image().getWidth()
+                        / backgroundSceneData.horizontalSpeedMultiplier()));
     xMax = parentRect.getMaxX();
   }
 }

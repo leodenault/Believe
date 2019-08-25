@@ -2,11 +2,11 @@ map_backgrounds {
   file_location: "/res/graphics/backgrounds/darkSky.png"
   top_y_position: 0
   bottom_y_position: 1
-  horizontal_speed_multiplier: 0.5
+  horizontal_speed_multiplier: 1.0
 }
 map_backgrounds {
   file_location: "/res/graphics/backgrounds/mountains.png"
   top_y_position: 0.25
   bottom_y_position: 1
-  horizontal_speed_multiplier: 0.5
+  horizontal_speed_multiplier: 0.1
 }
