@@ -25,6 +25,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public abstract class LevelState extends GameStateBase
     implements OverlayablePrecedingState, DamageListener {
@@ -144,8 +145,14 @@ public abstract class LevelState extends GameStateBase
 
   private void initPhysics() {
     physicsManager.reset();
-    mapData.layers().stream()
-        .flatMap(layerData -> layerData.generatedMapEntityData().physicsManageables().stream())
+    Stream.concat(
+            mapData.objectLayers().stream()
+                .flatMap(
+                    objectLayerData ->
+                        objectLayerData.generatedMapEntityData().physicsManageables().stream()),
+            mapData.layers().stream()
+                .flatMap(
+                    layerData -> layerData.generatedMapEntityData().physicsManageables().stream()))
         .forEach(entity -> entity.addToPhysicsManager(physicsManager));
     player.addToPhysicsManager(physicsManager);
   }

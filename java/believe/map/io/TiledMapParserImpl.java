@@ -17,15 +17,18 @@ public final class TiledMapParserImpl implements TiledMapParser {
   private final String playerStartXProperty;
   private final String playerStartYProperty;
   private final TiledMapLayerParser tiledMapLayerParser;
+  private final TiledMapObjectLayerParser tiledMapObjectLayerParser;
 
   @Inject
   TiledMapParserImpl(
       @PlayerStartXProperty String playerStartXProperty,
       @PlayerStartYProperty String playerStartYProperty,
-      TiledMapLayerParser tiledMapLayerParser) {
+      TiledMapLayerParser tiledMapLayerParser,
+      TiledMapObjectLayerParser tiledMapObjectLayerParser) {
     this.playerStartXProperty = playerStartXProperty;
     this.playerStartYProperty = playerStartYProperty;
     this.tiledMapLayerParser = tiledMapLayerParser;
+    this.tiledMapObjectLayerParser = tiledMapObjectLayerParser;
   }
 
   @Override
@@ -40,6 +43,10 @@ public final class TiledMapParserImpl implements TiledMapParser {
 
     for (int layerId = 0; layerId < tiledMap.getLayerCount(); layerId++) {
       mapDataBuilder.addLayer(tiledMapLayerParser.parseLayer(tiledMap, layerId));
+    }
+    for (int objectGroupId = 0; objectGroupId < tiledMap.getObjectGroupCount(); objectGroupId++) {
+      mapDataBuilder.addObjectLayer(
+          tiledMapObjectLayerParser.parseObjectLayer(tiledMap, objectGroupId));
     }
     return mapDataBuilder.build();
   }

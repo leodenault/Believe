@@ -6,8 +6,10 @@ java_library(
     name = "io",
     srcs = [
         "MapManager.java",
+        "ObjectParser.java",
         "TileParser.java",
         "TiledMapLayerParser.java",
+        "TiledMapObjectLayerParser.java",
         "TiledMapParser.java",
     ],
     deps = [
@@ -21,7 +23,9 @@ java_library(
     name = "impl",
     srcs = [
         "MapManagerImpl.java",
+        "ObjectParser.java",
         "TiledMapLayerParserImpl.java",
+        "TiledMapObjectLayerParserImpl.java",
         "TiledMapParserImpl.java",
     ],
     deps = [

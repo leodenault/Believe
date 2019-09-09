@@ -24,7 +24,7 @@ public final class CommandTest {
         new Command<>(
             commandCollisionHandler,
             Tile.create(
-                FakeTiledMap.tiledMapWithDefaultTilePropertyValue(),
+                FakeTiledMap.tiledMapWithDefaultPropertyValues(),
                 EntityType.COMMAND,
                 /* tileId= */ 0,
                 /* x= */ 123,

@@ -1,12 +1,12 @@
 package believe.map.io;
 
-import static believe.util.Util.hashSetOf;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
 import believe.map.data.BackgroundSceneData;
 import believe.map.data.LayerData;
 import believe.map.data.MapData;
+import believe.map.data.ObjectLayerData;
 import believe.map.data.proto.MapMetadataProto.MapBackground;
 import believe.map.tiled.TiledMap;
 import believe.testing.mockito.InstantiateMocksIn;
@@ -15,11 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.newdawn.slick.Image;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /** Unit tests for {@link TiledMapParserImpl}. */
 @InstantiateMocksIn
@@ -32,13 +30,18 @@ final class TiledMapParserImplTest {
 
   @Mock private TiledMap tiledMap;
   @Mock private TiledMapLayerParser layerParser;
+  @Mock private TiledMapObjectLayerParser objectLayerParser;
   @Mock private Image backgroundImage;
   @Mock private LayerData firstLayer;
   @Mock private LayerData secondLayer;
+  @Mock private ObjectLayerData firstObjectLayerData;
+  @Mock private ObjectLayerData secondObjectLayerData;
 
   @BeforeEach
   void setUp() {
-    parser = new TiledMapParserImpl(PLAYER_START_X_PROPERTY, PLAYER_START_Y_PROPERTY, layerParser);
+    parser =
+        new TiledMapParserImpl(
+            PLAYER_START_X_PROPERTY, PLAYER_START_Y_PROPERTY, layerParser, objectLayerParser);
     backgroundScenes =
         Collections.singletonList(
             BackgroundSceneData.create(
@@ -87,6 +90,17 @@ final class TiledMapParserImplTest {
     MapData mapData = parser.parseMap(tiledMap, Collections.emptyList());
 
     assertThat(mapData.layers()).containsExactly(firstLayer, secondLayer);
+  }
+
+  @Test
+  void parseMap_returnsMapDataWithObjectLayerData() {
+    when(tiledMap.getObjectGroupCount()).thenReturn(2);
+    when(objectLayerParser.parseObjectLayer(tiledMap, 0)).thenReturn(firstObjectLayerData);
+    when(objectLayerParser.parseObjectLayer(tiledMap, 1)).thenReturn(secondObjectLayerData);
+
+    MapData mapData = parser.parseMap(tiledMap, Collections.emptyList());
+
+    assertThat(mapData.objectLayers()).containsExactly(firstObjectLayerData, secondObjectLayerData);
   }
 
   @Test

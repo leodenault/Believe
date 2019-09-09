@@ -5,6 +5,13 @@ package(
 
 java_library(
     name = "testing",
-    srcs = ["FakeTiledMap.java"],
-    deps = ["//java/believe/map/tiled"],
+    srcs = [
+        "FakeTiledMap.java",
+        "package-info.java",
+    ],
+    deps = [
+        "//java/believe/app/annotation",
+        "//java/believe/map/tiled",
+        "//third_party/javax:annotations",
+    ],
 )

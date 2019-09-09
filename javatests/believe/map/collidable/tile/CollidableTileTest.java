@@ -23,7 +23,7 @@ final class CollidableTileTest {
     collidableTile =
         new CollidableTile(
             Tile.create(
-                FakeTiledMap.tiledMapWithDefaultTilePropertyValue(),
+                FakeTiledMap.tiledMapWithDefaultPropertyValues(),
                 EntityType.COLLIDABLE_TILE,
                 /* tileId= */ 123,
                 /* tileX= */ 3,

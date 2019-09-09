@@ -10,10 +10,14 @@ java_library(
         "Tile.java",
         "TileSet.java",
         "TiledMap.java",
+        "TiledObject.java",
         "TiledUtil.java",
+        "package-info.java",
     ],
     deps = [
+        "//java/believe/app/annotation",
         "//third_party/auto_value",
+        "//third_party/javax:annotations",
         "//third_party/slick",
     ],
 )

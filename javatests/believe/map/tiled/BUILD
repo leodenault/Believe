@@ -15,13 +15,23 @@ java_junit5_test(
 )
 
 java_junit5_test(
-    name = "TileDataTest",
+    name = "TileTest",
     srcs = ["TileTest.java"],
     deps = [
         "//java/believe/map/tiled",
         "//java/believe/map/tiled/testing",
         "//java/believe/testing/mockito",
         "//third_party/truth",
+        "//third_party/truth:truth8",
+    ],
+)
+
+java_junit5_test(
+    name = "TiledObjectTest",
+    srcs = ["TiledObjectTest.java"],
+    deps = [
+        "//java/believe/map/tiled",
+        "//java/believe/map/tiled/testing",
         "//third_party/truth:truth8",
     ],
 )

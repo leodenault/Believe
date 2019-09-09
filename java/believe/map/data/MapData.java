@@ -5,7 +5,6 @@ import com.google.auto.value.AutoValue;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 /** The data model for a map representing a playable environment. */
 @AutoValue
@@ -28,8 +27,13 @@ public abstract class MapData {
    */
   public abstract List<BackgroundSceneData> backgroundScenes();
 
-  /** The set of {@link LayerData} instances representing each layer of tiles in the map. */
+  /** The list of {@link LayerData} instances representing each layer of tiles in the map. */
   public abstract List<LayerData> layers();
+
+  /**
+   * The list of {@link ObjectLayerData} instances representing each layer of objects in the map.
+   */
+  public abstract List<ObjectLayerData> objectLayers();
 
   /** Returns a new builder for building instances of {@link MapData}. */
   public static Builder newBuilder(
@@ -50,6 +54,7 @@ public abstract class MapData {
   @AutoValue.Builder
   public abstract static class Builder {
     private final List<LayerData> layers = new ArrayList<>();
+    private final List<ObjectLayerData> objectLayers = new ArrayList<>();
 
     abstract Builder setPlayerStartX(int playerStartX);
 
@@ -63,9 +68,17 @@ public abstract class MapData {
 
     abstract Builder setLayers(List<LayerData> layers);
 
+    abstract Builder setObjectLayers(List<ObjectLayerData> objectLayers);
+
     /** Adds a layer of tiles to the map. */
     public Builder addLayer(LayerData layer) {
       layers.add(layer);
+      return this;
+    }
+
+    /** Adds a layer of objects to the map. */
+    public Builder addObjectLayer(ObjectLayerData objectLayerData) {
+      objectLayers.add(objectLayerData);
       return this;
     }
 
@@ -73,7 +86,7 @@ public abstract class MapData {
 
     /** Builds an instance of {@link MapData}. */
     public MapData build() {
-      return setLayers(layers).autoBuild();
+      return setLayers(layers).setObjectLayers(objectLayers).autoBuild();
     }
   }
 }

@@ -24,6 +24,8 @@ import java.util.Properties;
  * source.
  */
 public class TiledMap {
+  private static final String NO_PROPERTY = "no property";
+
   /** Indicates if we're running on a headless system */
   private static boolean headless;
 
@@ -767,27 +769,27 @@ public class TiledMap {
    * @param groupID Index of a group
    * @param objectID Index of an object
    * @param propertyName Name of a property
-   * @param def default value to return, if no property is found
    * @return The value of the property with the given name or def, if there is no property with that
    *     name.
    */
-  public String getObjectProperty(int groupID, int objectID, String propertyName, String def) {
+  public Optional<String> getObjectProperty(int groupID, int objectID, String propertyName) {
     if (groupID >= 0 && groupID < objectGroups.size()) {
       ObjectGroup grp = objectGroups.get(groupID);
       if (objectID >= 0 && objectID < grp.objects.size()) {
         GroupObject object = grp.objects.get(objectID);
 
         if (object == null) {
-          return def;
+          return Optional.empty();
         }
         if (object.props == null) {
-          return def;
+          return Optional.empty();
         }
 
-        return object.props.getProperty(propertyName, def);
+        String property = object.props.getProperty(propertyName, NO_PROPERTY);
+        return NO_PROPERTY.equals(property) ? Optional.empty() : Optional.of(property);
       }
     }
-    return def;
+    return Optional.empty();
   }
 
   /**

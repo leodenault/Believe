@@ -55,9 +55,16 @@ public abstract class MapParsingDaggerModule {
   @Multibinds
   abstract Set<TileParser> bindTileParsers();
 
+  @Multibinds
+  abstract Set<ObjectParser> bindObjectParsers();
+
   @Binds
   abstract TiledMapLayerParser bindTiledMapLayerParser(
       TiledMapLayerParserImpl tiledMapLayerParserImpl);
+
+  @Binds
+  abstract TiledMapObjectLayerParser bindTiledMapObjectLayerParser(
+      TiledMapObjectLayerParserImpl tiledMapObjectLayerParserImpl);
 
   @Binds
   abstract TiledMapParser bindTiledMapParser(TiledMapParserImpl tiledMapParserImpl);

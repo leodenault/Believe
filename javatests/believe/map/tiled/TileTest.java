@@ -3,7 +3,6 @@ package believe.map.tiled;
 import static com.google.common.truth.Truth8.assertThat;
 
 import believe.map.tiled.testing.FakeTiledMap;
-import believe.testing.mockito.InstantiateMocksIn;
 import com.google.common.truth.Truth;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +12,7 @@ import java.util.Optional;
 public final class TileTest {
   @Test
   void getProperty_keyNotFound_returnsAbsent() {
-    FakeTiledMap tiledMap = FakeTiledMap.tiledMapWithDefaultTilePropertyValue();
+    FakeTiledMap tiledMap = FakeTiledMap.tiledMapWithDefaultPropertyValues();
 
     Tile tile =
         Tile.create(

@@ -125,7 +125,7 @@ public class CollidableTileCollisionHandlerTest {
   private final CollidableTile leftTile =
       new CollidableTile(
           Tile.create(
-              FakeTiledMap.tiledMapWithDefaultTilePropertyValue(),
+              FakeTiledMap.tiledMapWithDefaultPropertyValues(),
               EntityType.COLLIDABLE_TILE,
               /* tileId= */ 0,
               /* x= */ 0,
@@ -137,7 +137,7 @@ public class CollidableTileCollisionHandlerTest {
   private final CollidableTile upTile =
       new CollidableTile(
           Tile.create(
-              FakeTiledMap.tiledMapWithDefaultTilePropertyValue(),
+              FakeTiledMap.tiledMapWithDefaultPropertyValues(),
               EntityType.COLLIDABLE_TILE,
               /* tileId= */ 0,
               /* x= */ 1,
@@ -149,7 +149,7 @@ public class CollidableTileCollisionHandlerTest {
   private final CollidableTile rightTile =
       new CollidableTile(
           Tile.create(
-              FakeTiledMap.tiledMapWithDefaultTilePropertyValue(),
+              FakeTiledMap.tiledMapWithDefaultPropertyValues(),
               EntityType.COLLIDABLE_TILE,
               /* tileId= */ 0,
               /* x= */ 2,
@@ -161,7 +161,7 @@ public class CollidableTileCollisionHandlerTest {
   private final CollidableTile downTile =
       new CollidableTile(
           Tile.create(
-              FakeTiledMap.tiledMapWithDefaultTilePropertyValue(),
+              FakeTiledMap.tiledMapWithDefaultPropertyValues(),
               EntityType.COLLIDABLE_TILE,
               /* tileId= */ 0,
               /* x= */ 1,

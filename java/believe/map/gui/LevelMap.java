@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @AutoFactory
 public class LevelMap extends ComponentBase {
@@ -36,14 +37,23 @@ public class LevelMap extends ComponentBase {
       MapData mapData) {
     super(container, 0, 0);
     renderables =
-        mapData.layers().stream()
-            .map(LayerData::generatedMapEntityData)
-            .flatMap(generatedMapEntityData -> generatedMapEntityData.renderables().stream())
+        Stream.concat(
+                mapData.objectLayers().stream()
+                    .flatMap(
+                        objectLayerData ->
+                            objectLayerData.generatedMapEntityData().renderables().stream()),
+                mapData.layers().stream()
+                    .flatMap(
+                        layerData -> layerData.generatedMapEntityData().renderables().stream()))
             .collect(Collectors.toSet());
     updatables =
-        mapData.layers().stream()
-            .map(LayerData::generatedMapEntityData)
-            .flatMap(generatedMapEntityData -> generatedMapEntityData.updatables().stream())
+        Stream.concat(
+                mapData.objectLayers().stream()
+                    .flatMap(
+                        objectLayerData ->
+                            objectLayerData.generatedMapEntityData().updatables().stream()),
+                mapData.layers().stream()
+                    .flatMap(layerData -> layerData.generatedMapEntityData().updatables().stream()))
             .collect(Collectors.toSet());
     rect.setSize(mapData.width(), mapData.height());
     setLocation(0, 0);

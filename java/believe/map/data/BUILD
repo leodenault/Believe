@@ -9,6 +9,7 @@ java_library(
         "GeneratedMapEntityData.java",
         "LayerData.java",
         "MapData.java",
+        "ObjectLayerData.java",
         "package-info.java",
     ],
     deps = [

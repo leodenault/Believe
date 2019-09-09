@@ -63,7 +63,7 @@ public final class CommandGeneratorTest {
 
   @Test
   void parseTile_propertyCannotBeFound_doesNothing() {
-    FakeTiledMap tiledMap = FakeTiledMap.tiledMapWithDefaultTilePropertyValue();
+    FakeTiledMap tiledMap = FakeTiledMap.tiledMapWithDefaultPropertyValues();
 
     commandGenerator.parseTile(tiledMap, createTileData(tiledMap), generatedMapEntityDataBuilder);
 
@@ -78,7 +78,7 @@ public final class CommandGeneratorTest {
 
     commandGenerator.parseTile(
         tiledMap,
-        createTileData(FakeTiledMap.tiledMapWithDefaultTilePropertyValue()),
+        createTileData(FakeTiledMap.tiledMapWithDefaultPropertyValues()),
         generatedMapEntityDataBuilder);
 
     GeneratedMapEntityData generatedMapEntityData = generatedMapEntityDataBuilder.build();

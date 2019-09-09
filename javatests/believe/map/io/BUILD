@@ -46,6 +46,21 @@ java_junit5_test(
 )
 
 java_junit5_test(
+    name = "TiledMapObjectLayerParserImplTest",
+    srcs = ["TiledMapObjectLayerParserImplTest.java"],
+    deps = [
+        "//java/believe/map/data",
+        "//java/believe/map/io",
+        "//java/believe/map/io:impl",
+        "//java/believe/map/tiled",
+        "//java/believe/testing/mockito",
+        "//java/believe/util",
+        "//third_party/mockito",
+        "//third_party/truth",
+    ],
+)
+
+java_junit5_test(
     name = "TiledMapParserImplTest",
     srcs = ["TiledMapParserImplTest.java"],
     deps = [
