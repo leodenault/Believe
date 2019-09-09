@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 /** Unit tests for {@link Tile}. */
-@InstantiateMocksIn
 public final class TileTest {
   @Test
   void getProperty_keyNotFound_returnsAbsent() {
@@ -49,30 +48,4 @@ public final class TileTest {
     assertThat(actualValue).isPresent();
     Truth.assertThat(actualValue.get()).isEqualTo("existing value");
   }
-  
-  @Test
-  void hasLeftNeighbour_tileHasLeftNeighbour_returnsTrue() {
-
-  }
-  
-  @Test
-  void hasLeftNeighbour_tileDoesNotHaveLeftNeighbour_returnsFalse() {}
-  
-  @Test
-  void hasUpNeighbour_tileHasUpNeighbour_returnsTrue() {}
-  
-  @Test
-  void hasUpNeighbour_tileDoesNotHaveUpNeighbour_returnsFalse() {}
-  
-  @Test
-  void hasRightNeighbour_tileHasRightNeighbour_returnsTrue() {}
-  
-  @Test
-  void hasRightNeighbour_tileDoesNotHaveRightNeighbour_returnsFalse() {}
-  
-  @Test
-  void hasDownNeighbour_tileHasDownNeighbour_returnsTrue() {}
-  
-  @Test
-  void hasDownNeighbour_tileDoesNotHaveDownNeighbour_returnsFalse() {}
 }
