@@ -25,6 +25,7 @@ import java.util.Properties;
  */
 public class TiledMap {
   private static final String NO_PROPERTY = "no property";
+  private static final String NO_GID = "";
 
   /** Indicates if we're running on a headless system */
   private static boolean headless;
@@ -781,9 +782,6 @@ public class TiledMap {
         if (object == null) {
           return Optional.empty();
         }
-        if (object.props == null) {
-          return Optional.empty();
-        }
 
         String property = object.props.getProperty(propertyName, NO_PROPERTY);
         return NO_PROPERTY.equals(property) ? Optional.empty() : Optional.of(property);
@@ -855,6 +853,9 @@ public class TiledMap {
    * @author kulpae
    */
   protected class GroupObject {
+    /** the properties of this group */
+    public final Properties props;
+
     /** The index of this object */
     public int index;
     /** The name of this object - read from the XML */
@@ -872,33 +873,45 @@ public class TiledMap {
     /** The image source */
     private String image;
 
-    /** the properties of this group */
-    public Properties props;
-
     /**
      * Create a new group based on the XML definition
      *
      * @param element The XML element describing the layer
      */
     public GroupObject(Element element) {
+      props = new Properties();
       name = element.getAttribute("name");
       type = element.getAttribute("type");
       x = Integer.parseInt(element.getAttribute("x"));
       y = Integer.parseInt(element.getAttribute("y"));
       width = Integer.parseInt(element.getAttribute("width"));
       height = Integer.parseInt(element.getAttribute("height"));
+      String gid = element.getAttribute("gid");
+      boolean isTile = !NO_GID.equals(gid);
 
       Element imageElement = (Element) element.getElementsByTagName("image").item(0);
       if (imageElement != null) {
         image = imageElement.getAttribute("source");
       }
 
-      // now read the layer properties
+      // Read the properties from the tile set if the object is a tile.
+      if (isTile) {
+        int parsedGid = Integer.parseInt(gid);
+        TileSet tileSet = findTileSet(parsedGid);
+        if (tileSet != null) {
+          Properties tileSetProperties = tileSet.getProperties(parsedGid);
+          for (Object key : tileSetProperties.keySet()) {
+            String typedKey = (String) key;
+            props.setProperty(typedKey, tileSetProperties.getProperty(typedKey));
+          }
+        }
+      }
+
+      // now read the properties stored directly on the object.
       Element propsElement = (Element) element.getElementsByTagName("properties").item(0);
       if (propsElement != null) {
         NodeList properties = propsElement.getElementsByTagName("property");
         if (properties != null) {
-          props = new Properties();
           for (int p = 0; p < properties.getLength(); p++) {
             Element propElement = (Element) properties.item(p);
 
