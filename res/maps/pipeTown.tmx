@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="250" height="100" tilewidth="32" tileheight="32" nextobjectid="8">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="250" height="100" tilewidth="32" tileheight="32" nextobjectid="29">
  <properties>
   <property name="player_start_x" value="1"/>
   <property name="player_start_y" value="21"/>
@@ -7,12 +7,12 @@
  <tileset firstgid="1" source="tilesets/pipe_town.tsx"/>
  <tileset firstgid="17" source="tilesets/commands.tsx"/>
  <tileset firstgid="29" source="tilesets/entities.tsx"/>
- <layer name="Entities" width="250" height="100">
+ <layer name="Collision" width="250" height="100">
   <properties>
    <property name="is_visible" value="false"/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3cMQ6CQBRAQa9goR3e/5g22hhJREGX50zyCxJCluJlgYLDAQAAAAAAAAAAAAAAAAAAAIB/Md0GaNI39Okc+nQOfffOjz9dBbC1aWaAFl1Dn86hT+fQp3Po0zn06RxanjWtc2jROfTpHPp0Dn06hz6dQ5/OoU/n0Kdz6NM59Okc+nQOfd/o/Lzy9YBltujcf+VgLGt3bu+G8Xzaub0bxuc7HPS92/nS5/PLwvPXNNK7xEhrWdMe72uPa37V6eF4rnNjTGsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABjTFQ6fgX6ghgEA
+   H4sIAAAAAAAAA+3csQnAMBAEQTWi/tt04tCKjECsZuBKWD77MQAAAAAAAAAAAAAAAAAAAAC4xXwHNOkb+nQOfTqHPp3DHeZiQIuuoU/n0Kdz6NM59Okc+nQOLV9N6xxadA59Ooc+nUOfzqFP59Cnc+jTOfTpHPp0Dn06hz6dQ5/OoW9H5/7KwVncc+j727nbDedzz6FP59C36tzMWgMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4EwPbQMS7aCGAQA=
   </data>
  </layer>
  <layer name="Back Ridge" width="250" height="100">
@@ -25,6 +25,22 @@
    H4sIAAAAAAAAA+3DoQ0AIBAAsUcgEOy/LkugLm3SGQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+Gep+VvNP2r+VfMBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABoedmgRaOghgEA
   </data>
  </layer>
+ <objectgroup name="Entities">
+  <object id="13" gid="30" x="736" y="1504" width="32" height="32">
+   <properties>
+    <property name="entity_type" value="enemy"/>
+   </properties>
+  </object>
+  <object id="20" gid="17" x="64" y="704" width="32" height="32"/>
+  <object id="21" gid="22" x="352" y="1504" width="32" height="32"/>
+  <object id="22" gid="22" x="544" y="1408" width="32" height="32"/>
+  <object id="23" gid="22" x="704" y="1344" width="32" height="32"/>
+  <object id="24" gid="22" x="1728" y="1504" width="32" height="32"/>
+  <object id="25" gid="22" x="2848" y="1504" width="32" height="32"/>
+  <object id="26" gid="22" x="4576" y="1504" width="32" height="32"/>
+  <object id="27" gid="22" x="6016" y="1504" width="32" height="32"/>
+  <object id="28" gid="21" x="7776" y="1504" width="32" height="32"/>
+ </objectgroup>
  <layer name="Front" width="250" height="100">
   <properties>
    <property name="is_front_layer" value="true"/>

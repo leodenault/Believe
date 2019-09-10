@@ -4,6 +4,7 @@ import static believe.util.Util.hashSetOf;
 
 import believe.geometry.Rectangle;
 import believe.map.tiled.Tile;
+import believe.map.tiled.TiledObject;
 import believe.physics.collision.Collidable;
 import believe.physics.collision.CollisionHandler;
 import believe.physics.manager.PhysicsManageable;
@@ -13,14 +14,15 @@ import java.util.Collections;
 import java.util.Set;
 
 /** A command block drawn on a tile map which, when executed, affects gameplay. */
-public class Command<C extends CommandCollidable<C>> implements Collidable<Command<C>>,
-    PhysicsManageable {
+public class Command<C extends CommandCollidable<C>>
+    implements Collidable<Command<C>>, PhysicsManageable {
   private final CommandCollisionHandler<C> commandCollisionHandler;
   private final Rectangle rect;
 
-  Command(CommandCollisionHandler<C> commandCollisionHandler, Tile tile) {
+  Command(CommandCollisionHandler<C> commandCollisionHandler, TiledObject tiledObject) {
     this.commandCollisionHandler = commandCollisionHandler;
-    rect = new Rectangle(tile.pixelX(), tile.pixelY(), tile.width(), tile.height());
+    rect =
+        new Rectangle(tiledObject.x(), tiledObject.y(), tiledObject.width(), tiledObject.height());
   }
 
   @Override

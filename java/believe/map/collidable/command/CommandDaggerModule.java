@@ -1,6 +1,7 @@
 package believe.map.collidable.command;
 
 import believe.map.collidable.command.InternalQualifiers.CommandParameter;
+import believe.map.io.ObjectParser;
 import believe.map.io.TileParser;
 import dagger.Binds;
 import dagger.Module;
@@ -23,5 +24,5 @@ public abstract class CommandDaggerModule {
 
   @Binds
   @IntoSet
-  abstract TileParser bindCommandGenerator(CommandGenerator commandGenerator);
+  abstract ObjectParser bindCommandGenerator(CommandGenerator commandGenerator);
 }

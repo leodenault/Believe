@@ -5,6 +5,7 @@ import static com.google.common.truth.Truth.assertThat;
 import believe.geometry.Rectangle;
 import believe.map.tiled.EntityType;
 import believe.map.tiled.Tile;
+import believe.map.tiled.TiledObject;
 import believe.map.tiled.testing.FakeTiledMap;
 import believe.testing.mockito.InstantiateMocksIn;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,15 +24,15 @@ public final class CommandTest {
     command =
         new Command<>(
             commandCollisionHandler,
-            Tile.create(
+            TiledObject.create(
                 FakeTiledMap.tiledMapWithDefaultPropertyValues(),
                 EntityType.COMMAND,
-                /* tileId= */ 0,
                 /* x= */ 123,
                 /* y= */ 321,
                 /* width= */ 10,
                 /* height= */ 10,
-                /* layerId= */ 0));
+                /* layerId= */ 0,
+                /* objectId= */ 0));
   }
 
   @Test

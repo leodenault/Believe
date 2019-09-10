@@ -8,6 +8,7 @@ import believe.character.playable.InternalQualifiers.RightMovementHandler;
 import believe.character.playable.InternalQualifiers.StopMovementHandler;
 import believe.map.collidable.command.CommandCollisionHandler;
 import believe.map.collidable.tile.CollidableTileCollisionHandler;
+import believe.map.io.ObjectParser;
 import believe.map.io.TileParser;
 import believe.map.tiled.EntityType;
 import believe.physics.collision.Collidable;
@@ -82,11 +83,11 @@ public abstract class PlayableDaggerModule {
 
   @Provides
   @IntoSet
-  static TileParser provideEnemyCharacterGenerator(EnemyCharacterFactory enemyCharacterFactory) {
-    return (map, tile, generatedMapEntityDataBuilder) -> {
-      if (tile.entityType() == EntityType.ENEMY) {
+  static ObjectParser provideEnemyCharacterGenerator(EnemyCharacterFactory enemyCharacterFactory) {
+    return (tiledObject, generatedMapEntityDataBuilder) -> {
+      if (tiledObject.entityType() == EntityType.ENEMY) {
         EnemyCharacter enemyCharacter =
-            enemyCharacterFactory.create(tile.pixelX(), tile.pixelY() + tile.height());
+            enemyCharacterFactory.create(tiledObject.x(), tiledObject.y() + tiledObject.height());
         generatedMapEntityDataBuilder.addPhysicsManageable(enemyCharacter);
         generatedMapEntityDataBuilder.addRenderable(enemyCharacter);
         generatedMapEntityDataBuilder.addUpdatable(enemyCharacter);
