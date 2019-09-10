@@ -34,14 +34,15 @@ final class TiledMapObjectLayerParserImpl implements TiledMapObjectLayerParser {
           tiledMap.getObjectProperty(layerId, objectId, entityTypeProperty);
       EntityType entityType = entityTypeName.map(EntityType::forName).orElse(EntityType.NONE);
       for (ObjectParser objectParser : objectParsers) {
+        int objectHeight = tiledMap.getObjectHeight(layerId, objectId);
         objectParser.parseObject(
             TiledObject.create(
                 tiledMap,
                 entityType,
                 tiledMap.getObjectX(layerId, objectId),
-                tiledMap.getObjectY(layerId, objectId),
+                tiledMap.getObjectY(layerId, objectId) - objectHeight,
                 tiledMap.getObjectWidth(layerId, objectId),
-                tiledMap.getObjectHeight(layerId, objectId),
+                objectHeight,
                 layerId,
                 objectId),
             generatedMapEntityDataBuilder);

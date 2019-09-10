@@ -32,6 +32,9 @@ final class TiledMapObjectLayerParserImplTest {
     parser = new TiledMapObjectLayerParserImpl(ENTITY_TYPE_PROPERTY, hashSetOf(objectParser));
   }
 
+  // Due to the Tiled issue found at https://github.com/bjorn/tiled/issues/91 we have to adjust the
+  // y position of objects by subtracting the height. The reason for this is that, unlike tiles, the
+  // y position for objects is defined at the bottom of the object rather than the top.
   @Test
   void parseObjectLayer_returnsValidObjectLayerData() {
     when(tiledMap.getObjectCount(/* groupID= */ 0)).thenReturn(2);
@@ -39,7 +42,7 @@ final class TiledMapObjectLayerParserImplTest {
             /* groupID= */ eq(0), /* objectID= */ anyInt(), eq(ENTITY_TYPE_PROPERTY)))
         .thenReturn(Optional.of(EntityType.COLLIDABLE_TILE.name()));
     when(tiledMap.getObjectX(/* groupID= */ eq(0), anyInt())).thenReturn(1);
-    when(tiledMap.getObjectY(/* groupID= */ eq(0), anyInt())).thenReturn(2);
+    when(tiledMap.getObjectY(/* groupID= */ eq(0), anyInt())).thenReturn(5);
     when(tiledMap.getObjectWidth(/* groupID= */ eq(0), anyInt())).thenReturn(3);
     when(tiledMap.getObjectHeight(/* groupID= */ eq(0), anyInt())).thenReturn(4);
 
@@ -52,7 +55,7 @@ final class TiledMapObjectLayerParserImplTest {
                     tiledMap,
                     EntityType.COLLIDABLE_TILE,
                     /* x= */ 1,
-                    /* y= */ 2,
+                    /* y= */ 1,
                     /* width= */ 3,
                     /* height= */ 4,
                     /* layerId= */ 0,
@@ -65,7 +68,7 @@ final class TiledMapObjectLayerParserImplTest {
                     tiledMap,
                     EntityType.COLLIDABLE_TILE,
                     /* x= */ 1,
-                    /* y= */ 2,
+                    /* y= */ 1,
                     /* width= */ 3,
                     /* height= */ 4,
                     /* layerId= */ 0,
