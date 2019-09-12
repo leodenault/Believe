@@ -6,7 +6,7 @@ import static com.google.common.truth.Truth.assertThat;
 import believe.geometry.Rectangle;
 import believe.map.data.GeneratedMapEntityData;
 import believe.map.tiled.EntityType;
-import believe.map.tiled.Tile;
+import believe.map.tiled.TiledObject;
 import believe.map.tiled.testing.FakeTiledMap;
 import believe.physics.manager.PhysicsManageable;
 import believe.testing.mockito.InstantiateMocksIn;
@@ -23,28 +23,23 @@ public final class CommandGeneratorTest {
 
   private CommandGenerator commandGenerator;
 
-  @Mock private CommandCollisionHandler<?> commandCollisionHandler;
+  @Mock private CommandCollisionHandler<?, Void> commandCollisionHandler;
 
   @BeforeEach
   void setUp() {
     commandGenerator =
         new CommandGenerator(
-            Util.hashMapOf(entry("valid_command", commandCollisionHandler)), "command");
+            Util.hashMapOf(entry("valid_command", CommandSupplier.from(commandCollisionHandler))),
+            "command");
   }
 
   @Test
-  void parseTile_generatesValidCommand() {
-    FakeTiledMap tiledMap = FakeTiledMap.tiledMapWithTilePropertyValue("valid_command");
+  void parseObject_generatesValidCommand() {
+    FakeTiledMap tiledMap = FakeTiledMap.tiledMapWithObjectPropertyValue("valid_command");
 
-    commandGenerator.parseTile(
-        tiledMap,
-        createTileData(
-            tiledMap,
-            /* pixelX= */ 100,
-            /* pixelY= */ 200,
-            /* tileWidth= */ 100,
-            /* tileHeight= */ 200
-            /* layer= */ ),
+    commandGenerator.parseObject(
+        createTiledObject(
+            tiledMap, /* x= */ 100, /* y= */ 200, /* width= */ 100, /* height= */ 200),
         generatedMapEntityDataBuilder);
 
     GeneratedMapEntityData generatedMapEntityData = generatedMapEntityDataBuilder.build();
@@ -52,7 +47,8 @@ public final class CommandGeneratorTest {
     PhysicsManageable physicsManageable =
         generatedMapEntityData.physicsManageables().stream().findFirst().get();
     assertThat(physicsManageable).isInstanceOf(Command.class);
-    Command<?> command = (Command<?>) physicsManageable;
+    @SuppressWarnings("unchecked")
+    Command<?, Void> command = (Command<?, Void>) physicsManageable;
     Rectangle commandRect = command.rect();
     assertThat(commandRect.getX()).isWithin(0).of(100);
     assertThat(commandRect.getY()).isWithin(0).of(200);
@@ -62,10 +58,10 @@ public final class CommandGeneratorTest {
   }
 
   @Test
-  void parseTile_propertyCannotBeFound_doesNothing() {
+  void parseObject_propertyCannotBeFound_doesNothing() {
     FakeTiledMap tiledMap = FakeTiledMap.tiledMapWithDefaultPropertyValues();
 
-    commandGenerator.parseTile(tiledMap, createTileData(tiledMap), generatedMapEntityDataBuilder);
+    commandGenerator.parseObject(createTiledObject(tiledMap), generatedMapEntityDataBuilder);
 
     GeneratedMapEntityData generatedMapEntityData = generatedMapEntityDataBuilder.build();
     assertThat(generatedMapEntityData.physicsManageables()).isEmpty();
@@ -73,12 +69,9 @@ public final class CommandGeneratorTest {
   }
 
   @Test
-  void parseTile_commandCannotBeFound_doesNothing() {
-    FakeTiledMap tiledMap = FakeTiledMap.tiledMapWithTilePropertyValue("does_not_exist");
-
-    commandGenerator.parseTile(
-        tiledMap,
-        createTileData(FakeTiledMap.tiledMapWithDefaultPropertyValues()),
+  void parseObject_commandCannotBeFound_doesNothing() {
+    commandGenerator.parseObject(
+        createTiledObject(FakeTiledMap.tiledMapWithDefaultPropertyValues()),
         generatedMapEntityDataBuilder);
 
     GeneratedMapEntityData generatedMapEntityData = generatedMapEntityDataBuilder.build();
@@ -86,28 +79,28 @@ public final class CommandGeneratorTest {
     assertThat(generatedMapEntityData.updatables()).isEmpty();
   }
 
-  private static Tile createTileData(FakeTiledMap fakeTiledMap) {
-    return Tile.create(
+  private static TiledObject createTiledObject(FakeTiledMap fakeTiledMap) {
+    return TiledObject.create(
         fakeTiledMap,
         EntityType.COLLIDABLE_TILE,
-        /* tiledId= */ 0,
-        /* tileX= */ 0,
-        /* tileY= */ 0,
-        /* tileWidth= */ 0,
-        /* tileHeight= */ 0,
-        /* layer= */ 0);
+        /* x= */ 0,
+        /* y= */ 0,
+        /* width= */ 0,
+        /* height= */ 0,
+        /* layer= */ 0,
+        /* tiledId= */ 0);
   }
 
-  private static Tile createTileData(
-      FakeTiledMap fakeTiledMap, int pixelX, int pixelY, int tileWidth, int tileHeight) {
-    return Tile.create(
+  private static TiledObject createTiledObject(
+      FakeTiledMap fakeTiledMap, int x, int y, int width, int height) {
+    return TiledObject.create(
         fakeTiledMap,
         EntityType.COMMAND,
-        /* tiledId= */ 0,
-        /* tileX= */ pixelX / tileWidth,
-        /* tileY= */ pixelY / tileHeight,
-        /* tileWidth= */ tileWidth,
-        /* tileHeight= */ tileHeight,
-        /* layer= */ 0);
+        /* x= */ x,
+        /* y= */ y,
+        /* width= */ width,
+        /* height= */ height,
+        /* layer= */ 0,
+        /* tiledId= */ 0);
   }
 }

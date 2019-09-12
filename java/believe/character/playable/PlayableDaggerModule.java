@@ -7,6 +7,7 @@ import believe.character.playable.InternalQualifiers.LeftMovementHandler;
 import believe.character.playable.InternalQualifiers.RightMovementHandler;
 import believe.character.playable.InternalQualifiers.StopMovementHandler;
 import believe.map.collidable.command.CommandCollisionHandler;
+import believe.map.collidable.command.CommandSupplier;
 import believe.map.collidable.tile.CollidableTileCollisionHandler;
 import believe.map.io.ObjectParser;
 import believe.map.io.TileParser;
@@ -57,29 +58,37 @@ public abstract class PlayableDaggerModule {
     return new PlayableCharacterMovementCommandCollisionHandler(Action.STOP);
   }
 
-  @Binds
+  @Provides
   @IntoMap
   @StringKey("right")
-  abstract CommandCollisionHandler<?> bindRightMovementCollisionHandler(
-      @RightMovementHandler PlayableCharacterMovementCommandCollisionHandler rightMovementHandler);
+  static CommandSupplier<?, ?> bindRightMovementCommandSupplier(
+      @RightMovementHandler PlayableCharacterMovementCommandCollisionHandler rightMovementHandler) {
+    return CommandSupplier.from(rightMovementHandler);
+  }
 
-  @Binds
+  @Provides
   @IntoMap
   @StringKey("left")
-  abstract CommandCollisionHandler<?> bindLeftMovementCollisionHandler(
-      @LeftMovementHandler PlayableCharacterMovementCommandCollisionHandler leftMovementHandler);
+  static CommandSupplier<?, ?> bindLeftMovementCommandSupplier(
+      @LeftMovementHandler PlayableCharacterMovementCommandCollisionHandler leftMovementHandler) {
+    return CommandSupplier.from(leftMovementHandler);
+  }
 
-  @Binds
+  @Provides
   @IntoMap
   @StringKey("jump")
-  abstract CommandCollisionHandler<?> bindJumpMovementCollisionHandler(
-      @JumpMovementHandler PlayableCharacterMovementCommandCollisionHandler jumpMovementHandler);
+  static CommandSupplier<?, ?> bindJumpMovementCommandSupplier(
+      @JumpMovementHandler PlayableCharacterMovementCommandCollisionHandler jumpMovementHandler) {
+    return CommandSupplier.from(jumpMovementHandler);
+  }
 
-  @Binds
+  @Provides
   @IntoMap
   @StringKey("stop")
-  abstract CommandCollisionHandler<?> bindStopMovementCollisionHandler(
-      @StopMovementHandler PlayableCharacterMovementCommandCollisionHandler stopMovementHandler);
+  static CommandSupplier<?, ?> bindStopMovementCommandSupplier(
+      @StopMovementHandler PlayableCharacterMovementCommandCollisionHandler stopMovementHandler) {
+    return CommandSupplier.from(stopMovementHandler);
+  }
 
   @Provides
   @IntoSet

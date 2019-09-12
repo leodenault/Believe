@@ -6,7 +6,7 @@ import believe.statemachine.State.Action;
 
 /** A {@link CommandCollisionHandler} that affects the movement of an entity. */
 final class PlayableCharacterMovementCommandCollisionHandler
-    implements CommandCollisionHandler<PlayableCharacter> {
+    implements CommandCollisionHandler<PlayableCharacter, Void> {
   private final Action movementAction;
 
   PlayableCharacterMovementCommandCollisionHandler(Action movementAction) {
@@ -15,7 +15,7 @@ final class PlayableCharacterMovementCommandCollisionHandler
 
   @Override
   public void handleCollision(
-      Command<PlayableCharacter> command, PlayableCharacter playableCharacter) {
+      Command<PlayableCharacter, Void> command, PlayableCharacter playableCharacter) {
     playableCharacter.transition(movementAction);
   }
 }

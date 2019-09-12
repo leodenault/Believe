@@ -9,6 +9,7 @@ java_library(
         "CommandCollidable.java",
         "CommandCollisionHandler.java",
         "CommandGenerator.java",
+        "CommandSupplier.java",
     ],
     deps = [
         ":internal_qualifiers",

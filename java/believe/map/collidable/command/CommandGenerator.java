@@ -3,9 +3,7 @@ package believe.map.collidable.command;
 import believe.map.collidable.command.InternalQualifiers.CommandParameter;
 import believe.map.data.GeneratedMapEntityData;
 import believe.map.io.ObjectParser;
-import believe.map.io.TileParser;
 import believe.map.tiled.EntityType;
-import believe.map.tiled.Tile;
 import believe.map.tiled.TiledMap;
 import believe.map.tiled.TiledObject;
 import dagger.Reusable;
@@ -18,14 +16,14 @@ import java.util.Optional;
 /** Generates a {@link Command} from a tile within a {@link TiledMap}. */
 @Reusable
 final class CommandGenerator implements ObjectParser {
-  private final Map<String, CommandCollisionHandler<?>> commandCollisionHandlerMap;
+  private final Map<String, CommandSupplier<?, ?>> commandSupplierMap;
   private final String commandParameter;
 
   @Inject
   CommandGenerator(
-      Map<String, CommandCollisionHandler<?>> commandCollisionHandlerMap,
+      Map<String, CommandSupplier<?, ?>> commandSupplierMap,
       @CommandParameter String commandParameter) {
-    this.commandCollisionHandlerMap = commandCollisionHandlerMap;
+    this.commandSupplierMap = commandSupplierMap;
     this.commandParameter = commandParameter;
   }
 
@@ -45,14 +43,13 @@ final class CommandGenerator implements ObjectParser {
       return;
     }
 
-    CommandCollisionHandler<?> commandCollisionHandler =
-        commandCollisionHandlerMap.get(commandName.get());
-    if (commandCollisionHandler == null) {
+    CommandSupplier<?, ?> commandSupplier =
+        commandSupplierMap.get(commandName.get());
+    if (commandSupplier == null) {
       Log.error("The command named '" + commandName + "' is not recognized as a command.");
       return;
     }
 
-    Command<?> command = new Command<>(commandCollisionHandler, tiledObject);
-    generatedMapEntityData.addPhysicsManageable(command);
+    generatedMapEntityData.addPhysicsManageable(commandSupplier.supplyCommand(tiledObject));
   }
 }

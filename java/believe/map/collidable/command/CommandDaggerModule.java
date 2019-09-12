@@ -20,7 +20,7 @@ public abstract class CommandDaggerModule {
   }
 
   @Multibinds
-  abstract Map<String, CommandCollisionHandler<?>> bindCommandCollisionHandlers();
+  abstract Map<String, CommandSupplier<?, ?>> bindCommandCollisionHandlers();
 
   @Binds
   @IntoSet
