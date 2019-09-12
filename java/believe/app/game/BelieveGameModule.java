@@ -6,14 +6,13 @@ import believe.app.ApplicationModule;
 import believe.app.ApplicationTitle;
 import believe.app.FirstState;
 import believe.app.GameStates;
-import believe.gamestate.levelstate.arcadestate.ArcadeState;
 import believe.gamestate.FlowFilePickerMenuState;
 import believe.gamestate.GameStateBase;
 import believe.gamestate.MainMenuState;
 import believe.gamestate.OptionsMenuState;
-import believe.gamestate.levelstate.arcadestate.ArcadeStateDaggerModule;
-import believe.gamestate.levelstate.platformingstate.PlatformingState;
 import believe.gamestate.PlayFlowFileState;
+import believe.gamestate.levelstate.arcadestate.ArcadeState;
+import believe.gamestate.levelstate.platformingstate.PlatformingState;
 import believe.gamestate.temporarystate.GameOverState;
 import believe.gamestate.temporarystate.GamePausedOverlay;
 import believe.util.Util;
@@ -27,7 +26,7 @@ import dagger.multibindings.ElementsIntoSet;
 import java.util.Set;
 
 /** Dagger module for the application running the elieve video game. */
-@Module(includes = {ApplicationModule.class, ArcadeStateDaggerModule.class})
+@Module(includes = {ApplicationModule.class})
 abstract class BelieveGameModule {
   @Provides
   @ApplicationTitle

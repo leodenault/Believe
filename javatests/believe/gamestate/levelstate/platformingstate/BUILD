@@ -4,6 +4,7 @@ java_test(
     deps = [
         "//java/believe/character/playable",
         "//java/believe/core/io",
+        "//java/believe/core/io/testing",
         "//java/believe/gamestate/levelstate/platformingstate",
         "//java/believe/gamestate/levelstate/platformingstate:package-info",
         "//java/believe/map/gui",

@@ -153,6 +153,7 @@ believe_binary(
     main_class = "believe.app.editor.LevelEditor",
     resources = [
         "//data",
+        "//res/dialogue",
         "//res/graphics",
         "//res/music",
         "//res/sfx",
@@ -171,6 +172,7 @@ believe_binary(
     main_class = "believe.app.editor.LevelEditor",
     resources = [
         "//data",
+        "//res/dialogue",
         "//res/graphics",
         "//res/music",
         "//res/sfx",

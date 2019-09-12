@@ -2,6 +2,7 @@ java_test(
     name = "CharacterDialogueTest",
     srcs = ["CharacterDialogueTest.java"],
     deps = [
+        "//java/believe/core/io/testing",
         "//java/believe/gui",
         "//java/believe/gui/testing",
         "//third_party/junit",

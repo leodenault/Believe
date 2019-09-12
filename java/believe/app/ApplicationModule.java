@@ -6,6 +6,7 @@ import believe.character.playable.PlayableDaggerModule;
 import believe.core.io.FontLoader;
 import believe.datamodel.MutableDataCommitter;
 import believe.datamodel.protodata.MutableProtoDataCommitter;
+import believe.dialogue.DialogueDaggerModule;
 import believe.gamestate.MainMenuState;
 import believe.gamestate.levelstate.platformingstate.EventActions;
 import believe.gamestate.levelstate.platformingstate.PlatformingState;
@@ -33,6 +34,7 @@ import java.util.function.Supplier;
       CollidableTileDaggerModule.class,
       CollisionDaggerModule.class,
       CommandDaggerModule.class,
+        DialogueDaggerModule.class,
       MapParsingDaggerModule.class,
       PlayableDaggerModule.class
     })

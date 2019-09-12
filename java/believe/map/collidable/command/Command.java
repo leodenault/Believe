@@ -37,12 +37,12 @@ public class Command<C extends CommandCollidable<C>, D>
     this.data = data;
   }
 
-  static <C extends CommandCollidable<C>, D> Command<C, D> create(
+  public static <C extends CommandCollidable<C>, D> Command<C, D> create(
       CommandCollisionHandler<C, D> commandCollisionHandler, TiledObject tiledObject) {
     return new Command<>(commandCollisionHandler, tiledObject, /* data= */ null);
   }
 
-  static <C extends CommandCollidable<C>, D> Command<C, D> create(
+  public static <C extends CommandCollidable<C>, D> Command<C, D> create(
       CommandCollisionHandler<C, D> commandCollisionHandler, TiledObject tiledObject, D data) {
     return new Command<>(commandCollisionHandler, tiledObject, data);
   }

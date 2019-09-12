@@ -1,9 +1,11 @@
 package believe.gui;
 
+import believe.core.io.FontLoader;
 import believe.gui.TextComponent.HorizontalTextAlignment;
 import believe.gui.TextComponent.VerticalTextAlignment;
+import com.google.auto.factory.AutoFactory;
+import com.google.auto.factory.Provided;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -12,6 +14,7 @@ import org.newdawn.slick.gui.GUIContext;
 import java.util.Iterator;
 import java.util.List;
 
+@AutoFactory
 public final class CharacterDialogue extends ComponentBase {
   public static final Image EMPTY_IMAGE = new Image() {};
 
@@ -33,11 +36,13 @@ public final class CharacterDialogue extends ComponentBase {
   private Image currentPortrait;
 
   public CharacterDialogue(
-      GUIContext container, Font font, List<DialogueResponse> dialogueResponses) {
+      @Provided GUIContext container,
+      @Provided FontLoader fontLoader,
+      List<DialogueResponse> dialogueResponses) {
     super(container);
     dialogueResponseIterator = dialogueResponses.iterator();
     currentPortrait = EMPTY_IMAGE;
-    textComponent = new TextComponent(container, font, "");
+    textComponent = new TextComponent(container, fontLoader.getBaseFont(), "");
     textComponent.setHorizontalTextAlignment(HorizontalTextAlignment.LEFT);
     textComponent.setVerticalTextAlignment(VerticalTextAlignment.TOP);
 

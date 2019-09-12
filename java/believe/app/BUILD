@@ -71,6 +71,7 @@ java_library(
         "//java/believe/core/io",
         "//java/believe/datamodel",
         "//java/believe/datamodel/protodata",
+        "//java/believe/dialogue:dagger_module",
         "//java/believe/gamestate:impl",
         "//java/believe/gamestate/levelstate/platformingstate",
         "//java/believe/gamestate/levelstate/platformingstate:qualifiers",

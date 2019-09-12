@@ -1,20 +1,27 @@
 package believe.dialogue;
 
-import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth8.assertThat;
 
+import believe.character.playable.PlayableCharacter;
 import believe.dialogue.proto.DialogueProto.Dialogue;
 import believe.dialogue.proto.DialogueProto.DialogueMap;
 import believe.dialogue.proto.DialogueProto.Response;
 import believe.logging.testing.VerifiableLogSystem;
-import believe.logging.testing.VerifiableLogSystemExtension;
+import believe.logging.testing.VerifiableLogSystem.LogSeverity;
+import believe.logging.testing.VerifiesLoggingCalls;
 import believe.logging.truth.VerifiableLogSystemSubject;
-import com.google.common.truth.Truth8;
-import java.util.Optional;
+import believe.map.collidable.command.Command;
+import believe.map.tiled.EntityType;
+import believe.map.tiled.testing.FakeTiledMap;
+import believe.map.tiled.testing.FakeTiledObjectFactory;
+import believe.react.ObservableValue;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.util.Optional;
 
 /** Unit tests for {@link DialogueSupplier}. */
-public final class DialogueSupplierTest {
+final class DialogueSupplierTest {
+  private static final String DIALOGUE_ID_PROPERTY = "dialogue_id";
   private static final String DIALOGUE_NAME = "rainbow";
   private static final Dialogue DIALOGUE =
       Dialogue.newBuilder()
@@ -25,28 +32,50 @@ public final class DialogueSupplierTest {
           .build();
   private static final DialogueMap DIALOGUE_MAP =
       DialogueMap.newBuilder().putDialogues(DIALOGUE_NAME, DIALOGUE).build();
+  private static final DialogueCommandCollisionHandler DIALOGUE_COMMAND_COLLISION_HANDLER =
+      new DialogueCommandCollisionHandler(new ObservableValue<>(Optional.empty()));
 
-  private final DialogueSupplier dialogueSupplier = new DialogueSupplier(() -> DIALOGUE_MAP);
+  private final DialogueSupplier dialogueSupplier =
+      new DialogueSupplier(
+          () -> DIALOGUE_MAP, DIALOGUE_COMMAND_COLLISION_HANDLER, DIALOGUE_ID_PROPERTY);
 
   @Test
-  public void getDialogue_returnsDialogueForGivenName() {
+  void supplyCommand_returnsCommandForCorrespondingTiledObject() {
+    Command<PlayableCharacter, Dialogue> command =
+        dialogueSupplier.supplyCommand(
+            FakeTiledObjectFactory.create(
+                FakeTiledMap.tiledMapWithObjectPropertyValue(DIALOGUE_NAME), EntityType.COMMAND));
 
-    Optional<Dialogue> dialogue = dialogueSupplier.getDialogue(DIALOGUE_NAME);
-
-    Truth8.assertThat(dialogue).isPresent();
-    assertThat(dialogue.get()).isEqualTo(DIALOGUE);
+    assertThat(command.data()).hasValue(DIALOGUE);
   }
 
   @Test
-  @ExtendWith(VerifiableLogSystemExtension.class)
-  public void getDialogue_dialogueDoesNotExist_logsErrorAndReturnsEmpty(
+  @VerifiesLoggingCalls
+  void supplyCommand_dialogueNameNotSpecified_returnsCommandWithoutDialogueAndLogsError(
       VerifiableLogSystem logSystem) {
-
-    Optional<Dialogue> dialogue = dialogueSupplier.getDialogue("bogus_name");
+    Command<PlayableCharacter, Dialogue> command =
+        dialogueSupplier.supplyCommand(FakeTiledObjectFactory.create(EntityType.COMMAND));
 
     VerifiableLogSystemSubject.assertThat(logSystem)
         .loggedAtLeastOneMessageThat()
-        .hasPattern("Could not find dialogue.*bogus_name.*");
-    Truth8.assertThat(dialogue).isEmpty();
+        .hasPattern("Dialogue name missing.*")
+        .hasSeverity(LogSeverity.ERROR);
+    assertThat(command.data()).isEmpty();
+  }
+
+  @Test
+  @VerifiesLoggingCalls
+  void supplyCommand_dialogueDoesNotExist_returnsCommandWithoutDialogueAndLogsError(
+      VerifiableLogSystem logSystem) {
+    Command<PlayableCharacter, Dialogue> command =
+        dialogueSupplier.supplyCommand(
+            FakeTiledObjectFactory.create(
+                FakeTiledMap.tiledMapWithObjectPropertyValue("bogus_name"), EntityType.COMMAND));
+
+    VerifiableLogSystemSubject.assertThat(logSystem)
+        .loggedAtLeastOneMessageThat()
+        .hasPattern("Could not find dialogue.*bogus_name.*")
+        .hasSeverity(LogSeverity.ERROR);
+    assertThat(command.data()).isEmpty();
   }
 }

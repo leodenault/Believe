@@ -7,6 +7,7 @@ java_library(
     name = "testing",
     srcs = [
         "FakeTiledMap.java",
+        "FakeTiledObjectFactory.java",
         "package-info.java",
     ],
     deps = [

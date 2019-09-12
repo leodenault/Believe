@@ -4,6 +4,11 @@ package(
     default_visibility = ["//:believe_all_pkgs"],
 )
 
+filegroup(
+    name = "dialogue",
+    srcs = [":dialogue_textproto"],
+)
+
 textproto(
     name = "dialogue_textproto",
     srcs = ["dialogue.textproto"],

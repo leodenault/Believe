@@ -27,7 +27,7 @@
  </tile>
  <tile id="8">
   <properties>
-   <property name="command" value="right"/>
+   <property name="command" value="dialogue"/>
    <property name="entity_type" value="command"/>
   </properties>
  </tile>
