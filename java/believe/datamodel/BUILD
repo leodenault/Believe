@@ -10,3 +10,9 @@ java_library(
         "MutableDataCommitter.java",
     ],
 )
+
+java_library(
+    name = "impl",
+    srcs = ["MutableValue.java"],
+    deps = [":datamodel"],
+)
