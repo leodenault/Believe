@@ -1,5 +1,6 @@
 package believe.map.collidable.command;
 
+import believe.character.playable.PlayableCharacter;
 import believe.map.collidable.command.InternalQualifiers.CommandParameter;
 import believe.map.io.ObjectParser;
 import believe.map.io.TileParser;
@@ -20,7 +21,7 @@ public abstract class CommandDaggerModule {
   }
 
   @Multibinds
-  abstract Map<String, CommandSupplier<?, ?>> bindCommandCollisionHandlers();
+  abstract Map<String, CommandSupplier<PlayableCharacter, ?>> bindCommandCollisionHandlers();
 
   @Binds
   @IntoSet

@@ -61,7 +61,7 @@ public abstract class PlayableDaggerModule {
   @Provides
   @IntoMap
   @StringKey("right")
-  static CommandSupplier<?, ?> bindRightMovementCommandSupplier(
+  static CommandSupplier<PlayableCharacter, ?> bindRightMovementCommandSupplier(
       @RightMovementHandler PlayableCharacterMovementCommandCollisionHandler rightMovementHandler) {
     return CommandSupplier.from(rightMovementHandler);
   }
@@ -69,7 +69,7 @@ public abstract class PlayableDaggerModule {
   @Provides
   @IntoMap
   @StringKey("left")
-  static CommandSupplier<?, ?> bindLeftMovementCommandSupplier(
+  static CommandSupplier<PlayableCharacter, ?> bindLeftMovementCommandSupplier(
       @LeftMovementHandler PlayableCharacterMovementCommandCollisionHandler leftMovementHandler) {
     return CommandSupplier.from(leftMovementHandler);
   }
@@ -77,7 +77,7 @@ public abstract class PlayableDaggerModule {
   @Provides
   @IntoMap
   @StringKey("jump")
-  static CommandSupplier<?, ?> bindJumpMovementCommandSupplier(
+  static CommandSupplier<PlayableCharacter, ?> bindJumpMovementCommandSupplier(
       @JumpMovementHandler PlayableCharacterMovementCommandCollisionHandler jumpMovementHandler) {
     return CommandSupplier.from(jumpMovementHandler);
   }
@@ -85,7 +85,7 @@ public abstract class PlayableDaggerModule {
   @Provides
   @IntoMap
   @StringKey("stop")
-  static CommandSupplier<?, ?> bindStopMovementCommandSupplier(
+  static CommandSupplier<PlayableCharacter, ?> bindStopMovementCommandSupplier(
       @StopMovementHandler PlayableCharacterMovementCommandCollisionHandler stopMovementHandler) {
     return CommandSupplier.from(stopMovementHandler);
   }

@@ -55,6 +55,7 @@ java_library(
         ":impl",
         ":internal_qualifiers",
         ":package-info",
+        "//java/believe/character/playable",
         "//java/believe/map/io",
         "//third_party/dagger",
     ],

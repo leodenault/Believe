@@ -1,5 +1,6 @@
 package believe.map.collidable.command;
 
+import believe.character.playable.PlayableCharacter;
 import believe.map.collidable.command.InternalQualifiers.CommandParameter;
 import believe.map.data.GeneratedMapEntityData;
 import believe.map.io.ObjectParser;
@@ -16,12 +17,12 @@ import java.util.Optional;
 /** Generates a {@link Command} from a tile within a {@link TiledMap}. */
 @Reusable
 final class CommandGenerator implements ObjectParser {
-  private final Map<String, CommandSupplier<?, ?>> commandSupplierMap;
+  private final Map<String, CommandSupplier<PlayableCharacter, ?>> commandSupplierMap;
   private final String commandParameter;
 
   @Inject
   CommandGenerator(
-      Map<String, CommandSupplier<?, ?>> commandSupplierMap,
+      Map<String, CommandSupplier<PlayableCharacter, ?>> commandSupplierMap,
       @CommandParameter String commandParameter) {
     this.commandSupplierMap = commandSupplierMap;
     this.commandParameter = commandParameter;
@@ -43,7 +44,7 @@ final class CommandGenerator implements ObjectParser {
       return;
     }
 
-    CommandSupplier<?, ?> commandSupplier =
+    CommandSupplier<PlayableCharacter, ?> commandSupplier =
         commandSupplierMap.get(commandName.get());
     if (commandSupplier == null) {
       Log.error("The command named '" + commandName + "' is not recognized as a command.");

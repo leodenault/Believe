@@ -3,6 +3,7 @@ package believe.map.collidable.command;
 import static believe.util.MapEntry.entry;
 import static com.google.common.truth.Truth.assertThat;
 
+import believe.character.playable.PlayableCharacter;
 import believe.geometry.Rectangle;
 import believe.map.data.GeneratedMapEntityData;
 import believe.map.tiled.EntityType;
@@ -23,7 +24,7 @@ public final class CommandGeneratorTest {
 
   private CommandGenerator commandGenerator;
 
-  @Mock private CommandCollisionHandler<?, Void> commandCollisionHandler;
+  @Mock private CommandCollisionHandler<PlayableCharacter, Void> commandCollisionHandler;
 
   @BeforeEach
   void setUp() {

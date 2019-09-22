@@ -4,6 +4,7 @@ java_junit5_test(
     name = "CommandGeneratorTest",
     srcs = ["CommandGeneratorTest.java"],
     deps = [
+        "//java/believe/character/playable",
         "//java/believe/geometry",
         "//java/believe/map/collidable/command",
         "//java/believe/map/collidable/command:impl",

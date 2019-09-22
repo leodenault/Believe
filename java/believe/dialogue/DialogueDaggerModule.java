@@ -49,7 +49,8 @@ public abstract class DialogueDaggerModule {
   @Binds
   @IntoMap
   @StringKey("dialogue")
-  abstract CommandSupplier<?, ?> bindDialogueCommandSupplier(DialogueSupplier dialogueSupplier);
+  abstract CommandSupplier<PlayableCharacter, ?> bindDialogueCommandSupplier(
+      DialogueSupplier dialogueSupplier);
 
   @Provides
   @Singleton
