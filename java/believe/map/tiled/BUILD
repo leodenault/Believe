@@ -7,9 +7,11 @@ java_library(
     srcs = [
         "EntityType.java",
         "Layer.java",
+        "PropertyProvider.java",
         "Tile.java",
         "TileSet.java",
         "TiledMap.java",
+        "TiledMapObjectPropertyProvider.java",
         "TiledObject.java",
         "TiledUtil.java",
         "package-info.java",

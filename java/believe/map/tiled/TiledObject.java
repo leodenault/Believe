@@ -7,11 +7,7 @@ import java.util.Optional;
 /** An object from a Tiled map. */
 @AutoValue
 public abstract class TiledObject {
-  abstract TiledMap tiledMap();
-
-  abstract int layerId();
-
-  abstract int objectId();
+  abstract PropertyProvider propertyProvider();
 
   /** The type of entity parsed from the object. */
   public abstract EntityType entityType();
@@ -49,11 +45,38 @@ public abstract class TiledObject {
       int height,
       int layerId,
       int objectId) {
-    return new AutoValue_TiledObject(tiledMap, layerId, objectId, entityType, x, y, width, height);
+    return create(
+        TiledMapObjectPropertyProvider.create(tiledMap, layerId, objectId),
+        entityType,
+        x,
+        y,
+        width,
+        height);
+  }
+
+  /**
+   * Instantiates a {@link TiledObject}.
+   *
+   * @param propertyProvider the {@link PropertyProvider} used by the created {@link TiledObject}.
+   * @param entityType the {@link EntityType} associated with the object.
+   */
+  public static TiledObject create(PropertyProvider propertyProvider, EntityType entityType) {
+    return create(
+        propertyProvider, entityType, /* x= */ 0, /* y= */ 0, /* width= */ 0, /* height= */ 0);
+  }
+
+  private static TiledObject create(
+      PropertyProvider propertyProvider,
+      EntityType entityType,
+      int x,
+      int y,
+      int width,
+      int height) {
+    return new AutoValue_TiledObject(propertyProvider, entityType, x, y, width, height);
   }
 
   /** Returns the value of a property for {@code key}. */
   public Optional<String> getProperty(String key) {
-    return tiledMap().getObjectProperty(layerId(), objectId(), key);
+    return propertyProvider().getProperty(key);
   }
 }

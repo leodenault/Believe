@@ -6,6 +6,7 @@ java_junit5_test(
     deps = [
         "//java/believe/geometry",
         "//java/believe/map/collidable/command",
+        "//java/believe/map/collidable/command:impl",
         "//java/believe/map/collidable/command:package-info",
         "//java/believe/map/data",
         "//java/believe/map/tiled",
@@ -17,6 +18,27 @@ java_junit5_test(
         "//third_party/slick",
         "//third_party/truth",
         "//third_party/truth:truth8",
+    ],
+)
+
+java_junit5_test(
+    name = "CommandSequenceSupplierTest",
+    srcs = ["CommandSequenceSupplierTest.java"],
+    deps = [
+        "//java/believe/character/playable",
+        "//java/believe/logging/testing",
+        "//java/believe/logging/truth",
+        "//java/believe/map/collidable/command",
+        "//java/believe/map/collidable/command:impl",
+        "//java/believe/map/collidable/command:package-info",
+        "//java/believe/map/tiled",
+        "//java/believe/map/tiled/testing",
+        "//java/believe/testing/mockito",
+        "//java/believe/util",
+        "//third_party/javax:annotations",
+        "//third_party/mockito",
+        "//third_party/proto",
+        "//third_party/truth",
     ],
 )
 

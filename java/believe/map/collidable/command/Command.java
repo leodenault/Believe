@@ -3,7 +3,6 @@ package believe.map.collidable.command;
 import static believe.util.Util.hashSetOf;
 
 import believe.geometry.Rectangle;
-import believe.map.tiled.Tile;
 import believe.map.tiled.TiledObject;
 import believe.physics.collision.Collidable;
 import believe.physics.collision.CollisionHandler;
@@ -37,14 +36,37 @@ public class Command<C extends CommandCollidable<C>, D>
     this.data = data;
   }
 
+  /**
+   * Creates a {@link Command} that, when triggered, will execute {@code commandCollisionHandler}.
+   *
+   * @param commandCollisionHandler the handler executed when the command is triggered.
+   * @param tiledObject the {@link TiledObject} from which the command is generated.
+   * @param <C> the type of {@link CommandCollidable} compatible with this command during
+   *     collisions.
+   * @param <D> the type of extra data associated with this command, if any.
+   */
   public static <C extends CommandCollidable<C>, D> Command<C, D> create(
       CommandCollisionHandler<C, D> commandCollisionHandler, TiledObject tiledObject) {
     return new Command<>(commandCollisionHandler, tiledObject, /* data= */ null);
   }
 
+  /**
+   * Creates a {@link Command} that, when triggered, will execute {@code commandCollisionHandler}.
+   *
+   * @param commandCollisionHandler the handler executed when the command is triggered.
+   * @param tiledObject the {@link TiledObject} from which the command is generated.
+   * @param data the extra data which should be stored on the command for use at execution time.
+   * @param <C> the type of {@link CommandCollidable} compatible with this command during
+   *     collisions.
+   * @param <D> the type of extra data associated with this command, if any.
+   */
   public static <C extends CommandCollidable<C>, D> Command<C, D> create(
       CommandCollisionHandler<C, D> commandCollisionHandler, TiledObject tiledObject, D data) {
     return new Command<>(commandCollisionHandler, tiledObject, data);
+  }
+
+  CommandCollisionHandler<C, D> getCommandCollisionHandler() {
+    return commandCollisionHandler;
   }
 
   @Override

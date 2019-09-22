@@ -8,11 +8,9 @@ java_library(
         "Command.java",
         "CommandCollidable.java",
         "CommandCollisionHandler.java",
-        "CommandGenerator.java",
         "CommandSupplier.java",
     ],
     deps = [
-        ":internal_qualifiers",
         ":package-info",
         "//java/believe/geometry",
         "//java/believe/map/data",
@@ -28,10 +26,33 @@ java_library(
 )
 
 java_library(
+    name = "impl",
+    srcs = [
+        "CommandGenerator.java",
+        "CommandSequenceSupplier.java",
+    ],
+    deps = [
+        ":command",
+        ":internal_qualifiers",
+        ":package-info",
+        "//java/believe/character/playable",
+        "//java/believe/map/collidable/command/proto:command_sequence_java_proto",
+        "//java/believe/map/data",
+        "//java/believe/map/io",
+        "//java/believe/map/tiled",
+        "//third_party/dagger",
+        "//third_party/javax:annotations",
+        "//third_party/proto",
+        "//third_party/slick",
+    ],
+)
+
+java_library(
     name = "dagger_module",
     srcs = ["CommandDaggerModule.java"],
     deps = [
         ":command",
+        ":impl",
         ":internal_qualifiers",
         ":package-info",
         "//java/believe/map/io",
