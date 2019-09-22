@@ -17,17 +17,18 @@ public class Util {
 
   public static File[] getFlowFiles() throws SecurityException {
     File parent = new File(DEFAULT_DIRECTORY);
-    return parent.listFiles(new FileFilter() {
-      @Override
-      public boolean accept(File pathname) {
-        return pathname.getName().toLowerCase().endsWith(FILE_EXTENSION);
-      }
-    });
+    return parent.listFiles(
+        new FileFilter() {
+          @Override
+          public boolean accept(File pathname) {
+            return pathname.getName().toLowerCase().endsWith(FILE_EXTENSION);
+          }
+        });
   }
 
   /**
-   * Clips to the child clip in the context of the graphics object's current
-   * clip. The result is the intersection of the two clips.
+   * Clips to the child clip in the context of the graphics object's current clip. The result is the
+   * intersection of the two clips.
    *
    * @param g The graphics object from which to fetch the current clip.
    * @param childClip The new clipping area to clip to.
@@ -66,16 +67,16 @@ public class Util {
   }
 
   @SafeVarargs
-  public static <K, V> HashMap<K, V> hashMapOf(MapEntry<K, V>... entries) {
+  public static <K, V> HashMap<K, V> hashMapOf(MapEntry<? extends K, ? extends V>... entries) {
     HashMap<K, V> map = new HashMap<>();
-    for (MapEntry<K, V> entry : entries) {
+    for (MapEntry<? extends K, ? extends V> entry : entries) {
       map.put(entry.getKey(), entry.getValue());
     }
     return map;
   }
 
   @SafeVarargs
-  public static <K, V> Map<K, V> immutableMapOf(MapEntry<K, V>... entries) {
+  public static <K, V> Map<K, V> immutableMapOf(MapEntry<? extends K, ? extends V>... entries) {
     return Collections.unmodifiableMap(hashMapOf(entries));
   }
 }
