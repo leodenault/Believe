@@ -7,7 +7,6 @@ java_library(
     srcs = [
         "EntityType.java",
         "Layer.java",
-        "PropertyProvider.java",
         "Tile.java",
         "TileSet.java",
         "TiledMap.java",
@@ -18,6 +17,7 @@ java_library(
     ],
     deps = [
         "//java/believe/app/annotation",
+        "//java/believe/core",
         "//third_party/auto_value",
         "//third_party/javax:annotations",
         "//third_party/slick",

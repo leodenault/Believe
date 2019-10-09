@@ -5,6 +5,7 @@ package(
 java_library(
     name = "core",
     srcs = [
+        "PropertyProvider.java",
         "SynchedComboPattern.java",
         "Timer.java",
         "Updatable.java",

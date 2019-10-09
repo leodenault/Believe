@@ -1,5 +1,6 @@
 package believe.map.tiled;
 
+import believe.core.PropertyProvider;
 import com.google.auto.value.AutoValue;
 
 import java.util.Optional;

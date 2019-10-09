@@ -1,4 +1,4 @@
-package believe.map.tiled;
+package believe.core;
 
 import java.util.Optional;
 
