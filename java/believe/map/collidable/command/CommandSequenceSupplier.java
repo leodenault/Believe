@@ -2,7 +2,7 @@ package believe.map.collidable.command;
 
 import believe.character.playable.PlayableCharacter;
 import believe.map.collidable.command.InternalQualifiers.SequenceParameter;
-import believe.map.collidable.command.proto.CommandSequenceProto.CommandSequence;
+import believe.command.proto.CommandSequenceProto.CommandSequence;
 import believe.map.tiled.EntityType;
 import believe.map.tiled.TiledObject;
 import com.google.protobuf.InvalidProtocolBufferException;

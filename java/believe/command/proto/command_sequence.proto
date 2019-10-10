@@ -2,7 +2,7 @@ syntax = "proto2";
 
 package believe.dialogue.proto;
 
-option java_package = "believe.map.collidable.command.proto";
+option java_package = "believe.command.proto";
 option java_outer_classname = "CommandSequenceProto";
 
 // An ordered list of commands which should be executed as a unit.

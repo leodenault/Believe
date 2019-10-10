@@ -14,22 +14,24 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-/** Unit tests for {@link CommandGenerator}. */
-final class CommandGeneratorTest {
-  private static final Command COMMAND = CommandGeneratorTest::doNothing;
-  private static final PropertyProvider PROPERTY_PROVIDER = CommandGeneratorTest::provideProperty;
+/** Unit tests for {@link CommandGeneratorImpl}. */
+final class CommandGeneratorImplTest {
+  private static final Command COMMAND = CommandGeneratorImplTest::doNothing;
+  private static final PropertyProvider PROPERTY_PROVIDER =
+      CommandGeneratorImplTest::provideProperty;
 
-  private CommandGenerator commandGenerator;
+  private CommandGeneratorImpl commandGeneratorImpl;
 
   @BeforeEach
   void setUp() {
-    commandGenerator =
-        new CommandGenerator(hashMapOf(entry("valid_command", propertyProvider -> COMMAND)));
+    commandGeneratorImpl =
+        new CommandGeneratorImpl(
+            hashMapOf(entry("valid_command", propertyProvider -> Optional.of(COMMAND))));
   }
 
   @Test
   void generateCommand_generatesValidCommand() {
-    assertThat(commandGenerator.generateCommand("valid_command", PROPERTY_PROVIDER))
+    assertThat(commandGeneratorImpl.generateCommand("valid_command", PROPERTY_PROVIDER))
         .hasValue(COMMAND);
   }
 
@@ -37,7 +39,8 @@ final class CommandGeneratorTest {
   @VerifiesLoggingCalls
   void generateCommand_commandCannotBeFound_returnsEmptyAndLogsError(
       VerifiableLogSystem logSystem) {
-    assertThat(commandGenerator.generateCommand("invalid_command", PROPERTY_PROVIDER)).isEmpty();
+    assertThat(commandGeneratorImpl.generateCommand("invalid_command", PROPERTY_PROVIDER))
+        .isEmpty();
     VerifiableLogSystemSubject.assertThat(logSystem)
         .loggedAtLeastOneMessageThat()
         .hasPattern(".*'invalid_command' is not recognized.*")

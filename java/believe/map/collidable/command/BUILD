@@ -36,7 +36,7 @@ java_library(
         ":internal_qualifiers",
         ":package-info",
         "//java/believe/character/playable",
-        "//java/believe/map/collidable/command/proto:command_sequence_java_proto",
+        "//java/believe/command/proto:command_sequence_java_proto",
         "//java/believe/map/data",
         "//java/believe/map/io",
         "//java/believe/map/tiled",
