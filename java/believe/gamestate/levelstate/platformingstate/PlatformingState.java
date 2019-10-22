@@ -6,6 +6,7 @@ import believe.character.playable.PlayableCharacter.SynchedComboListener;
 import believe.character.playable.PlayableCharacterFactory;
 import believe.core.SynchedComboPattern;
 import believe.core.io.FontLoader;
+import believe.datamodel.MutableValue;
 import believe.gamestate.levelstate.LevelState;
 import believe.levelFlow.component.ComboSyncher;
 import believe.map.data.MapData;
@@ -20,6 +21,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class PlatformingState extends LevelState implements SynchedComboListener {
@@ -44,8 +46,16 @@ public class PlatformingState extends LevelState implements SynchedComboListener
       @EventActions Map<Integer, Function<PlatformingState, Void>> eventActions,
       FontLoader fontLoader,
       PlayAreaFactory playAreaFactory,
-      PlayableCharacterFactory playableCharacterFactory) {
-    super(container, game, mapManager, physicsManager, fontLoader, playableCharacterFactory);
+      PlayableCharacterFactory playableCharacterFactory,
+      MutableValue<Optional<PlayableCharacter>> currentPlayableCharacter) {
+    super(
+        container,
+        game,
+        mapManager,
+        physicsManager,
+        fontLoader,
+        playableCharacterFactory,
+        currentPlayableCharacter);
     this.playAreaFactory = playAreaFactory;
     this.comboSyncher = new ComboSyncher(container, fontLoader.getBaseFont(), BPM);
     this.eventActions = eventActions;

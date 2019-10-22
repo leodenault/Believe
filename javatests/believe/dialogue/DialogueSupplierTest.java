@@ -2,7 +2,7 @@ package believe.dialogue;
 
 import static com.google.common.truth.Truth8.assertThat;
 
-import believe.character.playable.PlayableCharacter;
+import believe.command.Command;
 import believe.dialogue.proto.DialogueProto.Dialogue;
 import believe.dialogue.proto.DialogueProto.DialogueMap;
 import believe.dialogue.proto.DialogueProto.Response;
@@ -10,10 +10,6 @@ import believe.logging.testing.VerifiableLogSystem;
 import believe.logging.testing.VerifiableLogSystem.LogSeverity;
 import believe.logging.testing.VerifiesLoggingCalls;
 import believe.logging.truth.VerifiableLogSystemSubject;
-import believe.map.collidable.command.Command;
-import believe.map.tiled.EntityType;
-import believe.map.tiled.testing.FakeTiledMap;
-import believe.map.tiled.testing.FakeTiledObjectFactory;
 import believe.react.ObservableValue;
 import org.junit.jupiter.api.Test;
 
@@ -32,50 +28,42 @@ final class DialogueSupplierTest {
           .build();
   private static final DialogueMap DIALOGUE_MAP =
       DialogueMap.newBuilder().putDialogues(DIALOGUE_NAME, DIALOGUE).build();
-  private static final DialogueCommandCollisionHandler DIALOGUE_COMMAND_COLLISION_HANDLER =
-      new DialogueCommandCollisionHandler(new ObservableValue<>(Optional.empty()));
 
+  private final ObservableValue<Optional<Dialogue>> observableDialogue =
+      new ObservableValue<>(Optional.empty());
   private final DialogueSupplier dialogueSupplier =
       new DialogueSupplier(
-          () -> DIALOGUE_MAP, DIALOGUE_COMMAND_COLLISION_HANDLER, DIALOGUE_ID_PROPERTY);
+          () -> DIALOGUE_MAP,
+          new DialogueCommandFactory(() -> observableDialogue),
+          DIALOGUE_ID_PROPERTY);
 
   @Test
-  void supplyCommand_returnsCommandForCorrespondingTiledObject() {
-    Command<PlayableCharacter, Dialogue> command =
-        dialogueSupplier.supplyCommand(
-            FakeTiledObjectFactory.create(
-                FakeTiledMap.tiledMapWithObjectPropertyValue(DIALOGUE_NAME), EntityType.COMMAND));
+  void supplyCommand_returnsCommandForCorrespondingProperties() {
+    Optional<Command> command = dialogueSupplier.supplyCommand(key -> Optional.of(DIALOGUE_NAME));
 
-    assertThat(command.data()).hasValue(DIALOGUE);
+    assertThat(command).isPresent();
+    command.get().execute();
+    assertThat(observableDialogue.get()).hasValue(DIALOGUE);
   }
 
   @Test
   @VerifiesLoggingCalls
-  void supplyCommand_dialogueNameNotSpecified_returnsCommandWithoutDialogueAndLogsError(
+  void supplyCommand_dialogueNameNotSpecified_returnsEmptyAndLogsError(
       VerifiableLogSystem logSystem) {
-    Command<PlayableCharacter, Dialogue> command =
-        dialogueSupplier.supplyCommand(FakeTiledObjectFactory.create(EntityType.COMMAND));
-
+    assertThat(dialogueSupplier.supplyCommand(key -> Optional.empty())).isEmpty();
     VerifiableLogSystemSubject.assertThat(logSystem)
         .loggedAtLeastOneMessageThat()
         .hasPattern("Dialogue name missing.*")
         .hasSeverity(LogSeverity.ERROR);
-    assertThat(command.data()).isEmpty();
   }
 
   @Test
   @VerifiesLoggingCalls
-  void supplyCommand_dialogueDoesNotExist_returnsCommandWithoutDialogueAndLogsError(
-      VerifiableLogSystem logSystem) {
-    Command<PlayableCharacter, Dialogue> command =
-        dialogueSupplier.supplyCommand(
-            FakeTiledObjectFactory.create(
-                FakeTiledMap.tiledMapWithObjectPropertyValue("bogus_name"), EntityType.COMMAND));
-
+  void supplyCommand_dialogueDoesNotExist_returnsEmptyAndLogsError(VerifiableLogSystem logSystem) {
+    assertThat(dialogueSupplier.supplyCommand(key -> Optional.of("bogus_name"))).isEmpty();
     VerifiableLogSystemSubject.assertThat(logSystem)
         .loggedAtLeastOneMessageThat()
         .hasPattern("Could not find dialogue.*bogus_name.*")
         .hasSeverity(LogSeverity.ERROR);
-    assertThat(command.data()).isEmpty();
   }
 }

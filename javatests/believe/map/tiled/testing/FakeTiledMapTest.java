@@ -9,8 +9,7 @@ public final class FakeTiledMapTest {
   @Test
   void getTileProperty_noValue_returnsEmpty() {
     assertThat(
-            FakeTiledMap.tiledMapWithDefaultPropertyValues()
-                .getTileProperty(123, "some property"))
+            FakeTiledMap.tiledMapWithDefaultPropertyValues().getTileProperty(123, "some property"))
         .isEmpty();
   }
 

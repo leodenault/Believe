@@ -5,6 +5,7 @@ import believe.map.data.ObjectLayerData;
 import believe.map.io.InternalQualifiers.EntityTypeProperty;
 import believe.map.tiled.EntityType;
 import believe.map.tiled.TiledMap;
+import believe.map.tiled.TiledMapObjectPropertyProvider;
 import believe.map.tiled.TiledObject;
 import dagger.Reusable;
 import javax.inject.Inject;
@@ -35,16 +36,15 @@ final class TiledMapObjectLayerParserImpl implements TiledMapObjectLayerParser {
       EntityType entityType = entityTypeName.map(EntityType::forName).orElse(EntityType.NONE);
       for (ObjectParser objectParser : objectParsers) {
         int objectHeight = tiledMap.getObjectHeight(layerId, objectId);
+        int finalObjectId = objectId;
         objectParser.parseObject(
             TiledObject.create(
-                tiledMap,
                 entityType,
+                TiledMapObjectPropertyProvider.create(tiledMap, layerId, objectId),
                 tiledMap.getObjectX(layerId, objectId),
                 tiledMap.getObjectY(layerId, objectId) - objectHeight,
                 tiledMap.getObjectWidth(layerId, objectId),
-                objectHeight,
-                layerId,
-                objectId),
+                objectHeight),
             generatedMapEntityDataBuilder);
       }
     }

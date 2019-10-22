@@ -15,6 +15,7 @@ java_library(
         "//java/believe/character:faction",
         "//java/believe/character/playable",
         "//java/believe/core/io",
+        "//java/believe/datamodel:impl",
         "//java/believe/gamestate",
         "//java/believe/gamestate/temporarystate",
         "//java/believe/gamestate/temporarystate:impl",

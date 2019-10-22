@@ -1,5 +1,6 @@
 package believe.map.tiled.testing;
 
+import believe.core.PropertyProvider;
 import believe.map.tiled.TiledMap;
 import javax.annotation.Nullable;
 

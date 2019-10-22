@@ -9,7 +9,6 @@ import believe.character.Character;
 import believe.character.Faction;
 import believe.core.SynchedComboPattern;
 import believe.core.display.SpriteSheetManager;
-import believe.map.collidable.command.CommandCollidable;
 import believe.physics.collision.Collidable;
 import believe.physics.collision.CollisionHandler;
 import believe.physics.manager.PhysicsManager;
@@ -18,7 +17,6 @@ import believe.statemachine.State.Action;
 import believe.util.MapEntry;
 import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
-import javax.inject.Inject;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -32,7 +30,7 @@ import java.util.Set;
 
 @AutoFactory(allowSubclasses = true)
 public class PlayableCharacter extends Character<PlayableCharacter>
-    implements CommandCollidable<PlayableCharacter> {
+    implements Collidable<PlayableCharacter> {
   public interface SynchedComboListener {
     void activateCombo(SynchedComboPattern pattern);
   }
@@ -71,12 +69,12 @@ public class PlayableCharacter extends Character<PlayableCharacter>
   private SynchedComboPattern pattern;
   private List<SynchedComboListener> comboListeners;
 
-  @Inject
   public PlayableCharacter(
       @Provided GUIContext container,
       @Provided PhysicsManager physicsManager,
-      @Provided Set<CollisionHandler<? extends Collidable<?>, ? super PlayableCharacter>>
-          rightCompatibleHandlers,
+      @Provided
+          Set<CollisionHandler<? extends Collidable<?>, ? super PlayableCharacter>>
+              rightCompatibleHandlers,
       DamageListener damageListener,
       boolean onRails,
       int x,

@@ -8,21 +8,19 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import believe.character.playable.PlayableCharacterFactory;
 import believe.core.io.FontLoader;
 import believe.core.io.testing.FakeFontLoader;
-import believe.map.gui.LevelMapFactory;
+import believe.datamodel.MutableValue;
 import believe.map.gui.PlayAreaFactory;
 import believe.map.io.MapManager;
 import believe.physics.manager.PhysicsManager;
 import believe.testing.FakeGameContainer;
-import javax.inject.Provider;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 public class PlatformingStateTest {
@@ -52,7 +50,8 @@ public class PlatformingStateTest {
             hashMapOf(entry(Input.KEY_LEFT, singleEventAction)),
             fontLoader,
             playAreaFactory,
-            playableCharacterFactory);
+            playableCharacterFactory,
+            MutableValue.of(Optional.empty()));
   }
 
   @Test

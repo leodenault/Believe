@@ -14,6 +14,7 @@ java_library(
         "//java/believe/character:faction",
         "//java/believe/character/playable",
         "//java/believe/core/io",
+        "//java/believe/datamodel:impl",
         "//java/believe/dialogue",
         "//java/believe/dialogue/proto:dialogue_java_proto",
         "//java/believe/gamestate/levelstate",

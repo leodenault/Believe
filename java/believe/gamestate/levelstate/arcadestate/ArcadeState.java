@@ -5,6 +5,7 @@ import believe.character.Faction;
 import believe.character.playable.PlayableCharacter;
 import believe.character.playable.PlayableCharacterFactory;
 import believe.core.io.FontLoader;
+import believe.datamodel.MutableValue;
 import believe.dialogue.proto.DialogueProto.Dialogue;
 import believe.gamestate.levelstate.LevelState;
 import believe.gui.CharacterDialogue;
@@ -42,7 +43,8 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Singleton
-public class ArcadeState extends LevelState implements FlowComponentListener, Observer<Optional<Dialogue>> {
+public class ArcadeState extends LevelState
+    implements FlowComponentListener, Observer<Optional<Dialogue>> {
   private static final float FOCUS_RECHARGE_TIME = 45f; // Time in seconds for draining focus fully
   private static final float FOCUS_RECHARGE_RATE =
       PlayableCharacter.MAX_FOCUS / (FOCUS_RECHARGE_TIME * 1000f);
@@ -66,8 +68,16 @@ public class ArcadeState extends LevelState implements FlowComponentListener, Ob
       PlayAreaFactory playAreaFactory,
       PlayableCharacterFactory playableCharacterFactory,
       CharacterDialogueFactory characterDialogueFactory,
-      Observable<Optional<Dialogue>> observableDialogue) {
-    super(container, game, mapManager, physicsManager, fontLoader, playableCharacterFactory);
+      Observable<Optional<Dialogue>> observableDialogue,
+      MutableValue<Optional<PlayableCharacter>> currentPlayableCharacter) {
+    super(
+        container,
+        game,
+        mapManager,
+        physicsManager,
+        fontLoader,
+        playableCharacterFactory,
+        currentPlayableCharacter);
 
     this.playAreaFactory = playAreaFactory;
     this.characterDialogueFactory = characterDialogueFactory;

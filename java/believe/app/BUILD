@@ -68,6 +68,7 @@ java_library(
         "//java/believe/action",
         "//java/believe/app/proto:game_options_java_proto",
         "//java/believe/character/playable:dagger_module",
+        "//java/believe/command:dagger_module",
         "//java/believe/core/io",
         "//java/believe/datamodel",
         "//java/believe/datamodel/protodata",

@@ -7,23 +7,23 @@ import java.lang.annotation.RetentionPolicy;
 
 /** Container class for qualifier annotations internal to this package. */
 final class InternalQualifiers {
-  /** Qualifies a {@link PlayableCharacterMovementCommandCollisionHandler} for moving right. */
+  /** Qualifies a {@link PlayableCharacterMovementCommand} for moving right. */
   @Qualifier
   @Retention(RetentionPolicy.RUNTIME)
-  @interface RightMovementHandler {}
+  @interface RightMovementCommand {}
 
-  /** Qualifies a {@link PlayableCharacterMovementCommandCollisionHandler} for moving left. */
+  /** Qualifies a {@link PlayableCharacterMovementCommand} for moving left. */
   @Qualifier
   @Retention(RetentionPolicy.RUNTIME)
-  @interface LeftMovementHandler {}
+  @interface LeftMovementCommand {}
 
-  /** Qualifies a {@link PlayableCharacterMovementCommandCollisionHandler} for jumping. */
+  /** Qualifies a {@link PlayableCharacterMovementCommand} for jumping. */
   @Qualifier
   @Retention(RetentionPolicy.RUNTIME)
-  @interface JumpMovementHandler {}
+  @interface JumpMovementCommand {}
 
-  /** Qualifies a {@link PlayableCharacterMovementCommandCollisionHandler} for stopping movement. */
+  /** Qualifies a {@link PlayableCharacterMovementCommand} for stopping movement. */
   @Qualifier
   @Retention(RetentionPolicy.RUNTIME)
-  @interface StopMovementHandler {}
+  @interface StopMovementCommand {}
 }

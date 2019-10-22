@@ -27,16 +27,6 @@ java_junit5_test(
 )
 
 java_junit5_test(
-    name = "TiledObjectTest",
-    srcs = ["TiledObjectTest.java"],
-    deps = [
-        "//java/believe/map/tiled",
-        "//java/believe/map/tiled/testing",
-        "//third_party/truth:truth8",
-    ],
-)
-
-java_junit5_test(
     name = "TiledUtilTest",
     srcs = ["TiledUtilTest.java"],
     deps = [

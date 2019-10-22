@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import believe.map.tiled.EntityType;
 import believe.map.tiled.TiledMap;
+import believe.map.tiled.TiledMapObjectPropertyProvider;
 import believe.map.tiled.TiledObject;
 import believe.testing.mockito.InstantiateMocksIn;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,27 +53,25 @@ final class TiledMapObjectLayerParserImplTest {
         .parseObject(
             eq(
                 TiledObject.create(
-                    tiledMap,
                     EntityType.COLLIDABLE_TILE,
+                    TiledMapObjectPropertyProvider.create(
+                        tiledMap, /* layerId= */ 0, /* objectId= */ 0),
                     /* x= */ 1,
                     /* y= */ 1,
                     /* width= */ 3,
-                    /* height= */ 4,
-                    /* layerId= */ 0,
-                    /* objectId= */ 0)),
+                    /* height= */ 4)),
             any());
     verify(objectParser)
         .parseObject(
             eq(
                 TiledObject.create(
-                    tiledMap,
                     EntityType.COLLIDABLE_TILE,
+                    TiledMapObjectPropertyProvider.create(
+                        tiledMap, /* layerId= */ 0, /* objectId= */ 1),
                     /* x= */ 1,
                     /* y= */ 1,
                     /* width= */ 3,
-                    /* height= */ 4,
-                    /* layerId= */ 0,
-                    /* objectId= */ 1)),
+                    /* height= */ 4)),
             any());
   }
 
@@ -88,14 +87,13 @@ final class TiledMapObjectLayerParserImplTest {
         .parseObject(
             eq(
                 TiledObject.create(
-                    tiledMap,
                     EntityType.NONE,
+                    TiledMapObjectPropertyProvider.create(
+                        tiledMap, /* layerId= */ 1, /* objectId= */ 0),
                     /* x= */ 0,
                     /* y= */ 0,
                     /* width= */ 0,
-                    /* height= */ 0,
-                    /* layerId= */ 1,
-                    /* objectId= */ 0)),
+                    /* height= */ 0)),
             any());
   }
 }

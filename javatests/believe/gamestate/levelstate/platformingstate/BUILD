@@ -5,6 +5,7 @@ java_test(
         "//java/believe/character/playable",
         "//java/believe/core/io",
         "//java/believe/core/io/testing",
+        "//java/believe/datamodel:impl",
         "//java/believe/gamestate/levelstate/platformingstate",
         "//java/believe/gamestate/levelstate/platformingstate:package-info",
         "//java/believe/map/gui",

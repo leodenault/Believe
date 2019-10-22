@@ -12,6 +12,7 @@ java_library(
     ],
     deps = [
         "//java/believe/app/annotation",
+        "//java/believe/core",
         "//java/believe/map/tiled",
         "//third_party/javax:annotations",
     ],

@@ -6,6 +6,7 @@ import believe.character.Faction;
 import believe.character.playable.PlayableCharacter;
 import believe.character.playable.PlayableCharacterFactory;
 import believe.core.io.FontLoader;
+import believe.datamodel.MutableValue;
 import believe.gamestate.GameStateBase;
 import believe.gamestate.temporarystate.GameOverState;
 import believe.gamestate.temporarystate.GamePausedOverlay;
@@ -35,6 +36,7 @@ public abstract class LevelState extends GameStateBase
   private final ChangeToTemporaryStateAction<OverlayablePrecedingState> pauseAction;
   private final ChangeToTemporaryStateAction<PrecedingState> gameOverAction;
   private final PlayableCharacterFactory playableCharacterFactory;
+  private final MutableValue<Optional<PlayableCharacter>> currentPlayableCharacter;
   private final PhysicsManager physicsManager;
 
   private boolean enteringFromPauseMenu;
@@ -51,7 +53,8 @@ public abstract class LevelState extends GameStateBase
       MapManager mapManager,
       PhysicsManager physicsManager,
       FontLoader fontLoader,
-      PlayableCharacterFactory playableCharacterFactory) {
+      PlayableCharacterFactory playableCharacterFactory,
+      MutableValue<Optional<PlayableCharacter>> currentPlayableCharacter) {
     this.container = container;
     this.game = game;
     this.mapManager = mapManager;
@@ -59,6 +62,7 @@ public abstract class LevelState extends GameStateBase
     this.pauseAction = new ChangeToTemporaryStateAction<>(GamePausedOverlay.class, this, game);
     this.gameOverAction = new ChangeToTemporaryStateAction<>(GameOverState.class, this, game);
     this.playableCharacterFactory = playableCharacterFactory;
+    this.currentPlayableCharacter = currentPlayableCharacter;
     this.focusBar = new ProgressBar(container, fontLoader.getBaseFontAtSize(15));
     this.focusBar.setBorderSize(1);
     this.focusBar.setTextPadding(0);
@@ -111,6 +115,7 @@ public abstract class LevelState extends GameStateBase
       player =
           playableCharacterFactory.create(
               this, isOnRails(), mapData.playerStartX(), mapData.playerStartY());
+      currentPlayableCharacter.update(Optional.of(player));
       playArea = providePlayArea(mapData, player);
       focusBar.setText("Focus");
       playArea.addHudChild(focusBar, 0.02f, 0.05f, 0.15f, 0.07f);

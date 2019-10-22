@@ -35,6 +35,17 @@ java_library(
 )
 
 java_library(
+    name = "dagger_module",
+    srcs = ["CommandDaggerModule.java"],
+    deps = [
+        ":command",
+        ":impl",
+        ":package_info",
+        "//third_party/dagger",
+    ],
+)
+
+java_library(
     name = "internal_qualifiers",
     srcs = ["InternalQualifiers.java"],
     deps = [

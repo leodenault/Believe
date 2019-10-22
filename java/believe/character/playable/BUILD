@@ -9,12 +9,13 @@ java_library(
         "EnemyCharacter.java",
         "InternalQualifiers.java",
         "PlayableCharacter.java",
-        "PlayableCharacterMovementCommandCollisionHandler.java",
+        "PlayableCharacterMovementCommand.java",
     ],
     deps = [
         ":package-info",
         "//java/believe/character",
         "//java/believe/character:faction",
+        "//java/believe/command",
         "//java/believe/core",
         "//java/believe/core/display",
         "//java/believe/map/collidable/command",
@@ -38,6 +39,8 @@ java_library(
     deps = [
         ":package-info",
         ":playable",
+        "//java/believe/command",
+        "//java/believe/datamodel:impl",
         "//java/believe/map/collidable/command",
         "//java/believe/map/collidable/tile",
         "//java/believe/map/io",

@@ -1,16 +1,14 @@
 package believe.character.playable;
 
-import static believe.util.Util.hashSetOf;
-
-import believe.character.playable.InternalQualifiers.JumpMovementHandler;
-import believe.character.playable.InternalQualifiers.LeftMovementHandler;
-import believe.character.playable.InternalQualifiers.RightMovementHandler;
-import believe.character.playable.InternalQualifiers.StopMovementHandler;
-import believe.map.collidable.command.CommandCollisionHandler;
-import believe.map.collidable.command.CommandSupplier;
+import believe.character.playable.InternalQualifiers.JumpMovementCommand;
+import believe.character.playable.InternalQualifiers.LeftMovementCommand;
+import believe.character.playable.InternalQualifiers.RightMovementCommand;
+import believe.character.playable.InternalQualifiers.StopMovementCommand;
+import believe.command.CommandSupplier;
+import believe.datamodel.MutableValue;
+import believe.map.collidable.command.CollidableCommandCollisionHandler;
 import believe.map.collidable.tile.CollidableTileCollisionHandler;
 import believe.map.io.ObjectParser;
-import believe.map.io.TileParser;
 import believe.map.tiled.EntityType;
 import believe.physics.collision.Collidable;
 import believe.physics.collision.CollisionHandler;
@@ -19,76 +17,101 @@ import believe.statemachine.State.Action;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
-import dagger.multibindings.ElementsIntoSet;
+import dagger.Reusable;
 import dagger.multibindings.IntoMap;
 import dagger.multibindings.IntoSet;
 import dagger.multibindings.StringKey;
 import javax.inject.Singleton;
 
-import java.util.Set;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 /** Dagger module for bindings on playable entities. */
 @Module
 public abstract class PlayableDaggerModule {
   @Provides
   @Singleton
-  @RightMovementHandler
-  static PlayableCharacterMovementCommandCollisionHandler provideRightMovementCollisionHandler() {
-    return new PlayableCharacterMovementCommandCollisionHandler(Action.SELECT_RIGHT);
+  static MutableValue<Optional<PlayableCharacter>> providePlayableCharacterMutableValue() {
+    return MutableValue.of(Optional.empty());
+  }
+
+  @Binds
+  abstract Supplier<Optional<PlayableCharacter>> bindPlayableCharacterSupplier(
+      MutableValue<Optional<PlayableCharacter>> mutablePlayableCharacter);
+
+  @Provides
+  @Reusable
+  @RightMovementCommand
+  static PlayableCharacterMovementCommand provideRightMovementCommand(
+      PlayableCharacterMovementCommandFactory factory) {
+    return factory.create(Action.SELECT_RIGHT);
   }
 
   @Provides
-  @Singleton
-  @LeftMovementHandler
-  static PlayableCharacterMovementCommandCollisionHandler provideLeftMovementCollisionHandler() {
-    return new PlayableCharacterMovementCommandCollisionHandler(Action.SELECT_LEFT);
+  @Reusable
+  @LeftMovementCommand
+  static PlayableCharacterMovementCommand provideLeftMovementCommand(
+      PlayableCharacterMovementCommandFactory factory) {
+    return factory.create(Action.SELECT_LEFT);
   }
 
   @Provides
-  @Singleton
-  @JumpMovementHandler
-  static PlayableCharacterMovementCommandCollisionHandler provideJumpMovementCollisionHandler() {
-    return new PlayableCharacterMovementCommandCollisionHandler(Action.JUMP);
+  @Reusable
+  @JumpMovementCommand
+  static PlayableCharacterMovementCommand provideJumpMovementCommand(
+      PlayableCharacterMovementCommandFactory factory) {
+    return factory.create(Action.JUMP);
   }
 
   @Provides
-  @Singleton
-  @StopMovementHandler
-  static PlayableCharacterMovementCommandCollisionHandler provideStopMovementCollisionHandler() {
-    return new PlayableCharacterMovementCommandCollisionHandler(Action.STOP);
+  @Reusable
+  @StopMovementCommand
+  static PlayableCharacterMovementCommand provideStopMovementCommand(
+      PlayableCharacterMovementCommandFactory factory) {
+    return factory.create(Action.STOP);
   }
 
-  @Provides
+  @Binds
   @IntoMap
   @StringKey("right")
-  static CommandSupplier<PlayableCharacter, ?> bindRightMovementCommandSupplier(
-      @RightMovementHandler PlayableCharacterMovementCommandCollisionHandler rightMovementHandler) {
-    return CommandSupplier.from(rightMovementHandler);
-  }
+  abstract CommandSupplier bindRightMovementCommandSupplier(
+      @RightMovementCommand PlayableCharacterMovementCommand command);
 
-  @Provides
+  @Binds
   @IntoMap
   @StringKey("left")
-  static CommandSupplier<PlayableCharacter, ?> bindLeftMovementCommandSupplier(
-      @LeftMovementHandler PlayableCharacterMovementCommandCollisionHandler leftMovementHandler) {
-    return CommandSupplier.from(leftMovementHandler);
-  }
+  abstract CommandSupplier bindLeftMovementCommandSupplier(
+      @LeftMovementCommand PlayableCharacterMovementCommand command);
 
-  @Provides
+  @Binds
   @IntoMap
   @StringKey("jump")
-  static CommandSupplier<PlayableCharacter, ?> bindJumpMovementCommandSupplier(
-      @JumpMovementHandler PlayableCharacterMovementCommandCollisionHandler jumpMovementHandler) {
-    return CommandSupplier.from(jumpMovementHandler);
-  }
+  abstract CommandSupplier bindJumpMovementCommandSupplier(
+      @JumpMovementCommand PlayableCharacterMovementCommand command);
 
-  @Provides
+  @Binds
   @IntoMap
   @StringKey("stop")
-  static CommandSupplier<PlayableCharacter, ?> bindStopMovementCommandSupplier(
-      @StopMovementHandler PlayableCharacterMovementCommandCollisionHandler stopMovementHandler) {
-    return CommandSupplier.from(stopMovementHandler);
-  }
+  abstract CommandSupplier bindStopMovementCommandSupplier(
+      @StopMovementCommand PlayableCharacterMovementCommand command);
+
+  @Binds
+  @IntoSet
+  abstract CollisionHandler<? extends Collidable<?>, ? super PlayableCharacter>
+      bindPlayableCharacterCollidableCommandCollisionHandler(
+          CollidableCommandCollisionHandler collidableCommandCollisionHandler);
+
+  @Binds
+  @IntoSet
+  abstract CollisionHandler<? extends Collidable<?>, ? super PlayableCharacter>
+      bindPlayableCharacterCollidableTileCollisionHandler(
+          CollidableTileCollisionHandler collidableTileCollisionHandler);
+
+  @Binds
+  @IntoSet
+  abstract CollisionHandler<? extends Collidable<?>, ? super PlayableCharacter>
+      bindPlayableCharacterDamageBoxCollisionHandler(
+          DamageBoxCollisionHandler damageBoxCollisionHandler);
 
   @Provides
   @IntoSet
@@ -102,27 +125,6 @@ public abstract class PlayableDaggerModule {
         generatedMapEntityDataBuilder.addUpdatable(enemyCharacter);
       }
     };
-  }
-
-  @Provides
-  @ElementsIntoSet
-  static Set<CollisionHandler<? extends Collidable<?>, ? super PlayableCharacter>>
-      providePlayableCharacterCollisionHandler(
-          CollidableTileCollisionHandler collidableTileCollisionHandler,
-          DamageBoxCollisionHandler damageBoxCollisionHandler,
-          @RightMovementHandler
-              PlayableCharacterMovementCommandCollisionHandler rightMovementHandler,
-          @LeftMovementHandler PlayableCharacterMovementCommandCollisionHandler leftMovementHandler,
-          @JumpMovementHandler PlayableCharacterMovementCommandCollisionHandler jumpMovementHandler,
-          @StopMovementHandler
-              PlayableCharacterMovementCommandCollisionHandler stopMovementHandler) {
-    Set<CollisionHandler<? extends Collidable<?>, ? super PlayableCharacter>> collisionHandlers =
-        hashSetOf(collidableTileCollisionHandler, damageBoxCollisionHandler);
-    collisionHandlers.add(rightMovementHandler);
-    collisionHandlers.add(leftMovementHandler);
-    collisionHandlers.add(jumpMovementHandler);
-    collisionHandlers.add(stopMovementHandler);
-    return collisionHandlers;
   }
 
   @Provides

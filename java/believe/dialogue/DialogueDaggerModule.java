@@ -1,22 +1,18 @@
 package believe.dialogue;
 
-import believe.character.playable.PlayableCharacter;
 import believe.character.playable.PlayableDaggerModule;
+import believe.command.CommandSupplier;
 import believe.datamodel.protodata.MutableProtoDataCommitter;
 import believe.dialogue.InternalQualifiers.DialogueNameProperty;
 import believe.dialogue.InternalQualifiers.ModulePrivate;
 import believe.dialogue.proto.DialogueProto.Dialogue;
 import believe.dialogue.proto.DialogueProto.DialogueMap;
-import believe.map.collidable.command.CommandSupplier;
-import believe.physics.collision.Collidable;
-import believe.physics.collision.CollisionHandler;
 import believe.react.Observable;
 import believe.react.ObservableValue;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoMap;
-import dagger.multibindings.IntoSet;
 import dagger.multibindings.StringKey;
 import javax.inject.Singleton;
 
@@ -41,16 +37,9 @@ public abstract class DialogueDaggerModule {
       MutableProtoDataCommitter<DialogueMap> dialogueMapMutableProtoDataCommitter);
 
   @Binds
-  @IntoSet
-  abstract CollisionHandler<? extends Collidable<?>, ? super PlayableCharacter>
-      bindDialogueCommandCollisionHandler(
-          DialogueCommandCollisionHandler dialogueCommandCollisionHandler);
-
-  @Binds
   @IntoMap
   @StringKey("dialogue")
-  abstract CommandSupplier<PlayableCharacter, ?> bindDialogueCommandSupplier(
-      DialogueSupplier dialogueSupplier);
+  abstract CommandSupplier bindDialogueCommandSupplier(DialogueSupplier dialogueSupplier);
 
   @Provides
   @Singleton

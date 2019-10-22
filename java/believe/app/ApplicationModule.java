@@ -3,6 +3,7 @@ package believe.app;
 import believe.action.ChangeStateAction;
 import believe.app.proto.GameOptionsProto.GameOptions;
 import believe.character.playable.PlayableDaggerModule;
+import believe.command.CommandDaggerModule;
 import believe.core.io.FontLoader;
 import believe.datamodel.MutableDataCommitter;
 import believe.datamodel.protodata.MutableProtoDataCommitter;
@@ -10,7 +11,7 @@ import believe.dialogue.DialogueDaggerModule;
 import believe.gamestate.MainMenuState;
 import believe.gamestate.levelstate.platformingstate.EventActions;
 import believe.gamestate.levelstate.platformingstate.PlatformingState;
-import believe.map.collidable.command.CommandDaggerModule;
+import believe.map.collidable.command.CollidableCommandDaggerModule;
 import believe.map.collidable.tile.CollidableTileDaggerModule;
 import believe.map.io.MapParsingDaggerModule;
 import believe.physics.collision.CollisionDaggerModule;
@@ -33,8 +34,9 @@ import java.util.function.Supplier;
     includes = {
       CollidableTileDaggerModule.class,
       CollisionDaggerModule.class,
+      CollidableCommandDaggerModule.class,
       CommandDaggerModule.class,
-        DialogueDaggerModule.class,
+      DialogueDaggerModule.class,
       MapParsingDaggerModule.class,
       PlayableDaggerModule.class
     })

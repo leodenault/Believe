@@ -1,49 +1,49 @@
 package believe.dialogue;
 
-import believe.character.playable.PlayableCharacter;
+import believe.command.Command;
+import believe.command.CommandSupplier;
+import believe.core.PropertyProvider;
 import believe.dialogue.InternalQualifiers.DialogueNameProperty;
 import believe.dialogue.proto.DialogueProto.Dialogue;
 import believe.dialogue.proto.DialogueProto.DialogueMap;
-import believe.map.collidable.command.Command;
-import believe.map.collidable.command.CommandSupplier;
-import believe.map.tiled.TiledObject;
 import dagger.Reusable;
-import java.util.Optional;
-import java.util.function.Supplier;
 import javax.inject.Inject;
 import org.newdawn.slick.util.Log;
 
+import java.util.Optional;
+import java.util.function.Supplier;
+
 /** Manages fetching dialogue and loading it from disk. */
 @Reusable
-public final class DialogueSupplier implements CommandSupplier<PlayableCharacter, Dialogue> {
+public final class DialogueSupplier implements CommandSupplier {
   private final Supplier<DialogueMap> dialogueMap;
-  private final DialogueCommandCollisionHandler dialogueCommandCollisionHandler;
+  private final DialogueCommandFactory dialogueCommandFactory;
   private final String dialogueNameProperty;
 
   @Inject
   DialogueSupplier(
       Supplier<DialogueMap> dialogueMap,
-      DialogueCommandCollisionHandler dialogueCommandCollisionHandler,
+      DialogueCommandFactory dialogueCommandFactory,
       @DialogueNameProperty String dialogueNameProperty) {
     this.dialogueMap = dialogueMap;
-    this.dialogueCommandCollisionHandler = dialogueCommandCollisionHandler;
+    this.dialogueCommandFactory = dialogueCommandFactory;
     this.dialogueNameProperty = dialogueNameProperty;
   }
 
   @Override
-  public Command<PlayableCharacter, Dialogue> supplyCommand(TiledObject tiledObject) {
-    Optional<String> dialogueName = tiledObject.getProperty(dialogueNameProperty);
+  public Optional<Command> supplyCommand(PropertyProvider propertyProvider) {
+    Optional<String> dialogueName = propertyProvider.getProperty(dialogueNameProperty);
     if (!dialogueName.isPresent()) {
       Log.error("Dialogue name missing in Tiled map object.");
-      return Command.create(dialogueCommandCollisionHandler, tiledObject);
+      return Optional.empty();
     }
 
     Dialogue dialogue = dialogueMap.get().getDialoguesMap().get(dialogueName.get());
     if (dialogue == null) {
       Log.error("Could not find dialogue with name '" + dialogueName.get() + "'.");
-      return Command.create(dialogueCommandCollisionHandler, tiledObject);
+      return Optional.empty();
     }
 
-    return Command.create(dialogueCommandCollisionHandler, tiledObject, dialogue);
+    return Optional.of(dialogueCommandFactory.create(dialogue));
   }
 }
