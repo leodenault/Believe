@@ -31,4 +31,10 @@
    <property name="entity_type" value="command"/>
   </properties>
  </tile>
+ <tile id="9">
+  <properties>
+   <property name="command" value="sequence"/>
+   <property name="entity_type" value="command"/>
+  </properties>
+ </tile>
 </tileset>

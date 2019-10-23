@@ -40,6 +40,7 @@ java_library(
     deps = [
         ":command",
         ":impl",
+        ":internal_qualifiers",
         ":package_info",
         "//third_party/dagger",
     ],
