@@ -917,6 +917,11 @@ public class TiledMap {
 
             String name = propElement.getAttribute("name");
             String value = propElement.getAttribute("value");
+
+            if (value.isEmpty()) {
+              value = propElement.getTextContent();
+            }
+
             props.setProperty(name, value);
           }
         }
