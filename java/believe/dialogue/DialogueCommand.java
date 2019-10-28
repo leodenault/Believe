@@ -11,16 +11,16 @@ import java.util.Optional;
 
 @AutoFactory
 final class DialogueCommand implements Command {
-  private final ObservableValue<Optional<Dialogue>> mutableDialogue;
-  private final Dialogue dialogue;
+  private final ObservableValue<Optional<DialogueData>> mutableDialogue;
+  private final DialogueData dialogueData;
 
   private boolean hasTriggered;
 
   DialogueCommand(
-      @Provided @ModulePrivate ObservableValue<Optional<Dialogue>> mutableDialogue,
-      Dialogue dialogue) {
+      @Provided @ModulePrivate ObservableValue<Optional<DialogueData>> mutableDialogue,
+      DialogueData dialogueData) {
     this.mutableDialogue = mutableDialogue;
-    this.dialogue = dialogue;
+    this.dialogueData = dialogueData;
     this.hasTriggered = false;
   }
 
@@ -30,6 +30,6 @@ final class DialogueCommand implements Command {
       return;
     }
     hasTriggered = true;
-    mutableDialogue.setValue(Optional.of(dialogue));
+    mutableDialogue.setValue(Optional.of(dialogueData));
   }
 }

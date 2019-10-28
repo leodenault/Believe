@@ -4,6 +4,7 @@ import static com.google.common.truth.Truth8.assertThat;
 
 import believe.dialogue.proto.DialogueProto.Dialogue;
 import believe.react.ObservableValue;
+import com.google.common.truth.Truth;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -12,15 +13,16 @@ import java.util.Optional;
 final class DialogueCommandTest {
   private static final Dialogue DIALOGUE = Dialogue.getDefaultInstance();
 
-  private final ObservableValue<Optional<Dialogue>> observableDialogue =
+  private final ObservableValue<Optional<DialogueData>> observableDialogue =
       new ObservableValue<>(Optional.empty());
-  private final DialogueCommand dialogueCommand = new DialogueCommand(observableDialogue, DIALOGUE);
+  private final DialogueCommand dialogueCommand =
+      new DialogueCommand(observableDialogue, DialogueData.newBuilder(DIALOGUE).build());
 
   @Test
   void handleCollision_updatesDialogue() {
     dialogueCommand.execute();
 
-    assertThat(observableDialogue.get()).hasValue(DIALOGUE);
+    Truth.assertThat(observableDialogue.get().get().dialogue()).isEqualTo(DIALOGUE);
   }
 
   @Test

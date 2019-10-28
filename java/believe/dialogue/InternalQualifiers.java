@@ -14,4 +14,8 @@ final class InternalQualifiers {
   @Qualifier
   @Retention(RetentionPolicy.RUNTIME)
   @interface DialogueNameProperty {}
+
+  @Qualifier
+  @Retention(RetentionPolicy.RUNTIME)
+  @interface FollowupCommandsProperty {}
 }

@@ -1,9 +1,11 @@
 package believe.dialogue;
 
 import believe.command.Command;
+import believe.command.CommandSequenceParser;
 import believe.command.CommandSupplier;
 import believe.core.PropertyProvider;
 import believe.dialogue.InternalQualifiers.DialogueNameProperty;
+import believe.dialogue.InternalQualifiers.FollowupCommandsProperty;
 import believe.dialogue.proto.DialogueProto.Dialogue;
 import believe.dialogue.proto.DialogueProto.DialogueMap;
 import dagger.Reusable;
@@ -19,15 +21,21 @@ public final class DialogueSupplier implements CommandSupplier {
   private final Supplier<DialogueMap> dialogueMap;
   private final DialogueCommandFactory dialogueCommandFactory;
   private final String dialogueNameProperty;
+  private final String followupCommandsProperty;
+  private final CommandSequenceParser commandSequenceParser;
 
   @Inject
   DialogueSupplier(
       Supplier<DialogueMap> dialogueMap,
       DialogueCommandFactory dialogueCommandFactory,
-      @DialogueNameProperty String dialogueNameProperty) {
+      @DialogueNameProperty String dialogueNameProperty,
+      @FollowupCommandsProperty String followupCommandsProperty,
+      CommandSequenceParser commandSequenceParser) {
     this.dialogueMap = dialogueMap;
     this.dialogueCommandFactory = dialogueCommandFactory;
     this.dialogueNameProperty = dialogueNameProperty;
+    this.followupCommandsProperty = followupCommandsProperty;
+    this.commandSequenceParser = commandSequenceParser;
   }
 
   @Override
@@ -44,6 +52,15 @@ public final class DialogueSupplier implements CommandSupplier {
       return Optional.empty();
     }
 
-    return Optional.of(dialogueCommandFactory.create(dialogue));
+    DialogueData.Builder dialogueData = DialogueData.newBuilder(dialogue);
+
+    Optional<String> followupCommandText = propertyProvider.getProperty(followupCommandsProperty);
+    if (followupCommandText.isPresent()) {
+      Optional<Command> followupCommand =
+          commandSequenceParser.parseSequence(followupCommandText.get());
+      followupCommand.ifPresent(dialogueData::setFollowupCommand);
+    }
+
+    return Optional.of(dialogueCommandFactory.create(dialogueData.build()));
   }
 }

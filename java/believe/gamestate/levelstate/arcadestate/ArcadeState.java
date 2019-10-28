@@ -6,6 +6,7 @@ import believe.character.playable.PlayableCharacter;
 import believe.character.playable.PlayableCharacterFactory;
 import believe.core.io.FontLoader;
 import believe.datamodel.MutableValue;
+import believe.dialogue.DialogueData;
 import believe.dialogue.proto.DialogueProto.Dialogue;
 import believe.gamestate.levelstate.LevelState;
 import believe.gui.CharacterDialogue;
@@ -44,7 +45,7 @@ import java.util.stream.Collectors;
 
 @Singleton
 public class ArcadeState extends LevelState
-    implements FlowComponentListener, Observer<Optional<Dialogue>> {
+    implements FlowComponentListener, Observer<Optional<DialogueData>> {
   private static final float FOCUS_RECHARGE_TIME = 45f; // Time in seconds for draining focus fully
   private static final float FOCUS_RECHARGE_RATE =
       PlayableCharacter.MAX_FOCUS / (FOCUS_RECHARGE_TIME * 1000f);
@@ -68,7 +69,7 @@ public class ArcadeState extends LevelState
       PlayAreaFactory playAreaFactory,
       PlayableCharacterFactory playableCharacterFactory,
       CharacterDialogueFactory characterDialogueFactory,
-      Observable<Optional<Dialogue>> observableDialogue,
+      Observable<Optional<DialogueData>> observableDialogueData,
       MutableValue<Optional<PlayableCharacter>> currentPlayableCharacter) {
     super(
         container,
@@ -82,7 +83,7 @@ public class ArcadeState extends LevelState
     this.playAreaFactory = playAreaFactory;
     this.characterDialogueFactory = characterDialogueFactory;
 
-    observableDialogue.addObserver(this);
+    observableDialogueData.addObserver(this);
 
     FlowComponentBuilder builder =
         new FlowComponentBuilder(container, (int) (0.2 * container.getWidth()));
@@ -192,7 +193,7 @@ public class ArcadeState extends LevelState
   public void songEnded() {}
 
   @Override
-  public void valueChanged(Optional<Dialogue> newValue) {
+  public void valueChanged(Optional<DialogueData> newValue) {
     if (!newValue.isPresent()) {
       characterDialogue = null;
       return;
@@ -200,7 +201,7 @@ public class ArcadeState extends LevelState
 
     characterDialogue =
         characterDialogueFactory.create(
-            newValue.get().getResponsesList().stream()
+            newValue.get().dialogue().getResponsesList().stream()
                 .map(
                     response -> {
                       try {

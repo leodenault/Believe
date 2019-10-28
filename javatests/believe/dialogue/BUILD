@@ -21,11 +21,14 @@ java_junit5_test(
     srcs = ["DialogueSupplierTest.java"],
     deps = [
         "//java/believe/command",
+        "//java/believe/command/proto:command_sequence_java_proto",
         "//java/believe/dialogue",
         "//java/believe/dialogue/proto:dialogue_java_proto",
         "//java/believe/logging/testing",
         "//java/believe/logging/truth",
         "//java/believe/react:impl",
+        "//third_party/javax:annotations",
+        "//third_party/proto",
         "//third_party/truth:truth8",
     ],
 )

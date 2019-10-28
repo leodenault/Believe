@@ -4,6 +4,7 @@ import believe.character.playable.PlayableDaggerModule;
 import believe.command.CommandSupplier;
 import believe.datamodel.protodata.MutableProtoDataCommitter;
 import believe.dialogue.InternalQualifiers.DialogueNameProperty;
+import believe.dialogue.InternalQualifiers.FollowupCommandsProperty;
 import believe.dialogue.InternalQualifiers.ModulePrivate;
 import believe.dialogue.proto.DialogueProto.Dialogue;
 import believe.dialogue.proto.DialogueProto.DialogueMap;
@@ -44,17 +45,23 @@ public abstract class DialogueDaggerModule {
   @Provides
   @Singleton
   @ModulePrivate
-  static ObservableValue<Optional<Dialogue>> provideObservableDialogueValue() {
+  static ObservableValue<Optional<DialogueData>> provideObservableDialogueDataValue() {
     return new ObservableValue<>(Optional.empty());
   }
 
   @Binds
-  abstract Observable<Optional<Dialogue>> bindObservableDialogue(
-      @ModulePrivate ObservableValue<Optional<Dialogue>> observableDialogueValue);
+  abstract Observable<Optional<DialogueData>> bindObservableDialogueData(
+      @ModulePrivate ObservableValue<Optional<DialogueData>> observableDialogueDataValue);
 
   @Provides
   @DialogueNameProperty
   static String provideDialogueNameProperty() {
     return "dialogue_name";
+  }
+
+  @Provides
+  @FollowupCommandsProperty
+  static String provideFollowupCommandsProperty() {
+    return "followup_commands";
   }
 }
