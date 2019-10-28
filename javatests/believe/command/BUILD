@@ -21,8 +21,8 @@ java_junit5_test(
 )
 
 java_junit5_test(
-    name = "CommandSequenceSupplierTest",
-    srcs = ["CommandSequenceSupplierTest.java"],
+    name = "CommandSequenceParserImplTest",
+    srcs = ["CommandSequenceParserImplTest.java"],
     deps = [
         "//java/believe/command",
         "//java/believe/command:impl",
@@ -35,6 +35,22 @@ java_junit5_test(
         "//third_party/mockito",
         "//third_party/proto",
         "//third_party/truth",
+        "//third_party/truth:truth8",
+    ],
+)
+
+java_junit5_test(
+    name = "CommandSequenceSupplierTest",
+    srcs = ["CommandSequenceSupplierTest.java"],
+    deps = [
+        "//java/believe/command",
+        "//java/believe/command:impl",
+        "//java/believe/command:package_info",
+        "//java/believe/command/proto:command_sequence_java_proto",
+        "//java/believe/core",
+        "//java/believe/logging/testing",
+        "//java/believe/logging/truth",
+        "//third_party/proto",
         "//third_party/truth:truth8",
     ],
 )

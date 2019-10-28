@@ -7,6 +7,7 @@ java_library(
     srcs = [
         "Command.java",
         "CommandGenerator.java",
+        "CommandSequenceParser.java",
         "CommandSupplier.java",
     ],
     deps = [
@@ -19,6 +20,7 @@ java_library(
     name = "impl",
     srcs = [
         "CommandGeneratorImpl.java",
+        "CommandSequenceParserImpl.java",
         "CommandSequenceSupplier.java",
     ],
     deps = [

@@ -31,5 +31,9 @@ public abstract class CommandDaggerModule {
       CommandSequenceSupplier commandSequenceSupplier);
 
   @Binds
+  abstract CommandSequenceParser bindCommandSequenceParser(
+      CommandSequenceParserImpl commandSequenceParserImpl);
+
+  @Binds
   abstract CommandGenerator bindCommandGenerator(CommandGeneratorImpl commandGeneratorImpl);
 }
