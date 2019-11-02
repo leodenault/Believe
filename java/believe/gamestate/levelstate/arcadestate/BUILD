@@ -13,6 +13,7 @@ java_library(
         "//java/believe/app/proto:game_options_java_proto",
         "//java/believe/character:faction",
         "//java/believe/character/playable",
+        "//java/believe/command",
         "//java/believe/core/io",
         "//java/believe/datamodel:impl",
         "//java/believe/dialogue",

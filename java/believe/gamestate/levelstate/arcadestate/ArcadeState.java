@@ -4,6 +4,7 @@ import believe.app.proto.GameOptionsProto.GameOptions;
 import believe.character.Faction;
 import believe.character.playable.PlayableCharacter;
 import believe.character.playable.PlayableCharacterFactory;
+import believe.command.Command;
 import believe.core.io.FontLoader;
 import believe.datamodel.MutableValue;
 import believe.dialogue.DialogueData;
@@ -138,7 +139,9 @@ public class ArcadeState extends LevelState
     }
 
     if (key == Input.KEY_ENTER && characterDialogue != null) {
-      characterDialogue.scroll();
+      if (!characterDialogue.scroll()) {
+        characterDialogue.getFollupCommand().ifPresent(Command::execute);
+      }
     }
   }
 
@@ -210,6 +213,7 @@ public class ArcadeState extends LevelState
                         throw new RuntimeException(e);
                       }
                     })
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList()),
+            newValue.get().followupCommand());
   }
 }

@@ -51,6 +51,10 @@ commands {
     key: &quot;dialogue_name&quot;
     value: &quot;testing&quot;
   }
+  parameters {
+    key: &quot;followup_commands&quot;
+    value: &quot;commands { name: \&quot;right\&quot; }&quot;
+  }
 }</property>
    </properties>
   </object>

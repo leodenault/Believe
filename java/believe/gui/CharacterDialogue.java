@@ -1,10 +1,12 @@
 package believe.gui;
 
+import believe.command.Command;
 import believe.core.io.FontLoader;
 import believe.gui.TextComponent.HorizontalTextAlignment;
 import believe.gui.TextComponent.VerticalTextAlignment;
 import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
+import javax.annotation.Nullable;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -13,6 +15,7 @@ import org.newdawn.slick.gui.GUIContext;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 @AutoFactory
 public final class CharacterDialogue extends ComponentBase {
@@ -32,15 +35,18 @@ public final class CharacterDialogue extends ComponentBase {
 
   private final TextComponent textComponent;
   private final Iterator<DialogueResponse> dialogueResponseIterator;
+  @Nullable private final Command followupCommand;
 
   private Image currentPortrait;
 
   public CharacterDialogue(
       @Provided GUIContext container,
       @Provided FontLoader fontLoader,
-      List<DialogueResponse> dialogueResponses) {
+      List<DialogueResponse> dialogueResponses,
+      @Nullable Command followupCommand) {
     super(container);
     dialogueResponseIterator = dialogueResponses.iterator();
+    this.followupCommand = followupCommand;
     currentPortrait = EMPTY_IMAGE;
     textComponent = new TextComponent(container, fontLoader.getBaseFont(), "");
     textComponent.setHorizontalTextAlignment(HorizontalTextAlignment.LEFT);
@@ -65,10 +71,25 @@ public final class CharacterDialogue extends ComponentBase {
     textComponent.render(context, graphics);
   }
 
-  public void scroll() {
-    if (!textComponent.scroll() && dialogueResponseIterator.hasNext()) {
-      setUpDialogueResponse(dialogueResponseIterator.next());
+  public Optional<Command> getFollupCommand() {
+    return Optional.ofNullable(followupCommand);
+  }
+
+  /**
+   * Returns true if the dialogue scrolled due to having more text to display. Otherwise returns
+   * false.
+   */
+  public boolean scroll() {
+    if (textComponent.scroll()) {
+      return true;
     }
+
+    if (dialogueResponseIterator.hasNext()) {
+      setUpDialogueResponse(dialogueResponseIterator.next());
+      return true;
+    }
+
+    return false;
   }
 
   private void setUpDialogueResponse(DialogueResponse dialogueResponse) {
