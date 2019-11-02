@@ -19,6 +19,7 @@ java_library(
         "//java/believe/map/io",
         "//java/believe/map/tiled",
         "//java/believe/physics/collision",
+        "//java/believe/physics/manager",
         "//third_party/auto_factory",
         "//third_party/dagger",
         "//third_party/javax:annotations",

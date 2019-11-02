@@ -18,7 +18,7 @@ public final class CollidableCommandTest {
   private static final Command COMMAND = CollidableCommandTest::executeCommand;
 
   private final CollidableCommand collidableCommand =
-      new CollidableCommand(hashSetOf(COLLISION_HANDLER), COMMAND, RECTANGLE);
+      new CollidableCommand(hashSetOf(COLLISION_HANDLER), /* shouldDespawn= */ true, COMMAND, RECTANGLE);
 
   @Test
   void getRect_returnsOriginalRectangle() {
@@ -38,6 +38,11 @@ public final class CollidableCommandTest {
   @Test
   void getCommand_returnsCommand() {
     assertThat(collidableCommand.command()).isEqualTo(COMMAND);
+  }
+
+  @Test
+  void shouldDespawn_returnsDespawn() {
+    assertThat(collidableCommand.shouldDespawn()).isTrue();
   }
 
   private static void handleCollision(

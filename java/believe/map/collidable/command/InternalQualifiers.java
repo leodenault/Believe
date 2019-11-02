@@ -15,5 +15,9 @@ final class InternalQualifiers {
   @Retention(RetentionPolicy.RUNTIME)
   @interface CommandParameter {}
 
+  @Qualifier
+  @Retention(RetentionPolicy.RUNTIME)
+  @interface ShouldDespawnParameter {}
+
   private InternalQualifiers() {}
 }

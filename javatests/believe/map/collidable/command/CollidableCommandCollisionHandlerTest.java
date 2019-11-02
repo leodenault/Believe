@@ -2,15 +2,28 @@ package believe.map.collidable.command;
 
 import static believe.util.Util.hashSetOf;
 import static com.google.common.truth.Truth.assertThat;
+import static org.mockito.Mockito.verify;
 
 import believe.geometry.Rectangle;
 import believe.physics.collision.testing.FakeCollidable;
+import believe.physics.manager.PhysicsManager;
+import believe.testing.mockito.InstantiateMocksIn;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 /** Unit tests for {@link CollidableCommandCollisionHandler}. */
+@InstantiateMocksIn
 final class CollidableCommandCollisionHandlerTest {
-  private final CollidableCommandCollisionHandler collisionHandler =
-      new CollidableCommandCollisionHandler();
+  private CollidableCommandCollisionHandler collisionHandler;
+
+  @Mock private PhysicsManager physicsManager;
+
+  @BeforeEach
+  void setUp() {
+    collisionHandler = new CollidableCommandCollisionHandler(physicsManager);
+  }
 
   private boolean commandWasExecuted = false;
 
@@ -18,10 +31,27 @@ final class CollidableCommandCollisionHandlerTest {
   void handleCollision_executesCommand() {
     collisionHandler.handleCollision(
         new CollidableCommand(
-            hashSetOf(collisionHandler), this::executeCommand, new Rectangle(0, 0, 0, 0)),
+            hashSetOf(collisionHandler),
+            /* shouldDespawn= */ false,
+            this::executeCommand,
+            new Rectangle(0, 0, 0, 0)),
         new FakeCollidable());
 
     assertThat(commandWasExecuted).isTrue();
+  }
+
+  @Test
+  void handleCollision_commandShouldDespawn_despawnsCommand() {
+    CollidableCommand collidableCommand =
+        new CollidableCommand(
+            hashSetOf(collisionHandler),
+            /* shouldDespawn= */ true,
+            this::executeCommand,
+            new Rectangle(0, 0, 0, 0));
+
+    collisionHandler.handleCollision(collidableCommand, new FakeCollidable());
+
+    verify(physicsManager).removeCollidable(collidableCommand);
   }
 
   private void executeCommand() {

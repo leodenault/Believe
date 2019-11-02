@@ -5,36 +5,42 @@
   <properties>
    <property name="command" value="right"/>
    <property name="entity_type" value="command"/>
+   <property name="should_despawn" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="1">
   <properties>
    <property name="command" value="left"/>
    <property name="entity_type" value="command"/>
+   <property name="should_despawn" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="4">
   <properties>
    <property name="command" value="stop"/>
    <property name="entity_type" value="command"/>
+   <property name="should_despawn" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="5">
   <properties>
    <property name="command" value="jump"/>
    <property name="entity_type" value="command"/>
+   <property name="should_despawn" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="8">
   <properties>
    <property name="command" value="dialogue"/>
    <property name="entity_type" value="command"/>
+   <property name="should_despawn" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="9">
   <properties>
    <property name="command" value="sequence"/>
    <property name="entity_type" value="command"/>
+   <property name="should_despawn" type="bool" value="true"/>
   </properties>
  </tile>
 </tileset>

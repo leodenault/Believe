@@ -12,6 +12,7 @@ import java.util.Set;
 
 @AutoFactory(allowSubclasses = true)
 final class CollidableCommand implements Collidable<CollidableCommand> {
+  private final boolean shouldDespawn;
   private final Command command;
   private final Rectangle rectangle;
   private final Set<CollisionHandler<? super CollidableCommand, ? extends Collidable<?>>>
@@ -21,8 +22,10 @@ final class CollidableCommand implements Collidable<CollidableCommand> {
       @Provided
           Set<CollisionHandler<? super CollidableCommand, ? extends Collidable<?>>>
               collisionHandlers,
+      boolean shouldDespawn,
       Command command,
       Rectangle rectangle) {
+    this.shouldDespawn = shouldDespawn;
     this.command = command;
     this.rectangle = rectangle;
     this.collisionHandlers = collisionHandlers;
@@ -47,5 +50,9 @@ final class CollidableCommand implements Collidable<CollidableCommand> {
 
   Command command() {
     return command;
+  }
+
+  boolean shouldDespawn() {
+    return shouldDespawn;
   }
 }

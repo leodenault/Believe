@@ -1,6 +1,7 @@
 package believe.map.collidable.command;
 
 import believe.map.collidable.command.InternalQualifiers.CommandParameter;
+import believe.map.collidable.command.InternalQualifiers.ShouldDespawnParameter;
 import believe.map.io.ObjectParser;
 import believe.physics.collision.Collidable;
 import believe.physics.collision.CollisionHandler;
@@ -17,6 +18,12 @@ public abstract class CollidableCommandDaggerModule {
   @CommandParameter
   static String provideCommandParameter() {
     return "command";
+  }
+
+  @Provides
+  @ShouldDespawnParameter
+  static String provideShouldDespawnParameter() {
+    return "should_despawn";
   }
 
   @Binds
