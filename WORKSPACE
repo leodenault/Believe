@@ -138,3 +138,24 @@ http_archive(
     strip_prefix = "dagger-" + DAGGER_VERSION_NUM,
     urls = ["https://github.com/google/dagger/archive/" + DAGGER_VERSION_NUM + ".zip"],
 )
+
+#############################################################
+# Kotlin
+#############################################################
+rules_kotlin_version = "legacy-1.3.0-rc1"
+
+rules_kotlin_sha = "9de078258235ea48021830b1669bbbb678d7c3bdffd3435f4c0817c921a88e42"
+
+http_archive(
+    name = "io_bazel_rules_kotlin",
+    sha256 = rules_kotlin_sha,
+    strip_prefix = "rules_kotlin-%s" % rules_kotlin_version,
+    type = "zip",
+    urls = ["https://github.com/bazelbuild/rules_kotlin/archive/%s.zip" % rules_kotlin_version],
+)
+
+load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kotlin_repositories", "kt_register_toolchains")
+
+kotlin_repositories()  # if you want the default. Otherwise see custom kotlinc distribution below
+
+kt_register_toolchains()  # to use the default toolchain, otherwise see toolchains below
