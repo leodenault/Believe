@@ -8,6 +8,7 @@ import believe.dialogue.InternalQualifiers.FollowupCommandsProperty;
 import believe.dialogue.InternalQualifiers.ModulePrivate;
 import believe.dialogue.proto.DialogueProto.Dialogue;
 import believe.dialogue.proto.DialogueProto.DialogueMap;
+import believe.react.NotificationStrategy;
 import believe.react.Observable;
 import believe.react.ObservableValue;
 import dagger.Binds;
@@ -46,7 +47,7 @@ public abstract class DialogueDaggerModule {
   @Singleton
   @ModulePrivate
   static ObservableValue<Optional<DialogueData>> provideObservableDialogueDataValue() {
-    return ObservableValue.of(Optional.empty());
+    return ObservableValue.of(Optional.empty(), NotificationStrategy.ALWAYS_NOTIFY);
   }
 
   @Binds

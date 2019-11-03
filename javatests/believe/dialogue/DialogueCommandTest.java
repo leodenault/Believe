@@ -1,7 +1,5 @@
 package believe.dialogue;
 
-import static com.google.common.truth.Truth8.assertThat;
-
 import believe.dialogue.proto.DialogueProto.Dialogue;
 import believe.react.ObservableValue;
 import com.google.common.truth.Truth;
@@ -23,14 +21,5 @@ final class DialogueCommandTest {
     dialogueCommand.execute();
 
     Truth.assertThat(observableDialogue.get().get().dialogue()).isEqualTo(DIALOGUE);
-  }
-
-  @Test
-  void handleCollision_commandPreviouslyTriggered_doesNotCallDialogueListener() {
-    dialogueCommand.execute();
-    observableDialogue.setValue(Optional.empty());
-    dialogueCommand.execute();
-
-    assertThat(observableDialogue.get()).isEmpty();
   }
 }

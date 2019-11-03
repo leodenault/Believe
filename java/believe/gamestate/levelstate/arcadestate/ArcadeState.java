@@ -141,6 +141,7 @@ public class ArcadeState extends LevelState
     if (key == Input.KEY_ENTER && characterDialogue != null) {
       if (!characterDialogue.scroll()) {
         characterDialogue.getFollupCommand().ifPresent(Command::execute);
+        characterDialogue = null;
       }
     }
   }
