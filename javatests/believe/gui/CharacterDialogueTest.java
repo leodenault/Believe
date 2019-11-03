@@ -49,7 +49,8 @@ public final class CharacterDialogueTest {
             fontLoader,
             Arrays.asList(
                 new DialogueResponse(image1, "response 1"),
-                new DialogueResponse(image2, "response 2")));
+                new DialogueResponse(image2, "response 2")),
+            () -> {});
 
     dialogue.render(context, graphics);
     dialogue.scroll();
@@ -64,7 +65,8 @@ public final class CharacterDialogueTest {
             context,
             fontLoader,
             Collections.singletonList(
-                new DialogueResponse(CharacterDialogue.EMPTY_IMAGE, "response 1")));
+                new DialogueResponse(CharacterDialogue.EMPTY_IMAGE, "response 1")),
+            () -> {});
 
     dialogue.render(context, graphics);
     verify(graphics, never()).drawImage(any(), anyFloat(), anyFloat());
