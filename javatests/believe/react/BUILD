@@ -6,6 +6,17 @@ package(
 )
 
 java_junit5_test(
+    name = "NotificationStrategyTest",
+    srcs = ["NotificationStrategyTest.java"],
+    deps = [
+        "//java/believe/react",
+        "//java/believe/react:impl",
+        "//java/believe/util",
+        "//third_party/truth",
+    ],
+)
+
+java_junit5_test(
     name = "ValueObserverTest",
     srcs = ["ValueObserverTest.java"],
     deps = [

@@ -41,7 +41,7 @@ final class DialogueSupplierTest {
   private static final Command PARSED_COMMAND = DialogueSupplierTest::doNothing;
 
   private final ObservableValue<Optional<DialogueData>> observableDialogue =
-      new ObservableValue<>(Optional.empty());
+      ObservableValue.of(Optional.empty());
   private final DialogueSupplier dialogueSupplier =
       new DialogueSupplier(
           () -> DIALOGUE_MAP,

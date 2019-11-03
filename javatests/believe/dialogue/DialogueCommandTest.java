@@ -14,7 +14,7 @@ final class DialogueCommandTest {
   private static final Dialogue DIALOGUE = Dialogue.getDefaultInstance();
 
   private final ObservableValue<Optional<DialogueData>> observableDialogue =
-      new ObservableValue<>(Optional.empty());
+      ObservableValue.of(Optional.empty());
   private final DialogueCommand dialogueCommand =
       new DialogueCommand(observableDialogue, DialogueData.newBuilder(DIALOGUE).build());
 

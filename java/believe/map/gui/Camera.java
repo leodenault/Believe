@@ -27,7 +27,7 @@ class Camera implements Renderable {
     this.mapHeight = mapHeight;
     scaleX = 1;
     scaleY = 1;
-    rect = new ObservableValue<>(new Rectangle(0, 0, width, height));
+    rect = ObservableValue.of(new Rectangle(0, 0, width, height));
     children = new ArrayList<>();
   }
 

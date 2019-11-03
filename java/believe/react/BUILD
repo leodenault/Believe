@@ -13,6 +13,7 @@ java_library(
 java_library(
     name = "impl",
     srcs = [
+        "NotificationStrategy.java",
         "ObservableValue.java",
         "ValueObserver.java",
     ],

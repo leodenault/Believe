@@ -11,34 +11,42 @@ import java.util.function.Supplier;
  * @param <T> the type of the value being observed.
  */
 public final class ObservableValue<T> implements Observable<T>, Supplier<T> {
+
   private final Set<Observer<T>> observers;
 
   private T value;
+  private final NotificationStrategy notificationStrategy;
 
   /**
    * Instantiates an {@link ObservableValue}.
    *
    * @param initialValue the initial value contained within this instance.
    */
-  public ObservableValue(T initialValue) {
+  private ObservableValue(T initialValue, NotificationStrategy notificationStrategy) {
     value = initialValue;
+    this.notificationStrategy = notificationStrategy;
     observers = new HashSet<>();
   }
 
+  public static <T> ObservableValue<T> of(T initialValue) {
+    return of(initialValue, NotificationStrategy.ONLY_NOTIFY_ON_VALUE_CHANGE);
+  }
+
+  public static <T> ObservableValue<T> of(
+      T initialValue, NotificationStrategy notificationStrategy) {
+    return new ObservableValue<>(initialValue, notificationStrategy);
+  }
+
   /**
-   * Sets the new value to be contained within this instance. If the {@code newValue} is different
-   * from the one contained within this instance be an {@link Object#equals(Object)} comparison,
-   * then all {@link Observer} instances associated with this instance are notified of the change.
+   * Sets the new value to be contained within this instance.
+   *
+   * <p>Notification of observers depends on the {@link NotificationStrategy} defined for this
+   * instance.
    */
   public void setValue(T newValue) {
-    if (value.equals(newValue)) {
-      return;
-    }
-
+    T oldValue = value;
     value = newValue;
-    for (Observer<T> observer : observers) {
-      observer.valueChanged(value);
-    }
+    notificationStrategy.execute(oldValue, value, observers);
   }
 
   @Override

@@ -8,34 +8,26 @@ import org.junit.jupiter.api.Test;
 
 /** Unit tests for {@link ObservableValue}. */
 final class ObservableValueTest {
+  @Test
+  void setValue_executesNotificationStrategy() {
+    ObservableValue<String> observableValue =
+        ObservableValue.of("initial value", NotificationStrategy.ONLY_NOTIFY_ON_VALUE_CHANGE);
+    FakeObserver observer = new FakeObserver();
+    observableValue.addObserver(observer);
+
+    observableValue.setValue("new value");
+    assertThat(observer.valueChanged).isTrue();
+    observer.valueChanged = false;
+    observableValue.setValue("new value");
+    assertThat(observer.valueChanged).isFalse();
+  }
+
   private static final class FakeObserver implements Observer<String> {
-    @Nullable String value;
+    boolean valueChanged = false;
 
     @Override
     public void valueChanged(String newValue) {
-      value = newValue;
+      valueChanged = true;
     }
-  }
-
-  private final FakeObserver observer = new FakeObserver();
-  private final ObservableValue<String> observableValue = new ObservableValue<>("initial value");
-
-  @BeforeEach
-  void setUp() {
-    observableValue.addObserver(observer);
-  }
-
-  @Test
-  void setValue_valueIsSame_doesNothing() {
-    observableValue.setValue("initial value");
-
-    assertThat(observer.value).isNull();
-  }
-
-  @Test
-  void setValue_valueIsDifferent_notifiesObservers() {
-    observableValue.setValue("new value");
-
-    assertThat(observer.value).isEqualTo("new value");
   }
 }

@@ -46,7 +46,7 @@ public abstract class DialogueDaggerModule {
   @Singleton
   @ModulePrivate
   static ObservableValue<Optional<DialogueData>> provideObservableDialogueDataValue() {
-    return new ObservableValue<>(Optional.empty());
+    return ObservableValue.of(Optional.empty());
   }
 
   @Binds
