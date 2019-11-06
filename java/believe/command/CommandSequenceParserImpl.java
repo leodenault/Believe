@@ -31,8 +31,13 @@ public final class CommandSequenceParserImpl implements CommandSequenceParser {
       return Optional.empty();
     }
 
-    List<Command> subcommands =
-        commandSequence.build().getCommandsList().stream()
+    return Optional.of(parseSequence(commandSequence.build()));
+  }
+
+  @Override
+  public Command parseSequence(CommandSequence commandSequence) {
+    List<Command> subCommands =
+        commandSequence.getCommandsList().stream()
             .map(
                 command ->
                     commandGenerator
@@ -43,12 +48,10 @@ public final class CommandSequenceParserImpl implements CommandSequenceParser {
             .filter(Optional::isPresent)
             .map(Optional::get)
             .collect(Collectors.toList());
-
-    return Optional.of(
-        () -> {
-          for (Command subcommand : subcommands) {
-            subcommand.execute();
-          }
-        });
+    return () -> {
+      for (Command subCommand : subCommands) {
+        subCommand.execute();
+      }
+    };
   }
 }

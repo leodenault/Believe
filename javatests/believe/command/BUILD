@@ -27,6 +27,7 @@ java_junit5_test(
         "//java/believe/command",
         "//java/believe/command:impl",
         "//java/believe/command:package_info",
+        "//java/believe/command/proto:command_sequence_java_proto",
         "//java/believe/core",
         "//java/believe/logging/testing",
         "//java/believe/logging/truth",

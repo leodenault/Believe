@@ -12,6 +12,7 @@ java_library(
     ],
     deps = [
         ":package_info",
+        "//java/believe/command/proto:command_sequence_java_proto",
         "//java/believe/core",
     ],
 )
