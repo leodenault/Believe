@@ -1,3 +1,5 @@
+load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kt_jvm_test")
+
 #####################
 # Private constants #
 #####################
@@ -228,29 +230,49 @@ def _pkg_all_impl(ctx):
         use_default_shell_env = True,
     )
 
+def _find_junit5_test_class(srcs, test_class, file_suffix):
+    if len(srcs) != 1 or test_class != "":
+        return test_class
+
+    package = native.package_name()
+    package_start_index = package.find("/") + 1
+
+    # Remove java or javatests top-level directory reference from package path.
+    package = package[package_start_index:]
+    package = package.replace("/", ".")
+
+    inferred_test_class = package + "." + srcs[0]
+    inferred_test_class = inferred_test_class[:-len(file_suffix)]
+    return inferred_test_class
+
 def java_junit5_test(name = "", srcs = [], data = [], test_class = "", deps = []):
-    # In the case there's a single source we can automatically determine the test class.
-    if len(srcs) == 1 and test_class == "":
-        package = native.package_name()
-        package_start_index = package.find("/") + 1
-
-        # Remove java or javatests top-level directory reference from package path.
-        package = package[package_start_index:]
-        package = package.replace("/", ".")
-
-        test_class = package + "." + srcs[0]
-        test_class = test_class[:-len(".java")]
+    computed_test_class = _find_junit5_test_class(srcs, test_class, ".java")
 
     native.java_test(
         name = name,
         srcs = srcs,
         args = [
             "--select-class",
-            test_class,
+            computed_test_class,
         ],
         data = data,
         main_class = "org.junit.platform.console.ConsoleLauncher",
         use_testrunner = False,
+        deps = deps + ["//third_party/junit"],
+    )
+
+def kt_junit5_test(name = "", srcs = [], data = [], test_class = "", deps = []):
+    computed_test_class = _find_junit5_test_class(srcs, test_class, ".kt")
+
+    kt_jvm_test(
+        name = name,
+        srcs = srcs,
+        args = [
+            "--select-class",
+            computed_test_class,
+        ],
+        data = data,
+        main_class = "org.junit.platform.console.ConsoleLauncher",
         deps = deps + ["//third_party/junit"],
     )
 
