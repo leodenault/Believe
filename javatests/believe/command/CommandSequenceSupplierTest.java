@@ -3,6 +3,7 @@ package believe.command;
 import static com.google.common.truth.Truth8.assertThat;
 
 import believe.command.proto.CommandSequenceProto;
+import believe.command.proto.CommandSequenceProto.CommandSequence;
 import believe.logging.testing.VerifiableLogSystem;
 import believe.logging.testing.VerifiableLogSystem.LogSeverity;
 import believe.logging.testing.VerifiesLoggingCalls;
@@ -26,15 +27,7 @@ final class CommandSequenceSupplierTest {
           .build();
 
   private final CommandSequenceSupplier commandSequenceSupplier =
-      new CommandSequenceSupplier(
-          SEQUENCE_PARAMETER,
-          sequence -> {
-            try {
-              return Optional.of(new FakeCommand(sequence));
-            } catch (ParseException e) {
-              throw new RuntimeException("Unexpected parsing exception.", e);
-            }
-          });
+      new CommandSequenceSupplier(SEQUENCE_PARAMETER, new FakeCommandSequenceParser());
 
   @Test
   void supplyCommand_returnsValidCommand() {
@@ -69,5 +62,22 @@ final class CommandSequenceSupplierTest {
 
     @Override
     public void execute() {}
+  }
+
+  private static final class FakeCommandSequenceParser implements CommandSequenceParser {
+    @Override
+    public Optional<Command> parseSequence(String sequence) {
+      try {
+        return Optional.of(new FakeCommand(sequence));
+      } catch (ParseException e) {
+        throw new RuntimeException("Unexpected parsing exception.", e);
+      }
+    }
+
+    // Not used in this test.
+    @Override
+    public Command parseSequence(CommandSequence commandSequence) {
+      return () -> {};
+    }
   }
 }

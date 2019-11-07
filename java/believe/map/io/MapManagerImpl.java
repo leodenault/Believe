@@ -42,21 +42,9 @@ public class MapManagerImpl implements MapManager {
 
   @Inject
   MapManagerImpl(
-      TiledMapParser tiledMapParser, @MapDefinitionsDirectory String mapDefinitionsDirectory) {
-    this(
-        tiledMapParser,
-        mapDefinitionsDirectory,
-        ref -> {
-          try {
-            return Optional.of(new Image(ref));
-          } catch (SlickException e) {
-            return Optional.empty();
-          }
-        });
-  }
-
-  MapManagerImpl(
-      TiledMapParser tiledMapParser, String mapDefinitionsDirectory, ImageSupplier imageSupplier) {
+      TiledMapParser tiledMapParser,
+      ImageSupplier imageSupplier,
+      @MapDefinitionsDirectory String mapDefinitionsDirectory) {
     this.tiledMapParser = tiledMapParser;
     this.mapDefinitionsDirectory = mapDefinitionsDirectory;
     this.imageSupplier = imageSupplier;

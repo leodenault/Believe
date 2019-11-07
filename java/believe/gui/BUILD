@@ -35,3 +35,12 @@ java_library(
         "//third_party/slick",
     ],
 )
+
+java_library(
+    name = "dagger_module",
+    srcs = ["GuiDaggerModule.java"],
+    deps = [
+        ":gui",
+        "//third_party/dagger",
+    ],
+)

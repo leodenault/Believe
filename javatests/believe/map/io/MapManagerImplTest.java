@@ -7,6 +7,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import believe.gui.ImageSupplier;
 import believe.gui.testing.FakeImage;
 import believe.logging.testing.VerifiableLogSystem;
 import believe.logging.testing.VerifiableLogSystem.LogSeverity;
@@ -19,6 +20,7 @@ import believe.testing.mockito.InstantiateMocksIn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import java.util.Arrays;
@@ -65,8 +67,13 @@ final class MapManagerImplTest {
     mapManager =
         new MapManagerImpl(
             tiledMapParser,
-            "/javatests/believe/map/io/data",
-            fileLocation -> Optional.of(BACKGROUND_IMAGE));
+            new ImageSupplier() {
+              @Override
+              public Optional<Image> get(String fileLocation) {
+                return Optional.of(BACKGROUND_IMAGE);
+              }
+            },
+            "/javatests/believe/map/io/data");
   }
 
   @Test

@@ -7,6 +7,14 @@ import java.util.Optional;
 
 /** Supplies an {@link Image} when prompted. */
 public interface ImageSupplier {
+  ImageSupplier DEFAULT = new ImageSupplier() {};
+
   /** Returns an image found at {@code fileLocation}. */
-  Optional<Image> get(String fileLocation);
+  default Optional<Image> get(String fileLocation) {
+    try {
+      return Optional.of(new Image(fileLocation));
+    } catch (SlickException e) {
+      return Optional.empty();
+    }
+  }
 }

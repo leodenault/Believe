@@ -76,6 +76,7 @@ java_library(
         "//java/believe/gamestate:impl",
         "//java/believe/gamestate/levelstate/platformingstate",
         "//java/believe/gamestate/levelstate/platformingstate:qualifiers",
+        "//java/believe/gui:dagger_module",
         "//java/believe/map/collidable/command:dagger_module",
         "//java/believe/map/collidable/tile:dagger_module",
         "//java/believe/map/gui",

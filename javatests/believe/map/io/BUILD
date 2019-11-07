@@ -1,8 +1,21 @@
-load("//bzl:rules.bzl", "java_junit5_test")
+load("//bzl:rules.bzl", "java_junit5_test", "kt_junit5_test")
 
 package(
     default_testonly = True,
     default_visibility = ["//visibility:private"],
+)
+
+kt_junit5_test(
+    name = "BackgroundSceneParserImplTest",
+    srcs = ["BackgroundSceneParserImplTest.kt"],
+    deps = [
+        "//java/believe/gui/testing",
+        "//java/believe/map/data",
+        "//java/believe/map/data/proto:map_metadata_java_proto",
+        "//java/believe/map/io:impl",
+        "//third_party/slick",
+        "//third_party/truth:truth8",
+    ],
 )
 
 java_junit5_test(

@@ -5,6 +5,7 @@ package(
 java_library(
     name = "io",
     srcs = [
+        "BackgroundSceneParser.java",
         "MapManager.java",
         "ObjectParser.java",
         "TileParser.java",
@@ -14,6 +15,7 @@ java_library(
     ],
     deps = [
         "//java/believe/map/data",
+        "//java/believe/map/data/proto:map_metadata_java_proto",
         "//java/believe/map/tiled",
         "//third_party/slick",
     ],
@@ -22,6 +24,7 @@ java_library(
 java_library(
     name = "impl",
     srcs = [
+        "BackgroundSceneParserImpl.java",
         "MapManagerImpl.java",
         "ObjectParser.java",
         "TiledMapLayerParserImpl.java",

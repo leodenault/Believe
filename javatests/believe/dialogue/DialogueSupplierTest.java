@@ -3,6 +3,7 @@ package believe.dialogue;
 import static com.google.common.truth.Truth8.assertThat;
 
 import believe.command.Command;
+import believe.command.CommandSequenceParser;
 import believe.command.proto.CommandSequenceProto;
 import believe.command.proto.CommandSequenceProto.CommandSequence;
 import believe.dialogue.proto.DialogueProto.Dialogue;
@@ -48,7 +49,7 @@ final class DialogueSupplierTest {
           new DialogueCommandFactory(() -> observableDialogue),
           DIALOGUE_ID_PROPERTY,
           FOLLOW_UP_COMMAND_PROPERTY,
-          this::parseSequence);
+          new FakeCommandSequenceParser());
 
   private boolean followupCommandExists = true;
 
@@ -112,7 +113,16 @@ final class DialogueSupplierTest {
 
   private static void doNothing() {}
 
-  private Optional<Command> parseSequence(String sequence) {
-    return followupCommandExists ? Optional.of(PARSED_COMMAND) : Optional.empty();
+  private final class FakeCommandSequenceParser implements CommandSequenceParser {
+    @Override
+    public Optional<Command> parseSequence(String sequence) {
+      return followupCommandExists ? Optional.of(PARSED_COMMAND) : Optional.empty();
+    }
+
+    // Not used in this test.
+    @Override
+    public Command parseSequence(CommandSequence commandSequence) {
+      return () -> {};
+    }
   }
 }
