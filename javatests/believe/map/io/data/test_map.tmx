@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="10" height="20" tilewidth="32" tileheight="32" nextobjectid="1">
- <properties>
-  <property name="player_start_x" type="int" value="1"/>
-  <property name="player_start_y" type="int" value="1"/>
- </properties>
-</map>

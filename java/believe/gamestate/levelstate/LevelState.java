@@ -100,7 +100,9 @@ public abstract class LevelState extends GameStateBase
 
   @Override
   public void reset() {
-    player.setLocation(mapData.playerStartX(), mapData.playerStartY() - player.getHeight());
+    player.setLocation(
+        mapData.tiledMapData().playerStartX(),
+        mapData.tiledMapData().playerStartY() - player.getHeight());
     player.setVerticalSpeed(0);
     player.heal(1f);
     playArea.resetLayout();
@@ -114,7 +116,10 @@ public abstract class LevelState extends GameStateBase
       mapData = getMapData();
       player =
           playableCharacterFactory.create(
-              this, isOnRails(), mapData.playerStartX(), mapData.playerStartY());
+              this,
+              isOnRails(),
+              mapData.tiledMapData().playerStartX(),
+              mapData.tiledMapData().playerStartY());
       currentPlayableCharacter.update(Optional.of(player));
       playArea = providePlayArea(mapData, player);
       focusBar.setText("Focus");
@@ -151,11 +156,11 @@ public abstract class LevelState extends GameStateBase
   private void initPhysics() {
     physicsManager.reset();
     Stream.concat(
-            mapData.objectLayers().stream()
+            mapData.tiledMapData().objectLayers().stream()
                 .flatMap(
                     objectLayerData ->
                         objectLayerData.generatedMapEntityData().physicsManageables().stream()),
-            mapData.layers().stream()
+            mapData.tiledMapData().layers().stream()
                 .flatMap(
                     layerData -> layerData.generatedMapEntityData().physicsManageables().stream()))
         .forEach(entity -> entity.addToPhysicsManager(physicsManager));

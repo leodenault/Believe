@@ -38,29 +38,29 @@ public class LevelMap extends ComponentBase {
     super(container, 0, 0);
     renderables =
         Stream.concat(
-                mapData.objectLayers().stream()
+                mapData.tiledMapData().objectLayers().stream()
                     .flatMap(
                         objectLayerData ->
                             objectLayerData.generatedMapEntityData().renderables().stream()),
-                mapData.layers().stream()
+                mapData.tiledMapData().layers().stream()
                     .flatMap(
                         layerData -> layerData.generatedMapEntityData().renderables().stream()))
             .collect(Collectors.toSet());
     updatables =
         Stream.concat(
-                mapData.objectLayers().stream()
+                mapData.tiledMapData().objectLayers().stream()
                     .flatMap(
                         objectLayerData ->
                             objectLayerData.generatedMapEntityData().updatables().stream()),
-                mapData.layers().stream()
+                mapData.tiledMapData().layers().stream()
                     .flatMap(layerData -> layerData.generatedMapEntityData().updatables().stream()))
             .collect(Collectors.toSet());
-    rect.setSize(mapData.width(), mapData.height());
+    rect.setSize(mapData.tiledMapData().width(), mapData.tiledMapData().height());
     setLocation(0, 0);
 
     rearLayers = new ArrayList<>();
     frontLayers = new ArrayList<>();
-    for (LayerData layer : mapData.layers()) {
+    for (LayerData layer : mapData.tiledMapData().layers()) {
       if (!layer.isVisible()) {
         continue;
       }
@@ -75,7 +75,7 @@ public class LevelMap extends ComponentBase {
         mapData.backgroundScenes().stream()
             .map(
                 (BackgroundSceneData backgroundSceneData) ->
-                    new MapBackground(backgroundSceneData, mapData.height()))
+                    new MapBackground(backgroundSceneData, mapData.tiledMapData().height()))
             .collect(Collectors.toList());
   }
 

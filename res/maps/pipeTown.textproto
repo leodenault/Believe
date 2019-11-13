@@ -1,3 +1,5 @@
+map_location: "/res/maps/pipeTown.tmx"
+tile_sets_location: "/res/maps/tilesets"
 map_backgrounds {
   file_location: "/res/graphics/backgrounds/darkSky.png"
   top_y_position: 0

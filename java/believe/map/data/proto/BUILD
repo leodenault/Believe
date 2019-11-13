@@ -3,11 +3,11 @@ package(
 )
 
 proto_library(
-    name = "map_metadata",
+    name = "map_metadata_proto",
     srcs = ["map_metadata.proto"],
 )
 
 java_proto_library(
     name = "map_metadata_java_proto",
-    deps = [":map_metadata"],
+    deps = [":map_metadata_proto"],
 )

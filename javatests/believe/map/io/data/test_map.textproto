@@ -1,13 +1,2 @@
 # Textproto of map metadata used in testing.
-map_backgrounds {
-  file_location: "/javatests/believe/map/io/data/fake_image.png"
-  top_y_position: 0.3
-  bottom_y_position: 1
-  horizontal_speed_multiplier: 0.78
-}
-map_backgrounds {
-  file_location: "/javatests/believe/map/io/data/fake_image.png"
-  top_y_position: 0.1
-  bottom_y_position: 0.9
-  horizontal_speed_multiplier: 1
-}
+map_location: "some location"

@@ -5,6 +5,10 @@ import org.newdawn.slick.Image;
 import java.util.Objects;
 
 public final class FakeImage extends Image {
+  public FakeImage() {
+    this(0, 0);
+  }
+
   public FakeImage(int width, int height) {
     this.width = width;
     this.height = height;

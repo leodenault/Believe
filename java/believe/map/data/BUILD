@@ -10,6 +10,7 @@ java_library(
         "LayerData.java",
         "MapData.java",
         "ObjectLayerData.java",
+        "TiledMapData.java",
         "package-info.java",
     ],
     deps = [

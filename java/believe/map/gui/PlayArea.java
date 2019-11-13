@@ -64,7 +64,8 @@ public class PlayArea extends AbstractContainer {
     int width = convertPercentageToPixels(clipWidth, container.getWidth(), 0);
     int height = convertPercentageToPixels(clipHeight, container.getHeight(), 0);
     border = false;
-    camera = new Camera(width, height, mapData.width(), mapData.height());
+    camera =
+        new Camera(width, height, mapData.tiledMapData().width(), mapData.tiledMapData().height());
     levelMap = levelMapFactory.create(mapData);
     this.focus = focus;
     this.hud = new CanvasContainer(container, 0, 0, width, height);

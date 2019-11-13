@@ -13,12 +13,12 @@ import java.util.*
 internal class BackgroundSceneParserImplTest {
     @Test
     @Throws(SlickException::class)
-    fun load_returnsValidBackgroundSceneData() {
+    fun parse_returnsValidBackgroundSceneData() {
         val backgroundImage = FakeImage(0, 0)
         val backgroundSceneParser =
             BackgroundSceneParserImpl(FakeImageSupplier(Optional.of(backgroundImage)))
 
-        val backgroundSceneData = backgroundSceneParser.load(MAP_BACKGROUND)
+        val backgroundSceneData = backgroundSceneParser.parse(MAP_BACKGROUND)
 
         assertThat(backgroundSceneData).hasValue(
             BackgroundSceneData.create(
@@ -28,10 +28,10 @@ internal class BackgroundSceneParserImplTest {
     }
 
     @Test
-    fun load_emptyImageIsSupplied_returnsEmptyAndLogsError() {
+    fun parse_emptyImageIsSupplied_returnsEmptyAndLogsError() {
         val backgroundSceneParser = BackgroundSceneParserImpl(FakeImageSupplier(Optional.empty()))
 
-        assertThat(backgroundSceneParser.load(MAP_BACKGROUND)).isEmpty()
+        assertThat(backgroundSceneParser.parse(MAP_BACKGROUND)).isEmpty()
     }
 
     companion object {

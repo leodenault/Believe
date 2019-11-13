@@ -16,7 +16,7 @@ final class BackgroundSceneParserImpl implements BackgroundSceneParser {
   }
 
   @Override
-  public Optional<BackgroundSceneData> load(MapBackground mapBackground) {
+  public Optional<BackgroundSceneData> parse(MapBackground mapBackground) {
     return imageSupplier
         .get(mapBackground.getFileLocation())
         .map(image -> BackgroundSceneData.create(image, mapBackground));

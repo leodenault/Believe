@@ -67,8 +67,22 @@ public abstract class MapParsingDaggerModule {
       TiledMapObjectLayerParserImpl tiledMapObjectLayerParserImpl);
 
   @Binds
-  abstract TiledMapParser bindTiledMapParser(TiledMapParserImpl tiledMapParserImpl);
+  abstract BackgroundSceneParser bindBackgroundSceneParser(
+      BackgroundSceneParserImpl backgroundSceneParser);
+
+  @Binds
+  abstract MapMetadataParser bindTiledMapParser(MapMetadataParserImpl tiledMapParserImpl);
 
   @Binds
   abstract MapManager bindMapManager(MapManagerImpl mapManagerImpl);
+
+  @Provides
+  static TiledMapParser provideTiledMapParser(
+      @PlayerStartXProperty String playerStartXProperty,
+      @PlayerStartYProperty String playerStartYProperty,
+      TiledMapLayerParser tiledMapLayerParser,
+      TiledMapObjectLayerParser tiledMapObjectLayerParser) {
+    return TiledMapParser.create(
+        playerStartXProperty, playerStartYProperty, tiledMapLayerParser, tiledMapObjectLayerParser);
+  }
 }

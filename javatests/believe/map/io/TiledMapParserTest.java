@@ -3,35 +3,27 @@ package believe.map.io;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
-import believe.map.data.BackgroundSceneData;
 import believe.map.data.LayerData;
-import believe.map.data.MapData;
 import believe.map.data.ObjectLayerData;
-import believe.map.data.proto.MapMetadataProto.MapBackground;
+import believe.map.data.TiledMapData;
 import believe.map.tiled.TiledMap;
 import believe.testing.mockito.InstantiateMocksIn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.newdawn.slick.Image;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
-/** Unit tests for {@link TiledMapParserImpl}. */
 @InstantiateMocksIn
-final class TiledMapParserImplTest {
+final class TiledMapParserTest {
   private static final String PLAYER_START_X_PROPERTY = "x";
   private static final String PLAYER_START_Y_PROPERTY = "y";
 
-  private TiledMapParserImpl parser;
-  private List<BackgroundSceneData> backgroundScenes;
+  private TiledMapParser parser;
 
   @Mock private TiledMap tiledMap;
   @Mock private TiledMapLayerParser layerParser;
   @Mock private TiledMapObjectLayerParser objectLayerParser;
-  @Mock private Image backgroundImage;
   @Mock private LayerData firstLayer;
   @Mock private LayerData secondLayer;
   @Mock private ObjectLayerData firstObjectLayerData;
@@ -40,29 +32,20 @@ final class TiledMapParserImplTest {
   @BeforeEach
   void setUp() {
     parser =
-        new TiledMapParserImpl(
+        TiledMapParser.create(
             PLAYER_START_X_PROPERTY, PLAYER_START_Y_PROPERTY, layerParser, objectLayerParser);
-    backgroundScenes =
-        Collections.singletonList(
-            BackgroundSceneData.create(
-                backgroundImage,
-                MapBackground.newBuilder()
-                    .setTopYPosition(0)
-                    .setBottomYPosition(12)
-                    .setHorizontalSpeedMultiplier(0.5f)
-                    .build()));
     firstLayer = LayerData.newBuilder(tiledMap, 0).build();
     secondLayer = LayerData.newBuilder(tiledMap, 1).build();
   }
 
   @Test
-  void parseMap_returnsMapDataWithPlayerLocation() {
+  void parseMap_returnsDataWithPlayerLocation() {
     when(tiledMap.getMapProperty(PLAYER_START_X_PROPERTY)).thenReturn(Optional.of("123"));
     when(tiledMap.getMapProperty(PLAYER_START_Y_PROPERTY)).thenReturn(Optional.of("321"));
     when(tiledMap.getTileWidth()).thenReturn(10);
     when(tiledMap.getTileHeight()).thenReturn(100);
 
-    MapData mapData = parser.parseMap(tiledMap, Collections.emptyList());
+    TiledMapData mapData = parser.parse(tiledMap);
 
     assertThat(mapData.playerStartX()).isEqualTo(1230);
     assertThat(mapData.playerStartY()).isEqualTo(32100);
@@ -75,7 +58,7 @@ final class TiledMapParserImplTest {
     when(tiledMap.getTileWidth()).thenReturn(28);
     when(tiledMap.getTileHeight()).thenReturn(2);
 
-    MapData mapData = parser.parseMap(tiledMap, Collections.emptyList());
+    TiledMapData mapData = parser.parse(tiledMap);
 
     assertThat(mapData.width()).isEqualTo(280);
     assertThat(mapData.height()).isEqualTo(200);
@@ -87,7 +70,7 @@ final class TiledMapParserImplTest {
     when(layerParser.parseLayer(tiledMap, 0)).thenReturn(firstLayer);
     when(layerParser.parseLayer(tiledMap, 1)).thenReturn(secondLayer);
 
-    MapData mapData = parser.parseMap(tiledMap, Collections.emptyList());
+    TiledMapData mapData = parser.parse(tiledMap);
 
     assertThat(mapData.layers()).containsExactly(firstLayer, secondLayer);
   }
@@ -98,15 +81,8 @@ final class TiledMapParserImplTest {
     when(objectLayerParser.parseObjectLayer(tiledMap, 0)).thenReturn(firstObjectLayerData);
     when(objectLayerParser.parseObjectLayer(tiledMap, 1)).thenReturn(secondObjectLayerData);
 
-    MapData mapData = parser.parseMap(tiledMap, Collections.emptyList());
+    TiledMapData mapData = parser.parse(tiledMap);
 
     assertThat(mapData.objectLayers()).containsExactly(firstObjectLayerData, secondObjectLayerData);
-  }
-
-  @Test
-  void parseMap_returnsMapDataWithBackgroundData() {
-    MapData mapData = parser.parseMap(tiledMap, backgroundScenes);
-
-    assertThat(mapData.backgroundScenes()).containsAllIn(backgroundScenes);
   }
 }

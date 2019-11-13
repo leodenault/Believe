@@ -7,11 +7,11 @@ java_library(
     srcs = [
         "BackgroundSceneParser.java",
         "MapManager.java",
+        "MapMetadataParser.java",
         "ObjectParser.java",
         "TileParser.java",
         "TiledMapLayerParser.java",
         "TiledMapObjectLayerParser.java",
-        "TiledMapParser.java",
     ],
     deps = [
         "//java/believe/map/data",
@@ -26,10 +26,11 @@ java_library(
     srcs = [
         "BackgroundSceneParserImpl.java",
         "MapManagerImpl.java",
+        "MapMetadataParserImpl.java",
         "ObjectParser.java",
         "TiledMapLayerParserImpl.java",
         "TiledMapObjectLayerParserImpl.java",
-        "TiledMapParserImpl.java",
+        "TiledMapParser.java",
     ],
     deps = [
         ":internal_qualifiers",

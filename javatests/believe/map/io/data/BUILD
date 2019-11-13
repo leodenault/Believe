@@ -5,14 +5,6 @@ package(
     default_visibility = ["//javatests/believe/map/io:__subpackages__"],
 )
 
-filegroup(
-    name = "data",
-    srcs = [
-        "fake_image.png",
-        "test_map.tmx",
-    ],
-)
-
 textproto(
     name = "test_map_textproto",
     srcs = ["test_map.textproto"],
