@@ -261,12 +261,16 @@ def java_junit5_test(name = "", srcs = [], data = [], test_class = "", deps = []
         deps = deps + ["//third_party/junit"],
     )
 
-def kt_junit5_test(name = "", srcs = [], data = [], test_class = "", deps = []):
+def kt_junit5_test(name = "", srcs = [], data = [], friends = [], test_class = "", deps = []):
     computed_test_class = _find_junit5_test_class(srcs, test_class, ".kt")
+
+    if (not friends):
+        friends = ["//" + native.package_name().replace("javatests", "java")]
 
     kt_jvm_test(
         name = name,
         srcs = srcs,
+        friends = friends,
         args = [
             "--select-class",
             computed_test_class,
