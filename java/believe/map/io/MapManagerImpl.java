@@ -7,7 +7,6 @@ import believe.map.io.InternalQualifiers.MapDefinitionsDirectory;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.newdawn.slick.util.Log;
-import org.newdawn.slick.util.ResourceLoader;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -8,11 +8,11 @@ import believe.command.Command;
 import believe.core.io.FontLoader;
 import believe.datamodel.MutableValue;
 import believe.dialogue.DialogueData;
-import believe.dialogue.proto.DialogueProto.Dialogue;
 import believe.gamestate.levelstate.LevelState;
 import believe.gui.CharacterDialogue;
 import believe.gui.CharacterDialogue.DialogueResponse;
 import believe.gui.CharacterDialogueFactory;
+import believe.io.ResourceLoader;
 import believe.levelFlow.component.FlowComponent;
 import believe.levelFlow.component.FlowComponentListener;
 import believe.levelFlow.parsing.FlowComponentBuilder;
@@ -36,7 +36,6 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.util.ResourceLoader;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -71,7 +70,8 @@ public class ArcadeState extends LevelState
       PlayableCharacterFactory playableCharacterFactory,
       CharacterDialogueFactory characterDialogueFactory,
       Observable<Optional<DialogueData>> observableDialogueData,
-      MutableValue<Optional<PlayableCharacter>> currentPlayableCharacter) {
+      MutableValue<Optional<PlayableCharacter>> currentPlayableCharacter,
+      ResourceLoader resourceLoader) {
     super(
         container,
         game,
@@ -90,7 +90,7 @@ public class ArcadeState extends LevelState
         new FlowComponentBuilder(container, (int) (0.2 * container.getWidth()));
     try {
       new FlowFileParser(
-              new InputStreamReader(ResourceLoader.getResourceAsStream("levelFlowFiles/Drive.lfl")),
+              new InputStreamReader(resourceLoader.getResourceAsStream("levelFlowFiles/Drive.lfl")),
               builder)
           .parse();
       component = builder.buildFlowComponent();

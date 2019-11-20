@@ -1,7 +1,6 @@
 package believe.app;
 
 import believe.core.io.FontLoader;
-import believe.core.io.JarClasspathLocation;
 import believe.gamestate.GameStateBase;
 import dagger.Lazy;
 import javax.inject.Inject;
@@ -9,7 +8,6 @@ import javax.inject.Singleton;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.util.ResourceLoader;
 
 import java.util.Set;
 
@@ -29,8 +27,6 @@ final class Application extends StateBasedGame {
     this.firstState = firstState;
     this.gameStates = otherGameStates;
     this.fontLoader = fontLoader;
-
-    ResourceLoader.addResourceLocation(new JarClasspathLocation());
   }
 
   @Override

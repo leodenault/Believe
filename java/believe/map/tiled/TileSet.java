@@ -1,5 +1,8 @@
 package believe.map.tiled;
 
+import believe.io.ResourceLoader;
+import com.google.auto.factory.AutoFactory;
+import com.google.auto.factory.Provided;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.newdawn.slick.Color;
@@ -7,7 +10,6 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.util.Log;
-import org.newdawn.slick.util.ResourceLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -22,6 +24,7 @@ import java.util.Properties;
  * <p>See http://slick.ninjacave.com/license/ for license and copyright information on the original
  * source.
  */
+@AutoFactory
 final class TileSet {
   /** The index of the tile set */
   public int index;
@@ -53,12 +56,13 @@ final class TileSet {
   /**
    * Create a tile set based on an XML definition
    *
+   * @param resourceLoader the {@link ResourceLoader} used in loading the tile set.
    * @param element The XML describing the tileset
    * @param map The map this tileset was loaded from (gives context to paths)
    * @param loadImage True if we should load the image (useful in headless mode)
-   * @throws SlickException Indicates a failure to parse the tileset
    */
-  public TileSet(TiledMap map, Element element, boolean loadImage) throws SlickException {
+  public TileSet(
+      @Provided ResourceLoader resourceLoader, TiledMap map, Element element, boolean loadImage) {
     /* The map this tileset was loaded as part of */
     /** The map this tileset was loaded as part of */
     name = element.getAttribute("name");
@@ -67,8 +71,7 @@ final class TileSet {
 
     if ((source != null) && (!source.equals(""))) {
       try {
-        InputStream in =
-            ResourceLoader.getResourceAsStream(map.getMapDirectory() + "/" + source);
+        InputStream in = resourceLoader.getResourceAsStream(map.getMapDirectory() + "/" + source);
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document doc = builder.parse(in);
         Element docElement = doc.getDocumentElement();
@@ -76,14 +79,14 @@ final class TileSet {
         // docElement.getElementsByTagName("tileset").item(0);
       } catch (Exception e) {
         Log.error(e);
-        throw new SlickException(
+        throw new RuntimeException(
             "Unable to load or parse sourced tileset: " + map.getMapDirectory() + "/" + source);
       }
     }
     String tileWidthString = element.getAttribute("tilewidth");
     String tileHeightString = element.getAttribute("tileheight");
     if (tileWidthString.length() == 0 || tileHeightString.length() == 0) {
-      throw new SlickException(
+      throw new RuntimeException(
           "TiledMap requires that the map be created with tilesets that use a "
               + "single image.  Check the WiKi for more complete information.");
     }
@@ -113,9 +116,13 @@ final class TileSet {
     }
 
     if (loadImage) {
-      Image image =
-          new Image(map.getTileSetsLocation() + "/" + ref, false, Image.FILTER_NEAREST, trans);
-      setTileSetImage(image);
+      try {
+        Image image =
+            new Image(map.getTileSetsLocation() + "/" + ref, false, Image.FILTER_NEAREST, trans);
+        setTileSetImage(image);
+      } catch (SlickException e) {
+        Log.error("Failed to load tile set image.", e);
+      }
     }
 
     NodeList pElements = element.getElementsByTagName("tile");

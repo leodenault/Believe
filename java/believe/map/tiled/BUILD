@@ -18,6 +18,8 @@ java_library(
     deps = [
         "//java/believe/app/annotation",
         "//java/believe/core",
+        "//java/believe/io",
+        "//third_party/auto_factory",
         "//third_party/auto_value",
         "//third_party/javax:annotations",
         "//third_party/slick",

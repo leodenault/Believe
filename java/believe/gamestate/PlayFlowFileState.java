@@ -6,6 +6,7 @@ import believe.app.proto.GameOptionsProto.GameOptions;
 import believe.action.ExternalLoadGameAction.LoadableState;
 import believe.gamestate.temporarystate.GamePausedOverlay;
 import believe.gamestate.temporarystate.OverlayablePrecedingState;
+import believe.io.ResourceLoader;
 import believe.levelFlow.component.FlowComponent;
 import believe.levelFlow.component.FlowComponentListener;
 import believe.levelFlow.parsing.FlowComponentBuilder;
@@ -24,13 +25,13 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.util.ResourceLoader;
 
 public class PlayFlowFileState extends GameStateBase
     implements FlowComponentListener, OverlayablePrecedingState, LoadableState {
   private final GameContainer gameContainer;
   private final ChangeToTemporaryStateAction<OverlayablePrecedingState> pauseAction;
   private final Supplier<GameOptions> gameOptions;
+  private final ResourceLoader resourceLoader;
 
   boolean enteringFromPauseMenu;
   private FlowComponent component;
@@ -38,10 +39,11 @@ public class PlayFlowFileState extends GameStateBase
 
   @Inject
   public PlayFlowFileState(
-      GameContainer gameContainer, StateBasedGame game, Supplier<GameOptions> gameOptions) {
+      GameContainer gameContainer, StateBasedGame game, Supplier<GameOptions> gameOptions, ResourceLoader resourceLoader) {
     this.gameContainer = gameContainer;
     this.pauseAction = new ChangeToTemporaryStateAction<>(GamePausedOverlay.class, this, game);
     this.gameOptions = gameOptions;
+    this.resourceLoader = resourceLoader;
     enteringFromPauseMenu = false;
     this.game = game;
   }
@@ -49,7 +51,7 @@ public class PlayFlowFileState extends GameStateBase
   @Override
   public void loadFile(String flowFile)
       throws IOException, FlowFileParserException, SlickException, FlowComponentBuilderException {
-    InputStream stream = ResourceLoader.getResourceAsStream(flowFile);
+    InputStream stream = resourceLoader.getResourceAsStream(flowFile);
     GameContainer container = game.getContainer();
     FlowComponentBuilder builder = new FlowComponentBuilder(container, container.getWidth() / 3);
     InputStreamReader reader = new InputStreamReader(stream);

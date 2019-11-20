@@ -4,6 +4,7 @@ import believe.map.data.MapData;
 import believe.map.data.proto.MapMetadataProto.MapBackground;
 import believe.map.data.proto.MapMetadataProto.MapMetadata;
 import believe.map.tiled.TiledMap;
+import believe.map.tiled.TiledMapFactory;
 import dagger.Reusable;
 import javax.inject.Inject;
 import org.newdawn.slick.SlickException;
@@ -23,8 +24,10 @@ public final class MapMetadataParserImpl implements MapMetadataParser {
 
   @Inject
   MapMetadataParserImpl(
-      TiledMapParser tiledMapParser, BackgroundSceneParser backgroundSceneParser) {
-    this(TiledMap::new, tiledMapParser, backgroundSceneParser);
+      TiledMapFactory tiledMapFactory,
+      TiledMapParser tiledMapParser,
+      BackgroundSceneParser backgroundSceneParser) {
+    this(tiledMapFactory::create, tiledMapParser, backgroundSceneParser);
   }
 
   MapMetadataParserImpl(

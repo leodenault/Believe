@@ -1,8 +1,7 @@
 package believe.map.tiled.testing;
 
-import believe.core.PropertyProvider;
+import believe.io.testing.FakeResourceLoader;
 import believe.map.tiled.TiledMap;
-import javax.annotation.Nullable;
 
 import java.util.Optional;
 
@@ -14,7 +13,7 @@ public final class FakeTiledMap extends TiledMap {
   private final String objectPropertyValue;
 
   private FakeTiledMap(String tilePropertyValue, String objectPropertyValue) {
-    super("", "");
+    super(new FakeResourceLoader(), "", "");
     this.tilePropertyValue = tilePropertyValue;
     this.objectPropertyValue = objectPropertyValue;
   }

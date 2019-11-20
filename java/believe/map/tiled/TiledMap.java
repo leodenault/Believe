@@ -1,11 +1,13 @@
 package believe.map.tiled;
 
+import believe.io.ResourceLoader;
+import com.google.auto.factory.AutoFactory;
+import com.google.auto.factory.Provided;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.Log;
-import org.newdawn.slick.util.ResourceLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -23,6 +25,7 @@ import java.util.Properties;
  * <p>See http://slick.ninjacave.com/license/ for license and copyright information on the original
  * source.
  */
+@AutoFactory(allowSubclasses = true)
 public class TiledMap {
   private static final String NO_PROPERTY = "no property";
   private static final String NO_GID = "";
@@ -30,6 +33,8 @@ public class TiledMap {
   /** Indicates if we're running on a headless system */
   private static boolean headless;
 
+  private final ResourceLoader resourceLoader;
+  private final TileSetFactory tileSetFactory;
   private final String tileMapLocation;
   private final String tileSetsLocation;
 
@@ -75,7 +80,13 @@ public class TiledMap {
    * @param tileMapLocation The location of the tile map to load
    * @param tileSetsLocation The location where we can find the tileset images and other resources
    */
-  public TiledMap(String tileMapLocation, String tileSetsLocation) {
+  public TiledMap(
+      @Provided ResourceLoader resourceLoader,
+      @Provided TileSetFactory tileSetFactory,
+      String tileMapLocation,
+      String tileSetsLocation) {
+    this.resourceLoader = resourceLoader;
+    this.tileSetFactory = tileSetFactory;
     this.tileMapLocation = tileMapLocation;
     this.tileSetsLocation = tileSetsLocation;
   }
@@ -464,7 +475,7 @@ public class TiledMap {
    * @throws SlickException Indicates a failure to parse the map or find a tileset
    */
   public void load() throws SlickException {
-    InputStream in = ResourceLoader.getResourceAsStream(tileMapLocation);
+    InputStream in = resourceLoader.getResourceAsStream(tileMapLocation);
 
     try {
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -512,7 +523,7 @@ public class TiledMap {
       for (int i = 0; i < setNodes.getLength(); i++) {
         Element current = (Element) setNodes.item(i);
 
-        tileSet = new TileSet(this, current, !headless);
+        tileSet = tileSetFactory.create(this, current, !headless);
         tileSet.index = i;
 
         if (lastSet != null) {
