@@ -114,6 +114,56 @@ pkg_zip(
     deps = [":Believe_linux_x86"],
 )
 
+java_binary(
+    name = "Believe",
+    data = BELIEVE_DATA_FILES + LINUX_X64_NATIVES + [":fix_openal"],
+    main_class = BELIEVE_MAIN_CLASS,
+    resources = BELIEVE_RES,
+    runtime_deps = RUNTIME_DEPS,
+)
+
+genrule(
+    name = "fix_openal",
+    srcs = [
+        "//third_party/openal:linux_x64",
+    ],
+    outs = [
+        "openal64.so",
+    ],
+    cmd = """
+    cp $(location //third_party/openal:linux_x64) $@
+    """,
+)
+
+genrule(
+    name = "test_genrule",
+    outs = ["test_genrule.zip"],
+    cmd = """
+    mkdir outs
+    cp $(location :Believe)_deploy.jar outs/Believe.jar
+    rsync \
+      -r -D \
+      --links \
+      --exclude=/external \
+      --exclude=/java \
+      --exclude=*.jar \
+      $(location :Believe).runfiles/__main__/ \
+      outs
+    mv outs/third_party/openal/* outs
+    chmod -R 775 outs
+    cd outs
+    rm $(rootpath :Believe)
+    zip -qr contents.zip *
+    cd ..
+    cp outs/contents.zip $@
+    rm -rf outs
+    """,
+    tools = [
+        ":Believe",
+        ":Believe_deploy.jar",
+    ],
+)
+
 believe_binary(
     name = "Believe_linux_x64",
     data = BELIEVE_DATA_FILES + LINUX_X64_NATIVES,
@@ -141,11 +191,11 @@ pkg_zip(
     name = "Believe_mac_pkg",
     deps = [":Believe_mac"],
 )
-
-alias(
-    name = "Believe",
-    actual = ":Believe_linux_x64",
-)
+#
+#alias(
+#    name = "Believe",
+#    actual = ":Believe_linux_x64",
+#)
 
 believe_binary(
     name = "LevelEditor",

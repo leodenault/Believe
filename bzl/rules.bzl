@@ -109,7 +109,7 @@ def _believe_binary_impl(ctx):
     # Split up the jar files into third party libraries, generated libraries, and internal data
     # files.
     for dep in ctx.attr.runtime_deps:
-        for file in dep.data_runfiles.files:
+        for file in dep.data_runfiles.files.to_list():
             if file.is_source:
                 third_party_libs.append(file)
             elif file.path.endswith("jar"):
@@ -123,7 +123,7 @@ def _believe_binary_impl(ctx):
     data_files = []
     openal_files = []
     for dep in ctx.attr.data:
-        for file in dep.files:
+        for file in dep.files.to_list():
             if "openal" in file.basename.lower():
                 openal_files.append(file)
             else:
@@ -131,17 +131,17 @@ def _believe_binary_impl(ctx):
     data_file_paths = [file.short_path for file in data_files]
 
     # Gather the resource files which will be put into the final jar file.
-    resource_files = [file for dep in ctx.attr.resources for file in dep.files]
+    resource_files = [file for dep in ctx.attr.resources for file in dep.files.to_list()]
 
     # Set up the manifest file contents.
     manifest_main_class = "Main-Class: " + ctx.attr.main_class
     manifest_classpath = "Class-Path: " + " ".join(data_file_paths + third_party_lib_paths)
     manifest_content = manifest_main_class + "\n" + _normalize_classpath(manifest_classpath) + "\n"
 
-    ctx.file_action(
+    ctx.actions.write(
         output = manifest_temp,
         content = manifest_content,
-        executable = False,
+        is_executable = False,
     )
 
     cmd = "mkdir " + build_dir + "\n"
@@ -194,7 +194,7 @@ def _believe_binary_impl(ctx):
 
 def _zip_impl(ctx):
     zip_file = ctx.outputs.zip_file
-    files_to_zip = [file for dep in ctx.attr.deps for file in dep.files]
+    files_to_zip = [file for dep in ctx.attr.deps for file in dep.files.to_list()]
     file_string = ""
     single_dir = False
     if len(files_to_zip) == 1 and files_to_zip[0].extension == "":
@@ -220,7 +220,7 @@ def _zip_impl(ctx):
 
 def _pkg_all_impl(ctx):
     out_dir = ctx.outputs.out_dir
-    files = [file for dep in ctx.attr.deps for file in dep.files]
+    files = [file for dep in ctx.attr.deps for file in dep.files.to_list()]
     cmd = "mkdir " + out_dir.path + "\n"
     cmd += "\n".join(["cp " + file.path + " " + out_dir.path for file in files])
     ctx.actions.run_shell(
