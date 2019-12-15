@@ -1,7 +1,7 @@
 licenses(["notice"])
 
 package(
-    default_visibility = ["//:__pkg__"],
+    default_visibility = ["//:believe_all_pkgs"],
 )
 
 filegroup(

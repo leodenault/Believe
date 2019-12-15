@@ -4,8 +4,9 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 # Load common Bazel targets defined by Google.
 http_archive(
     name = "google_bazel_common",
-    strip_prefix = "bazel-common-1c225e62390566a9e88916471948ddd56e5f111c",
-    urls = ["https://github.com/google/bazel-common/archive/1c225e62390566a9e88916471948ddd56e5f111c.zip"],
+    sha256 = "f20aaaf1d80fa5fbe9843792cd199ab213ab63ee8a0f3931dd14ae7a9d528f05",
+    strip_prefix = "bazel-common-4c4c70bdf2a9f5bc9afdf2c27dfcb905cac2eea1",
+    urls = ["https://github.com/google/bazel-common/archive/4c4c70bdf2a9f5bc9afdf2c27dfcb905cac2eea1.zip"],
 )
 
 load("@google_bazel_common//:workspace_defs.bzl", "google_common_workspace_rules")
@@ -86,6 +87,7 @@ maven_jar(
 
 http_archive(
     name = "com_google_protobuf",
+    sha256 = "f35dcbdce75fa14c289c73ec9b8adaf00ced04c017cc8604efb29cd33d0472e3",
     strip_prefix = "protobuf-master",
     urls = ["https://github.com/protocolbuffers/protobuf/archive/master.zip"],
 )
@@ -129,14 +131,41 @@ maven_jar(
     artifact = "com.googlecode.java-diff-utils:diffutils:1.2",
 )
 
-# We need this specific commit number because of a bug in the Dagger library at API v21.
-# See https://github.com/google/dagger/pull/1366#issuecomment-470016185 for context on the issue.
-DAGGER_VERSION_NUM = "9e0baea74aa2b2ef83f78898bac44851b9840f30"
+#############################################################
+# Dagger
+#############################################################
+
+# Load dependencies.
+
+RULES_JVM_EXTERNAL_TAG = "2.7"
+
+RULES_JVM_EXTERNAL_SHA = "f04b1466a00a2845106801e0c5cec96841f49ea4e7d1df88dc8e4bf31523df74"
+
+http_archive(
+    name = "rules_jvm_external",
+    sha256 = RULES_JVM_EXTERNAL_SHA,
+    strip_prefix = "rules_jvm_external-%s" % RULES_JVM_EXTERNAL_TAG,
+    url = "https://github.com/bazelbuild/rules_jvm_external/archive/%s.zip" % RULES_JVM_EXTERNAL_TAG,
+)
+
+load("@rules_jvm_external//:defs.bzl", "maven_install")
+
+maven_install(
+    artifacts = [
+        "org.jetbrains.kotlin:kotlin-stdlib:1.3.50",
+        "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.1.0",
+    ],
+    repositories = [
+        "https://repo1.maven.org/maven2",
+    ],
+)
+
+DAGGER_VERSION_NUM = "2.25.2"
 
 http_archive(
     name = "google_dagger",
-    strip_prefix = "dagger-" + DAGGER_VERSION_NUM,
-    urls = ["https://github.com/google/dagger/archive/" + DAGGER_VERSION_NUM + ".zip"],
+    strip_prefix = "dagger-dagger-" + DAGGER_VERSION_NUM,
+    urls = ["https://github.com/google/dagger/archive/dagger-" + DAGGER_VERSION_NUM + ".zip"],
 )
 
 #############################################################

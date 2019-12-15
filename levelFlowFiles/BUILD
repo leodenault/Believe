@@ -1,5 +1,5 @@
 filegroup(
     name = "level_flow_files",
     srcs = glob(["*.lfl"]),
-    visibility = ["//:__pkg__"],
+    visibility = ["//:believe_all_pkgs"],
 )

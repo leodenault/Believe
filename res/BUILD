@@ -7,5 +7,5 @@ filegroup(
         "//res/music",
         "//res/sfx",
     ],
-    visibility = ["//:__pkg__"],
+    visibility = ["//:believe_all_pkgs"],
 )

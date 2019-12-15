@@ -2,7 +2,7 @@ licenses(["notice"])
 
 java_library(
     name = "mockito",
-    testonly = 1,
+    testonly = True,
     visibility = ["//:believe_all_pkgs"],
     exports = ["@mockito_maven//jar"],
     runtime_deps = [
