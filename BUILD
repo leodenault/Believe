@@ -1,53 +1,45 @@
-load("//bzl:rules.bzl", "believe_binary", "pkg_all", "pkg_zip", "textproto")
+load("//bzl:rules.bzl", "believe_binary", "textproto")
 
-BELIEVE_MAIN_CLASS = "believe.app.game.Believe"
-
-# Files which should be stored outside of the JAR file.
-BELIEVE_DATA_FILES = [
-    "//customFlowFiles:custom_flow_files",
-    "//customSongs:custom_songs",
-    ":game_options_textproto",
-]
-
-WINDOWS_X86_NATIVES = [
-    "//third_party/lwjgl:windows_x86",
-    "//third_party/openal:windows_x86",
-]
-
-WINDOWS_X64_NATIVES = [
-    "//third_party/lwjgl:windows_x64",
-    "//third_party/openal:windows_x64",
-]
-
-LINUX_X86_NATIVES = [
-    "//third_party/lwjgl:linux_x86",
-    "//third_party/openal:linux_x86",
-    "//third_party/jinput:linux_x86",
-]
-
-LINUX_X64_NATIVES = [
-    "//third_party/lwjgl:linux_x64",
-    "//third_party/openal:linux_x64",
-    "//third_party/jinput:linux_x64",
-]
-
-MAC_NATIVES = [
-    "//third_party/lwjgl:mac",
-    "//third_party/openal:mac",
-    "//third_party/jinput:mac",
-]
-
-# Files that should be stored inside the JAR as resources. These should be immutable as we shouldn't
-# be writing to resources within the JAR file.
-BELIEVE_RES = [
-    "//data",
-    "//levelFlowFiles:level_flow_files",
-    "//res",
-]
-
-RUNTIME_DEPS = [
-    "//java/believe/app/game",
-]
+NATIVE_CONFIGS = {
+    "linux_x86": {
+        "openal_file_name": "libopenal.so",
+        "native_targets": [
+            "//third_party/lwjgl:linux_x86",
+            "//third_party/openal:linux_x86",
+            "//third_party/jinput:linux_x86",
+        ],
+    },
+    "linux_x64": {
+        "openal_file_name": "libopenal64.so",
+        "native_targets": [
+            "//third_party/lwjgl:linux_x64",
+            "//third_party/openal:linux_x64",
+            "//third_party/jinput:linux_x64",
+        ],
+    },
+    "mac": {
+        "openal_file_name": "openal.dylib",
+        "native_targets": [
+            "//third_party/lwjgl:mac",
+            "//third_party/openal:mac",
+            "//third_party/jinput:mac",
+        ],
+    },
+    "windows_x86": {
+        "openal_file_name": "OpenAL32.dll",
+        "native_targets": [
+            "//third_party/lwjgl:windows_x86",
+            "//third_party/openal:windows_x86",
+        ],
+    },
+    "windows_x64": {
+        "openal_file_name": "OpenAL64.dll",
+        "native_targets": [
+            "//third_party/lwjgl:windows_x64",
+            "//third_party/openal:windows_x64",
+        ],
+    },
+}
 
 package_group(
     name = "believe_src_pkgs",
@@ -73,175 +65,18 @@ textproto(
 )
 
 believe_binary(
-    name = "Believe_windows_x86",
-    data = BELIEVE_DATA_FILES + WINDOWS_X86_NATIVES,
-    jar_name = "Believe.jar",
-    main_class = BELIEVE_MAIN_CLASS,
-    resources = BELIEVE_RES,
-    runtime_deps = RUNTIME_DEPS,
-)
-
-pkg_zip(
-    name = "Believe_windows_x86_pkg",
-    deps = [":Believe_windows_x86"],
-)
-
-believe_binary(
-    name = "Believe_windows_x64",
-    data = BELIEVE_DATA_FILES + WINDOWS_X64_NATIVES,
-    jar_name = "Believe.jar",
-    main_class = BELIEVE_MAIN_CLASS,
-    resources = BELIEVE_RES,
-    runtime_deps = RUNTIME_DEPS,
-)
-
-pkg_zip(
-    name = "Believe_windows_x64_pkg",
-    deps = [":Believe_windows_x64"],
-)
-
-believe_binary(
-    name = "Believe_linux_x86",
-    data = BELIEVE_DATA_FILES + LINUX_X86_NATIVES,
-    jar_name = "Believe.jar",
-    main_class = BELIEVE_MAIN_CLASS,
-    resources = BELIEVE_RES,
-    runtime_deps = RUNTIME_DEPS,
-)
-
-pkg_zip(
-    name = "Believe_linux_x86_pkg",
-    deps = [":Believe_linux_x86"],
-)
-
-java_binary(
-    name = "Believe",
-    data = BELIEVE_DATA_FILES + LINUX_X64_NATIVES + [":fix_openal"],
-    main_class = BELIEVE_MAIN_CLASS,
-    resources = BELIEVE_RES,
-    runtime_deps = RUNTIME_DEPS,
-)
-
-genrule(
-    name = "fix_openal",
-    srcs = [
-        "//third_party/openal:linux_x64",
+    base_name = "Believe",
+    data = [
+        ":game_options_textproto",
+        "//customFlowFiles:custom_flow_files",
+        "//customSongs:custom_songs",
     ],
-    outs = [
-        "openal64.so",
-    ],
-    cmd = """
-    cp $(location //third_party/openal:linux_x64) $@
-    """,
-)
-
-genrule(
-    name = "test_genrule",
-    outs = ["test_genrule.zip"],
-    cmd = """
-    mkdir outs
-    cp $(location :Believe)_deploy.jar outs/Believe.jar
-    rsync \
-      -r -D \
-      --links \
-      --exclude=/external \
-      --exclude=/java \
-      --exclude=*.jar \
-      $(location :Believe).runfiles/__main__/ \
-      outs
-    mv outs/third_party/openal/* outs
-    chmod -R 775 outs
-    cd outs
-    rm $(rootpath :Believe)
-    zip -qr contents.zip *
-    cd ..
-    cp outs/contents.zip $@
-    rm -rf outs
-    """,
-    tools = [
-        ":Believe",
-        ":Believe_deploy.jar",
-    ],
-)
-
-believe_binary(
-    name = "Believe_linux_x64",
-    data = BELIEVE_DATA_FILES + LINUX_X64_NATIVES,
-    jar_name = "Believe.jar",
-    main_class = BELIEVE_MAIN_CLASS,
-    resources = BELIEVE_RES,
-    runtime_deps = RUNTIME_DEPS,
-)
-
-pkg_zip(
-    name = "Believe_linux_x64_pkg",
-    deps = [":Believe_linux_x64"],
-)
-
-believe_binary(
-    name = "Believe_mac",
-    data = BELIEVE_DATA_FILES + MAC_NATIVES,
-    jar_name = "Believe.jar",
-    main_class = BELIEVE_MAIN_CLASS,
-    resources = BELIEVE_RES,
-    runtime_deps = RUNTIME_DEPS,
-)
-
-pkg_zip(
-    name = "Believe_mac_pkg",
-    deps = [":Believe_mac"],
-)
-#
-#alias(
-#    name = "Believe",
-#    actual = ":Believe_linux_x64",
-#)
-
-believe_binary(
-    name = "LevelEditor",
-    data = LINUX_X64_NATIVES + ["//res/maps"],
-    main_class = "believe.app.editor.LevelEditor",
+    main_class = "believe.app.game.Believe",
+    native_configs = NATIVE_CONFIGS,
     resources = [
         "//data",
-        "//res/dialogue",
-        "//res/graphics",
-        "//res/music",
-        "//res/sfx",
+        "//levelFlowFiles:level_flow_files",
+        "//res",
     ],
-    runtime_deps = ["//java/believe/app/editor"],
-)
-
-pkg_zip(
-    name = "LevelEditor_pkg",
-    deps = [":LevelEditor"],
-)
-
-believe_binary(
-    name = "LevelEditor_windows",
-    data = WINDOWS_X64_NATIVES + ["//res/maps"],
-    main_class = "believe.app.editor.LevelEditor",
-    resources = [
-        "//data",
-        "//res/dialogue",
-        "//res/graphics",
-        "//res/music",
-        "//res/sfx",
-    ],
-    runtime_deps = ["//java/believe/app/editor"],
-)
-
-pkg_zip(
-    name = "LevelEditor_windows_pkg",
-    deps = [":LevelEditor_windows"],
-)
-
-pkg_all(
-    name = "Believe_all",
-    deps = [
-        ":Believe_linux_x64_pkg",
-        ":Believe_linux_x86_pkg",
-        ":Believe_mac_pkg",
-        ":Believe_windows_x64_pkg",
-        ":Believe_windows_x86_pkg",
-    ],
+    runtime_deps = ["//java/believe/app/game"],
 )
