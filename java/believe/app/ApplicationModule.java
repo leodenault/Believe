@@ -1,30 +1,29 @@
 package believe.app;
 
-import static believe.util.Util.hashSetOf;
-
 import believe.action.ChangeStateAction;
 import believe.app.proto.GameOptionsProto.GameOptions;
 import believe.character.playable.PlayableDaggerModule;
 import believe.command.CommandDaggerModule;
 import believe.core.io.FontLoader;
 import believe.core.io.JarClasspathLocation;
-import believe.datamodel.MutableDataCommitter;
-import believe.datamodel.protodata.MutableProtoDataCommitter;
+import believe.datamodel.DataCommitter;
+import believe.datamodel.MutableValue;
+import believe.datamodel.protodata.BinaryProtoFile;
+import believe.datamodel.protodata.BinaryProtoFile.BinaryProtoFileFactory;
 import believe.dialogue.DialogueDaggerModule;
 import believe.gamestate.MainMenuState;
 import believe.gamestate.levelstate.platformingstate.EventActions;
 import believe.gamestate.levelstate.platformingstate.PlatformingState;
 import believe.gui.GuiDaggerModule;
+import believe.io.IoDaggerModule;
 import believe.map.collidable.command.CollidableCommandDaggerModule;
 import believe.map.collidable.tile.CollidableTileDaggerModule;
 import believe.map.io.MapParsingDaggerModule;
 import believe.physics.collision.CollisionDaggerModule;
-import believe.util.Util;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
-import dagger.multibindings.ElementsIntoSet;
 import dagger.multibindings.IntoSet;
 import dagger.multibindings.Multibinds;
 import javax.inject.Singleton;
@@ -37,19 +36,20 @@ import org.newdawn.slick.util.ResourceLocation;
 
 import java.io.File;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 /** Dagger module used in all application components. */
 @Module(
     includes = {
+      AudioDaggerModule.class,
       CollidableTileDaggerModule.class,
       CollisionDaggerModule.class,
       CollidableCommandDaggerModule.class,
       CommandDaggerModule.class,
       DialogueDaggerModule.class,
       GuiDaggerModule.class,
+      IoDaggerModule.class,
       MapParsingDaggerModule.class,
       PlayableDaggerModule.class
     })
@@ -58,20 +58,26 @@ public abstract class ApplicationModule {
 
   @Provides
   @Singleton
-  static MutableDataCommitter<GameOptions> provideGameOptionsCommitter() {
-    MutableProtoDataCommitter<GameOptions> optionsProvider =
-        new MutableProtoDataCommitter<>(
-            GAME_OPTIONS_FILE_NAME, GameOptions.parser(), GameOptions.getDefaultInstance());
-    optionsProvider.load();
-    return optionsProvider;
+  static BinaryProtoFile<GameOptions> provideGameOptionsFile(
+      BinaryProtoFileFactory binaryProtoFileFactory) {
+    return binaryProtoFileFactory.create(GAME_OPTIONS_FILE_NAME, GameOptions.parser());
+  }
+
+  @Provides
+  @Singleton
+  static MutableValue<GameOptions> provideGameOptions(
+      BinaryProtoFile<GameOptions> gameOptionsFile) {
+    return MutableValue.of(gameOptionsFile.load());
   }
 
   @Binds
-  abstract Supplier<GameOptions> provideGameOptionsProvider(
-      MutableDataCommitter<GameOptions> gameOptions);
+  abstract Supplier<GameOptions> bindGameOptionsSupplier(MutableValue<GameOptions> gameOptions);
+
+  @Binds
+  abstract DataCommitter<GameOptions> bindGameOptionsDataCommitter(
+      BinaryProtoFile<GameOptions> gameOptionsFile);
 
   @Multibinds
-  @Reusable
   @EventActions
   abstract Map<Integer, Function<PlatformingState, Void>> bindEventActionMap();
 
@@ -102,12 +108,17 @@ public abstract class ApplicationModule {
   }
 
   @Provides
-  @ElementsIntoSet
-  static Set<ResourceLocation> provideResourceLocations() {
-    return hashSetOf(new ClasspathLocation(), new FileSystemLocation(new File(".")));
+  @IntoSet
+  static ResourceLocation provideClasspathResourceLocation() {
+    return new ClasspathLocation();
   }
 
   @Binds
   @IntoSet
   abstract ResourceLocation bindJarClasspathLocation(JarClasspathLocation jarClasspathLocation);
+
+  @Provides
+  static FileSystemLocation provideFileSystemLocation() {
+    return new FileSystemLocation(new File("."));
+  }
 }

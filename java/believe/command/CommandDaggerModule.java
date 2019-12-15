@@ -15,7 +15,6 @@ import java.util.Map;
 @Module
 public abstract class CommandDaggerModule {
   @Multibinds
-  @Reusable
   abstract Map<String, CommandSupplier> bindCommandSupplierMap();
 
   @Provides

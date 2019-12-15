@@ -1,6 +1,8 @@
 package believe.map.tiled.testing;
 
-import believe.io.testing.FakeResourceLoader;
+import believe.io.ResourceManager;
+import believe.io.testing.FakeResourceManagerFactory;
+import believe.map.tiled.TileSetFactory;
 import believe.map.tiled.TiledMap;
 
 import java.util.Optional;
@@ -8,26 +10,28 @@ import java.util.Optional;
 /** Fake {@link TiledMap} for use in testing. */
 public final class FakeTiledMap extends TiledMap {
   private static final String NO_PROPERTY = "no property";
+  private static final ResourceManager RESOURCE_MANAGER = FakeResourceManagerFactory.createNoOp();
 
   private final String tilePropertyValue;
   private final String objectPropertyValue;
 
-  private FakeTiledMap(String tilePropertyValue, String objectPropertyValue) {
-    super(new FakeResourceLoader(), "", "");
+  private FakeTiledMap(
+      ResourceManager resourceManager, String tilePropertyValue, String objectPropertyValue) {
+    super(resourceManager, new TileSetFactory(() -> resourceManager), "", "");
     this.tilePropertyValue = tilePropertyValue;
     this.objectPropertyValue = objectPropertyValue;
   }
 
   public static FakeTiledMap tiledMapWithTilePropertyValue(String tilePropertyValue) {
-    return new FakeTiledMap(tilePropertyValue, NO_PROPERTY);
+    return new FakeTiledMap(RESOURCE_MANAGER, tilePropertyValue, NO_PROPERTY);
   }
 
   public static FakeTiledMap tiledMapWithDefaultPropertyValues() {
-    return new FakeTiledMap(NO_PROPERTY, NO_PROPERTY);
+    return new FakeTiledMap(RESOURCE_MANAGER, NO_PROPERTY, NO_PROPERTY);
   }
 
   public static FakeTiledMap tiledMapWithObjectPropertyValue(String objectPropertyValue) {
-    return new FakeTiledMap(NO_PROPERTY, objectPropertyValue);
+    return new FakeTiledMap(RESOURCE_MANAGER, NO_PROPERTY, objectPropertyValue);
   }
 
   @Override

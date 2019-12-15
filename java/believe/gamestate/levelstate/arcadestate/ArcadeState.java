@@ -12,7 +12,7 @@ import believe.gamestate.levelstate.LevelState;
 import believe.gui.CharacterDialogue;
 import believe.gui.CharacterDialogue.DialogueResponse;
 import believe.gui.CharacterDialogueFactory;
-import believe.io.ResourceLoader;
+import believe.io.ResourceManager;
 import believe.levelFlow.component.FlowComponent;
 import believe.levelFlow.component.FlowComponentListener;
 import believe.levelFlow.parsing.FlowComponentBuilder;
@@ -71,7 +71,7 @@ public class ArcadeState extends LevelState
       CharacterDialogueFactory characterDialogueFactory,
       Observable<Optional<DialogueData>> observableDialogueData,
       MutableValue<Optional<PlayableCharacter>> currentPlayableCharacter,
-      ResourceLoader resourceLoader) {
+      ResourceManager resourceManager) {
     super(
         container,
         game,
@@ -90,7 +90,7 @@ public class ArcadeState extends LevelState
         new FlowComponentBuilder(container, (int) (0.2 * container.getWidth()));
     try {
       new FlowFileParser(
-              new InputStreamReader(resourceLoader.getResourceAsStream("levelFlowFiles/Drive.lfl")),
+              new InputStreamReader(resourceManager.getResourceAsStream("levelFlowFiles/Drive.lfl")),
               builder)
           .parse();
       component = builder.buildFlowComponent();

@@ -4,6 +4,7 @@ import believe.util.Util;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.Log;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;

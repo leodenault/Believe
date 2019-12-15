@@ -6,7 +6,7 @@ import believe.app.proto.GameOptionsProto.GameOptions;
 import believe.action.ExternalLoadGameAction.LoadableState;
 import believe.gamestate.temporarystate.GamePausedOverlay;
 import believe.gamestate.temporarystate.OverlayablePrecedingState;
-import believe.io.ResourceLoader;
+import believe.io.ResourceManager;
 import believe.levelFlow.component.FlowComponent;
 import believe.levelFlow.component.FlowComponentListener;
 import believe.levelFlow.parsing.FlowComponentBuilder;
@@ -31,7 +31,7 @@ public class PlayFlowFileState extends GameStateBase
   private final GameContainer gameContainer;
   private final ChangeToTemporaryStateAction<OverlayablePrecedingState> pauseAction;
   private final Supplier<GameOptions> gameOptions;
-  private final ResourceLoader resourceLoader;
+  private final ResourceManager resourceManager;
 
   boolean enteringFromPauseMenu;
   private FlowComponent component;
@@ -39,11 +39,11 @@ public class PlayFlowFileState extends GameStateBase
 
   @Inject
   public PlayFlowFileState(
-      GameContainer gameContainer, StateBasedGame game, Supplier<GameOptions> gameOptions, ResourceLoader resourceLoader) {
+      GameContainer gameContainer, StateBasedGame game, Supplier<GameOptions> gameOptions, ResourceManager resourceManager) {
     this.gameContainer = gameContainer;
     this.pauseAction = new ChangeToTemporaryStateAction<>(GamePausedOverlay.class, this, game);
     this.gameOptions = gameOptions;
-    this.resourceLoader = resourceLoader;
+    this.resourceManager = resourceManager;
     enteringFromPauseMenu = false;
     this.game = game;
   }
@@ -51,7 +51,7 @@ public class PlayFlowFileState extends GameStateBase
   @Override
   public void loadFile(String flowFile)
       throws IOException, FlowFileParserException, SlickException, FlowComponentBuilderException {
-    InputStream stream = resourceLoader.getResourceAsStream(flowFile);
+    InputStream stream = resourceManager.getResourceAsStream(flowFile);
     GameContainer container = game.getContainer();
     FlowComponentBuilder builder = new FlowComponentBuilder(container, container.getWidth() / 3);
     InputStreamReader reader = new InputStreamReader(stream);

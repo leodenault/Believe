@@ -20,6 +20,7 @@ java_library(
         "//java/believe/dialogue/proto:dialogue_java_proto",
         "//java/believe/gamestate/levelstate",
         "//java/believe/gui",
+        "//java/believe/io",
         "//java/believe/levelFlow/component",
         "//java/believe/levelFlow/parsing",
         "//java/believe/levelFlow/parsing/exceptions",

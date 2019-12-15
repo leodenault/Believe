@@ -1,6 +1,6 @@
 package believe.map.tiled;
 
-import believe.io.ResourceLoader;
+import believe.io.ResourceManager;
 import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
 import javax.xml.parsers.DocumentBuilder;
@@ -25,7 +25,7 @@ import java.util.Properties;
  * source.
  */
 @AutoFactory
-final class TileSet {
+public final class TileSet {
   /** The index of the tile set */
   public int index;
   /** The name of the tile set */
@@ -56,13 +56,13 @@ final class TileSet {
   /**
    * Create a tile set based on an XML definition
    *
-   * @param resourceLoader the {@link ResourceLoader} used in loading the tile set.
+   * @param resourceManager the {@link ResourceManager} used in loading the tile set.
    * @param element The XML describing the tileset
    * @param map The map this tileset was loaded from (gives context to paths)
    * @param loadImage True if we should load the image (useful in headless mode)
    */
   public TileSet(
-      @Provided ResourceLoader resourceLoader, TiledMap map, Element element, boolean loadImage) {
+      @Provided ResourceManager resourceManager, TiledMap map, Element element, boolean loadImage) {
     /* The map this tileset was loaded as part of */
     /** The map this tileset was loaded as part of */
     name = element.getAttribute("name");
@@ -71,7 +71,7 @@ final class TileSet {
 
     if ((source != null) && (!source.equals(""))) {
       try {
-        InputStream in = resourceLoader.getResourceAsStream(map.getMapDirectory() + "/" + source);
+        InputStream in = resourceManager.getResourceAsStream(map.getMapDirectory() + "/" + source);
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document doc = builder.parse(in);
         Element docElement = doc.getDocumentElement();

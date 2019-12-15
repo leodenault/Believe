@@ -1,18 +1,20 @@
+load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kt_jvm_library")
+
 package(
     default_visibility = ["//:believe_all_pkgs"],
 )
 
-java_library(
+kt_jvm_library(
     name = "datamodel",
     srcs = [
-        "DataCommitter.java",
-        "MutableData.java",
-        "MutableDataCommitter.java",
+        "DataCommitter.kt",
+        "LoadableData.kt",
+        "MutableData.kt",
     ],
 )
 
-java_library(
+kt_jvm_library(
     name = "impl",
-    srcs = ["MutableValue.java"],
+    srcs = ["MutableValue.kt"],
     deps = [":datamodel"],
 )

@@ -3,7 +3,8 @@ package believe.gamestate;
 import believe.action.ChangeStateAction;
 import believe.app.proto.GameOptionsProto.GameOptions;
 import believe.app.proto.GameOptionsProto.GameplayOptions;
-import believe.datamodel.MutableDataCommitter;
+import believe.datamodel.DataCommitter;
+import believe.datamodel.MutableValue;
 import believe.gui.MenuSelection;
 import believe.gui.NumberPicker;
 import believe.gui.VerticalKeyboardScrollpanel;
@@ -21,7 +22,10 @@ public class OptionsMenuState extends GameStateBase {
 
   @Inject
   public OptionsMenuState(
-      GameContainer container, StateBasedGame game, MutableDataCommitter<GameOptions> gameOptions) {
+      GameContainer container,
+      StateBasedGame game,
+      MutableValue<GameOptions> mutableGameOptions,
+      DataCommitter<GameOptions> gameOptionsCommitter) {
     int cWidth = container.getWidth();
     int cHeight = container.getHeight();
     scrollPanelFocused = false;
@@ -49,14 +53,14 @@ public class OptionsMenuState extends GameStateBase {
             container,
             container.getGraphics().getFont(),
             "Flow Speed",
-            gameOptions.get().getGameplayOptions().getFlowSpeed(),
+            mutableGameOptions.get().getGameplayOptions().getFlowSpeed(),
             1,
             20);
     flowSpeed.addListener(
         (component) -> {
           if (scrollPanelFocused) {
-            gameOptions.update(
-                gameOptions
+            mutableGameOptions.update(
+                mutableGameOptions
                     .get()
                     .toBuilder()
                     .mergeGameplayOptions(
@@ -70,7 +74,7 @@ public class OptionsMenuState extends GameStateBase {
     scrollPanel.addChild(flowSpeed);
     back.addListener(
         (component) -> {
-          gameOptions.commit();
+          gameOptionsCommitter.commit(mutableGameOptions.get());
           new ChangeStateAction<>(MainMenuState.class, game).componentActivated(component);
         });
   }

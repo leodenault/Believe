@@ -1,6 +1,6 @@
 package believe.map.tiled;
 
-import believe.io.ResourceLoader;
+import believe.io.ResourceManager;
 import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
 import javax.xml.parsers.DocumentBuilder;
@@ -33,7 +33,7 @@ public class TiledMap {
   /** Indicates if we're running on a headless system */
   private static boolean headless;
 
-  private final ResourceLoader resourceLoader;
+  private final ResourceManager resourceManager;
   private final TileSetFactory tileSetFactory;
   private final String tileMapLocation;
   private final String tileSetsLocation;
@@ -81,11 +81,11 @@ public class TiledMap {
    * @param tileSetsLocation The location where we can find the tileset images and other resources
    */
   public TiledMap(
-      @Provided ResourceLoader resourceLoader,
+      @Provided ResourceManager resourceManager,
       @Provided TileSetFactory tileSetFactory,
       String tileMapLocation,
       String tileSetsLocation) {
-    this.resourceLoader = resourceLoader;
+    this.resourceManager = resourceManager;
     this.tileSetFactory = tileSetFactory;
     this.tileMapLocation = tileMapLocation;
     this.tileSetsLocation = tileSetsLocation;
@@ -475,7 +475,7 @@ public class TiledMap {
    * @throws SlickException Indicates a failure to parse the map or find a tileset
    */
   public void load() throws SlickException {
-    InputStream in = resourceLoader.getResourceAsStream(tileMapLocation);
+    InputStream in = resourceManager.getResourceAsStream(tileMapLocation);
 
     try {
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

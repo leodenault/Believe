@@ -2,11 +2,11 @@ package believe.dialogue;
 
 import believe.character.playable.PlayableDaggerModule;
 import believe.command.CommandSupplier;
-import believe.datamodel.protodata.MutableProtoDataCommitter;
+import believe.datamodel.protodata.BinaryProtoFile;
+import believe.datamodel.protodata.BinaryProtoFile.BinaryProtoFileFactory;
 import believe.dialogue.InternalQualifiers.DialogueNameProperty;
 import believe.dialogue.InternalQualifiers.FollowupCommandsProperty;
 import believe.dialogue.InternalQualifiers.ModulePrivate;
-import believe.dialogue.proto.DialogueProto.Dialogue;
 import believe.dialogue.proto.DialogueProto.DialogueMap;
 import believe.react.NotificationStrategy;
 import believe.react.Observable;
@@ -26,17 +26,11 @@ import java.util.function.Supplier;
 public abstract class DialogueDaggerModule {
   @Provides
   @Singleton
-  static MutableProtoDataCommitter<DialogueMap> provideDialogueMapProtoDataCommitter() {
-    MutableProtoDataCommitter<DialogueMap> dialogueMap =
-        new MutableProtoDataCommitter<>(
-            "res/dialogue/dialogue.pb", DialogueMap.parser(), DialogueMap.getDefaultInstance());
-    dialogueMap.load();
-    return dialogueMap;
+  static Supplier<DialogueMap> provideDialogueMap(BinaryProtoFileFactory binaryProtoFileFactory) {
+    DialogueMap dialogueMap =
+        binaryProtoFileFactory.create("res/dialogue/dialogue.pb", DialogueMap.parser()).load();
+    return dialogueMap == null ? DialogueMap::getDefaultInstance : () -> dialogueMap;
   }
-
-  @Binds
-  abstract Supplier<DialogueMap> bindDialogueMapSupplier(
-      MutableProtoDataCommitter<DialogueMap> dialogueMapMutableProtoDataCommitter);
 
   @Binds
   @IntoMap

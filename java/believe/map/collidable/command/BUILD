@@ -54,7 +54,6 @@ java_library(
 java_library(
     name = "package-info",
     srcs = ["package-info.java"],
-    visibility = ["//javatests/believe/map/collidable/command:__pkg__"],
     deps = [
         "//java/believe/app/annotation",
         "//third_party/javax:annotations",

@@ -7,6 +7,9 @@ package(
 
 kt_jvm_library(
     name = "testing",
-    srcs = ["FakeResourceManagerFactory.kt"],
-    deps = ["//java/believe/io"],
+    srcs = ["FakeBinaryProtoFileFactory.kt"],
+    deps = [
+        "//java/believe/datamodel/protodata",
+        "//java/believe/io/testing",
+    ],
 )

@@ -11,7 +11,7 @@ import java.util.Set;
 @Module
 public abstract class IoDaggerModule {
   @Binds
-  abstract ResourceLoader bindResourceLoader(ResourceLoaderImpl resourceLoader);
+  abstract ResourceManager bindResourceLoader(ResourceManagerImpl resourceLoader);
 
   @Multibinds
   abstract Set<ResourceLocation> bindResourceLocations();

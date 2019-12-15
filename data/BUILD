@@ -1,5 +1,5 @@
 filegroup(
     name = "data",
     srcs = glob(["*.xml"]),
-    visibility = ["//:__pkg__"],
+    visibility = ["//:believe_all_pkgs"],
 )

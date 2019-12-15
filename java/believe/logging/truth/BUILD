@@ -20,7 +20,6 @@ java_library(
 java_library(
     name = "package_info",
     srcs = ["package-info.java"],
-    visibility = ["//javatests/believe/logging/truth:__pkg__"],
     deps = [
         "//java/believe/app/annotation",
         "//third_party/javax:annotations",

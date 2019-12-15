@@ -6,12 +6,12 @@ package(
 
 kt_jvm_library(
     name = "io",
-    srcs = ["ResourceLoader.kt"],
+    srcs = ["ResourceManager.kt"],
 )
 
 kt_jvm_library(
     name = "impl",
-    srcs = ["ResourceLoaderImpl.kt"],
+    srcs = ["ResourceManagerImpl.kt"],
     deps = [
         ":io",
         "//third_party/javax:annotations",

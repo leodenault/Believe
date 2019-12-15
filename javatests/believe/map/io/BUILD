@@ -8,6 +8,7 @@ package(
 kt_junit5_test(
     name = "BackgroundSceneParserImplTest",
     srcs = ["BackgroundSceneParserImplTest.kt"],
+    friends = [],
     deps = [
         "//java/believe/gui/testing",
         "//java/believe/map/data",
@@ -25,6 +26,8 @@ java_junit5_test(
         "//javatests/believe/map/io/data:test_map_textproto",
     ],
     deps = [
+        "//java/believe/datamodel/protodata",
+        "//java/believe/datamodel/protodata/testing",
         "//java/believe/gui",
         "//java/believe/gui/testing",
         "//java/believe/logging/testing",

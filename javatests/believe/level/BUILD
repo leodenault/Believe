@@ -1,4 +1,4 @@
-load("//bzl:rules.bzl", "java_junit5_test", "kt_junit5_test")
+load("//bzl:rules.bzl", "kt_junit5_test")
 
 package(
     default_testonly = True,
@@ -16,6 +16,24 @@ kt_junit5_test(
         "//java/believe/map/data",
         "//java/believe/map/data/proto:map_metadata_java_proto",
         "//java/believe/map/io",
+        "//third_party/truth",
+    ],
+)
+
+kt_junit5_test(
+    name = "LevelManagerImplTest",
+    srcs = ["LevelManagerImplTest.kt"],
+    friends = ["//java/believe/level:impl"],
+    deps = [
+        "//java/believe/command/proto:command_sequence_java_proto",
+        "//java/believe/datamodel",
+        "//java/believe/datamodel/protodata/testing",
+        "//java/believe/level:impl",
+        "//java/believe/level/proto:level_java_proto",
+        "//java/believe/logging/testing",
+        "//java/believe/logging/truth",
+        "//java/believe/map/data",
+        "//third_party/mockito",
         "//third_party/truth",
     ],
 )
