@@ -38,7 +38,7 @@ java_test(
     name = "NumberPickerTest",
     srcs = ["NumberPickerTest.java"],
     deps = [
-        "//java/believe/audio",
+        "//java/believe/audio/testing",
         "//java/believe/gui",
         "//third_party/hamcrest",
         "//third_party/junit",

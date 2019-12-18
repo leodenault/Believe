@@ -24,6 +24,7 @@ java_library(
     deps = [
         "//java/believe/app/annotation",
         "//java/believe/audio",
+        "//java/believe/audio:impl",
         "//java/believe/command",
         "//java/believe/core",
         "//java/believe/core/display",

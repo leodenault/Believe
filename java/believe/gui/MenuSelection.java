@@ -1,6 +1,7 @@
 package believe.gui;
 
 import believe.audio.Sound;
+import believe.audio.SoundImpl;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.GUIContext;
@@ -30,8 +31,8 @@ public class MenuSelection extends TextComponent {
         width,
         height,
         text,
-        new Sound(DEFAULT_SELECTION_SOUND),
-        new Sound(DEFAULT_ACTIVATION_SOUND));
+        new SoundImpl(DEFAULT_SELECTION_SOUND),
+        new SoundImpl(DEFAULT_ACTIVATION_SOUND));
   }
 
   /** Used for testing. */

@@ -1,6 +1,7 @@
 package believe.gui;
 
 import believe.audio.Sound;
+import believe.audio.SoundImpl;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
@@ -75,7 +76,7 @@ public class NumberPicker extends MenuSelection {
     this.activated = false;
     this.min = min;
     this.max = max;
-    this.pressSound = new Sound(DEFAULT_PRESS_SOUND);
+    this.pressSound = new SoundImpl(DEFAULT_PRESS_SOUND);
   }
 
   /** Used for testing. */

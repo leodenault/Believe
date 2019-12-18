@@ -5,7 +5,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import believe.audio.Sound;
+import believe.audio.testing.FakeSound;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -18,13 +18,13 @@ public class NumberPickerTest {
 
   @Mock private GUIContext container;
   @Mock private Input input;
-  @Mock private Sound sound;
   @Mock private Font font;
 
   @Before
   public void setUp() {
     initMocks(this);
     when(container.getInput()).thenReturn(input);
+    FakeSound sound = new FakeSound();
     picker = new NumberPicker(container, font, 0, 0, 0, 0, "", 3, 1, 5, sound, sound, sound);
   }
 

@@ -11,9 +11,15 @@ kt_jvm_library(
         "Sound.kt",
     ],
     deps = [
-        "//java/believe/io",
-        "//third_party/dagger",
-        "//third_party/javax:annotations",
+        "//third_party/slick",
+    ],
+)
+
+kt_jvm_library(
+    name = "impl",
+    srcs = ["SoundImpl.kt"],
+    deps = [
+        ":audio",
         "//third_party/slick",
     ],
 )
