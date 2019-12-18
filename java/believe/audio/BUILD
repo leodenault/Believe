@@ -8,11 +8,9 @@ kt_jvm_library(
     name = "audio",
     srcs = [
         "Music.kt",
-        "OpenlAlFixer.kt",
         "Sound.kt",
     ],
     deps = [
-        ":internal_qualifiers",
         "//java/believe/io",
         "//third_party/dagger",
         "//third_party/javax:annotations",

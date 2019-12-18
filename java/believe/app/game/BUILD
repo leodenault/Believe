@@ -33,7 +33,6 @@ java_library(
         "//java/believe/app:game_container_supplier",
         "//java/believe/app/proto:game_options_java_proto",
         "//java/believe/audio",
-        "//java/believe/audio:dagger_module",
         "//java/believe/character/playable",
         "//java/believe/character/playable:dagger_module",
         "//java/believe/character/playable:package-info",

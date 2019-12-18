@@ -68,7 +68,6 @@ java_library(
         ":qualifiers",
         "//java/believe/action",
         "//java/believe/app/proto:game_options_java_proto",
-        "//java/believe/audio:dagger_module",
         "//java/believe/character/playable:dagger_module",
         "//java/believe/command:dagger_module",
         "//java/believe/core/io",

@@ -42,7 +42,6 @@ import java.util.function.Supplier;
 /** Dagger module used in all application components. */
 @Module(
     includes = {
-      AudioDaggerModule.class,
       CollidableTileDaggerModule.class,
       CollisionDaggerModule.class,
       CollidableCommandDaggerModule.class,
