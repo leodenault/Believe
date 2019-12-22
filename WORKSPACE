@@ -87,7 +87,7 @@ maven_jar(
 
 http_archive(
     name = "com_google_protobuf",
-    sha256 = "f35dcbdce75fa14c289c73ec9b8adaf00ced04c017cc8604efb29cd33d0472e3",
+    sha256 = "594dbf9bb549dd117108460ea2782bfde9cc47a118465200bea5e02c7edfa04f",
     strip_prefix = "protobuf-master",
     urls = ["https://github.com/protocolbuffers/protobuf/archive/master.zip"],
 )
