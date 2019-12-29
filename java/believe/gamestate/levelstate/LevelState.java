@@ -129,6 +129,7 @@ public abstract class LevelState extends GameStateBase
       initPhysics();
 
       levelEnter(container, game);
+      levelData.getInitialCommand().execute();
     }
   }
 

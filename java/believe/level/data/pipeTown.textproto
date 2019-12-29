@@ -14,3 +14,19 @@ map_metadata {
     horizontal_speed_multiplier: 0.1
   }
 }
+initial_commands {
+  # commands {
+  #   name: "stop"
+  # }
+  commands {
+    name: "dialogue"
+    parameters {
+      key: "dialogue_name"
+      value: "testing"
+    }
+    parameters {
+      key: "followup_commands"
+      value: "commands { name: \"right\" }"
+    }
+  }
+}

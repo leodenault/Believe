@@ -31,7 +31,6 @@
     <property name="entity_type" value="enemy"/>
    </properties>
   </object>
-  <object id="20" gid="17" x="64" y="704" width="32" height="32"/>
   <object id="21" gid="22" x="352" y="1504" width="32" height="32"/>
   <object id="22" gid="22" x="544" y="1408" width="32" height="32"/>
   <object id="23" gid="22" x="704" y="1344" width="32" height="32"/>
@@ -40,24 +39,6 @@
   <object id="26" gid="22" x="4576" y="1504" width="32" height="32"/>
   <object id="27" gid="22" x="6016" y="1504" width="32" height="32"/>
   <object id="28" gid="21" x="7776" y="1504" width="32" height="32"/>
-  <object id="30" gid="26" x="640" y="1344" width="32" height="32">
-   <properties>
-    <property name="sequence">commands {
-  name: &quot;stop&quot;
-}
-commands {
-  name: &quot;dialogue&quot;
-  parameters {
-    key: &quot;dialogue_name&quot;
-    value: &quot;testing&quot;
-  }
-  parameters {
-    key: &quot;followup_commands&quot;
-    value: &quot;commands { name: \&quot;right\&quot; }&quot;
-  }
-}</property>
-   </properties>
-  </object>
  </objectgroup>
  <layer name="Front" width="250" height="100">
   <properties>
