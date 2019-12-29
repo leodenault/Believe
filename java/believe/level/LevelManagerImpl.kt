@@ -2,16 +2,17 @@ package believe.level
 
 import believe.datamodel.protodata.BinaryProtoFile.BinaryProtoFileFactory
 import believe.level.proto.LevelProto.Level
+import dagger.Reusable
 import org.newdawn.slick.util.Log
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /** Default implementation of [LevelManager].  */
-@Singleton
+@Reusable
 class LevelManagerImpl @Inject internal constructor(
     private val binaryProtoFileFactory: BinaryProtoFileFactory,
-    private val levelDataParser: (Level) -> LevelData?,
+    private val levelDataParser: LevelParser,
     @LevelDefinitionsDirectory
     private val levelDefinitionsDirectory: String
 ) : LevelManager {
@@ -32,7 +33,7 @@ class LevelManagerImpl @Inject internal constructor(
             return null
         }
 
-        val parsedLevelData = levelDataParser(level)
+        val parsedLevelData = levelDataParser.parseLevel(level)
         if (parsedLevelData == null) {
             Log.error("Failed to parse level at '$levelLocation' into LevelData instance.")
             return null

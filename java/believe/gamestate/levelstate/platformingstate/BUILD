@@ -16,6 +16,7 @@ java_library(
         "//java/believe/core/io",
         "//java/believe/datamodel:impl",
         "//java/believe/gamestate/levelstate",
+        "//java/believe/level",
         "//java/believe/levelFlow/component",
         "//java/believe/map/data",
         "//java/believe/map/gui",

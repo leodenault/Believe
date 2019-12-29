@@ -55,13 +55,9 @@ abstract class LevelEditorModule {
   @IntoMap
   @IntKey(Input.KEY_R)
   @EventActions
-  static Function<PlatformingState, Void> provideResetLevelAction(GameContainer gameContainer) {
+  static Function<PlatformingState, Void> provideResetLevelAction() {
     return platformingState -> {
-      try {
-        platformingState.reloadLevel(gameContainer);
-      } catch (SlickException e) {
-        Log.error("Failed to reload level.", e);
-      }
+      platformingState.reloadLevel();
       return null;
     };
   }

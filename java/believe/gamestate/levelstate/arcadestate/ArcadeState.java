@@ -13,6 +13,7 @@ import believe.gui.CharacterDialogue;
 import believe.gui.CharacterDialogue.DialogueResponse;
 import believe.gui.CharacterDialogueFactory;
 import believe.io.ResourceManager;
+import believe.level.LevelManager;
 import believe.levelFlow.component.FlowComponent;
 import believe.levelFlow.component.FlowComponentListener;
 import believe.levelFlow.parsing.FlowComponentBuilder;
@@ -22,7 +23,6 @@ import believe.levelFlow.parsing.exceptions.FlowFileParserException;
 import believe.map.data.MapData;
 import believe.map.gui.PlayArea;
 import believe.map.gui.PlayAreaFactory;
-import believe.map.io.MapManager;
 import believe.physics.manager.PhysicsManager;
 import believe.react.Observable;
 import believe.react.Observer;
@@ -65,7 +65,7 @@ public class ArcadeState extends LevelState
       PhysicsManager physicsManager,
       FontLoader fontLoader,
       Supplier<GameOptions> gameOptions,
-      MapManager mapManager,
+      LevelManager levelManager,
       PlayAreaFactory playAreaFactory,
       PlayableCharacterFactory playableCharacterFactory,
       CharacterDialogueFactory characterDialogueFactory,
@@ -75,7 +75,7 @@ public class ArcadeState extends LevelState
     super(
         container,
         game,
-        mapManager,
+        levelManager,
         physicsManager,
         fontLoader,
         playableCharacterFactory,
@@ -163,7 +163,7 @@ public class ArcadeState extends LevelState
   }
 
   @Override
-  protected String getMapName() {
+  protected String getLevelName() {
     return "pipeTown";
   }
 

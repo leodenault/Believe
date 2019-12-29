@@ -1,8 +1,0 @@
-map_location: "/res/maps/snow.tmx"
-tile_sets_location: "/res/maps/tilesets"
-map_backgrounds {
-  file_location: "/res/graphics/backgrounds/tree.png"
-  top_y_position: 0
-  bottom_y_position: 1
-  horizontal_speed_multiplier: 0.5
-}

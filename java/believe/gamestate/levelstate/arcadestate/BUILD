@@ -21,6 +21,7 @@ java_library(
         "//java/believe/gamestate/levelstate",
         "//java/believe/gui",
         "//java/believe/io",
+        "//java/believe/level",
         "//java/believe/levelFlow/component",
         "//java/believe/levelFlow/parsing",
         "//java/believe/levelFlow/parsing/exceptions",

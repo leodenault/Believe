@@ -6,7 +6,6 @@ java_library(
     name = "io",
     srcs = [
         "BackgroundSceneParser.java",
-        "MapManager.java",
         "MapMetadataParser.java",
         "ObjectParser.java",
         "TileParser.java",
@@ -25,7 +24,6 @@ java_library(
     name = "impl",
     srcs = [
         "BackgroundSceneParserImpl.java",
-        "MapManagerImpl.java",
         "MapMetadataParserImpl.java",
         "ObjectParser.java",
         "TiledMapLayerParserImpl.java",

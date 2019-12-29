@@ -6,6 +6,7 @@ import believe.io.ResourceManager
 import com.google.protobuf.InvalidProtocolBufferException
 import com.google.protobuf.Message
 import com.google.protobuf.Parser
+import dagger.Reusable
 import org.newdawn.slick.util.Log
 import javax.inject.Inject
 
@@ -49,6 +50,7 @@ class BinaryProtoFile<M : Message> internal constructor(
         data.writeTo(outputStream)
     }
 
+    @Reusable
     class BinaryProtoFileFactory @Inject constructor(
         private val resourceManager: ResourceManager
     ) {

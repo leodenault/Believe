@@ -9,8 +9,8 @@ import believe.character.playable.PlayableCharacterFactory;
 import believe.core.io.FontLoader;
 import believe.core.io.testing.FakeFontLoader;
 import believe.datamodel.MutableValue;
+import believe.level.LevelManager;
 import believe.map.gui.PlayAreaFactory;
-import believe.map.io.MapManager;
 import believe.physics.manager.PhysicsManager;
 import believe.testing.FakeGameContainer;
 import org.junit.Before;
@@ -30,7 +30,7 @@ public class PlatformingStateTest {
   @Mock private StateBasedGame game;
   @Mock private PhysicsManager physicsManager;
   @Mock private Function<PlatformingState, Void> singleEventAction;
-  @Mock private MapManager mapManager;
+  @Mock private LevelManager levelManager;
   @Mock private PlayAreaFactory playAreaFactory;
   @Mock private PlayableCharacterFactory playableCharacterFactory;
 
@@ -45,7 +45,7 @@ public class PlatformingStateTest {
         new PlatformingState(
             container,
             game,
-            mapManager,
+            levelManager,
             physicsManager,
             hashMapOf(entry(Input.KEY_LEFT, singleEventAction)),
             fontLoader,

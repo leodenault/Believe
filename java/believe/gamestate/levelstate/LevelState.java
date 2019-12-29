@@ -13,9 +13,10 @@ import believe.gamestate.temporarystate.GamePausedOverlay;
 import believe.gamestate.temporarystate.OverlayablePrecedingState;
 import believe.gamestate.temporarystate.PrecedingState;
 import believe.gui.ProgressBar;
+import believe.level.LevelData;
+import believe.level.LevelManager;
 import believe.map.data.MapData;
 import believe.map.gui.PlayArea;
-import believe.map.io.MapManager;
 import believe.physics.manager.PhysicsManager;
 import javax.annotation.Nullable;
 import org.newdawn.slick.GameContainer;
@@ -31,7 +32,7 @@ import java.util.stream.Stream;
 public abstract class LevelState extends GameStateBase
     implements OverlayablePrecedingState, DamageListener {
 
-  private final MapManager mapManager;
+  private final LevelManager levelManager;
   private final GameContainer container;
   private final ChangeToTemporaryStateAction<OverlayablePrecedingState> pauseAction;
   private final ChangeToTemporaryStateAction<PrecedingState> gameOverAction;
@@ -40,7 +41,7 @@ public abstract class LevelState extends GameStateBase
   private final PhysicsManager physicsManager;
 
   private boolean enteringFromPauseMenu;
-  @Nullable private MapData mapData;
+  @Nullable private LevelData levelData;
   private ProgressBar focusBar;
 
   protected StateBasedGame game;
@@ -50,14 +51,14 @@ public abstract class LevelState extends GameStateBase
   public LevelState(
       GameContainer container,
       StateBasedGame game,
-      MapManager mapManager,
+      LevelManager levelManager,
       PhysicsManager physicsManager,
       FontLoader fontLoader,
       PlayableCharacterFactory playableCharacterFactory,
       MutableValue<Optional<PlayableCharacter>> currentPlayableCharacter) {
     this.container = container;
     this.game = game;
-    this.mapManager = mapManager;
+    this.levelManager = levelManager;
     this.physicsManager = physicsManager;
     this.pauseAction = new ChangeToTemporaryStateAction<>(GamePausedOverlay.class, this, game);
     this.gameOverAction = new ChangeToTemporaryStateAction<>(GameOverState.class, this, game);
@@ -101,8 +102,8 @@ public abstract class LevelState extends GameStateBase
   @Override
   public void reset() {
     player.setLocation(
-        mapData.tiledMapData().playerStartX(),
-        mapData.tiledMapData().playerStartY() - player.getHeight());
+        levelData.getMapData().tiledMapData().playerStartX(),
+        levelData.getMapData().tiledMapData().playerStartY() - player.getHeight());
     player.setVerticalSpeed(0);
     player.heal(1f);
     playArea.resetLayout();
@@ -113,7 +114,8 @@ public abstract class LevelState extends GameStateBase
   public void enter(GameContainer container, StateBasedGame game) throws SlickException {
     super.enter(container, game);
     if (!enteringFromPauseMenu) {
-      mapData = getMapData();
+      levelData = getLevelData();
+      MapData mapData = levelData.getMapData();
       player =
           playableCharacterFactory.create(
               this,
@@ -130,20 +132,20 @@ public abstract class LevelState extends GameStateBase
     }
   }
 
-  private MapData getMapData() throws SlickException {
-    Optional<MapData> optionalMapData = mapManager.getMap(getMapName());
-    if (!optionalMapData.isPresent()) {
+  private LevelData getLevelData() {
+    LevelData levelData = levelManager.getLevel(getLevelName());
+    if (levelData == null) {
       // TODO(#16): Show an error screen instead of throwing an exception.
-      throw new IllegalStateException("Cannot initialize level due to missing map.");
+      throw new IllegalStateException("Cannot initialize level due to missing level data.");
     }
-    return optionalMapData.get();
+    return levelData;
   }
 
-  public void reloadLevel(GameContainer container) throws SlickException {
+  public void reloadLevel() {
     int playerX = player.getX();
     int playerY = player.getY();
-    mapData = getMapData();
-    playArea.reloadMap(mapData);
+    levelData = getLevelData();
+    playArea.reloadMap(levelData.getMapData());
     reset();
     player.setLocation(playerX, playerY);
   }
@@ -155,6 +157,7 @@ public abstract class LevelState extends GameStateBase
 
   private void initPhysics() {
     physicsManager.reset();
+    MapData mapData = levelData.getMapData();
     Stream.concat(
             mapData.tiledMapData().objectLayers().stream()
                 .flatMap(
@@ -176,7 +179,7 @@ public abstract class LevelState extends GameStateBase
 
   protected abstract boolean isOnRails();
 
-  protected abstract String getMapName();
+  protected abstract String getLevelName();
 
   protected abstract String getMusicLocation();
 

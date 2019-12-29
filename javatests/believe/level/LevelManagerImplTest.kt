@@ -71,7 +71,11 @@ internal class LevelManagerImplTest {
     private fun levelManagerImpl(
         binaryProtoFileFactory: BinaryProtoFileFactory, levelParser: (Level) -> LevelData?
     ): LevelManagerImpl {
-        return LevelManagerImpl(binaryProtoFileFactory, levelParser, LEVEL_DIRECTORY)
+        return LevelManagerImpl(
+            binaryProtoFileFactory, object : LevelParser {
+                override fun parseLevel(level: Level): LevelData? = levelParser(level)
+            }, LEVEL_DIRECTORY
+        )
     }
 
     companion object {

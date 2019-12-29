@@ -20,6 +20,7 @@ java_library(
         "//java/believe/gamestate/temporarystate",
         "//java/believe/gamestate/temporarystate:impl",
         "//java/believe/gui",
+        "//java/believe/level",
         "//java/believe/map/data",
         "//java/believe/map/gui",
         "//java/believe/map/io",

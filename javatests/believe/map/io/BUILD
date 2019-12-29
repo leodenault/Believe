@@ -20,31 +20,6 @@ kt_junit5_test(
 )
 
 java_junit5_test(
-    name = "MapManagerImplTest",
-    srcs = ["MapManagerImplTest.java"],
-    data = [
-        "//javatests/believe/map/io/data:test_map_textproto",
-    ],
-    deps = [
-        "//java/believe/datamodel/protodata",
-        "//java/believe/datamodel/protodata/testing",
-        "//java/believe/gui",
-        "//java/believe/gui/testing",
-        "//java/believe/logging/testing",
-        "//java/believe/logging/truth",
-        "//java/believe/map/data",
-        "//java/believe/map/data/proto:map_metadata_java_proto",
-        "//java/believe/map/io",
-        "//java/believe/map/io:impl",
-        "//java/believe/testing/mockito",
-        "//java/believe/util",
-        "//third_party/mockito",
-        "//third_party/slick",
-        "//third_party/truth:truth8",
-    ],
-)
-
-java_junit5_test(
     name = "TiledMapLayerParserImplTest",
     srcs = ["TiledMapLayerParserImplTest.java"],
     deps = [

@@ -73,9 +73,6 @@ public abstract class MapParsingDaggerModule {
   @Binds
   abstract MapMetadataParser bindTiledMapParser(MapMetadataParserImpl tiledMapParserImpl);
 
-  @Binds
-  abstract MapManager bindMapManager(MapManagerImpl mapManagerImpl);
-
   @Provides
   static TiledMapParser provideTiledMapParser(
       @PlayerStartXProperty String playerStartXProperty,

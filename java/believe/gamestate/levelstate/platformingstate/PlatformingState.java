@@ -8,9 +8,9 @@ import believe.core.SynchedComboPattern;
 import believe.core.io.FontLoader;
 import believe.datamodel.MutableValue;
 import believe.gamestate.levelstate.LevelState;
+import believe.level.LevelManager;
 import believe.levelFlow.component.ComboSyncher;
 import believe.map.data.MapData;
-import believe.map.io.MapManager;
 import believe.map.gui.PlayArea;
 import believe.map.gui.PlayAreaFactory;
 import believe.physics.manager.PhysicsManager;
@@ -41,7 +41,7 @@ public class PlatformingState extends LevelState implements SynchedComboListener
   public PlatformingState(
       GameContainer container,
       StateBasedGame game,
-      MapManager mapManager,
+      LevelManager levelManager,
       PhysicsManager physicsManager,
       @EventActions Map<Integer, Function<PlatformingState, Void>> eventActions,
       FontLoader fontLoader,
@@ -51,7 +51,7 @@ public class PlatformingState extends LevelState implements SynchedComboListener
     super(
         container,
         game,
-        mapManager,
+        levelManager,
         physicsManager,
         fontLoader,
         playableCharacterFactory,
@@ -122,7 +122,7 @@ public class PlatformingState extends LevelState implements SynchedComboListener
   }
 
   @Override
-  protected String getMapName() {
+  protected String getLevelName() {
     return "snow";
   }
 

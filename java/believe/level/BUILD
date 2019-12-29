@@ -9,6 +9,7 @@ kt_jvm_library(
     srcs = [
         "LevelData.kt",
         "LevelManager.kt",
+        "LevelParser.kt",
     ],
     deps = [
         "//java/believe/command",
@@ -30,6 +31,17 @@ kt_jvm_library(
         "//third_party/dagger",
         "//third_party/javax:annotations",
         "//third_party/slick",
+    ],
+)
+
+java_library(
+    name = "dagger_module",
+    srcs = ["LevelDaggerModule.java"],
+    data = ["//java/believe/level/data"],
+    deps = [
+        ":impl",
+        ":level",
+        "//third_party/dagger",
     ],
 )
 

@@ -16,6 +16,7 @@ import believe.gamestate.levelstate.platformingstate.EventActions;
 import believe.gamestate.levelstate.platformingstate.PlatformingState;
 import believe.gui.GuiDaggerModule;
 import believe.io.IoDaggerModule;
+import believe.level.LevelDaggerModule;
 import believe.map.collidable.command.CollidableCommandDaggerModule;
 import believe.map.collidable.tile.CollidableTileDaggerModule;
 import believe.map.io.MapParsingDaggerModule;
@@ -49,6 +50,7 @@ import java.util.function.Supplier;
       DialogueDaggerModule.class,
       GuiDaggerModule.class,
       IoDaggerModule.class,
+      LevelDaggerModule.class,
       MapParsingDaggerModule.class,
       PlayableDaggerModule.class
     })
