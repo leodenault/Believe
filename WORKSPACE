@@ -137,9 +137,9 @@ maven_jar(
 
 # Load dependencies.
 
-RULES_JVM_EXTERNAL_TAG = "2.7"
+RULES_JVM_EXTERNAL_TAG = "3.1"
 
-RULES_JVM_EXTERNAL_SHA = "f04b1466a00a2845106801e0c5cec96841f49ea4e7d1df88dc8e4bf31523df74"
+RULES_JVM_EXTERNAL_SHA = "e246373de2353f3d34d35814947aa8b7d0dd1a58c2f7a6c41cfeaff3007c2d14"
 
 http_archive(
     name = "rules_jvm_external",
@@ -154,6 +154,7 @@ maven_install(
     artifacts = [
         "org.jetbrains.kotlin:kotlin-stdlib:1.3.50",
         "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.1.0",
+        "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0",
     ],
     repositories = [
         "https://repo1.maven.org/maven2",
@@ -171,9 +172,9 @@ http_archive(
 #############################################################
 # Kotlin
 #############################################################
-rules_kotlin_version = "legacy-1.3.0-rc1"
+rules_kotlin_version = "legacy-1.3.0-rc4"
 
-rules_kotlin_sha = "9de078258235ea48021830b1669bbbb678d7c3bdffd3435f4c0817c921a88e42"
+rules_kotlin_sha = "fe32ced5273bcc2f9e41cea65a28a9184a77f3bc30fea8a5c47b3d3bfc801dff"
 
 http_archive(
     name = "io_bazel_rules_kotlin",
