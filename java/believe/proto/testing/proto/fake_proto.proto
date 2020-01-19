@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+package believe.proto.testing.proto;
+
+option java_package = "believe.proto.testing.proto";
+option java_outer_classname = "FakeProto";
+
+message FakeMessage {
+  extensions 1000 to max;
+
+  optional string data = 1;
+}
+
+message FakeMessageExtension {
+  extend FakeMessage {
+    optional FakeMessageExtension fake_message_extension = 1000;
+  }
+
+  optional string extension_data = 1;
+}
+
+message FakeMessageExtension2 {
+  extend FakeMessage {
+    optional FakeMessageExtension2 fake_message_extension_2 = 1001;
+  }
+
+  optional string extension_data = 1;
+}

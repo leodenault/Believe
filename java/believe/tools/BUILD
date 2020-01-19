@@ -1,15 +1,18 @@
+load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kt_jvm_library")
+
 package(
     default_visibility = ["//:believe_all_pkgs"],
 )
 
-java_library(
+kt_jvm_library(
     name = "proto_file_serializer",
     srcs = [
-        "ProtoFileSerializer.java",
-        "package-info.java",
+        "ProtoFileSerializer.kt",
     ],
     deps = [
         "//java/believe/app/annotation",
+        "//java/believe/proto",
+        "//java/believe/proto:dagger_component",
         "//third_party/javax:annotations",
         "//third_party/proto",
         "//third_party/slick",
