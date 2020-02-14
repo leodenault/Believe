@@ -14,19 +14,13 @@ map_metadata {
     horizontal_speed_multiplier: 0.1
   }
 }
-initial_commands {
-  # commands {
-  #   name: "stop"
-  # }
-  commands {
-    name: "dialogue"
-    parameters {
-      key: "dialogue_name"
-      value: "testing"
-    }
-    parameters {
-      key: "followup_commands"
-      value: "commands { name: \"right\" }"
+initial_command {
+  [believe.dialogue.proto.DialogueCommand.dialogue_command] {
+    dialogue_name: "testing"
+    followup_command {
+      [believe.character.playable.proto.PlayableCharacterMovementCommand.playable_character_movement_command] {
+        action: SELECT_RIGHT
+      }
     }
   }
 }

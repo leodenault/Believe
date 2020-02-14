@@ -21,11 +21,11 @@ internal class FakeTextProtoParserFactoryFactoryTest {
 
     @Test
     fun createFailing_createsFactoryThatOutputsFailingParsers() {
-        assertThrows<TextFormat.ParseException> {
+        assertThat(
             FakeTextProtoParserFactoryFactory.createFailing().create(FakeMessage::class.java).parse(
                 ByteArrayInputStream(PROTO_CONTENTS.toByteArray())
             )
-        }
+        ).isNull()
     }
 
     companion object {

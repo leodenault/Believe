@@ -7,6 +7,7 @@ package(
 proto_library(
     name = "dialogue_proto",
     srcs = ["dialogue.proto"],
+    deps = ["//java/believe/command/proto:command_proto"],
 )
 
 java_proto_library(

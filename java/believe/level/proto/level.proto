@@ -5,13 +5,13 @@ package believe.level.proto;
 option java_package = "believe.level.proto";
 option java_outer_classname = "LevelProto";
 
-import "java/believe/command/proto/command_sequence.proto";
+import "java/believe/command/proto/command.proto";
 import "java/believe/map/data/proto/map_metadata.proto";
 
 // Contains details on a level that can be played by the user.
 message Level {
   // The metadata for the map associated with this level.
   optional believe.map.data.proto.MapMetadata map_metadata = 1;
-  // The sequence of commands which should be run at the beginning of a level.
-  optional believe.dialogue.proto.CommandSequence initial_commands = 2;
+  // The command which should be run at the beginning of a level.
+  optional believe.command.proto.Command initial_command = 2;
 }

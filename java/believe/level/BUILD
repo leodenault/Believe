@@ -40,6 +40,7 @@ java_library(
     data = ["//java/believe/level/data"],
     deps = [
         ":impl",
+        ":internal_qualifiers",
         ":level",
         "//third_party/dagger",
     ],

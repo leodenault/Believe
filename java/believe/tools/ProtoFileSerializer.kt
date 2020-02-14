@@ -1,14 +1,14 @@
 package believe.tools
 
-import believe.proto.DaggerProtoComponent
-import believe.proto.TextProtoParserFactory
+import believe.proto.TextProtoParser
 import com.google.protobuf.Message
-import com.google.protobuf.TextFormat
+import dagger.Reusable
 import org.newdawn.slick.util.Log
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
+import javax.inject.Inject
 
 /**
  * Takes a proto message reference and an arbitrary number of textproto files and serializes the
@@ -22,8 +22,9 @@ import java.io.IOException
  *     proto2.textproto
  * ```
  */
-class ProtoFileSerializer internal constructor(
-    private val textProtoParserFactory: TextProtoParserFactory
+@Reusable
+class ProtoFileSerializer @Inject constructor(
+    private val textProtoParserFactory: TextProtoParser.Factory
 ) {
 
     @Throws(ClassNotFoundException::class, IOException::class)
@@ -48,38 +49,14 @@ class ProtoFileSerializer internal constructor(
             val outputFile = File(filePath)
             FileInputStream(inputFile).use { textProtoInputStream ->
                 FileOutputStream(outputFile).use { binaryProtoOutputStream ->
-                    try {
-                        textProtoParser.parse(textProtoInputStream).writeTo(binaryProtoOutputStream)
-                    } catch (e: TextFormat.ParseException) {
-                        Log.error("Failed to generate $fileName due to a parsing error.", e)
+                    val parsedProto = textProtoParser.parse(textProtoInputStream)
+                    if (parsedProto == null) {
+                        Log.error("Failed to generate $fileName due to a parsing error.")
+                    } else {
+                        parsedProto.writeTo(binaryProtoOutputStream)
                     }
                 }
             }
         }
     }
-
-    companion object {
-        private const val USAGE =
-            "Usage:\n    bazel-out/.../proto_file_serializer com.proto.MessageType /path/to/out/dir proto1.textproto [other text protos]"
-
-        @Throws(IOException::class, ClassNotFoundException::class)
-        @JvmStatic
-        fun main(args: Array<String>) {
-            if (!verifyArgs(args)) {
-                return
-            }
-            ProtoFileSerializer(DaggerProtoComponent.create().textProtoParserFactory).serialize(
-                args
-            )
-        }
-
-        private fun verifyArgs(args: Array<String>): Boolean {
-            if (args.size < 3) {
-                println(USAGE)
-                return false
-            }
-            return true
-        }
-    }
-
 }

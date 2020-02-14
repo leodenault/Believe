@@ -14,6 +14,7 @@ kt_junit5_test(
         "//java/believe/logging/testing",
         "//java/believe/logging/truth",
         "//java/believe/testing/proto:test_java_proto",
+        "//third_party/mockito:mockito_kotlin",
         "//third_party/proto",
         "//third_party/truth",
     ],

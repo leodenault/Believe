@@ -7,7 +7,7 @@
  <tileset firstgid="1" source="tilesets/pipe_town.tsx"/>
  <tileset firstgid="17" source="tilesets/commands.tsx"/>
  <tileset firstgid="29" source="tilesets/entities.tsx"/>
- <layer name="Collision" width="250" height="100">
+ <layer name="Collision" width="250" height="100" opacity="0.98">
   <properties>
    <property name="is_visible" value="false"/>
   </properties>

@@ -14,6 +14,7 @@ public abstract class LevelDaggerModule {
   abstract LevelParser bindLevelParser(LevelData.Parser impl);
 
   @Provides
+  @LevelDefinitionsDirectory
   static String provideLevelDataDirectory() {
     return "/java/believe/level/data";
   }

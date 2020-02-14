@@ -6,7 +6,7 @@ proto_library(
     name = "level_proto",
     srcs = ["level.proto"],
     deps = [
-        "//java/believe/command/proto:command_sequence_proto",
+        "//java/believe/command/proto:command_proto",
         "//java/believe/map/data/proto:map_metadata_proto",
     ],
 )

@@ -13,7 +13,7 @@ import believe.physics.collision.Collidable;
 import believe.physics.collision.CollisionHandler;
 import believe.physics.manager.PhysicsManager;
 import believe.statemachine.State;
-import believe.statemachine.State.Action;
+import believe.character.playable.proto.PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand.Action;
 import believe.util.MapEntry;
 import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
@@ -42,7 +42,7 @@ public class PlayableCharacter extends Character<PlayableCharacter>
           entry(Input.KEY_RIGHT, Action.SELECT_RIGHT),
           entry(Input.KEY_SPACE, Action.JUMP));
 
-  private final Map<State, Set<MapEntry<Integer, Action>>> KEY_PRESSED_MODS =
+  private final Map<State<Action>, Set<MapEntry<Integer, Action>>> KEY_PRESSED_MODS =
       immutableMapOf(
           entry(
               standingState,
@@ -51,7 +51,7 @@ public class PlayableCharacter extends Character<PlayableCharacter>
                   entry(Input.KEY_RIGHT, Action.SELECT_RIGHT))),
           entry(movingLeftState, hashSetOf(entry(Input.KEY_RIGHT, Action.STOP))),
           entry(movingRightState, hashSetOf(entry(Input.KEY_LEFT, Action.STOP))));
-  private final Map<State, Set<MapEntry<Integer, Action>>> KEY_RELEASED_MODS =
+  private final Map<State<Action>, Set<MapEntry<Integer, Action>>> KEY_RELEASED_MODS =
       immutableMapOf(
           entry(
               standingState,
@@ -143,17 +143,17 @@ public class PlayableCharacter extends Character<PlayableCharacter>
   }
 
   @Override
-  public void transitionEnded(Set<State> currentStates) {
+  public void transitionEnded(Set<State<Action>> currentStates) {
     super.transitionEnded(currentStates);
     remapKeys(currentStates, KEY_PRESSED_MODS, keyPressedActionMap);
     remapKeys(currentStates, KEY_RELEASED_MODS, keyReleasedActionMap);
   }
 
   private void remapKeys(
-      Set<State> states,
-      Map<State, Set<MapEntry<Integer, Action>>> mods,
+      Set<State<Action>> states,
+      Map<State<Action>, Set<MapEntry<Integer, Action>>> mods,
       Map<Integer, Action> keyActionMap) {
-    for (State state : states) {
+    for (State<Action> state : states) {
       if (mods.containsKey(state)) {
         for (MapEntry<Integer, Action> entry : mods.get(state)) {
           keyActionMap.put(entry.getKey(), entry.getValue());

@@ -12,9 +12,11 @@ kt_jvm_library(
     deps = [
         "//java/believe/datamodel",
         "//java/believe/io",
+        "//java/believe/proto",
+        "//java/believe/proto:impl",
+        "//java/believe/util:kt",
         "//third_party/dagger",
         "//third_party/javax:annotations",
-        "//third_party/proto",
         "//third_party/slick",
     ],
 )

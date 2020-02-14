@@ -6,15 +6,15 @@ java_library(
     name = "dialogue",
     srcs = [
         "DialogueCommand.java",
+        "DialogueCommandParser.java",
         "DialogueData.java",
-        "DialogueSupplier.java",
         "package-info.java",
     ],
     deps = [
         ":internal_qualifiers",
         "//java/believe/app/annotation",
         "//java/believe/command",
-        "//java/believe/command/proto:command_sequence_java_proto",
+        "//java/believe/command/proto:command_java_proto",
         "//java/believe/core",
         "//java/believe/dialogue/proto:dialogue_java_proto",
         "//java/believe/react:impl",
@@ -39,6 +39,7 @@ java_library(
         "//java/believe/react",
         "//java/believe/react:impl",
         "//third_party/dagger",
+        "//third_party/proto",
     ],
 )
 

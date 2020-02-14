@@ -6,21 +6,28 @@ package(
 
 kt_jvm_library(
     name = "proto",
-    srcs = ["TextProtoParser.kt"],
+    srcs = [
+        "ProtoParser.kt",
+        "TextProtoParser.kt",
+    ],
     deps = [
-        "//third_party/auto_factory",
+        "//third_party/dagger",
+        "//third_party/javax:annotations",
         "//third_party/proto",
+        "//third_party/slick",
     ],
 )
 
-java_library(
-    name = "dagger_component",
-    srcs = ["ProtoComponent.java"],
+kt_jvm_library(
+    name = "impl",
+    srcs = ["ProtoParserImpl.kt"],
     deps = [
-        ":dagger_module",
         ":proto",
         "//third_party/dagger",
+        "//third_party/javax:annotations",
+        "//third_party/kotlin:kotlin_reflect",
         "//third_party/proto",
+        "//third_party/slick",
     ],
 )
 
@@ -28,6 +35,8 @@ java_library(
     name = "dagger_module",
     srcs = ["ProtoDaggerModule.java"],
     deps = [
+        ":impl",
+        ":proto",
         "//third_party/dagger",
         "//third_party/proto",
     ],

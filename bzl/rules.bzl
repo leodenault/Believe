@@ -69,8 +69,8 @@ def textproto(name = "", srcs = [], java_outer_class_name = "", proto_message = 
 
     native.java_binary(
         name = binary_name,
-        main_class = "believe.tools.ProtoFileSerializer",
-        runtime_deps = ["//java/believe/tools:proto_file_serializer"] + deps,
+        main_class = "believe.tools.ProtoFileSerializerRunner",
+        runtime_deps = ["//java/believe/tools:runner"] + deps,
     )
 
     cmd = "$(location :{binary_name}) {proto_class} $(@D) {src_args}".format(

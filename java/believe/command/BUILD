@@ -1,38 +1,33 @@
+load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kt_jvm_library")
+
 package(
     default_visibility = ["//:believe_all_pkgs"],
 )
 
-java_library(
+kt_jvm_library(
     name = "command",
     srcs = [
-        "Command.java",
-        "CommandGenerator.java",
-        "CommandSequenceParser.java",
-        "CommandSupplier.java",
+        "Command.kt",
+        "CommandGenerator.kt",
+        "CommandParser.kt",
     ],
     deps = [
-        ":package_info",
-        "//java/believe/command/proto:command_sequence_java_proto",
-        "//java/believe/core",
+        "//java/believe/command/proto:command_java_proto",
+        "//third_party/dagger",
     ],
 )
 
-java_library(
+kt_jvm_library(
     name = "impl",
     srcs = [
-        "CommandGeneratorImpl.java",
-        "CommandSequenceParserImpl.java",
-        "CommandSequenceSupplier.java",
+        "CommandGeneratorImpl.kt",
+        "CommandSequenceParser.kt",
     ],
     deps = [
         ":command",
-        ":internal_qualifiers",
-        ":package_info",
-        "//java/believe/command/proto:command_sequence_java_proto",
-        "//java/believe/core",
+        "//java/believe/command/proto:command_java_proto",
         "//third_party/dagger",
         "//third_party/javax:annotations",
-        "//third_party/proto",
         "//third_party/slick",
     ],
 )
@@ -43,26 +38,8 @@ java_library(
     deps = [
         ":command",
         ":impl",
-        ":internal_qualifiers",
-        ":package_info",
+        "//java/believe/command/proto:command_java_proto",
         "//third_party/dagger",
-    ],
-)
-
-java_library(
-    name = "internal_qualifiers",
-    srcs = ["InternalQualifiers.java"],
-    deps = [
-        ":package_info",
-        "//third_party/javax:annotations",
-    ],
-)
-
-java_library(
-    name = "package_info",
-    srcs = ["package-info.java"],
-    deps = [
-        "//java/believe/app/annotation",
-        "//third_party/javax:annotations",
+        "//third_party/proto",
     ],
 )

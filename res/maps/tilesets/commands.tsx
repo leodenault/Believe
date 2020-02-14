@@ -3,28 +3,36 @@
  <image source="commands.png" width="144" height="96"/>
  <tile id="0">
   <properties>
-   <property name="command" value="right"/>
+   <property name="command">[believe.character.playable.proto.PlayableCharacterMovementCommand.playable_character_movement_command] {
+  action: MOVE_RIGHT
+}</property>
    <property name="entity_type" value="command"/>
    <property name="should_despawn" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="1">
   <properties>
-   <property name="command" value="left"/>
+   <property name="command">[believe.character.playable.proto.PlayableCharacterMovementCommand.playable_character_movement_command] {
+  action: MOVE_LEFT
+}</property>
    <property name="entity_type" value="command"/>
    <property name="should_despawn" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="4">
   <properties>
-   <property name="command" value="stop"/>
+   <property name="command">[believe.character.playable.proto.PlayableCharacterMovementCommand.playable_character_movement_command] {
+  action: STOP
+}</property>
    <property name="entity_type" value="command"/>
    <property name="should_despawn" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="5">
   <properties>
-   <property name="command" value="jump"/>
+   <property name="command">[believe.character.playable.proto.PlayableCharacterMovementCommand.playable_character_movement_command] {
+  action: JUMP
+}</property>
    <property name="entity_type" value="command"/>
    <property name="should_despawn" type="bool" value="true"/>
   </properties>

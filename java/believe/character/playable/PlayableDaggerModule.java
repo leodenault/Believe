@@ -1,10 +1,7 @@
 package believe.character.playable;
 
-import believe.character.playable.InternalQualifiers.JumpMovementCommand;
-import believe.character.playable.InternalQualifiers.LeftMovementCommand;
-import believe.character.playable.InternalQualifiers.RightMovementCommand;
-import believe.character.playable.InternalQualifiers.StopMovementCommand;
-import believe.command.CommandSupplier;
+import believe.character.playable.proto.PlayableCharacterMovementCommandProto;
+import believe.command.CommandParser;
 import believe.datamodel.MutableValue;
 import believe.map.collidable.command.CollidableCommandCollisionHandler;
 import believe.map.collidable.tile.CollidableTileCollisionHandler;
@@ -13,14 +10,11 @@ import believe.map.tiled.EntityType;
 import believe.physics.collision.Collidable;
 import believe.physics.collision.CollisionHandler;
 import believe.physics.damage.DamageBoxCollisionHandler;
-import believe.statemachine.State.Action;
+import com.google.protobuf.GeneratedMessage.GeneratedExtension;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
-import dagger.Reusable;
-import dagger.multibindings.IntoMap;
 import dagger.multibindings.IntoSet;
-import dagger.multibindings.StringKey;
 import javax.inject.Singleton;
 
 import java.util.Optional;
@@ -39,61 +33,10 @@ public abstract class PlayableDaggerModule {
   abstract Supplier<Optional<PlayableCharacter>> bindPlayableCharacterSupplier(
       MutableValue<Optional<PlayableCharacter>> mutablePlayableCharacter);
 
-  @Provides
-  @Reusable
-  @RightMovementCommand
-  static PlayableCharacterMovementCommand provideRightMovementCommand(
-      PlayableCharacterMovementCommandFactory factory) {
-    return factory.create(Action.SELECT_RIGHT);
-  }
-
-  @Provides
-  @Reusable
-  @LeftMovementCommand
-  static PlayableCharacterMovementCommand provideLeftMovementCommand(
-      PlayableCharacterMovementCommandFactory factory) {
-    return factory.create(Action.SELECT_LEFT);
-  }
-
-  @Provides
-  @Reusable
-  @JumpMovementCommand
-  static PlayableCharacterMovementCommand provideJumpMovementCommand(
-      PlayableCharacterMovementCommandFactory factory) {
-    return factory.create(Action.JUMP);
-  }
-
-  @Provides
-  @Reusable
-  @StopMovementCommand
-  static PlayableCharacterMovementCommand provideStopMovementCommand(
-      PlayableCharacterMovementCommandFactory factory) {
-    return factory.create(Action.STOP);
-  }
-
   @Binds
-  @IntoMap
-  @StringKey("right")
-  abstract CommandSupplier bindRightMovementCommandSupplier(
-      @RightMovementCommand PlayableCharacterMovementCommand command);
-
-  @Binds
-  @IntoMap
-  @StringKey("left")
-  abstract CommandSupplier bindLeftMovementCommandSupplier(
-      @LeftMovementCommand PlayableCharacterMovementCommand command);
-
-  @Binds
-  @IntoMap
-  @StringKey("jump")
-  abstract CommandSupplier bindJumpMovementCommandSupplier(
-      @JumpMovementCommand PlayableCharacterMovementCommand command);
-
-  @Binds
-  @IntoMap
-  @StringKey("stop")
-  abstract CommandSupplier bindStopMovementCommandSupplier(
-      @StopMovementCommand PlayableCharacterMovementCommand command);
+  @IntoSet
+  abstract CommandParser<?> bindPlayableCharacterMovementCommandParser(
+      PlayableCharacterMovementCommandParser impl);
 
   @Binds
   @IntoSet
@@ -132,5 +75,12 @@ public abstract class PlayableDaggerModule {
   static CollisionHandler<? extends Collidable<?>, ? super EnemyCharacter>
       provideEnemyCollisionHandler(CollidableTileCollisionHandler collidableTileCollisionHandler) {
     return collidableTileCollisionHandler;
+  }
+
+  @Provides
+  @IntoSet
+  static GeneratedExtension<?, ?> providePlayableCharacterMovementCommandExtension() {
+    return PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand
+        .playableCharacterMovementCommand;
   }
 }

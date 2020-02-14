@@ -141,6 +141,10 @@ public final class TileSet {
         String name = propElement.getAttribute("name");
         String value = propElement.getAttribute("value");
 
+        if (value.isEmpty()) {
+          value = propElement.getTextContent();
+        }
+
         tileProps.setProperty(name, value);
       }
 

@@ -1,8 +1,19 @@
-load("//bzl:rules.bzl", "java_junit5_test")
+load("//bzl:rules.bzl", "java_junit5_test", "kt_junit5_test")
 
 package(
     default_testonly = True,
     default_visibility = ["//visibility:private"],
+)
+
+kt_junit5_test(
+    name = "KotlinHelpersTest",
+    srcs = ["KotlinHelpersTest.kt"],
+    friends = ["//java/believe/util:kt"],
+    deps = [
+        "//java/believe/util:kt",
+        "//third_party/mockito:mockito_kotlin",
+        "//third_party/truth",
+    ],
 )
 
 java_test(

@@ -148,7 +148,7 @@ public final class CollidableCommandGeneratorTest {
   void parseObject_commandGeneratorReturnsEmpty_doesNothing() {
     CollidableCommandGenerator collidableCommandGenerator =
         new CollidableCommandGenerator(
-            (commandName, propertyProvider) -> Optional.empty(),
+            (propertyProvider) -> null,
             collidableCommandFactory,
             COMMAND_NAME_PARAMETER,
             SHOULD_DESPAWN_PARAMETER);
@@ -183,9 +183,8 @@ public final class CollidableCommandGeneratorTest {
     }
   }
 
-  private static Optional<believe.command.Command> generateCommand(
-      String commandName, PropertyProvider propertyProvider) {
-    return Optional.of(COMMAND);
+  private static Command generateCommand(PropertyProvider propertyProvider) {
+    return COMMAND;
   }
 
   private static final class FakeCollidableCommandFactory extends CollidableCommandFactory {

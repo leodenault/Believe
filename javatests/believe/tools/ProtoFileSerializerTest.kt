@@ -4,7 +4,7 @@ import believe.logging.testing.VerifiableLogSystem
 import believe.logging.testing.VerifiableLogSystem.LogSeverity
 import believe.logging.testing.VerifiesLoggingCalls
 import believe.logging.truth.VerifiableLogSystemSubject
-import believe.proto.TextProtoParserFactory
+import believe.proto.TextProtoParser
 import believe.proto.testing.FakeTextProtoParserFactoryFactory
 import believe.testing.proto.TestProto.TestMessage
 import believe.testing.temporaryfolder.TemporaryFolder
@@ -17,19 +17,10 @@ import java.io.IOException
 import java.io.OutputStream
 
 internal class ProtoFileSerializerTest {
-    private var textProtoParserFactory: TextProtoParserFactory =
+    private var textProtoParserFactory: TextProtoParser.Factory =
         FakeTextProtoParserFactoryFactory.create()
     private val serializer: ProtoFileSerializer by lazy {
         ProtoFileSerializer(textProtoParserFactory)
-    }
-
-    @Test
-    @UsesTemporaryFolder
-    @Throws(Exception::class)
-    fun main_wrongNumberOfArgs_doesNothing(temporaryFolder: TemporaryFolder) {
-        ProtoFileSerializer.main(arrayOf())
-
-        assertThat(temporaryFolder.folder.list()).isEmpty()
     }
 
     @Test
@@ -106,7 +97,7 @@ internal class ProtoFileSerializerTest {
     @UsesTemporaryFolder
     @VerifiesLoggingCalls
     @Throws(Exception::class)
-    fun serialize_textProtoParserThrowsException_logsExceptionAndSkips(
+    fun serialize_textProtoParserReturnsNull_logsErrorAndSkips(
         temporaryFolder: TemporaryFolder, logSystem: VerifiableLogSystem
     ) {
         textProtoParserFactory = FakeTextProtoParserFactoryFactory.createFailing()
@@ -126,7 +117,7 @@ internal class ProtoFileSerializerTest {
         }
         VerifiableLogSystemSubject.assertThat(logSystem).loggedAtLeastOneMessageThat().hasPattern(
             "Failed to generate some_proto.pb due to a parsing error."
-        ).hasSeverity(LogSeverity.ERROR).hasThrowable(TextFormat.ParseException::class.java)
+        ).hasSeverity(LogSeverity.ERROR)
     }
 
     @Test

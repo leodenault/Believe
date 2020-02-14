@@ -12,6 +12,7 @@ java_library(
     srcs = ["Character.java"],
     deps = [
         ":faction",
+        "//java/believe/character/proto:playable_character_movement_command_java_proto",
         "//java/believe/core",
         "//java/believe/core/display",
         "//java/believe/geometry",

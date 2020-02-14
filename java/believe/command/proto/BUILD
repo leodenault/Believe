@@ -3,11 +3,11 @@ package(
 )
 
 proto_library(
-    name = "command_sequence_proto",
-    srcs = ["command_sequence.proto"],
+    name = "command_proto",
+    srcs = ["command.proto"],
 )
 
 java_proto_library(
-    name = "command_sequence_java_proto",
-    deps = [":command_sequence_proto"],
+    name = "command_java_proto",
+    deps = [":command_proto"],
 )

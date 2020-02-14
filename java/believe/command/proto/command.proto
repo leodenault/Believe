@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package believe.command.proto;
+
+option java_package = "believe.command.proto";
+option java_outer_classname = "CommandProto";
+
+// An ordered list of commands which should be executed as a unit.
+message CommandSequence {
+  extend Command {
+    optional CommandSequence command_sequence = 1002;
+  }
+  // The list of commands which should be executed. The commands will be
+  // executed in the order specified by the list.
+  repeated Command commands = 1;
+}
+
+// A command that, when executed, has an effect on gameplay.
+message Command {
+//  oneof command_data {
+//    // An ordered list of commands which should be executed as a unit.
+//    CommandSequence command_sequence = 1;
+//    // A command that executes dialogue when run.
+//    believe.dialogue.proto.DialogueCommand dialogue_command = 2;
+//  }
+
+  // Next ID: 1004
+  extensions 1000 to max;
+}

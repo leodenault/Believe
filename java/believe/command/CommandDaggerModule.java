@@ -1,38 +1,32 @@
 package believe.command;
 
-import believe.command.InternalQualifiers.SequenceParameter;
+import believe.command.proto.CommandProto.CommandSequence;
+import com.google.protobuf.GeneratedMessage.GeneratedExtension;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
-import dagger.Reusable;
-import dagger.multibindings.IntoMap;
+import dagger.multibindings.IntoSet;
 import dagger.multibindings.Multibinds;
-import dagger.multibindings.StringKey;
 
-import java.util.Map;
+import java.util.Set;
 
 /** Provides Dagger bindings for commands. */
 @Module
 public abstract class CommandDaggerModule {
   @Multibinds
-  abstract Map<String, CommandSupplier> bindCommandSupplierMap();
+  abstract Set<CommandParser<?>> bindCommandParsers();
+
+  @Binds
+  @IntoSet
+  abstract CommandParser<?> bindCommandSequenceSupplier(
+      CommandSequenceParser commandSequenceParser);
 
   @Provides
-  @SequenceParameter
-  static String provideSequenceCommandParameter() {
-    return "sequence";
+  @IntoSet
+  static GeneratedExtension<?, ?> provideCommandSequenceExtension() {
+    return CommandSequence.commandSequence;
   }
 
   @Binds
-  @IntoMap
-  @StringKey("sequence")
-  abstract CommandSupplier bindCommandSequenceSupplier(
-      CommandSequenceSupplier commandSequenceSupplier);
-
-  @Binds
-  abstract CommandSequenceParser bindCommandSequenceParser(
-      CommandSequenceParserImpl commandSequenceParserImpl);
-
-  @Binds
-  abstract CommandGenerator bindCommandGenerator(CommandGeneratorImpl commandGeneratorImpl);
+  abstract CommandGenerator bindCommandGenerator(CommandGeneratorImpl impl);
 }

@@ -12,15 +12,48 @@ kt_jvm_library(
     deps = [
         "//java/believe/app/annotation",
         "//java/believe/proto",
-        "//java/believe/proto:dagger_component",
         "//third_party/javax:annotations",
         "//third_party/proto",
         "//third_party/slick",
     ],
 )
 
+kt_jvm_library(
+    name = "runner",
+    srcs = ["ProtoFileSerializerRunner.kt"],
+    deps = [":dagger_component"],
+)
+
+java_library(
+    name = "dagger_module",
+    srcs = ["ProtoFileSerializerDaggerModule.java"],
+    deps = [
+        "//java/believe/character/playable:dagger_module",
+        "//java/believe/command:dagger_module",
+        "//java/believe/dialogue:dagger_module",
+        "//java/believe/proto:dagger_module",
+        "//third_party/dagger",
+    ],
+)
+
+java_library(
+    name = "dagger_component",
+    srcs = ["ProtoFileSerializerComponent.java"],
+    deps = [
+        ":dagger_module",
+        ":proto_file_serializer",
+        "//java/believe/character/playable:dagger_module",
+        "//java/believe/command:dagger_module",
+        "//java/believe/dialogue:dagger_module",
+        "//java/believe/proto",
+        "//java/believe/proto:dagger_module",
+        "//third_party/dagger",
+        "//third_party/proto",
+    ],
+)
+
 java_binary(
     name = "ProtoFileSerializer",
-    main_class = "believe.tools.ProtoFileSerializer",
-    runtime_deps = [":proto_file_serializer"],
+    main_class = "believe.tools.ProtoFileSerializerRunner",
+    runtime_deps = [":runner"],
 )

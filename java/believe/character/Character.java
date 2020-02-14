@@ -4,6 +4,7 @@ import static believe.util.MapEntry.entry;
 import static believe.util.Util.hashMapOf;
 import static believe.util.Util.hashSetOf;
 
+import believe.character.playable.proto.PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand.Action;
 import believe.core.Updatable;
 import believe.core.display.AnimationSet;
 import believe.core.display.SpriteSheetManager;
@@ -16,7 +17,6 @@ import believe.physics.manager.PhysicsManageable;
 import believe.physics.manager.PhysicsManager;
 import believe.statemachine.ConcurrentStateMachine;
 import believe.statemachine.State;
-import believe.statemachine.State.Action;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -33,7 +33,7 @@ public abstract class Character<C extends Character<C>> extends ComponentBase
         DamageBoxCollidable<C>,
         PhysicsManageable,
         Updatable,
-        ConcurrentStateMachine.Listener {
+        ConcurrentStateMachine.Listener<Action> {
 
   public interface DamageListener {
     DamageListener NONE = (currentFocus, inflictor) -> {};
@@ -51,14 +51,14 @@ public abstract class Character<C extends Character<C>> extends ComponentBase
 
   public static final float MAX_FOCUS = 1.0f;
 
-  protected final State standingState;
-  protected final State movingLeftState;
-  protected final State movingRightState;
-  protected final State groundedState;
-  protected final State jumpingState;
-  protected final ConcurrentStateMachine machine;
+  protected final State<Action> standingState;
+  protected final State<Action> movingLeftState;
+  protected final State<Action> movingRightState;
+  protected final State<Action> groundedState;
+  protected final State<Action> jumpingState;
+  protected final ConcurrentStateMachine<Action> machine;
 
-  private final Map<Set<State>, String> animationMap;
+  private final Map<Set<State<Action>>, String> animationMap;
   private final DamageListener damageListener;
   private final Set<CollisionHandler<? extends Collidable<?>, ? super C>> rightCompatibleHandlers;
 
@@ -90,14 +90,14 @@ public abstract class Character<C extends Character<C>> extends ComponentBase
     anim.setCurrentFrame(0);
     focus = MAX_FOCUS;
 
-    standingState = new State();
-    movingLeftState = new State();
-    movingRightState = new State();
-    groundedState = new State();
-    jumpingState = new State();
+    standingState = new State<>();
+    movingLeftState = new State<>();
+    movingRightState = new State<>();
+    groundedState = new State<>();
+    jumpingState = new State<>();
     buildStateMachine();
     machine =
-        new ConcurrentStateMachine(new HashSet<>(Arrays.asList(standingState, groundedState)));
+        new ConcurrentStateMachine<>(new HashSet<>(Arrays.asList(standingState, groundedState)));
     machine.addListener(this);
 
     animationMap =
@@ -217,7 +217,7 @@ public abstract class Character<C extends Character<C>> extends ComponentBase
   }
 
   @Override
-  public void transitionEnded(Set<State> currentStates) {
+  public void transitionEnded(Set<State<Action>> currentStates) {
     anim = animSet.get(animationMap.get(currentStates));
   }
 

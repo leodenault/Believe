@@ -19,5 +19,8 @@ java_library(
     name = "auto_factory",
     exported_plugins = [":auto_factory_plugin"],
     visibility = ["//:believe_all_pkgs"],
-    exports = ["@google_auto_factory//jar"],
+    exports = [
+        "//third_party/javax:annotations",
+        "@google_auto_factory//jar",
+    ],
 )

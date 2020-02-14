@@ -5,6 +5,8 @@ package believe.dialogue.proto;
 option java_package = "believe.dialogue.proto";
 option java_outer_classname = "DialogueProto";
 
+import "java/believe/command/proto/command.proto";
+
 // A single response within a dialogue that is spoken by a character.
 message Response {
   // The text representing what a character is saying.
@@ -26,4 +28,16 @@ message Dialogue {
 message DialogueMap {
   // The dialogues that will be stored and loaded into the game.
   map<string, Dialogue> dialogues = 1;
+}
+
+// A command that executes dialogue when run.
+message DialogueCommand {
+  extend believe.command.proto.Command {
+    optional DialogueCommand dialogue_command = 1000;
+  }
+  // The name of the dialogue data that should be retrieved.
+  optional string dialogue_name = 1;
+  // The command that should be executed after the user has scrolled through all of the available
+  // dialogue.
+  optional believe.command.proto.Command followup_command = 2;
 }

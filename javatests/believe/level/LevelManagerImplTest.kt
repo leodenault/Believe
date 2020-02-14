@@ -1,7 +1,8 @@
 package believe.level
 
 import believe.command.Command
-import believe.command.proto.CommandSequenceProto.CommandSequence
+import believe.command.proto.CommandProto
+import believe.command.proto.CommandProto.CommandSequence
 import believe.datamodel.protodata.BinaryProtoFile.BinaryProtoFileFactory
 import believe.datamodel.protodata.testing.FakeBinaryProtoFileFactory
 import believe.level.proto.LevelProto.Level
@@ -81,10 +82,12 @@ internal class LevelManagerImplTest {
     companion object {
         private val LEVEL_DIRECTORY: String = "some_directory"
         private val LEVEL: Level =
-            Level.newBuilder().setInitialCommands(CommandSequence.getDefaultInstance()).build()
-        private val EXPECTED_LEVEL_DATA: LevelData = LevelData(
-            MapData.newBuilder(TiledMapData.newBuilder(0, 0, 0, 0).build()).build(),
-            Command { })
+            Level.newBuilder().setInitialCommand(CommandProto.Command.getDefaultInstance()).build()
+        private val EXPECTED_LEVEL_DATA: LevelData =
+            LevelData(MapData.newBuilder(TiledMapData.newBuilder(0, 0, 0, 0).build()).build(),
+                object : Command {
+                    override fun execute() {}
+                })
         private val FAKE_LEVEL_PARSER = object : (Level) -> LevelData? {
             var calls = 0
 

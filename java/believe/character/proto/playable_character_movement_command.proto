@@ -1,0 +1,34 @@
+syntax = "proto2";
+
+package believe.character.playable.proto;
+
+option java_package = "believe.character.playable.proto";
+option java_outer_classname = "PlayableCharacterMovementCommandProto";
+
+import "java/believe/command/proto/command.proto";
+
+// A command that affects a playable character's movement.
+message PlayableCharacterMovementCommand {
+  extend believe.command.proto.Command {
+    optional PlayableCharacterMovementCommand playable_character_movement_command = 1003;
+  }
+
+  // The type of action that can be applied to a playable character's movement.
+  enum Action {
+    UNKNOWN_ACTION = 0;
+    // Signals that the character should move towards the right.
+    SELECT_RIGHT = 1;
+    // Signals that the character should move towards the left.
+    SELECT_LEFT = 2;
+    // Signals that the character should stop moving.
+    STOP = 3;
+    // Signals that the character should jump.
+    JUMP = 4;
+    // Signals that the character has landed from a fall. In practice this is not likely to be
+    // written in an actual command.
+    LAND = 5;
+  }
+
+  // The action that should be applied to the playable character's movement.
+  optional Action action = 1;
+}

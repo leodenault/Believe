@@ -3,31 +3,32 @@ package believe.statemachine;
 import java.util.HashMap;
 import java.util.Map;
 
-public class State {
-  public static enum Action {
-    SELECT_RIGHT, SELECT_LEFT, STOP, JUMP, LAND
+/**
+ * A state within a concurrent state machine.
+ *
+ * @param <A> the type of action that triggers a transition.
+ */
+public class State<A> {
+  private Map<A, Transition<A>> transitions;
+
+  public State() {
+    transitions = new HashMap<>();
   }
 
-  private Map<Action, Transition> transitions;
-
-  public State () {
-    transitions = new HashMap<Action, Transition>();
-  }
-
-  public State addTransition(Action action, Transition transition) {
+  public State<A> addTransition(A action, Transition<A> transition) {
     transitions.put(action, transition);
     return this;
   }
 
-  public State addTransition(Action action, Runnable runnable, State endState) {
-    return addTransition(action, new Transition(runnable, endState));
+  public State<A> addTransition(A action, Runnable runnable, State<A> endState) {
+    return addTransition(action, new Transition<>(runnable, endState));
   }
 
-  public State addTransition(Action action, State endState) {
+  public State<A> addTransition(A action, State<A> endState) {
     return addTransition(action, () -> {}, endState);
   }
 
-  public <T> State transition(Action action) {
+  public State<A> transition(A action) {
     if (transitions.containsKey(action)) {
       return transitions.get(action).execute();
     }

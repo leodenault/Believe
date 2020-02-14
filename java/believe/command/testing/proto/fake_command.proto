@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package believe.command.testing.proto;
+
+option java_package = "believe.command.testing.proto";
+option java_outer_classname = "FakeCommandProto";
+
+import "java/believe/command/proto/command.proto";
+
+message FakeCommand {
+  extend believe.command.proto.Command {
+    optional FakeCommand fake_command = 1000;
+  }
+
+  optional string data = 1;
+}
+
+message FakeCommand2 {
+  extend believe.command.proto.Command {
+    optional FakeCommand2 fake_command_2 = 1001;
+  }
+
+  optional string data = 1;
+}

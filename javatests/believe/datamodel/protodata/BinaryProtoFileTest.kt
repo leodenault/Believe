@@ -6,25 +6,37 @@ import believe.logging.testing.VerifiableLogSystem
 import believe.logging.testing.VerifiableLogSystem.LogSeverity
 import believe.logging.testing.VerifiesLoggingCalls
 import believe.logging.truth.VerifiableLogSystemSubject
+import believe.proto.ProtoParser
+import believe.proto.ProtoParserImpl
 import believe.testing.proto.TestProto.TestMessage
 import com.google.common.truth.Truth.assertThat
+import com.nhaarman.mockitokotlin2.mock
 import com.google.protobuf.InvalidProtocolBufferException
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.jupiter.api.Test
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 
 internal class BinaryProtoFileTest {
+    val resourceManager: ResourceManager = mock {
+        on { getResourceAsStream(any()) } doReturn ByteArrayInputStream(PROTO.toByteArray())
+    }
+    val protoParser: ProtoParser<TestMessage> = mock {
+        on { parse(any()) } doReturn PROTO
+    }
+    val binaryProtoFile = BinaryProtoFile(resourceManager, FILE_NAME, protoParser)
+
     @Test
     fun load_returnsContentsFromFile() {
-        val binaryProtoFile = binaryProtoFile(
-            FakeResourceManagerFactory.managerReadingFrom(ByteArrayInputStream(PROTO.toByteArray()))
-        )
-
         assertThat(binaryProtoFile.load()).isEqualTo(PROTO)
     }
 
     @Test
     fun load_cannotGetInputStream_returnsNull() {
+        whenever(resourceManager.getResourceAsStream(any())) doReturn null
+
         assertThat(binaryProtoFile(FakeResourceManagerFactory.createNoOp()).load()).isNull()
     }
 
@@ -33,27 +45,18 @@ internal class BinaryProtoFileTest {
     fun load_errorReadingFromFile_logsErrorAndReturnsNull(
         logSystem: VerifiableLogSystem
     ) {
-        val binaryProtoFile = binaryProtoFile(
-            FakeResourceManagerFactory.managerReadingFrom(
-                ByteArrayInputStream(
-                    byteArrayOf(
-                        1, 2, 3
-                    )
-                )
-            )
-        )
+        whenever(protoParser.parse(any())) doReturn null
 
         assertThat(binaryProtoFile.load()).isNull()
         VerifiableLogSystemSubject.assertThat(logSystem).loggedAtLeastOneMessageThat()
             .hasPattern("Could not parse contents of binary proto file '$FILE_NAME'.")
-            .hasSeverity(LogSeverity.ERROR).hasThrowable(InvalidProtocolBufferException::class.java)
+            .hasSeverity(LogSeverity.ERROR)
     }
 
     @Test
     fun write_writesContentsToDisk() {
         val outputStream = ByteArrayOutputStream()
-        val binaryProtoFile =
-            binaryProtoFile(FakeResourceManagerFactory.managerWritingTo(outputStream))
+        whenever(resourceManager.getOutputStreamToFileResource(any())) doReturn outputStream
 
         binaryProtoFile.commit(PROTO)
 
@@ -63,7 +66,7 @@ internal class BinaryProtoFileTest {
     @Test
     @VerifiesLoggingCalls
     fun write_cannotGetOutputStream_logsError(logSystem: VerifiableLogSystem) {
-        val binaryProtoFile = binaryProtoFile(FakeResourceManagerFactory.createNoOp())
+        whenever(resourceManager.getOutputStreamToFileResource(any())) doReturn null
 
         binaryProtoFile.commit(PROTO)
 
@@ -75,11 +78,12 @@ internal class BinaryProtoFileTest {
     companion object {
         private val FILE_NAME = "proto.pb"
         private val PROTO = TestMessage.newBuilder().addContent("proto content").build()
+        private val PROTO_PARSER_FACTORY = ProtoParserImpl.Factory()
 
         private fun binaryProtoFile(
             resourceManager: ResourceManager
         ): BinaryProtoFile<TestMessage> {
-            return BinaryProtoFile(resourceManager, FILE_NAME, TestMessage.parser())
+            return BinaryProtoFile(resourceManager, FILE_NAME, PROTO_PARSER_FACTORY.create())
         }
     }
 }

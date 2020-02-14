@@ -10,12 +10,4 @@ final class InternalQualifiers {
   @Qualifier
   @Retention(RetentionPolicy.RUNTIME)
   @interface ModulePrivate {}
-
-  @Qualifier
-  @Retention(RetentionPolicy.RUNTIME)
-  @interface DialogueNameProperty {}
-
-  @Qualifier
-  @Retention(RetentionPolicy.RUNTIME)
-  @interface FollowupCommandsProperty {}
 }

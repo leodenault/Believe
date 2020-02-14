@@ -1,5 +1,9 @@
 package believe.proto
 
+import believe.logging.testing.VerifiableLogSystem
+import believe.logging.testing.VerifiableLogSystem.LogSeverity
+import believe.logging.testing.VerifiesLoggingCalls
+import believe.logging.truth.VerifiableLogSystemSubject
 import believe.proto.testing.proto.FakeProto.FakeMessage
 import believe.proto.testing.proto.FakeProto.FakeMessageExtension
 import believe.proto.testing.proto.FakeProto.FakeMessageExtension2
@@ -15,11 +19,19 @@ import java.io.InputStream
 internal class TextProtoParserTest {
     val parser = TextProtoParser(
         ExtensionRegistry.newInstance().apply { add(FakeMessageExtension.fakeMessageExtension) },
-        FakeMessage::class.java)
+        FakeMessage::class.java
+    )
 
     @Test
-    internal fun parse_fileCannotBeReadAsProto_throwsParseException() {
-        assertThrows<ParseException> { parser.parse("invalid contents".toInputStream()) }
+    @VerifiesLoggingCalls
+    internal fun parse_fileCannotBeReadAsProto_logsErrorAndReturnsNull(
+        logSystem: VerifiableLogSystem
+    ) {
+        assertThat(parser.parse("invalid contents".toInputStream())).isNull()
+        VerifiableLogSystemSubject.assertThat(logSystem).loggedAtLeastOneMessageThat()
+            .hasPattern("Failed to parse textproto.").hasSeverity(
+                LogSeverity.ERROR
+            ).hasThrowable(ParseException::class.java)
     }
 
     @Test
@@ -28,10 +40,17 @@ internal class TextProtoParserTest {
     }
 
     @Test
-    internal fun parse_protoContentsContainUnregisteredExtension_throwsParseException() {
-        assertThrows<ParseException> {
+    @VerifiesLoggingCalls
+    internal fun parse_protoContentsContainUnregisteredExtension_logsErrorAndReturnsNull(
+        logSystem: VerifiableLogSystem
+    ) {
+        assertThat(
             parser.parse(FAKE_PROTO_WITH_UNREGISTERED_EXTENSION.asTextProto().toInputStream())
-        }
+        ).isNull()
+        VerifiableLogSystemSubject.assertThat(logSystem).loggedAtLeastOneMessageThat()
+            .hasPattern("Failed to parse textproto.").hasSeverity(
+                LogSeverity.ERROR
+            ).hasThrowable(ParseException::class.java)
     }
 
     @Test

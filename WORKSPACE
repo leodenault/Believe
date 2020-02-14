@@ -23,48 +23,6 @@ maven_jar(
     artifact = "org.mockito:mockito-core:2.13.0",
 )
 
-# This is unfortunately required because of a bug in JUnit 5 where it requires
-# org.junit.ComparisonFailure.
-maven_jar(
-    name = "junit",
-    artifact = "junit:junit:4.12",
-)
-
-maven_jar(
-    name = "junit_jupiter_api",
-    artifact = "org.junit.jupiter:junit-jupiter-api:5.3.2",
-)
-
-maven_jar(
-    name = "junit_jupiter_engine",
-    artifact = "org.junit.jupiter:junit-jupiter-engine:5.3.2",
-)
-
-maven_jar(
-    name = "junit_platform_commons",
-    artifact = "org.junit.platform:junit-platform-commons:1.4.0",
-)
-
-maven_jar(
-    name = "junit_platform_console",
-    artifact = "org.junit.platform:junit-platform-console:1.4.0",
-)
-
-maven_jar(
-    name = "junit_platform_engine",
-    artifact = "org.junit.platform:junit-platform-engine:1.4.0",
-)
-
-maven_jar(
-    name = "junit_platform_launcher",
-    artifact = "org.junit.platform:junit-platform-launcher:1.4.0",
-)
-
-maven_jar(
-    name = "opentest4j",
-    artifact = "org.opentest4j:opentest4j:1.0.0-M1",
-)
-
 maven_jar(
     name = "bytebuddy_maven",
     artifact = "net.bytebuddy:byte-buddy:1.9.7",
@@ -155,6 +113,15 @@ maven_install(
         "org.jetbrains.kotlin:kotlin-stdlib:1.3.50",
         "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.1.0",
         "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0",
+        "org.junit.jupiter:junit-jupiter-api:5.3.2",
+        "org.junit.platform:junit-platform-commons:1.4.0",
+        "org.junit.platform:junit-platform-console:1.4.0",
+        "org.junit.jupiter:junit-jupiter-engine:5.3.2",
+        "org.junit.platform:junit-platform-engine:1.4.0",
+        "org.junit.platform:junit-platform-launcher:1.4.0",
+        # This is unfortunately required because of a bug in JUnit 5 where it requires
+        # org.junit.ComparisonFailure.
+        "junit:junit:4.12",
     ],
     repositories = [
         "https://repo1.maven.org/maven2",

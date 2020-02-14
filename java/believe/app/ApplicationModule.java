@@ -20,7 +20,9 @@ import believe.level.LevelDaggerModule;
 import believe.map.collidable.command.CollidableCommandDaggerModule;
 import believe.map.collidable.tile.CollidableTileDaggerModule;
 import believe.map.io.MapParsingDaggerModule;
+import believe.map.tiled.command.TiledCommandDaggerModule;
 import believe.physics.collision.CollisionDaggerModule;
+import believe.proto.ProtoDaggerModule;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
@@ -52,7 +54,9 @@ import java.util.function.Supplier;
       IoDaggerModule.class,
       LevelDaggerModule.class,
       MapParsingDaggerModule.class,
-      PlayableDaggerModule.class
+      PlayableDaggerModule.class,
+      ProtoDaggerModule.class,
+      TiledCommandDaggerModule.class
     })
 public abstract class ApplicationModule {
   private static final String GAME_OPTIONS_FILE_NAME = "game_options.pb";

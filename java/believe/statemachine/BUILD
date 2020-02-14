@@ -1,10 +1,13 @@
+package(
+    default_visibility = ["//:believe_all_pkgs"],
+)
+
 java_library(
     name = "statemachine",
-    srcs = glob(["*.java"]),
-    visibility = [
-        "//java/believe/character:character_pkg",
-        "//java/believe/map/collidable:__pkg__",
-        "//java/believe/physics/collision:__pkg__",
-        "//javatests/believe:believe_tests",
+    srcs = [
+        "ConcurrentStateMachine.java",
+        "EntityStateMachine.java",
+        "State.java",
+        "Transition.java",
     ],
 )

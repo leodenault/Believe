@@ -3,10 +3,13 @@ package believe.datamodel.protodata
 import believe.datamodel.DataCommitter
 import believe.datamodel.LoadableData
 import believe.io.ResourceManager
+import believe.proto.ProtoParser
+import believe.proto.ProtoParserImpl
 import com.google.protobuf.InvalidProtocolBufferException
 import com.google.protobuf.Message
 import com.google.protobuf.Parser
 import dagger.Reusable
+import believe.util.KotlinHelpers.whenNull
 import org.newdawn.slick.util.Log
 import javax.inject.Inject
 
@@ -18,26 +21,14 @@ import javax.inject.Inject
 class BinaryProtoFile<M : Message> internal constructor(
     private val resourceManager: ResourceManager,
     private val dataLocation: String,
-    private val messageParser: Parser<M>
+    private val protoParser: ProtoParser<M>
 ) : DataCommitter<M>, LoadableData<M> {
 
     /** Loads the proto data from disk. */
-    override fun load(): M? {
-        val inputStream = resourceManager.getResourceAsStream(dataLocation)
-
-        if (inputStream == null) {
-            Log.error("Could not load binary proto file '$dataLocation'.")
-            return null
-        }
-
-        return try {
-            inputStream.use { messageParser.parseFrom(it) }
-        } catch (e: InvalidProtocolBufferException) {
-            Log.error(
-                "Could not parse contents of binary proto file '$dataLocation'.", e
-            )
-            null
-        }
+    override fun load(): M? = resourceManager.getResourceAsStream(dataLocation).whenNull {
+        Log.error("Could not load binary proto file '$dataLocation'.")
+    }?.use(protoParser::parse).whenNull {
+        Log.error("Could not parse contents of binary proto file '$dataLocation'.")
     }
 
     override fun commit(data: M) {
@@ -52,12 +43,25 @@ class BinaryProtoFile<M : Message> internal constructor(
 
     @Reusable
     class BinaryProtoFileFactory @Inject constructor(
-        private val resourceManager: ResourceManager
+        private val resourceManager: ResourceManager,
+        val protoParserFactory: ProtoParserImpl.Factory
     ) {
         fun <M : Message> create(
-            dataLocation: String, messageParser: Parser<M>
+            dataLocation: String, protoParser: ProtoParser<M>
         ): BinaryProtoFile<M> {
-            return BinaryProtoFile(resourceManager, dataLocation, messageParser)
+            return BinaryProtoFile(resourceManager, dataLocation, protoParser)
+        }
+
+        fun <M : Message> create(
+            dataLocation: String, protoParser: Parser<M>
+        ): BinaryProtoFile<M> {
+            return BinaryProtoFile(
+                resourceManager, dataLocation, protoParserFactory.create(protoParser)
+            )
+        }
+
+        inline fun <reified M : Message> create(dataLocation: String): BinaryProtoFile<M> {
+            return create(dataLocation, protoParserFactory.create())
         }
     }
 }

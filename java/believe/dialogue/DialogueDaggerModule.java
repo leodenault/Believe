@@ -1,21 +1,19 @@
 package believe.dialogue;
 
 import believe.character.playable.PlayableDaggerModule;
-import believe.command.CommandSupplier;
-import believe.datamodel.protodata.BinaryProtoFile;
+import believe.command.CommandParser;
 import believe.datamodel.protodata.BinaryProtoFile.BinaryProtoFileFactory;
-import believe.dialogue.InternalQualifiers.DialogueNameProperty;
-import believe.dialogue.InternalQualifiers.FollowupCommandsProperty;
 import believe.dialogue.InternalQualifiers.ModulePrivate;
+import believe.dialogue.proto.DialogueProto;
 import believe.dialogue.proto.DialogueProto.DialogueMap;
 import believe.react.NotificationStrategy;
 import believe.react.Observable;
 import believe.react.ObservableValue;
+import com.google.protobuf.GeneratedMessage.GeneratedExtension;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
-import dagger.multibindings.IntoMap;
-import dagger.multibindings.StringKey;
+import dagger.multibindings.IntoSet;
 import javax.inject.Singleton;
 
 import java.util.Optional;
@@ -33,9 +31,14 @@ public abstract class DialogueDaggerModule {
   }
 
   @Binds
-  @IntoMap
-  @StringKey("dialogue")
-  abstract CommandSupplier bindDialogueCommandSupplier(DialogueSupplier dialogueSupplier);
+  @IntoSet
+  abstract CommandParser<?> bindDialogueCommandParser(DialogueCommandParser impl);
+
+  @Provides
+  @IntoSet
+  static GeneratedExtension<?, ?> provideDialogueCommandExtension() {
+    return DialogueProto.DialogueCommand.dialogueCommand;
+  }
 
   @Provides
   @Singleton
@@ -47,16 +50,4 @@ public abstract class DialogueDaggerModule {
   @Binds
   abstract Observable<Optional<DialogueData>> bindObservableDialogueData(
       @ModulePrivate ObservableValue<Optional<DialogueData>> observableDialogueDataValue);
-
-  @Provides
-  @DialogueNameProperty
-  static String provideDialogueNameProperty() {
-    return "dialogue_name";
-  }
-
-  @Provides
-  @FollowupCommandsProperty
-  static String provideFollowupCommandsProperty() {
-    return "followup_commands";
-  }
 }

@@ -7,7 +7,7 @@ import believe.logging.testing.VerifiableLogSystem;
 import believe.logging.testing.VerifiableLogSystem.LogSeverity;
 import believe.logging.testing.VerifiesLoggingCalls;
 import believe.logging.truth.VerifiableLogSystemSubject;
-import believe.statemachine.State.Action;
+import believe.character.playable.proto.PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand.Action;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;

@@ -7,14 +7,15 @@ java_library(
     srcs = [
         "DamageProjection.java",
         "EnemyCharacter.java",
-        "InternalQualifiers.java",
         "PlayableCharacter.java",
         "PlayableCharacterMovementCommand.java",
+        "PlayableCharacterMovementCommandParser.java",
     ],
     deps = [
         ":package-info",
         "//java/believe/character",
         "//java/believe/character:faction",
+        "//java/believe/character/proto:playable_character_movement_command_java_proto",
         "//java/believe/command",
         "//java/believe/core",
         "//java/believe/core/display",
@@ -28,6 +29,7 @@ java_library(
         "//java/believe/statemachine",
         "//java/believe/util",
         "//third_party/auto_factory",
+        "//third_party/dagger",
         "//third_party/javax:annotations",
         "//third_party/slick",
     ],
@@ -39,6 +41,7 @@ java_library(
     deps = [
         ":package-info",
         ":playable",
+        "//java/believe/character/proto:playable_character_movement_command_java_proto",
         "//java/believe/command",
         "//java/believe/datamodel:impl",
         "//java/believe/map/collidable/command",
@@ -50,6 +53,7 @@ java_library(
         "//java/believe/statemachine",
         "//java/believe/util",
         "//third_party/dagger",
+        "//third_party/proto",
     ],
 )
 

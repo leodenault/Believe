@@ -26,7 +26,7 @@ class LevelManagerImpl @Inject internal constructor(
         }
 
         val levelLocation = "$levelDefinitionsDirectory/$name.pb"
-        val level = binaryProtoFileFactory.create(levelLocation, Level.parser()).load()
+        val level = binaryProtoFileFactory.create<Level>(levelLocation).load()
 
         if (level == null) {
             Log.error("Failed to read level at '$levelLocation'.")

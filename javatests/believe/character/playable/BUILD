@@ -1,4 +1,4 @@
-load("//bzl:rules.bzl", "java_junit5_test")
+load("//bzl:rules.bzl", "java_junit5_test", "kt_junit5_test")
 
 package(
     default_testonly = True,
@@ -20,12 +20,27 @@ java_test(
     ],
 )
 
+kt_junit5_test(
+    name = "PlayableCharacterMovementCommandParserTest",
+    srcs = ["PlayableCharacterMovementCommandParserTest.kt"],
+    friends = [],
+    deps = [
+        "//java/believe/character/playable",
+        "//java/believe/character/proto:playable_character_movement_command_java_proto",
+        "//java/believe/command",
+        "//java/believe/logging/testing",
+        "//java/believe/logging/truth",
+        "//third_party/mockito:mockito_kotlin",
+    ],
+)
+
 java_junit5_test(
     name = "PlayableCharacterMovementCommandTest",
     srcs = ["PlayableCharacterMovementCommandTest.java"],
     deps = [
         "//java/believe/character/playable",
         "//java/believe/character/playable:package-info",
+        "//java/believe/character/proto:playable_character_movement_command_java_proto",
         "//java/believe/logging/testing",
         "//java/believe/logging/truth",
         "//java/believe/statemachine",
