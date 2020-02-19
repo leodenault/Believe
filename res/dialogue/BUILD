@@ -1,4 +1,4 @@
-load("//bzl:rules.bzl", "textproto")
+load("//bazel/bzl:rules.bzl", "textproto")
 
 package(
     default_visibility = ["//:believe_all_pkgs"],

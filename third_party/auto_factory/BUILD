@@ -10,8 +10,8 @@ java_plugin(
         "@com_google_googlejavaformat_google_java_format//jar",
         "@com_google_guava_guava//jar",
         "@com_squareup_javapoet//jar",
-        "@google_auto_factory//jar",
         "@javax_inject_javax_inject//jar",
+        "@maven//:com_google_auto_factory_auto_factory",
     ],
 )
 
@@ -21,6 +21,6 @@ java_library(
     visibility = ["//:believe_all_pkgs"],
     exports = [
         "//third_party/javax:annotations",
-        "@google_auto_factory//jar",
+        "@maven//:com_google_auto_factory_auto_factory",
     ],
 )

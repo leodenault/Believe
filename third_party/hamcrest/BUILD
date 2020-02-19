@@ -4,5 +4,5 @@ java_library(
     name = "hamcrest",
     testonly = 1,
     visibility = ["//:believe_test_pkgs"],
-    exports = ["@hamcrest_maven//jar"],
+    exports = ["@maven//:org_hamcrest_hamcrest_library"],
 )

@@ -1,8 +1,19 @@
+bazel_binary: bazel/bazelisk
+
 directories:
   .
 
-targets:
-  //...:all
+derive_targets_from_directories: true
 
 test_sources:
   javatests/
+
+additional_languages:
+  kotlin
+
+import_run_configurations:
+  bazel/run_configs/All_Tests.xml
+  bazel/run_configs/Believe.xml
+  bazel/run_configs/Believe___Windowed.xml
+  bazel/run_configs/Editor.xml
+  bazel/run_configs/Editor___Windowed.xml

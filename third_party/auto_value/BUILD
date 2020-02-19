@@ -3,7 +3,7 @@ licenses(["notice"])
 java_plugin(
     name = "auto_value_plugin",
     processor_class = "com.google.auto.value.processor.AutoValueProcessor",
-    deps = ["@google_auto_value//jar"],
+    deps = ["@maven//:com_google_auto_value_auto_value"],
 )
 
 java_library(
@@ -11,7 +11,7 @@ java_library(
     exported_plugins = [":auto_value_plugin"],
     visibility = ["//:believe_all_pkgs"],
     exports = [
-        "@google_auto_value//jar",
-        "@google_auto_value_annotations//jar",
+        "@maven//:com_google_auto_value_auto_value",
+        "@maven//:com_google_auto_value_auto_value_annotations",
     ],
 )

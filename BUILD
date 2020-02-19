@@ -1,4 +1,4 @@
-load("//bzl:rules.bzl", "believe_binary", "textproto")
+load("//bazel/bzl:rules.bzl", "believe_binary", "textproto")
 
 NATIVE_CONFIGS = {
     "linux_x86": {

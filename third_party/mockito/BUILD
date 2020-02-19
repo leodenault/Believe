@@ -7,12 +7,7 @@ package(
 
 java_library(
     name = "mockito",
-    exports = ["@mockito_maven//jar"],
-    runtime_deps = [
-        "@bytebuddy_agent_maven//jar",
-        "@bytebuddy_maven//jar",
-        "@objenesis_maven//jar",
-    ],
+    exports = ["@maven//:org_mockito_mockito_core"],
 )
 
 alias(

@@ -1,4 +1,4 @@
-load("//bzl:rules.bzl", "kt_junit5_test")
+load("//bazel/bzl:rules.bzl", "kt_junit5_test")
 
 package(
     default_testonly = True,

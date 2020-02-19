@@ -1,4 +1,4 @@
-load("//bzl:rules.bzl", "java_junit5_test")
+load("//bazel/bzl:rules.bzl", "java_junit5_test")
 
 java_junit5_test(
     name = "CollidableCommandCollisionHandlerTest",
