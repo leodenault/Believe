@@ -72,7 +72,7 @@ public class PlatformingState extends LevelState implements SynchedComboListener
     } else if (!music.playing()) {
       music.loop();
     }
-    player.heal(delta * FOCUS_DRAIN_RATE);
+    getPlayer().heal(delta * FOCUS_DRAIN_RATE);
   }
 
   @Override
@@ -93,8 +93,8 @@ public class PlatformingState extends LevelState implements SynchedComboListener
   @Override
   public void levelEnter(GameContainer container, StateBasedGame game) throws SlickException {
     music = new Music(getMusicLocation(), BPM);
-    playArea.attachHudChildToFocus(comboSyncher, 0.05f, -0.08f, 0.3f, 0.05f);
-    player.addComboListener(this);
+    getPlayArea().attachHudChildToFocus(comboSyncher, 0.05f, -0.08f, 0.3f, 0.05f);
+    getPlayer().addComboListener(this);
     music.stop();
   }
 

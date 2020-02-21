@@ -1,13 +1,12 @@
+load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kt_jvm_library")
+
 package(
     default_visibility = ["//:believe_all_pkgs"],
 )
 
-java_library(
+kt_jvm_library(
     name = "levelstate",
-    srcs = [
-        "LevelState.java",
-        "package-info.java",
-    ],
+    srcs = ["LevelState.kt"],
     deps = [
         "//java/believe/action",
         "//java/believe/app/annotation",

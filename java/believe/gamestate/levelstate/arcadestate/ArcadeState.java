@@ -117,7 +117,7 @@ public class ArcadeState extends LevelState
     if (!component.isPlaying()) {
       component.play();
     }
-    player.inflictDamage(delta * FOCUS_RECHARGE_RATE, Faction.NONE);
+    getPlayer().inflictDamage(delta * FOCUS_RECHARGE_RATE, Faction.NONE);
   }
 
   @Override
@@ -182,12 +182,12 @@ public class ArcadeState extends LevelState
 
   @Override
   public void beatSuccess(int index) {
-    player.heal(HEALTH_PER_SUCCESS);
+    getPlayer().heal(HEALTH_PER_SUCCESS);
   }
 
   @Override
   public void beatFailed() {
-    player.inflictDamage(DAMAGE_PER_FAILURE, Faction.NONE);
+    getPlayer().inflictDamage(DAMAGE_PER_FAILURE, Faction.NONE);
   }
 
   @Override
