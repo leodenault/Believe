@@ -1,3 +1,5 @@
+load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kt_jvm_library")
+
 package(
     default_visibility = ["//:believe_all_pkgs"],
 )
@@ -51,6 +53,54 @@ java_library(
         "//java/believe/util",
         "//third_party/javax:annotations",
         "//third_party/slick",
+    ],
+)
+
+kt_jvm_library(
+    name = "gamestate_kt",
+    srcs = [
+        "GameState.kt",
+        "GameStateRunner.kt",
+    ],
+    deps = [
+        "//java/believe/core",
+        "//java/believe/core/display",
+        "//java/believe/gamestate/transition",
+    ],
+)
+
+kt_jvm_library(
+    name = "impl_kt",
+    srcs = [
+        "GameStateRunnerImpl.kt",
+        "MainMenuStateV2.kt",
+        "OptionsMenuStateV2.kt",
+        "StateController.kt",
+    ],
+    deps = [
+        ":gamestate_kt",
+        "//java/believe/app/proto:game_options_java_proto",
+        "//java/believe/core",
+        "//java/believe/core/display",
+        "//java/believe/datamodel",
+        "//java/believe/datamodel:impl",
+        "//java/believe/gamestate/transition",
+        "//java/believe/gamestate/transition:impl",
+        "//java/believe/gui",
+        "//third_party/auto_factory",
+        "//third_party/dagger",
+        "//third_party/javax:annotations",
+        "//third_party/slick",
+    ],
+)
+
+java_library(
+    name = "dagger_module",
+    srcs = ["GamestateDaggerModule.java"],
+    deps = [
+        "gamestate_kt",
+        ":impl_kt",
+        "//third_party/dagger",
     ],
 )
 

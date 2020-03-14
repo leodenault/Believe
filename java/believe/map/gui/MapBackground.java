@@ -30,7 +30,7 @@ public final class MapBackground implements Observer<Rectangle>, Renderable {
   }
 
   @Override
-  public void render(GUIContext guiContext, Graphics g) {
+  public void render(Graphics g) {
     for (float currentImageX = xMin;
         currentImageX < xMax;
         currentImageX += backgroundSceneData.image().getWidth()) {

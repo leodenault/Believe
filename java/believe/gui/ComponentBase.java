@@ -16,7 +16,7 @@ public abstract class ComponentBase extends AbstractComponent implements Rendera
   /**
    * Creates a new ComponentBase.
    *
-   * @param container  The context in which this component will be created and rendered.
+   * @param container The context in which this component will be created and rendered.
    */
   public ComponentBase(GUIContext container) {
     this(container, 0, 0, 0, 0);
@@ -25,9 +25,9 @@ public abstract class ComponentBase extends AbstractComponent implements Rendera
   /**
    * Creates a new ComponentBase.
    *
-   * @param container  The context in which this component will be created and rendered.
-   * @param x      The x position of this component.
-   * @param y      The y position of this component.
+   * @param container The context in which this component will be created and rendered.
+   * @param x The x position of this component.
+   * @param y The y position of this component.
    */
   public ComponentBase(GUIContext container, int x, int y) {
     this(container, x, y, 0, 0);
@@ -36,11 +36,11 @@ public abstract class ComponentBase extends AbstractComponent implements Rendera
   /**
    * Creates a new ComponentBase.
    *
-   * @param container  The context in which this component will be created and rendered.
-   * @param x      The x position of this component.
-   * @param y      The y position of this component.
-   * @param width    The width of this component.
-   * @param height  The height of this component.
+   * @param container The context in which this component will be created and rendered.
+   * @param x The x position of this component.
+   * @param y The y position of this component.
+   * @param width The width of this component.
+   * @param height The height of this component.
    */
   public ComponentBase(GUIContext container, int x, int y, int width, int height) {
     super(container);
@@ -54,7 +54,7 @@ public abstract class ComponentBase extends AbstractComponent implements Rendera
 
   @Override
   public int getHeight() {
-    return (int)rect.getHeight();
+    return (int) rect.getHeight();
   }
 
   public void setHeight(int height) {
@@ -63,7 +63,7 @@ public abstract class ComponentBase extends AbstractComponent implements Rendera
 
   @Override
   public int getWidth() {
-    return (int)rect.getWidth();
+    return (int) rect.getWidth();
   }
 
   public void setWidth(int width) {
@@ -72,12 +72,12 @@ public abstract class ComponentBase extends AbstractComponent implements Rendera
 
   @Override
   public int getX() {
-    return (int)rect.getX();
+    return (int) rect.getX();
   }
 
   @Override
   public int getY() {
-    return (int)rect.getY();
+    return (int) rect.getY();
   }
 
   @Override
@@ -100,20 +100,23 @@ public abstract class ComponentBase extends AbstractComponent implements Rendera
     this.rendering = rendering;
   }
 
+  // TODO: Migrate the render methods below to stop using GUIContext.
+  @Override
+  public void render(Graphics g) throws SlickException {
+    if (rendering) {
+      renderComponent(container, g);
+    }
+  }
+
   @Override
   public final void render(GUIContext context, Graphics g) throws SlickException {
-    if (rendering){
+    if (rendering) {
       renderComponent(context, g);
     }
   }
 
-  /**
-   * Resets the layout of the children of this component.
-   */
+  /** Resets the layout of the children of this component. */
   public abstract void resetLayout();
-  /**
-   * Renders the component within the context of a GUI component
-   */
-  protected abstract void renderComponent(GUIContext context, Graphics g)
-      throws SlickException;
+  /** Renders the component within the context of a GUI component */
+  protected abstract void renderComponent(GUIContext context, Graphics g) throws SlickException;
 }

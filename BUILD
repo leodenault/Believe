@@ -80,3 +80,20 @@ believe_binary(
     ],
     runtime_deps = ["//java/believe/app/game"],
 )
+
+#believe_binary(
+#    base_name = "Believe",
+#    data = [
+#        ":game_options_textproto",
+#        "//customFlowFiles:custom_flow_files",
+#        "//customSongs:custom_songs",
+#    ],
+#    main_class = "believe.app.game.BelieveV2",
+#    native_configs = NATIVE_CONFIGS,
+#    resources = [
+#        "//data",
+#        "//levelFlowFiles:level_flow_files",
+#        "//res",
+#    ],
+#    runtime_deps = ["//java/believe/app/game:game_v2"],
+#)

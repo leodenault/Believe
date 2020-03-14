@@ -12,7 +12,6 @@ java_library(
         ":package-info",
         "//java/believe/app",
         "//java/believe/app:util",
-        "//java/believe/app/flag_parsers",
         "//java/believe/app/flags",
         "//java/believe/core/io",
         "//java/believe/gamestate",

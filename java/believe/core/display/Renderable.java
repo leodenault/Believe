@@ -9,8 +9,20 @@ public interface Renderable {
   /**
    * Draws the object to the screen.
    *
-   * @param context the application window within which this instance will be drawn.
    * @param g the {@link Graphics} instance that will be used to draw this object to the screen.
    */
-  void render(GUIContext context, Graphics g) throws SlickException;
+  void render(Graphics g) throws SlickException;
+
+  /**
+   * Draws the object to the screen.
+   *
+   * @param context the {@link GUIContext} providing context about the containing application.
+   * @param g the {@link Graphics} instance that will be used to draw this object to the screen.
+   * @deprecated this is a legacy method that exists only as the rendering code is being migrated.
+   *     Please use {@link #render(Graphics)} instead.
+   */
+  @Deprecated
+  default void render(GUIContext context, Graphics g) throws SlickException {
+    render(g);
+  }
 }

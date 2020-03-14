@@ -85,14 +85,14 @@ class Camera implements Renderable {
   }
 
   @Override
-  public void render(GUIContext context, Graphics g) throws SlickException {
+  public void render(Graphics g) throws SlickException {
     Rectangle rectangle = rect.get();
     g.pushTransform();
     g.scale(scaleX, scaleY);
     g.translate(-rectangle.getX(), -rectangle.getY());
 
     for (Renderable child : children) {
-      child.render(context, g);
+      child.render(g);
     }
 
     g.popTransform();

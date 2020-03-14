@@ -1,3 +1,5 @@
+load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kt_jvm_library")
+
 package(
     default_visibility = [
         "//:__pkg__",
@@ -98,8 +100,6 @@ java_library(
         "//java/believe/app",
         "//java/believe/app:dagger_module",
         "//java/believe/app:qualifiers",
-        "//java/believe/app/flag_parsers",
-        "//java/believe/app/flags",
         "//java/believe/core/io",
         "//java/believe/gamestate",
         "//java/believe/gamestate:impl",
@@ -110,6 +110,34 @@ java_library(
         "//java/believe/util",
         "//third_party/dagger",
         "//third_party/slick",
+    ],
+)
+
+kt_jvm_library(
+    name = "game_v2",
+    srcs = ["BelieveV2.kt"],
+    deps = [
+        "//java/believe/app:dagger_component_v2",
+    ],
+)
+
+java_library(
+    name = "dagger_module_v2",
+    srcs = ["BelieveDaggerModuleV2.java"],
+    deps = [
+        "//java/believe/app:app_kt",
+        "//java/believe/app:qualifiers_v2",
+        "//third_party/dagger",
+    ],
+)
+
+java_library(
+    name = "dagger_component_v2",
+    srcs = ["BelieveComponentV2.java"],
+    deps = [
+        ":dagger_module_v2",
+        "//java/believe/app:dagger_component_v2",
+        "//third_party/dagger",
     ],
 )
 
