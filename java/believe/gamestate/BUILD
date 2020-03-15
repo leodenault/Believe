@@ -61,6 +61,7 @@ kt_jvm_library(
     srcs = [
         "GameState.kt",
         "GameStateRunner.kt",
+        "StateController.kt",
     ],
     deps = [
         "//java/believe/core",
@@ -75,7 +76,7 @@ kt_jvm_library(
         "GameStateRunnerImpl.kt",
         "MainMenuStateV2.kt",
         "OptionsMenuStateV2.kt",
-        "StateController.kt",
+        "StateControllerImpl.kt",
     ],
     deps = [
         ":gamestate_kt",

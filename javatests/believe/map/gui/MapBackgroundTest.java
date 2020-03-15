@@ -37,7 +37,6 @@ final class MapBackgroundTest {
                   .build()),
           /* mapHeight= */ 500);
 
-  @Mock private GUIContext guiContext;
   @Mock private Graphics graphics;
 
   @Test
@@ -46,7 +45,7 @@ final class MapBackgroundTest {
         new Rectangle(
             /* x= */ 0, /* y= */ 0, /* width= */ IMAGE_WIDTH, /* height= */ IMAGE_HEIGHT));
 
-    mapBackground.render(guiContext, graphics);
+    mapBackground.render(graphics);
 
     verify(graphics)
         .drawImage(
@@ -63,7 +62,7 @@ final class MapBackgroundTest {
             /* width= */ IMAGE_WIDTH,
             /* height= */ parentHeight));
 
-    mapBackground.render(guiContext, graphics);
+    mapBackground.render(graphics);
 
     verify(graphics)
         .drawImage(
@@ -77,7 +76,7 @@ final class MapBackgroundTest {
         new Rectangle(
             /* x= */ 0, /* y= */ 0, /* width= */ parentWidth, /* height= */ IMAGE_HEIGHT));
 
-    mapBackground.render(guiContext, graphics);
+    mapBackground.render(graphics);
 
     verify(graphics).drawImage(eq(IMAGE), /* x= */ eq(0f), /* y= */ anyFloat());
     verify(graphics).drawImage(eq(IMAGE), /* x= */ eq((float) IMAGE_WIDTH), /* y= */ anyFloat());
@@ -98,7 +97,7 @@ final class MapBackgroundTest {
             /* width= */ parentWidth,
             /* height= */ IMAGE_HEIGHT));
 
-    mapBackground.render(guiContext, graphics);
+    mapBackground.render(graphics);
 
     verify(graphics).drawImage(eq(IMAGE), /* x= */ eq(imageHorizontalScroll), /* y= */ anyFloat());
     verify(graphics)

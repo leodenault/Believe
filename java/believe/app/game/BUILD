@@ -132,16 +132,6 @@ java_library(
 )
 
 java_library(
-    name = "dagger_component_v2",
-    srcs = ["BelieveComponentV2.java"],
-    deps = [
-        ":dagger_module_v2",
-        "//java/believe/app:dagger_component_v2",
-        "//third_party/dagger",
-    ],
-)
-
-java_library(
     name = "package-info",
     srcs = ["package-info.java"],
     deps = [

@@ -7,4 +7,7 @@ import dagger.Module;
 public abstract class GamestateDaggerModule {
   @Binds
   abstract GameStateRunner bindGameStateRunner(GameStateRunnerImpl impl);
+
+  @Binds
+  abstract StateController bindStateController(StateControllerImpl impl);
 }
