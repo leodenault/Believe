@@ -1,3 +1,5 @@
+load("//bazel/bzl:rules.bzl", "kt_junit5_test")
+
 java_test(
     name = "CharacterDialogueTest",
     srcs = ["CharacterDialogueTest.java"],
@@ -23,6 +25,48 @@ java_test(
     ],
 )
 
+kt_junit5_test(
+    name = "FocusableGroupTest",
+    srcs = ["FocusableGroupImplTest.kt"],
+    friends = ["//java/believe/gui:gui_v2"],
+    deps = [
+        "//java/believe/gui:gui_v2",
+        "//java/believe/input/testing",
+        "//third_party/mockito:mockito_kotlin",
+        "//third_party/truth",
+    ],
+)
+
+kt_junit5_test(
+    name = "GuiContainerTest",
+    srcs = ["GuiContainerTest.kt"],
+    friends = ["//java/believe/gui:gui_v2"],
+    deps = [
+        "//java/believe/core",
+        "//java/believe/gui:gui_v2",
+        "//java/believe/gui/testing",
+        "//java/believe/gui/testing:dagger_component",
+        "//third_party/mockito:mockito_kotlin",
+        "//third_party/slick",
+        "//third_party/truth",
+    ],
+)
+
+kt_junit5_test(
+    name = "GuiLayoutFactoryTest",
+    srcs = ["GuiLayoutFactoryTest.kt"],
+    friends = ["//java/believe/gui:gui_v2"],
+    deps = [
+        "//java/believe/geometry",
+        "//java/believe/gui:gui_v2",
+        "//java/believe/logging/testing",
+        "//java/believe/logging/truth",
+        "//third_party/mockito:mockito_kotlin",
+        "//third_party/slick",
+        "//third_party/truth",
+    ],
+)
+
 java_test(
     name = "MenuSelectionGroupTest",
     srcs = ["MenuSelectionGroupTest.java"],
@@ -31,6 +75,21 @@ java_test(
         "//third_party/hamcrest",
         "//third_party/junit",
         "//third_party/mockito",
+    ],
+)
+
+kt_junit5_test(
+    name = "MenuSelectionV2Test",
+    srcs = ["MenuSelectionV2Test.kt"],
+    friends = ["//java/believe/gui:gui_v2"],
+    deps = [
+        "//java/believe/audio",
+        "//java/believe/geometry",
+        "//java/believe/gui:gui_v2",
+        "//java/believe/gui/testing:dagger_component",
+        "//java/believe/input/testing",
+        "//third_party/mockito:mockito_kotlin",
+        "//third_party/truth",
     ],
 )
 

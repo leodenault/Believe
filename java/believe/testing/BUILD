@@ -1,5 +1,6 @@
 package(
-    default_visibility = ["//javatests/believe:believe_tests"],
+    default_testonly = True,
+    default_visibility = ["//:believe_all_pkgs"],
 )
 
 java_library(

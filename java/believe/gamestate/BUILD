@@ -88,6 +88,7 @@ kt_jvm_library(
         "//java/believe/gamestate/transition",
         "//java/believe/gamestate/transition:impl",
         "//java/believe/gui",
+        "//java/believe/gui:gui_v2",
         "//third_party/auto_factory",
         "//third_party/dagger",
         "//third_party/javax:annotations",

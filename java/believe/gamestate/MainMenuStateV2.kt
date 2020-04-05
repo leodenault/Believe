@@ -1,6 +1,11 @@
 package believe.gamestate
 
+import believe.core.display.Renderable
 import believe.gui.DirectionalPanel
+import believe.gui.FocusableGroupImplFactory
+import believe.gui.GuiBuilders.menuSelection
+import believe.gui.GuiBuilders.verticalLayoutContainer
+import believe.gui.GuiLayoutFactory
 import believe.gui.MenuSelection
 import believe.gui.MenuSelectionGroup
 import com.google.auto.factory.AutoFactory
@@ -8,31 +13,52 @@ import com.google.auto.factory.Provided
 import org.newdawn.slick.Font
 import org.newdawn.slick.GameContainer
 import org.newdawn.slick.Graphics
-import javax.inject.Inject
 
 @AutoFactory
 class MainMenuStateV2 constructor(
     @Provided private val container: GameContainer, @Provided font: Font, @Provided
-    stateController: StateController
+    stateController: StateController, @Provided guiLayoutFactory: GuiLayoutFactory, @Provided
+    focusableGroupFactory: FocusableGroupImplFactory
 ) : GameState {
 
     private val panel: DirectionalPanel
     private val selections: MenuSelectionGroup
+    private val guiLayout: Renderable = guiLayoutFactory.create(verticalLayoutContainer {
+        val menuGroup = focusableGroupFactory.create()
+
+        +menuSelection {
+            focusableGroup = menuGroup
+        }
+        +menuSelection {
+            focusableGroup = menuGroup
+        }
+        +menuSelection {
+            focusableGroup = menuGroup
+        }
+        +menuSelection {
+            executeSelectionAction = stateController::navigateToOptionsMenu
+            focusableGroup = menuGroup
+        }
+        +menuSelection {
+            executeSelectionAction = container::exit
+            focusableGroup = menuGroup
+        }
+    })
 
     init {
         val playPlatformingLevel = MenuSelection(container, font, "Play Platforming Level")
         val playArcadeLevel = MenuSelection(container, font, "Play Arcade Level")
         val playFlowFile = MenuSelection(container, font, "Play Flow File")
-        val options = MenuSelection(container, font, "Options")
-        val exit = MenuSelection(container, font, "Exit")
+        //        val options = MenuSelection(container, font, "Options")
+        //        val exit = MenuSelection(container, font, "Exit")
         panel = DirectionalPanel(
             container, container.width / 2, (container.height - 250) / 5, 50
         ).apply {
             addChild(playPlatformingLevel)
             addChild(playArcadeLevel)
             addChild(playFlowFile)
-            addChild(options)
-            addChild(exit)
+            //            addChild(options)
+            //            addChild(exit)
         }
         //        playPlatformingLevel.addListener(
         //            ChangeStateAction(
@@ -45,17 +71,19 @@ class MainMenuStateV2 constructor(
         //                FlowFilePickerMenuState::class.java, game
         //            )
         //        )
-        options.addListener { stateController.navigateToOptionsMenu() }
+
+        //        options.addListener { stateController.navigateToOptionsMenu() }
+
 
         //        (ChangeStateAction(OptionsMenuState::class.java, game))
 
-        exit.addListener { container.exit() }
+        //        exit.addListener { container.exit() }
         selections = MenuSelectionGroup().apply {
             add(playPlatformingLevel)
             add(playArcadeLevel)
             add(playFlowFile)
-            add(options)
-            add(exit)
+            //            add(options)
+            //            add(exit)
         }
 
         selections.select(0)
@@ -70,7 +98,8 @@ class MainMenuStateV2 constructor(
     //    }
 
     override fun render(g: Graphics) {
-        panel.render(container, g)
+        //        panel.render(container, g)
+        guiLayout.render(g)
     }
 
     override fun update(delta: Int) {}
