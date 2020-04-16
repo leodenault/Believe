@@ -4,19 +4,15 @@ package(
     default_visibility = ["//:believe_all_pkgs"],
 )
 
-java_library(
+kt_jvm_library(
     name = "util",
     srcs = [
-        "MapEntry.java",
-        "Util.java",
+        "KotlinHelpers.kt",
+        "MapEntry.kt",
+        "Util.kt",
     ],
     deps = [
         "//java/believe/geometry",
         "//third_party/slick",
     ],
-)
-
-kt_jvm_library(
-    name = "kt",
-    srcs = ["KotlinHelpers.kt"],
 )
