@@ -105,3 +105,25 @@ java_test(
         "//third_party/slick",
     ],
 )
+
+kt_junit5_test(
+    name = "TextAlignmentTest",
+    srcs = ["TextAlignmentTest.kt"],
+    friends = ["//java/believe/gui:gui_v2"],
+    deps = [
+        "//java/believe/geometry",
+        "//java/believe/gui:gui_v2",
+        "//third_party/truth",
+    ],
+)
+
+kt_junit5_test(
+    name = "TextBoxTest",
+    srcs = ["TextBoxTest.kt"],
+    friends = ["//java/believe/gui:gui_v2"],
+    deps = [
+        "//java/believe/gui:gui_v2",
+        "//java/believe/gui/testing:dagger_component",
+        "//third_party/mockito:mockito_kotlin",
+    ],
+)

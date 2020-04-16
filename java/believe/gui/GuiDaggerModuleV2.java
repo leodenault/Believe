@@ -26,4 +26,9 @@ public abstract class GuiDaggerModuleV2 {
       KeyboardInputAdapter.Factory factory, GuiKeyboardActionMap mapInput) {
     return factory.create(mapInput);
   }
+
+  @Provides
+  static TextBoxStyle provideTextBoxStyle() {
+    return new TextBoxStyle(/* textColour= */ 0xffffff);
+  }
 }

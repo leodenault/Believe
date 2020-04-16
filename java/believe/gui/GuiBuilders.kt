@@ -11,6 +11,10 @@ object GuiBuilders {
         configure: MenuSelectionV2.Builder.() -> Unit
     ): MenuSelectionV2.Builder = MenuSelectionV2.Builder().apply(configure)
 
+    fun textBox(
+        configure: TextBox.Builder.() -> Unit
+    ): TextBox.Builder = TextBox.Builder().apply(configure)
+
     /**
      * Creates a [GuiContainer] with a vertical layout.
      *

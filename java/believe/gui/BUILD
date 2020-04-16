@@ -53,8 +53,9 @@ kt_jvm_library(
         "LayoutBuilder.kt",
         "MenuSelectionStyle.kt",
         "MenuSelectionV2.kt",
-        "TextComponentStyle.kt",
-        "TextComponentV2.kt",
+        "TextAlignment.kt",
+        "TextBox.kt",
+        "TextBoxStyle.kt",
     ],
     deps = [
         ":internal_qualifiers",
