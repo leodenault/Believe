@@ -7,8 +7,10 @@ import believe.geometry.Rectangle
  * A builder object that constructs GUI layouts.
  *
  * It is intended to be paired with [GuiBuilders] to provide an intuitive API for constructing GUIs.
+ *
+ * @param T the type of [Renderable] constructed by this builder.
  */
-interface LayoutBuilder<C> {
+interface LayoutBuilder<C, T : Renderable> {
     /**
      * Builds the layout based on the contents of this builder instance.
      *
@@ -21,5 +23,5 @@ interface LayoutBuilder<C> {
      */
     fun build(
         configuration: C, guiLayoutFactory: GuiLayoutFactory, positionData: Rectangle
-    ): Renderable
+    ): T
 }

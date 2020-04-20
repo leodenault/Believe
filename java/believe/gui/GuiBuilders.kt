@@ -1,5 +1,7 @@
 package believe.gui
 
+import org.newdawn.slick.Graphics
+
 /** Builder methods for constructing UIs. */
 object GuiBuilders {
     /**

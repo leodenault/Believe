@@ -1,9 +1,11 @@
+load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kt_jvm_library")
+
 package(
     default_visibility = ["//:believe_all_pkgs"],
 )
 
-java_library(
+kt_jvm_library(
     name = "geometry",
-    srcs = glob(["*.java"]),
+    srcs = ["Rectangle.kt"],
     deps = ["//third_party/slick"],
 )

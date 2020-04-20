@@ -59,8 +59,6 @@ kt_junit5_test(
     deps = [
         "//java/believe/geometry",
         "//java/believe/gui:gui_v2",
-        "//java/believe/logging/testing",
-        "//java/believe/logging/truth",
         "//third_party/mockito:mockito_kotlin",
         "//third_party/slick",
         "//third_party/truth",

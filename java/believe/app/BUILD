@@ -103,7 +103,6 @@ java_library(
         "//java/believe/gamestate:impl_kt",
         "//java/believe/gamestate:package-info",
         "//java/believe/gui",
-        "//java/believe/gui:common_dagger_module",
         "//java/believe/gui:dagger_module_v2",
         "//java/believe/gui:gui_v2",
         "//java/believe/input",

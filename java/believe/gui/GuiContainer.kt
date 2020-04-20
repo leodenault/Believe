@@ -3,6 +3,7 @@ package believe.gui
 import believe.core.display.Renderable
 import believe.geometry.Rectangle
 import org.newdawn.slick.Graphics
+import kotlin.math.round
 
 /** A container for grouping GUI elements together in a common layout. */
 class GuiContainer private constructor(
@@ -12,12 +13,12 @@ class GuiContainer private constructor(
     override fun render(g: Graphics) = children.forEach { it.render(g) }
 
     /** A builder for constructing instances of [GuiContainer]. */
-    class Builder : LayoutBuilder<Unit> {
+    class Builder : LayoutBuilder<Unit, GuiContainer> {
         /** The children to be contained within the container built by this builder. */
         val children: MutableList<(GuiLayoutFactory, Rectangle) -> Renderable> = mutableListOf()
 
         /** Adds the result of the [LayoutBuilder] as a child of this container. */
-        inline operator fun <reified T> LayoutBuilder<T>.unaryPlus() {
+        inline operator fun <reified T> LayoutBuilder<T, *>.unaryPlus() {
             children.add { guiLayoutFactory, positionData ->
                 guiLayoutFactory.create(
                     this, positionData
@@ -27,7 +28,7 @@ class GuiContainer private constructor(
 
         override fun build(
             configuration: Unit, guiLayoutFactory: GuiLayoutFactory, positionData: Rectangle
-        ): Renderable {
+        ): GuiContainer {
             val childPositioner = ChildPositioner(children.size, positionData)
             return GuiContainer(children.map {
                 it(
@@ -39,10 +40,11 @@ class GuiContainer private constructor(
 
     internal class ChildPositioner(private val numChildren: Int, positionData: Rectangle) {
         private val spacing = (positionData.height * SPACING_FRACTION) / (numChildren + 1)
-        private val width = positionData.width / 2
-        private val height = (positionData.height * (1 - SPACING_FRACTION)) / numChildren
-        private val x = positionData.width / 4
-        private val baseY = positionData.y
+        private val width = round(positionData.width / 2).toInt()
+        private val height =
+            round((positionData.height * (1 - SPACING_FRACTION)) / numChildren).toInt()
+        private val x = round(positionData.width / 4).toInt()
+        private val baseY = round(positionData.y).toInt()
 
         private var currentChildIndex = 0
 
@@ -52,7 +54,10 @@ class GuiContainer private constructor(
             }
 
             return Rectangle(
-                x, baseY + spacing + (spacing + height) * currentChildIndex++, width, height
+                x,
+                baseY + round(spacing + (spacing + height) * currentChildIndex++).toInt(),
+                width,
+                height
             )
         }
 

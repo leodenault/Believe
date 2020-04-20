@@ -1,6 +1,7 @@
 package believe.gui
 
 import believe.audio.Sound
+import believe.core.display.Renderable
 import believe.geometry.Rectangle
 import believe.gui.GuiBuilders.menuSelection
 import believe.gui.testing.DaggerGuiTestComponent
@@ -10,20 +11,25 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import org.junit.jupiter.api.Test
+import org.newdawn.slick.Font
 import org.newdawn.slick.Graphics
 
 internal class MenuSelectionV2Test {
     private val inputAdapter = FakeInputAdapter<GuiAction>()
+    private val font: Font = mock()
     private val focusSound: Sound = mock()
     private val selectedSound: Sound = mock()
     private val graphics: Graphics = mock()
-    private val layoutFactory: GuiLayoutFactory = DaggerGuiTestComponent.builder()
-        .addGuiConfiguration(MenuSelectionV2.Configuration(inputAdapter, focusSound, selectedSound))
-        .build().guiLayoutFactory
+    private val layoutFactory: GuiLayoutFactory =
+        DaggerGuiTestComponent.builder().addGuiConfiguration(
+            MenuSelectionV2.Configuration(
+                inputAdapter, focusSound, selectedSound
+            )
+        ).addGuiConfiguration(TextBox.Configuration(font)).build().guiLayoutFactory
     private var layoutBuilder: MenuSelectionV2.Builder = menuSelection { }
-    private val positionData = Rectangle(100f, 1000f, 1000f, 100f)
+
     private val menuSelection: MenuSelectionV2 by lazy {
-        layoutFactory.create(layoutBuilder, positionData) as MenuSelectionV2
+        layoutFactory.create(layoutBuilder, POSITION_DATA)
     }
 
     @Test
@@ -86,9 +92,52 @@ internal class MenuSelectionV2Test {
     }
 
     @Test
+    fun focus_highlightsText() {
+        val textDisplay: MenuSelectionV2.TextDisplay = mock()
+        layoutBuilder = menuSelection { createTextDisplay = { _, _, _ -> textDisplay } }
+
+        menuSelection.focus()
+
+        verify(textDisplay).highlight()
+    }
+
+    @Test
+    fun unfocus_unhighlightsText() {
+        val textDisplay: MenuSelectionV2.TextDisplay = mock()
+        layoutBuilder = menuSelection { createTextDisplay = { _, _, _ -> textDisplay } }
+
+        menuSelection.unfocus()
+
+        verify(textDisplay).unhighlight()
+    }
+
+    @Test
     fun render_successfullyRendersMenuSelection() {
         menuSelection.render(graphics)
 
-        verify(graphics).fill(positionData)
+        verify(graphics).fill(POSITION_DATA)
+    }
+
+    @Test
+    fun render_rendersTextCorrectly() {
+        val textDisplay: MenuSelectionV2.TextDisplay = mock()
+        var actualText = ""
+        layoutBuilder = menuSelection {
+            +"some text"
+            createTextDisplay = { _, _, text ->
+                textDisplay.also {
+                    actualText = text
+                }
+            }
+        }
+
+        menuSelection.render(graphics)
+
+        assertThat(actualText).isEqualTo("some text")
+        verify(textDisplay).render(graphics)
+    }
+
+    companion object {
+        private val POSITION_DATA = Rectangle(100, 1000, 1000, 100)
     }
 }

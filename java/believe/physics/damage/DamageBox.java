@@ -22,10 +22,10 @@ public class DamageBox implements Collidable<DamageBox> {
   DamageBox(
       @Provided DamageBoxCollisionHandler damageBoxCollisionHandler,
       Faction faction,
-      float x,
-      float y,
-      float width,
-      float height,
+      int x,
+      int y,
+      int width,
+      int height,
       float damage) {
     this.damageBoxCollisionHandler = damageBoxCollisionHandler;
     this.rect = new Rectangle(x, y, width, height);

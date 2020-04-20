@@ -4,10 +4,12 @@ import believe.core.display.Renderable
 import believe.gui.DirectionalPanel
 import believe.gui.FocusableGroupImplFactory
 import believe.gui.GuiBuilders.menuSelection
+import believe.gui.GuiBuilders.textBox
 import believe.gui.GuiBuilders.verticalLayoutContainer
 import believe.gui.GuiLayoutFactory
 import believe.gui.MenuSelection
 import believe.gui.MenuSelectionGroup
+import believe.gui.TextAlignment
 import com.google.auto.factory.AutoFactory
 import com.google.auto.factory.Provided
 import org.newdawn.slick.Font
@@ -27,19 +29,20 @@ class MainMenuStateV2 constructor(
         val menuGroup = focusableGroupFactory.create()
 
         +menuSelection {
+            +"Play Platforming Level"
             focusableGroup = menuGroup
         }
         +menuSelection {
+            +"Play Arcade Level"
             focusableGroup = menuGroup
         }
         +menuSelection {
-            focusableGroup = menuGroup
-        }
-        +menuSelection {
+            +"Options"
             executeSelectionAction = stateController::navigateToOptionsMenu
             focusableGroup = menuGroup
         }
         +menuSelection {
+            +"Exit"
             executeSelectionAction = container::exit
             focusableGroup = menuGroup
         }

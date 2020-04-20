@@ -75,7 +75,7 @@ public class EnemyCharacter extends Character<EnemyCharacter> {
       anim.start();
       punchTimer.stop();
       attacking = true;
-      dmg = damageBoxFactory.create(getFaction(), getFloatX() + 9, getFloatY() + 43, 4, 3, 0.1f);
+      dmg = damageBoxFactory.create(getFaction(), getX() + 9, getY() + 43, 4, 3, 0.1f);
     }
 
     if (attacking) {

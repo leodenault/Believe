@@ -41,7 +41,7 @@ object Util {
         DeprecationLevel.WARNING
     )
     @JvmStatic
-    fun resetClipContext(g: Graphics, oldClip: Rectangle) {
+    fun resetClipContext(g: Graphics, oldClip: Rectangle?) {
         g.clip = oldClip
     }
 

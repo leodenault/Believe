@@ -18,14 +18,14 @@ internal class GuiContainerTest {
     private val graphics: Graphics = mock()
     private val container: Renderable by lazy {
         layoutFactory.create(
-            layoutBuilder, Rectangle(0f, 0f, 1000f, 100f)
+            layoutBuilder, Rectangle(0, 0, 1000, 100)
         )
     }
 
     @Test
     fun render_rendersChildren() {
         val child: Renderable = mock()
-        layoutBuilder = verticalLayoutContainer { +FakeLayoutBuilder<Unit>(child) }
+        layoutBuilder = verticalLayoutContainer { +FakeLayoutBuilder<Unit, Renderable>(child) }
 
         container.render(graphics)
 
@@ -37,9 +37,9 @@ internal class GuiContainerTest {
         val child1: Renderable = mock()
         val child2: Renderable = mock()
         val child3: Renderable = mock()
-        val layoutBuilder1 = FakeLayoutBuilder<Unit>(child1)
-        val layoutBuilder2 = FakeLayoutBuilder<Unit>(child2)
-        val layoutBuilder3 = FakeLayoutBuilder<Unit>(child3)
+        val layoutBuilder1 = FakeLayoutBuilder<Unit, Renderable>(child1)
+        val layoutBuilder2 = FakeLayoutBuilder<Unit, Renderable>(child2)
+        val layoutBuilder3 = FakeLayoutBuilder<Unit, Renderable>(child3)
         layoutBuilder = verticalLayoutContainer {
             +layoutBuilder1
             +layoutBuilder2
@@ -50,19 +50,19 @@ internal class GuiContainerTest {
 
         with(layoutBuilder1) {
             assertThat(receivedPositionData?.x).isEqualTo(250f)
-            assertThat(receivedPositionData?.y).isEqualTo(6.25f)
+            assertThat(receivedPositionData?.y).isEqualTo(6f)
             assertThat(receivedPositionData?.width).isEqualTo(500f)
             assertThat(receivedPositionData?.height).isEqualTo(25f)
         }
         with(layoutBuilder2) {
             assertThat(receivedPositionData?.x).isEqualTo(250f)
-            assertThat(receivedPositionData?.y).isEqualTo(37.5f)
+            assertThat(receivedPositionData?.y).isEqualTo(38f)
             assertThat(receivedPositionData?.width).isEqualTo(500f)
             assertThat(receivedPositionData?.height).isEqualTo(25f)
         }
         with(layoutBuilder3) {
             assertThat(receivedPositionData?.x).isEqualTo(250f)
-            assertThat(receivedPositionData?.y).isEqualTo(68.75f)
+            assertThat(receivedPositionData?.y).isEqualTo(69f)
             assertThat(receivedPositionData?.width).isEqualTo(500f)
             assertThat(receivedPositionData?.height).isEqualTo(25f)
         }

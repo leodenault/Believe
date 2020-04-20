@@ -22,7 +22,7 @@ class Camera implements Renderable {
   private float scaleX;
   private float scaleY;
 
-  Camera(float width, float height, int mapWidth, int mapHeight) {
+  Camera(int width, int height, int mapWidth, int mapHeight) {
     this.mapWidth = mapWidth;
     this.mapHeight = mapHeight;
     scaleX = 1;
@@ -36,7 +36,7 @@ class Camera implements Renderable {
   }
 
   void center(float x, float y) {
-    Rectangle newRectangle = Rectangle.copyFrom(rect.get());
+    Rectangle newRectangle = rect.get().copy();
     newRectangle.setCenterX(x);
     newRectangle.setCenterY(y);
 
@@ -58,7 +58,7 @@ class Camera implements Renderable {
   void scale(float x, float y) {
     scaleX = x;
     scaleY = y;
-    Rectangle newRectangle = Rectangle.copyFrom(rect.get());
+    Rectangle newRectangle = rect.get().copy();
     newRectangle.setSize(newRectangle.getWidth() * (1 / x), newRectangle.getHeight() * (1 / y));
     rect.setValue(newRectangle);
   }

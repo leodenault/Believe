@@ -47,7 +47,7 @@ public class CollidableTileCollisionHandlerTest {
 
     private float verticalSpeed;
 
-    FakeTileCollidable(float x1, float y1, float x2, float y2) {
+    FakeTileCollidable(int x1, int y1, int x2, int y2) {
       rect = new Rectangle(x1, y1, x2 - x1, y2 - y1);
       isLanded = false;
     }

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test
 import org.newdawn.slick.Color
 import org.newdawn.slick.Font
 import org.newdawn.slick.Graphics
+import kotlin.math.round
 
 internal class TextBoxTest {
     private val initialGraphicsFont: Font = mock()
@@ -27,11 +28,26 @@ internal class TextBoxTest {
         on { it.color } doReturn initialGraphicsColour
     }
     private val layoutFactory: GuiLayoutFactory =
-        DaggerGuiTestComponent.builder().addGuiConfiguration(TextBox.Configuration(font, STYLE))
-            .build().guiLayoutFactory
-    private var layoutBuilder: TextBox.Builder = textBox { }
+        DaggerGuiTestComponent.builder().addGuiConfiguration(TextBox.Configuration(font)).build()
+            .guiLayoutFactory
+    private var layoutBuilder: TextBox.Builder = textBox { style = STYLE }
     private val textBox: TextBox by lazy {
-        layoutFactory.create(layoutBuilder, CONTAINER) as TextBox
+        layoutFactory.create(layoutBuilder, CONTAINER)
+    }
+
+    @Test
+    fun render_unhighlighted_rendersTextNormally() {
+        textBox.render(graphics)
+
+        verify(graphics).color = STYLE.textColour
+    }
+
+    @Test
+    fun render_highlighted_rendersTextAsHighlighted() {
+        textBox.highlight()
+        textBox.render(graphics)
+
+        verify(graphics).color = STYLE.highlightedTextColor
     }
 
     @Test
@@ -40,7 +56,7 @@ internal class TextBoxTest {
 
         inOrder(graphics) {
             verify(graphics).font = font
-            verify(graphics).color = STYLE.textColor
+            verify(graphics).color = STYLE.textColour
             verify(graphics).font = initialGraphicsFont
             verify(graphics).color = initialGraphicsColour
         }
@@ -199,14 +215,14 @@ internal class TextBoxTest {
     }
 
     companion object {
-        private val STYLE = TextBoxStyle(0x323232)
-        private val CONTAINER = Rectangle(100f, 1000f, 10f, 10f)
+        private val STYLE = TextBoxStyle(textColour = 0x323232, highlightedTextColour = 0x989898)
+        private val CONTAINER = Rectangle(100, 1000, 10, 10)
         private const val STRING_HEIGHT = 4
 
         fun centeredXPositionOf(text: String): Float =
-            ((CONTAINER.width - text.length) / 2) + CONTAINER.x
+            round(((CONTAINER.width - text.length) / 2) + CONTAINER.x)
 
         fun middleYPositionFor(numLines: Int, lineIndex: Int): Float =
-            ((CONTAINER.height - (STRING_HEIGHT * numLines)) / 2) + CONTAINER.y + lineIndex * STRING_HEIGHT
+            round(((CONTAINER.height - (STRING_HEIGHT * numLines)) / 2) + CONTAINER.y + lineIndex * STRING_HEIGHT)
     }
 }

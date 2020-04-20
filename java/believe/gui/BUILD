@@ -85,23 +85,12 @@ java_library(
     name = "dagger_module_v2",
     srcs = ["GuiDaggerModuleV2.java"],
     deps = [
-        ":common_dagger_module",
         ":gui_v2",
         ":internal_qualifiers",
         "//java/believe/audio",
         "//java/believe/audio:impl",
         "//java/believe/input",
         "//java/believe/input/keyboard",
-        "//third_party/dagger",
-    ],
-)
-
-java_library(
-    name = "common_dagger_module",
-    srcs = ["GuiCommonDaggerModule.java"],
-    deps = [
-        ":gui_v2",
-        ":internal_qualifiers",
         "//java/believe/util",
         "//third_party/dagger",
     ],

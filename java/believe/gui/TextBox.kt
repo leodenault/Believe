@@ -11,9 +11,12 @@ import javax.inject.Inject
 /** A component displaying text within the bounds of a box. */
 class TextBox private constructor(
     private val config: Configuration,
+    private val style: TextBoxStyle,
     private val rect: Rectangle,
     private val textFragments: List<TextFragment>
 ) : Renderable {
+
+    private var textColour = style.textColour
 
     override fun render(graphics: Graphics) {
         with(graphics) {
@@ -21,7 +24,7 @@ class TextBox private constructor(
             val previousFont = font
             val previousColour = color
             font = config.font
-            color = config.style.textColor
+            color = textColour
             textFragments.forEach { drawString(it.text, it.rect.x, it.rect.y) }
             font = previousFont
             color = previousColour
@@ -29,14 +32,29 @@ class TextBox private constructor(
         }
     }
 
+    /**
+     * Changes the state of this [TextBox] within the context of its surroundings being highlighted.
+     */
+    fun highlight() {
+        textColour = style.highlightedTextColor
+    }
+
+    /**
+     * Changes the state of this [TextBox] within the context of its surroundings being in a normal
+     * state.
+     */
+    fun unhighlight() {
+        textColour = style.textColour
+    }
+
     /** Configures a [TextBox] with dependencies injected through a framework. */
     @Reusable
     class Configuration @Inject internal constructor(
-        internal val font: Font, internal val style: TextBoxStyle
+        internal val font: Font
     )
 
     /** Builds instances of [TextBox]. */
-    class Builder : LayoutBuilder<Configuration> {
+    class Builder : LayoutBuilder<Configuration, TextBox> {
         /** The text displayed within the text box. */
         var text: String = ""
         /**
@@ -51,6 +69,9 @@ class TextBox private constructor(
          * Set to [TextAlignment.Vertical.MIDDLE] by default.
          */
         var verticalAlignment = TextAlignment.Vertical.MIDDLE
+        /** The style applied to the text. */
+        var style: TextBoxStyle =
+            TextBoxStyle(textColour = 0xffffff, highlightedTextColour = 0x000000)
 
         /** Adds this text to the [TextBox.Builder]. */
         operator fun String.unaryPlus() {
@@ -61,7 +82,7 @@ class TextBox private constructor(
             configuration: Configuration,
             guiLayoutFactory: GuiLayoutFactory,
             positionData: Rectangle
-        ): Renderable {
+        ): TextBox {
             val fragments: List<String> = chopText(text, configuration.font, positionData.width)
             val textFragmentFactory = TextFragment.Factory(
                 configuration.font,
@@ -72,9 +93,15 @@ class TextBox private constructor(
                 )
             )
 
-            return TextBox(configuration, positionData, fragments.mapIndexed { index, fragment ->
-                textFragmentFactory.create(fragment, configuration.font.getHeight(fragment) * index)
-            })
+            return TextBox(
+                configuration,
+                style,
+                positionData,
+                fragments.mapIndexed { index, fragment ->
+                    textFragmentFactory.create(
+                        fragment, configuration.font.getHeight(fragment) * index
+                    )
+                })
         }
 
         companion object {
@@ -120,13 +147,13 @@ class TextBox private constructor(
             private val font: Font,
             private val textBoxRect: Rectangle,
             private val horizontalAlignment: TextAlignment.Horizontal,
-            private val baseY: Float
+            private val baseY: Int
         ) {
             fun create(text: String, y: Int) = TextFragment(
                 text, Rectangle(
                     horizontalAlignment.calculateXPosition(
                         font.getWidth(text), textBoxRect
-                    ), baseY + y, font.getWidth(text).toFloat(), font.getHeight(text).toFloat()
+                    ), baseY + y, font.getWidth(text), font.getHeight(text)
                 )
             )
         }

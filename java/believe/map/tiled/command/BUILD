@@ -22,7 +22,7 @@ kt_jvm_library(
         "//java/believe/command",
         "//java/believe/core",
         "//java/believe/proto",
-        "//java/believe/util:kt",
+        "//java/believe/util",
         "//third_party/dagger",
         "//third_party/javax:annotations",
         "//third_party/proto",
