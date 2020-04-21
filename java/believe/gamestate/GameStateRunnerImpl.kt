@@ -10,6 +10,7 @@ import javax.inject.Inject
 /** Default implementation of [GameStateRunner]. */
 @Reusable
 class GameStateRunnerImpl @Inject constructor() : GameStateRunner {
+    private var previousState: GameState = EmptyGameState
     private var currentUpdatableAndRenderable: UpdatableAndRenderable<*> =
         UpdatableAndRenderable(EmptyGameState)
 
@@ -18,13 +19,16 @@ class GameStateRunnerImpl @Inject constructor() : GameStateRunner {
     override fun render(g: Graphics) = currentUpdatableAndRenderable.render(g)
 
     override fun transitionTo(
-        gameState: GameState,
+        nextState: GameState,
         leaveTransition: GameStateTransition,
         enterTransition: GameStateTransition
     ) {
+        previousState.leave()
         enterTransition.addListener(object : GameStateTransition.Listener {
             override fun transitionEnded() {
-                currentUpdatableAndRenderable = UpdatableAndRenderable(gameState)
+                currentUpdatableAndRenderable = UpdatableAndRenderable(nextState)
+                previousState = nextState
+                nextState.enter()
             }
         })
         leaveTransition.addListener(object : GameStateTransition.Listener {
@@ -36,6 +40,8 @@ class GameStateRunnerImpl @Inject constructor() : GameStateRunner {
     }
 
     private object EmptyGameState : GameState {
+        override fun enter() {}
+        override fun leave() {}
         override fun update(delta: Int) {}
         override fun render(g: Graphics) {}
     }

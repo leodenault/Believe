@@ -8,4 +8,10 @@ import believe.core.display.Renderable
  *
  * This should represent a single screen with its own independent context.
  */
-interface GameState : Updatable, Renderable
+interface GameState : Updatable, Renderable {
+    /** Sets up the game state. */
+    fun enter()
+
+    /** Cleans up the game state, such as references to its components. */
+    fun leave()
+}

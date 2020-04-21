@@ -2,6 +2,7 @@ package believe.gamestate
 
 import believe.gamestate.transition.GameStateTransition
 import believe.gamestate.transition.GameStateTransition.Listener
+import com.nhaarman.mockitokotlin2.inOrder
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
@@ -10,22 +11,21 @@ import org.junit.jupiter.api.Test
 import org.newdawn.slick.Graphics
 
 internal class GameStateRunnerImplTest {
-    private val gameState: GameState = mock()
+    private val previousState: GameState = mock()
+    private val nextState: GameState = mock()
     private val leaveTransition: FakeTransition = spy()
     private val enterTransition: FakeTransition = spy()
     private val graphics: Graphics = mock()
     private val gameStateRunner = GameStateRunnerImpl()
 
     @BeforeEach
-    internal fun setUp() {
-        gameStateRunner.transitionTo(gameState, leaveTransition, enterTransition)
+    fun setUp() {
+        gameStateRunner.transitionTo(nextState, leaveTransition, enterTransition)
     }
 
     @Test
     fun update_leaveTransitionIsActive_updatesLeaveTransition() {
         gameStateRunner.update(123)
-
-        verify(leaveTransition).update(123)
     }
 
     @Test
@@ -37,12 +37,24 @@ internal class GameStateRunnerImplTest {
     }
 
     @Test
-    fun update_gameStateIsActive_updatesGameState() {
+    fun update_nextStateIsActive_entersNextStateAndUpdatesNextState() {
         leaveTransition.transitionEnded()
         enterTransition.transitionEnded()
         gameStateRunner.update(123)
 
-        verify(gameState).update(123)
+        inOrder(nextState) {
+            verify(nextState).enter()
+            verify(nextState).update(123)
+        }
+    }
+
+    @Test
+    fun transitionTo_leavesPreviousState() {
+        leaveTransition.transitionEnded()
+        enterTransition.transitionEnded()
+        gameStateRunner.transitionTo(nextState, leaveTransition, enterTransition)
+
+        verify(nextState).leave()
     }
 
     @Test
@@ -66,7 +78,7 @@ internal class GameStateRunnerImplTest {
         enterTransition.transitionEnded()
         gameStateRunner.render(graphics)
 
-        verify(gameState).render(graphics)
+        verify(nextState).render(graphics)
     }
 
     private abstract class FakeTransition : GameStateTransition {
