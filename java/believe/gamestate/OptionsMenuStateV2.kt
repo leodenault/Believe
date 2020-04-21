@@ -86,6 +86,10 @@ class OptionsMenuStateV2 constructor(
     //        }
     //    }
 
+    override fun enter() {}
+
+    override fun leave() {}
+
     override fun update(delta: Int) {}
 
     override fun render(g: Graphics) {

@@ -100,6 +100,10 @@ class MainMenuStateV2 constructor(
     //        }
     //    }
 
+    override fun enter() {}
+
+    override fun leave() {}
+
     override fun render(g: Graphics) {
         //        panel.render(container, g)
         guiLayout.render(g)
