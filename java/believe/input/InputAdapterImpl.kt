@@ -16,11 +16,11 @@ class InputAdapterImpl<A, B>(private val mapInput: (A) -> B) : InputAdapter<B> {
 
     /** Signals that the input system has started sending a signal corresponding to [action]. */
     fun actionStarted(action: A) {
-        listeners.forEach { it.actionStarted(mapInput(action)) }
+        List(listeners.size) { i -> listeners[i] }.forEach { it.actionStarted(mapInput(action)) }
     }
 
     /** Signals that the input system has stopped sending a signal corresponding to [action]. */
     fun actionEnded(action: A) {
-        listeners.forEach { it.actionEnded(mapInput(action)) }
+        List(listeners.size) { i -> listeners[i] }.forEach { it.actionEnded(mapInput(action)) }
     }
 }
