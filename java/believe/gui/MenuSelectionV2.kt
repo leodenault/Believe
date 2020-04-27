@@ -15,23 +15,21 @@ class MenuSelectionV2 private constructor(
     private val borderRect: Rectangle,
     private val executeSelectionAction: () -> Unit,
     private val textDisplay: TextDisplay
-) : Renderable, Focusable {
+) : GuiElement, Focusable {
+
+    private val inputListener = object : InputAdapter.Listener<GuiAction> {
+        override fun actionStarted(action: GuiAction) {
+            if (action == GuiAction.EXECUTE_ACTION && isFocused) {
+                configuration.selectionSound.play()
+                executeSelectionAction()
+            }
+        }
+
+        override fun actionEnded(action: GuiAction) {}
+    }
 
     private var style: MenuSelectionStyle = INACTIVE
     private var isFocused = false;
-
-    init {
-        configuration.inputAdapter.addListener(object : InputAdapter.Listener<GuiAction> {
-            override fun actionStarted(action: GuiAction) {
-                if (action == GuiAction.EXECUTE_ACTION && isFocused) {
-                    configuration.selectionSound.play()
-                    executeSelectionAction()
-                }
-            }
-
-            override fun actionEnded(action: GuiAction) {}
-        })
-    }
 
     override fun focus() {
         configuration.focusSound.play()
@@ -55,7 +53,11 @@ class MenuSelectionV2 private constructor(
         textDisplay.render(g)
     }
 
-    interface TextDisplay : Renderable {
+    override fun bind() = configuration.inputAdapter.addListener(inputListener)
+
+    override fun unbind() = configuration.inputAdapter.removeListener(inputListener)
+
+    interface TextDisplay : GuiElement {
         fun highlight()
         fun unhighlight()
     }
@@ -92,13 +94,15 @@ class MenuSelectionV2 private constructor(
                     override fun unhighlight() = textBox.unhighlight()
 
                     override fun render(g: Graphics) = textBox.render(g)
+
+                    override fun bind() = textBox.bind()
+
+                    override fun unbind() = textBox.unbind()
                 }
             }
 
         /** The logic executed when the [MenuSelectionV2] is selected. */
         var executeSelectionAction: () -> Unit = {}
-        /** A [FocusableGroup] that will manage the state of this [MenuSelectionV2]. */
-        var focusableGroup: FocusableGroup? = null
 
         /** Add this string to the builder. */
         operator fun String.unaryPlus() {
@@ -124,7 +128,7 @@ class MenuSelectionV2 private constructor(
                 borderPositionData,
                 executeSelectionAction,
                 createTextDisplay(guiLayoutFactory, borderPositionData, text)
-            ).also { focusableGroup?.add(it) }
+            )
         }
     }
 

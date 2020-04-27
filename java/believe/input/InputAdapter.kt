@@ -25,4 +25,7 @@ interface InputAdapter<A> {
 
     /** Adds [listener] to this instance so that it may be notified of input events. */
     fun addListener(listener: Listener<A>)
+
+    /** Removes [listener] from this instance. */
+    fun removeListener(listener: Listener<A>)
 }

@@ -7,6 +7,7 @@ import believe.gui.GuiAction;
 import believe.gui.GuiConfigurations;
 import believe.gui.SelectedSound;
 import believe.input.InputAdapter;
+import believe.input.InputAdapter.Listener;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
@@ -32,7 +33,13 @@ abstract class GuiTestDaggerModule {
 
   @Provides
   static InputAdapter<GuiAction> provideInputAdapter() {
-    return listener -> {};
+    return new InputAdapter<GuiAction>() {
+      @Override
+      public void removeListener(Listener<GuiAction> listener) {}
+
+      @Override
+      public void addListener(Listener<GuiAction> listener) {}
+    };
   }
 
   @Binds

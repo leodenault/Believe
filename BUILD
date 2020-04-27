@@ -64,23 +64,6 @@ textproto(
     deps = ["//java/believe/app/proto:game_options_java_proto"],
 )
 
-believe_binary(
-    base_name = "Believe",
-    data = [
-        ":game_options_textproto",
-        "//customFlowFiles:custom_flow_files",
-        "//customSongs:custom_songs",
-    ],
-    main_class = "believe.app.game.Believe",
-    native_configs = NATIVE_CONFIGS,
-    resources = [
-        "//data",
-        "//levelFlowFiles:level_flow_files",
-        "//res",
-    ],
-    runtime_deps = ["//java/believe/app/game"],
-)
-
 #believe_binary(
 #    base_name = "Believe",
 #    data = [
@@ -88,12 +71,29 @@ believe_binary(
 #        "//customFlowFiles:custom_flow_files",
 #        "//customSongs:custom_songs",
 #    ],
-#    main_class = "believe.app.game.BelieveV2",
+#    main_class = "believe.app.game.Believe",
 #    native_configs = NATIVE_CONFIGS,
 #    resources = [
 #        "//data",
 #        "//levelFlowFiles:level_flow_files",
 #        "//res",
 #    ],
-#    runtime_deps = ["//java/believe/app/game:game_v2"],
+#    runtime_deps = ["//java/believe/app/game"],
 #)
+
+believe_binary(
+    base_name = "Believe",
+    data = [
+        ":game_options_textproto",
+        "//customFlowFiles:custom_flow_files",
+        "//customSongs:custom_songs",
+    ],
+    main_class = "believe.app.game.BelieveV2",
+    native_configs = NATIVE_CONFIGS,
+    resources = [
+        "//data",
+        "//levelFlowFiles:level_flow_files",
+        "//res",
+    ],
+    runtime_deps = ["//java/believe/app/game:game_v2"],
+)

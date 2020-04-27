@@ -42,12 +42,14 @@ java_library(
 kt_jvm_library(
     name = "gui_v2",
     srcs = [
+        "Bindable.kt",
         "Focusable.kt",
         "FocusableGroup.kt",
         "FocusableGroupImpl.kt",
         "GuiAction.kt",
         "GuiBuilders.kt",
         "GuiContainer.kt",
+        "GuiElement.kt",
         "GuiKeyboardActionMap.kt",
         "GuiLayoutFactory.kt",
         "LayoutBuilder.kt",

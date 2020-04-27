@@ -1,11 +1,9 @@
 package believe.gui
 
-import believe.core.display.Renderable
 import believe.geometry.Rectangle
 import dagger.Reusable
 import org.newdawn.slick.gui.GUIContext
 import javax.inject.Inject
-import kotlin.reflect.KClass
 
 /** Creates the layout of a UI by invoking a [LayoutBuilder]. */
 @Reusable
@@ -13,12 +11,14 @@ class GuiLayoutFactory @Inject internal constructor(
     @GuiConfigurations val guiConfigurations: Set<*>, val guiContext: GUIContext
 ) {
     /**
-     * Returns a [Renderable] representing a GUI layout.
+     * Returns a [T] representing a GUI layout.
      *
      * @param layoutBuilder the [LayoutBuilder] to use in creating the layout.
      * @param positionData the [Rectangle] instructing [layoutBuilder] of the area it occupies.
+     * @param C the type of configuration used to instantiate elements built by [layoutBuilder].
+     * @param T the type of [GuiElement] created by [layoutBuilder].
      */
-    inline fun <reified C, T : Renderable> create(
+    inline fun <reified C, T : GuiElement> create(
         layoutBuilder: LayoutBuilder<C, T>, positionData: Rectangle = Rectangle(
             x = 0, y = 0, width = guiContext.width, height = guiContext.height
         )

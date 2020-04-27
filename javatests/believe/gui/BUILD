@@ -42,7 +42,6 @@ kt_junit5_test(
     srcs = ["GuiContainerTest.kt"],
     friends = ["//java/believe/gui:gui_v2"],
     deps = [
-        "//java/believe/core",
         "//java/believe/gui:gui_v2",
         "//java/believe/gui/testing",
         "//java/believe/gui/testing:dagger_component",

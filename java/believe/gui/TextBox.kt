@@ -1,6 +1,5 @@
 package believe.gui
 
-import believe.core.display.Renderable
 import believe.geometry.Rectangle
 import believe.util.Util.changeClipContext
 import dagger.Reusable
@@ -14,7 +13,7 @@ class TextBox private constructor(
     private val style: TextBoxStyle,
     private val rect: Rectangle,
     private val textFragments: List<TextFragment>
-) : Renderable {
+) : GuiElement {
 
     private var textColour = style.textColour
 
@@ -31,6 +30,10 @@ class TextBox private constructor(
             changeClipContext(oldClip)
         }
     }
+
+    override fun bind() {}
+
+    override fun unbind() {}
 
     /**
      * Changes the state of this [TextBox] within the context of its surroundings being highlighted.
@@ -93,8 +96,7 @@ class TextBox private constructor(
                 )
             )
 
-            return TextBox(
-                configuration,
+            return TextBox(configuration,
                 style,
                 positionData,
                 fragments.mapIndexed { index, fragment ->

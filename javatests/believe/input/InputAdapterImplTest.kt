@@ -2,6 +2,7 @@ package believe.input
 
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import org.junit.jupiter.api.Test
 
 internal class InputAdapterImplTest {
@@ -44,6 +45,15 @@ internal class InputAdapterImplTest {
         inputAdapter.addListener(concurrentlyModifyinglistener)
 
         inputAdapter.actionStarted(987)
+    }
+
+    @Test
+    fun removeListener_removesListenerFromInstance() {
+        inputAdapter.removeListener(listener)
+
+        inputAdapter.actionStarted(456)
+
+        verifyZeroInteractions(listener)
     }
 
     companion object {

@@ -29,24 +29,18 @@ internal class MenuSelectionV2Test {
     private var layoutBuilder: MenuSelectionV2.Builder = menuSelection { }
 
     private val menuSelection: MenuSelectionV2 by lazy {
-        layoutFactory.create(layoutBuilder, POSITION_DATA)
+        layoutFactory.create(layoutBuilder, POSITION_DATA).apply { bind() }
     }
 
     @Test
-    fun new_registersListenerWithInputAdapter() {
+    fun unbind_removesListenerFromInputAdapter() {
         menuSelection.render(graphics) // Builds the menuSelection through lazy invocation.
 
-        assertThat(inputAdapter.listeners).hasSize(1)
-    }
+        assertThat(inputAdapter.listeners).hasSize(1) // Bind was called in the lazy invocation.
 
-    @Test
-    fun build_focusableGroupIsDefined_addsMenuSelectionToGroup() {
-        val focusableGroup: FocusableGroup = mock()
-        layoutBuilder = menuSelection { this.focusableGroup = focusableGroup }
+        menuSelection.unbind()
 
-        menuSelection.render(graphics) // Builds the menuSelection through lazy invocation.
-
-        verify(focusableGroup).add(menuSelection)
+        assertThat(inputAdapter.listeners).isEmpty()
     }
 
     @Test

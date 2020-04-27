@@ -12,11 +12,18 @@ internal class FocusableGroupImplTest {
     private val inputAdapter = FakeInputAdapter<GuiAction>()
     private val focusable1: Focusable = mock()
     private val focusable2: Focusable = mock()
-    private val group = FocusableGroupImpl(inputAdapter)
+    private val group = FocusableGroupImpl(inputAdapter).also { it.bind() }
 
     @Test
-    fun new_addsListenerToInputAdapter() {
+    fun bind_addsListenerToInputAdapter() {
         assertThat(inputAdapter.listeners).hasSize(1)
+    }
+
+    @Test
+    fun unbind_removesListenerToInputAdapter() {
+        group.unbind()
+
+        assertThat(inputAdapter.listeners).isEmpty()
     }
 
     @Test

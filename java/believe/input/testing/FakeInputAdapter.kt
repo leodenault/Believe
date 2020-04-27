@@ -14,6 +14,10 @@ class FakeInputAdapter<A> : InputAdapter<A> {
         internalListeners.add(listener)
     }
 
+    override fun removeListener(listener: InputAdapter.Listener<A>) {
+        internalListeners.remove(listener)
+    }
+
     /** Delegates this call to each listener's [InputAdapter.Listener.actionStarted] method. */
     fun actionStarted(action: A) = internalListeners.forEach { it.actionStarted(action) }
 }

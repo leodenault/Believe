@@ -14,6 +14,10 @@ class InputAdapterImpl<A, B>(private val mapInput: (A) -> B) : InputAdapter<B> {
         listeners.add(listener)
     }
 
+    override fun removeListener(listener: InputAdapter.Listener<B>) {
+        listeners.remove(listener)
+    }
+
     /** Signals that the input system has started sending a signal corresponding to [action]. */
     fun actionStarted(action: A) {
         List(listeners.size) { i -> listeners[i] }.forEach { it.actionStarted(mapInput(action)) }

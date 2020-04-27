@@ -20,6 +20,13 @@ internal class FakeInputAdapterTest {
     }
 
     @Test
+    fun removeListener_removesListenerFromInstance() {
+        adapter.removeListener(listener2)
+
+        assertThat(adapter.listeners).containsExactly(listener1)
+    }
+
+    @Test
     fun actionStarted_delegatesToListeners() {
         adapter.actionStarted("some action")
 

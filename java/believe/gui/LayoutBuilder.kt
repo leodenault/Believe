@@ -1,6 +1,5 @@
 package believe.gui
 
-import believe.core.display.Renderable
 import believe.geometry.Rectangle
 
 /**
@@ -8,9 +7,9 @@ import believe.geometry.Rectangle
  *
  * It is intended to be paired with [GuiBuilders] to provide an intuitive API for constructing GUIs.
  *
- * @param T the type of [Renderable] constructed by this builder.
+ * @param T the type of [GuiElement] constructed by this builder.
  */
-interface LayoutBuilder<C, T : Renderable> {
+interface LayoutBuilder<C, T : GuiElement> {
     /**
      * Builds the layout based on the contents of this builder instance.
      *
