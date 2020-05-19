@@ -146,7 +146,7 @@ public class TextComponent extends ComponentBase {
       drawButton(context, graphics);
     }
 
-    Rectangle oldClip = Util.changeClipContext(graphics, rect);
+    Rectangle oldClip = Util.changeClipContext(graphics, rect.asSlickRectangle());
     Font previousFont = graphics.getFont();
     graphics.setFont(font);
     graphics.setColor(new Color(colorSet.textColor));
@@ -220,7 +220,7 @@ public class TextComponent extends ComponentBase {
   private void drawButton(GUIContext context, Graphics g) {
     // Colour the button
     g.setColor(new Color(colorSet.color));
-    g.fill(rect);
+    g.fill(rect.asSlickRectangle());
 
     // Colour the border
     g.setColor(new Color(colorSet.borderColor));

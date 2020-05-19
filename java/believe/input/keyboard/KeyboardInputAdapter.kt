@@ -42,7 +42,8 @@ class KeyboardInputAdapter<A> private constructor(
      * register itself as a listener.
      */
     @Reusable
-    class Factory @Inject internal constructor(private val guiContext: GUIContext) {
+    class Factory @Inject internal constructor(
+        private val guiContext: GUIContext) {
         /**
          * Creates a [KeyboardInputAdapter] instance.
          *

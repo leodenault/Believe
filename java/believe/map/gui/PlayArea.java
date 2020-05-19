@@ -103,7 +103,7 @@ public class PlayArea extends AbstractContainer {
   @Override
   public void setLocation(int x, int y) {
     if (rect != null) {
-      rect.setLocation(x, y);
+      rect = new believe.geometry.Rectangle(x, y, rect.getWidth(), rect.getHeight());
     }
   }
 
@@ -138,7 +138,7 @@ public class PlayArea extends AbstractContainer {
   @Override
   protected void renderComponent(GUIContext context, Graphics g) throws SlickException {
     g.pushTransform();
-    Rectangle oldClip = Util.changeClipContext(g, rect);
+    Rectangle oldClip = Util.changeClipContext(g, rect.asSlickRectangle());
     g.translate(getX(), getY());
 
     camera.render(context, g);
@@ -148,7 +148,7 @@ public class PlayArea extends AbstractContainer {
 
     if (border) {
       g.setColor(new Color(0xffffff));
-      g.draw(rect);
+      g.draw(rect.asSlickRectangle());
     }
 
     hud.render(context, g);
@@ -156,14 +156,15 @@ public class PlayArea extends AbstractContainer {
 
   public void update(int delta) {
     levelMap.update(delta);
-    Rectangle focusRect = focus.rect();
+    believe.geometry.Rectangle focusRect = focus.rect();
     camera.center(focusRect.getCenterX(), focusRect.getCenterY());
     updateDynamicHudChildren();
   }
 
   private void updateDynamicHudChildren() {
-    Rectangle rect = focus.rect();
-    Vector2f focusLocation = camera.cameraToWindow(new Vector2f(rect.getCenter()));
+    believe.geometry.Rectangle rect = focus.rect();
+    Vector2f focusLocation =
+        camera.cameraToWindow(new Vector2f(rect.getCenterX(), rect.getCenterY()));
 
     for (DynamicHudChild child : dynamicHudChildren) {
       int ox = convertPercentageToPixels(child.offsetX, getWidth(), 0);

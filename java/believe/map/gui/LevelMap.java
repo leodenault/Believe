@@ -2,6 +2,7 @@ package believe.map.gui;
 
 import believe.core.Updatable;
 import believe.core.display.Renderable;
+import believe.geometry.Rectangle;
 import believe.gui.ComponentBase;
 import believe.map.data.BackgroundSceneData;
 import believe.map.data.LayerData;
@@ -55,7 +56,12 @@ public class LevelMap extends ComponentBase {
                 mapData.tiledMapData().layers().stream()
                     .flatMap(layerData -> layerData.generatedMapEntityData().updatables().stream()))
             .collect(Collectors.toSet());
-    rect.setSize(mapData.tiledMapData().width(), mapData.tiledMapData().height());
+    rect =
+        new Rectangle(
+            rect.getX(),
+            rect.getY(),
+            mapData.tiledMapData().width(),
+            mapData.tiledMapData().height());
     setLocation(0, 0);
 
     rearLayers = new ArrayList<>();

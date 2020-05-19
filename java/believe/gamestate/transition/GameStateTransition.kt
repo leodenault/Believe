@@ -1,10 +1,10 @@
 package believe.gamestate.transition
 
 import believe.core.Updatable
-import believe.core.display.Renderable
+import believe.core.display.RenderableV2
 
 /** A transition effect executed either after leaving a state or before entering a state. */
-interface GameStateTransition : Updatable, Renderable {
+interface GameStateTransition : Updatable, RenderableV2 {
     /** An object that listens for the end of a [GameStateTransition]. */
     interface Listener {
         /** Notifies this listener that the transition has ended. */

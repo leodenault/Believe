@@ -9,21 +9,22 @@ import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import org.junit.jupiter.api.Test
 
 internal class FocusableGroupImplTest {
-    private val inputAdapter = FakeInputAdapter<GuiAction>()
+    private val inputAdapter = FakeInputAdapter.create<GuiAction>()
     private val focusable1: Focusable = mock()
     private val focusable2: Focusable = mock()
     private val group = FocusableGroupImpl(inputAdapter).also { it.bind() }
 
     @Test
-    fun bind_addsListenerToInputAdapter() {
-        assertThat(inputAdapter.listeners).hasSize(1)
+    fun bind_addsListenersToInputAdapter() {
+        assertThat(inputAdapter.startListeners).hasSize(2)
     }
 
     @Test
-    fun unbind_removesListenerToInputAdapter() {
+    fun unbind_removesListenersFromInputAdapter() {
         group.unbind()
 
-        assertThat(inputAdapter.listeners).isEmpty()
+        assertThat(inputAdapter.startListeners[GuiAction.SELECT_UP]).isEmpty()
+        assertThat(inputAdapter.startListeners[GuiAction.SELECT_DOWN]).isEmpty()
     }
 
     @Test

@@ -21,7 +21,7 @@ class UtilTest {
     @Test
     fun changeClipContext_returnsOldClipAndSetsNewClipOnGraphics() {
         val expectedParentClip = Rectangle(0f, 0f, 100f, 100f)
-        val newClip = believe.geometry.Rectangle(50, 50, 100, 100)
+        val newClip = Rectangle(50f, 50f, 100f, 100f)
         whenever(g.clip).thenReturn(expectedParentClip)
 
         val actualParentClip = g.changeClipContext(newClip)
@@ -46,7 +46,7 @@ class UtilTest {
     fun changeClipContext_parentIsNull_returnsNull() {
         whenever(g.clip).thenReturn(null)
 
-        val oldClip = g.changeClipContext(believe.geometry.Rectangle(123, 123, 123, 123))
+        val oldClip = g.changeClipContext(Rectangle(123f, 123f, 123f, 123f))
 
         assertThat(oldClip).isNull()
     }

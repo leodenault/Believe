@@ -1,5 +1,6 @@
 package believe.levelFlow.component;
 
+import believe.geometry.Rectangle;
 import believe.gui.AbstractContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
@@ -13,8 +14,8 @@ import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.GUIContext;
 
 /**
- * Contains lanes with beats. The main component for creating musical games
- * where the user must tap beats to play.
+ * Contains lanes with beats. The main component for creating musical games where the user must tap
+ * beats to play.
  */
 public class FlowComponent extends AbstractContainer implements ComponentListener, MusicListener {
 
@@ -28,74 +29,127 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
   /**
    * Creates a new FlowComponent.
    *
-   * @param container  The context in which this FlowComponent is created and rendered.
-   * @param image    The image for the top bar of this FlowComponent.
-   * @param song    The song to play when activating this component.
-   * @param inputKeys  The keys in that each lane will respond to, in their respective order. There must be the same amount of lanes
-   * as there are keys. The int codes are used from the Input class constants.
-   * @param numLanes  The number of lanes for this component to contain.
-   * @param laneWidth  The width of each lane.
-   * @param subdivision  The current number of subdivisions for the song (4 = 16th note, 2 = 8th note...).
-   * @param bpm    The tempo of the song in beats per minute.
-   * @param offset  The offset of the song in milliseconds.
-   *
+   * @param container The context in which this FlowComponent is created and rendered.
+   * @param image The image for the top bar of this FlowComponent.
+   * @param song The song to play when activating this component.
+   * @param inputKeys The keys in that each lane will respond to, in their respective order. There
+   *     must be the same amount of lanes as there are keys. The int codes are used from the Input
+   *     class constants.
+   * @param numLanes The number of lanes for this component to contain.
+   * @param laneWidth The width of each lane.
+   * @param subdivision The current number of subdivisions for the song (4 = 16th note, 2 = 8th
+   *     note...).
+   * @param bpm The tempo of the song in beats per minute.
+   * @param offset The offset of the song in milliseconds.
    * @see org.newdawn.slick.Input
    */
-  public FlowComponent(GUIContext container, Music song, char[] inputKeys, int numLanes, int width, int subdivision, double bpm, double offset) {
+  public FlowComponent(
+      GUIContext container,
+      Music song,
+      char[] inputKeys,
+      int numLanes,
+      int width,
+      int subdivision,
+      double bpm,
+      double offset) {
     this(container, song, inputKeys, numLanes, width, subdivision, bpm, offset, 0, 0);
   }
 
   /**
    * Creates a new FlowComponent.
    *
-   * @param container  The context in which this FlowComponent is created and rendered.
-   * @param image    The image for the top bar of this FlowComponent.
-   * @param song    The song to play when activating this component.
-   * @param inputKeys  The keys in that each lane will respond to, in their respective order. There must be the same amount of lanes
-   * as there are keys. The int codes are used from the Input class constants.
-   * @param numLanes  The number of lanes for this component to contain.
-   * @param laneWidth  The width of each lane.
-   * @param subdivision  The current number of subdivisions for the song (4 = 16th note, 2 = 8th note...).
-   * @param bpm    The tempo of the song in beats per minute.
-   * @param offset  The offset of the song in milliseconds.
-   * @param x      The x position of this FlowComponent.
-   * @param y      The y position of this FlowComponent.
-   *
+   * @param container The context in which this FlowComponent is created and rendered.
+   * @param image The image for the top bar of this FlowComponent.
+   * @param song The song to play when activating this component.
+   * @param inputKeys The keys in that each lane will respond to, in their respective order. There
+   *     must be the same amount of lanes as there are keys. The int codes are used from the Input
+   *     class constants.
+   * @param numLanes The number of lanes for this component to contain.
+   * @param laneWidth The width of each lane.
+   * @param subdivision The current number of subdivisions for the song (4 = 16th note, 2 = 8th
+   *     note...).
+   * @param bpm The tempo of the song in beats per minute.
+   * @param offset The offset of the song in milliseconds.
+   * @param x The x position of this FlowComponent.
+   * @param y The y position of this FlowComponent.
    * @see org.newdawn.slick.Input
    */
-  public FlowComponent(GUIContext container, Music song, char[] inputKeys, int numLanes, int width, int subdivision, double bpm, double offset, int x, int y) {
+  public FlowComponent(
+      GUIContext container,
+      Music song,
+      char[] inputKeys,
+      int numLanes,
+      int width,
+      int subdivision,
+      double bpm,
+      double offset,
+      int x,
+      int y) {
     this(container, song, inputKeys, numLanes, width, subdivision, bpm, offset, x, y, 0);
   }
 
   /**
    * Creates a new FlowComponent.
    *
-   * @param container  The context in which this FlowComponent is created and rendered.
-   * @param image    The image for the top bar of this FlowComponent.
-   * @param song    The song to play when activating this component.
-   * @param inputKeys  The keys in that each lane will respond to, in their respective order. There must be the same amount of lanes
-   * as there are keys. The int codes are used from the Input class constants.
-   * @param numLanes  The number of lanes for this component to contain.
-   * @param laneWidth  The width of each lane.
-   * @param subdivision  The current number of subdivisions for the song (4 = 16th note, 2 = 8th note...).
-   * @param bpm    The tempo of the song in beats per minute.
-   * @param offset  The offset of the song in milliseconds.
-   * @param x      The x position of this FlowComponent.
-   * @param y      The y position of this FlowComponent.
-   * @param width    The width of this FlowComponent.
-   * @param height  The height of this FlowComponent.
-   *
+   * @param container The context in which this FlowComponent is created and rendered.
+   * @param image The image for the top bar of this FlowComponent.
+   * @param song The song to play when activating this component.
+   * @param inputKeys The keys in that each lane will respond to, in their respective order. There
+   *     must be the same amount of lanes as there are keys. The int codes are used from the Input
+   *     class constants.
+   * @param numLanes The number of lanes for this component to contain.
+   * @param laneWidth The width of each lane.
+   * @param subdivision The current number of subdivisions for the song (4 = 16th note, 2 = 8th
+   *     note...).
+   * @param bpm The tempo of the song in beats per minute.
+   * @param offset The offset of the song in milliseconds.
+   * @param x The x position of this FlowComponent.
+   * @param y The y position of this FlowComponent.
+   * @param width The width of this FlowComponent.
+   * @param height The height of this FlowComponent.
    * @see org.newdawn.slick.Input
    */
-  public FlowComponent(GUIContext container, Music song, char[] inputKeys, int numLanes, int width, int subdivision, double bpm, double offset, int x, int y, int height) {
-    this(container, song, inputKeys, numLanes, width, subdivision, bpm, offset, x, y, height, new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.PLAIN, 50), true));
+  public FlowComponent(
+      GUIContext container,
+      Music song,
+      char[] inputKeys,
+      int numLanes,
+      int width,
+      int subdivision,
+      double bpm,
+      double offset,
+      int x,
+      int y,
+      int height) {
+    this(
+        container,
+        song,
+        inputKeys,
+        numLanes,
+        width,
+        subdivision,
+        bpm,
+        offset,
+        x,
+        y,
+        height,
+        new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.PLAIN, 50), true));
   }
 
-  /**
-   * Used for testing
-   */
-  protected FlowComponent(GUIContext container, Music song, char[] inputKeys, int numLanes, int width,
-      int subdivision, double bpm, double offset, int x, int y, int height, TrueTypeFont keyFont) {
+  /** Used for testing */
+  protected FlowComponent(
+      GUIContext container,
+      Music song,
+      char[] inputKeys,
+      int numLanes,
+      int width,
+      int subdivision,
+      double bpm,
+      double offset,
+      int x,
+      int y,
+      int height,
+      TrueTypeFont keyFont) {
     super(container, 0, 0, 0, 0);
 
     if (inputKeys.length != numLanes) {
@@ -105,18 +159,28 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
     this.status = PlayStatus.STOPPED;
     this.song = song;
     this.song.addListener(this);
-    this.rect.setWidth(0);
+    this.rect = new Rectangle(rect.getX(), rect.getY(), 0, rect.getHeight());
     this.createLanes(numLanes, width / numLanes, subdivision, bpm, offset);
     KEY_FONT = keyFont;
   }
 
-  private void createLanes(int numLanes, int laneWidth, int subdivision, double bpm, double offset) {
+  private void createLanes(
+      int numLanes, int laneWidth, int subdivision, double bpm, double offset) {
     if (numLanes <= 0) {
       throw new RuntimeException("FlowComponent must contain at least one lane.");
     }
-      this.lanes = new Lane[numLanes];
+    this.lanes = new Lane[numLanes];
     for (int i = 0; i < numLanes; i++) {
-      Lane lane = new Lane(this.container, (int)this.rect.getX() + (i * laneWidth), (int)this.rect.getY(), laneWidth, (int)this.rect.getHeight(), subdivision, bpm, offset);
+      Lane lane =
+          new Lane(
+              this.container,
+              (int) this.rect.getX() + (i * laneWidth),
+              (int) this.rect.getY(),
+              laneWidth,
+              (int) this.rect.getHeight(),
+              subdivision,
+              bpm,
+              offset);
       this.addChild(lane);
       this.lanes[i] = lane;
       lane.addListener(this);
@@ -131,15 +195,14 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
         if (this.lanes[i].consumeBeat()) {
           for (Object listener : this.listeners) {
             if (listener instanceof FlowComponentListener) {
-              FlowComponentListener child = (FlowComponentListener)listener;
+              FlowComponentListener child = (FlowComponentListener) listener;
               child.beatSuccess(i);
             }
           }
-        }
-        else {
+        } else {
           for (Object listener : this.listeners) {
             if (listener instanceof FlowComponentListener) {
-              FlowComponentListener child = (FlowComponentListener)listener;
+              FlowComponentListener child = (FlowComponentListener) listener;
               child.beatFailed();
             }
           }
@@ -149,64 +212,48 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
     }
   }
 
-  /**
-   * The multiplier for the speed at which the beats scroll onscreen.
-   */
+  /** The multiplier for the speed at which the beats scroll onscreen. */
   public double getSpeedMultiplier() {
     return this.lanes[0].getSpeedMultiplier();
   }
 
-  /**
-   * The multiplier for the speed at which the beats scroll onscreen.
-   */
+  /** The multiplier for the speed at which the beats scroll onscreen. */
   public void setSpeedMultiplier(double value) {
     for (Lane lane : this.lanes) {
       lane.setSpeedMultiplier(value);
     }
   }
 
-  /**
-   * Gets the current number of subdivisions for the song (4 = 16th note, 2 = 8th note...).
-   */
+  /** Gets the current number of subdivisions for the song (4 = 16th note, 2 = 8th note...). */
   public int getSubdivision() {
     return this.lanes[0].getSubdivision();
   }
 
-  /**
-   * Sets the current number of subdivisions for the song (4 = 16th note, 2 = 8th note...).
-   */
+  /** Sets the current number of subdivisions for the song (4 = 16th note, 2 = 8th note...). */
   public void setSubdivision(int value) {
     for (Lane lane : this.lanes) {
       lane.setSubdivision(value);
     }
   }
 
-  /**
-   * Gets the current tempo of the song in beats per minute.
-   */
+  /** Gets the current tempo of the song in beats per minute. */
   public double getBpm() {
     return this.lanes[0].getBpm();
   }
 
-  /**
-   * Sets the current tempo of the song in beats per minute.
-   */
+  /** Sets the current tempo of the song in beats per minute. */
   public void setBpm(double value) {
     for (Lane lane : this.lanes) {
       lane.setBpm(value);
     }
   }
 
-  /**
-   * The time in milliseconds allotted for missing a beat.
-   */
+  /** The time in milliseconds allotted for missing a beat. */
   public int getBuffer() {
     return this.lanes[0].getBuffer();
   }
 
-  /**
-   * The time in milliseconds allotted for missing a beat.
-   */
+  /** The time in milliseconds allotted for missing a beat. */
   public void setBuffer(int value) {
     for (Lane lane : this.lanes) {
       lane.setBuffer(value);
@@ -261,7 +308,10 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
     super.keyPressed(key, c);
 
     if (this.status == PlayStatus.PLAYING) {
-      this.notifyLanes(Character.toLowerCase(c)); // TODO: Do we really want this? Having to switch using CapsLock could be an interesting feature... Or annoyance.
+      this.notifyLanes(
+          Character.toLowerCase(
+              c)); // TODO: Do we really want this? Having to switch using CapsLock could be an
+                   // interesting feature... Or annoyance.
     }
   }
 
@@ -269,24 +319,20 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
   public void componentActivated(AbstractComponent source) {
     for (Object listener : this.listeners) {
       if (listener instanceof FlowComponentListener) {
-        FlowComponentListener child = (FlowComponentListener)listener;
+        FlowComponentListener child = (FlowComponentListener) listener;
         child.beatMissed();
       }
     }
   }
 
-  /**
-   * Updates the lanes in this FlowComponent.
-   */
+  /** Updates the lanes in this FlowComponent. */
   public void update(int delta) {
     for (Lane lane : this.lanes) {
       lane.updateBeats(delta);
     }
   }
 
-  /**
-   * Begins playing the music and this FlowComponent's lanes.
-   */
+  /** Begins playing the music and this FlowComponent's lanes. */
   public void play() {
     if (this.status != PlayStatus.PLAYING) {
       for (Lane lane : this.lanes) {
@@ -294,17 +340,14 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
       }
       if (this.status == PlayStatus.PAUSED) {
         this.song.resume();
-      }
-      else {
+      } else {
         this.song.play();
       }
       this.status = PlayStatus.PLAYING;
     }
   }
 
-  /**
-   * Pauses playing the music and this FlowComponent's lanes.
-   */
+  /** Pauses playing the music and this FlowComponent's lanes. */
   public void pause() {
     if (this.status == PlayStatus.PLAYING) {
       for (Lane lane : this.lanes) {
@@ -315,9 +358,7 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
     }
   }
 
-  /**
-   * Stops playing the music and resets this FlowComponent's lanes.
-   */
+  /** Stops playing the music and resets this FlowComponent's lanes. */
   public void stop() {
     for (Lane lane : this.lanes) {
       lane.stop();
@@ -338,17 +379,16 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
   /**
    * The number of lanes this FlowComponent contains.
    *
-   * @return  The number of lanes this FlowComponent contains.
+   * @return The number of lanes this FlowComponent contains.
    */
   public int numLanes() {
     return this.lanes.length;
   }
 
-
   /**
    * Whether this FlowComponent is playing or not.
    *
-   * @return  Whether this FlowComponent is playing or not.
+   * @return Whether this FlowComponent is playing or not.
    */
   public boolean isPlaying() {
     return this.status == PlayStatus.PLAYING;
@@ -357,7 +397,7 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
   /**
    * Whether this FlowComponent is paused or not.
    *
-   * @return  Whether this FlowComponent is paused or not.
+   * @return Whether this FlowComponent is paused or not.
    */
   public boolean isPaused() {
     return this.status == PlayStatus.PAUSED;
@@ -366,7 +406,7 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
   /**
    * Whether this FlowComponent is stopped or not.
    *
-   * @return  Whether this FlowComponent is stopped or not.
+   * @return Whether this FlowComponent is stopped or not.
    */
   public boolean isStopped() {
     return this.status == PlayStatus.STOPPED;
@@ -375,16 +415,16 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
   /**
    * Adds beats to the specified lanes and positions. This can done at any time.
    *
-   * @param beats  A 2D array of beats. The first dimension represents the lane to put the beat in,
-   *           and the second dimension is for specifying the beats to be put in.
+   * @param beats A 2D array of beats. The first dimension represents the lane to put the beat in,
+   *     and the second dimension is for specifying the beats to be put in.
    */
   public void addBeats(Beat[][] beats) {
 
     if (beats == null) {
       return;
-    }
-    else if (beats.length != this.lanes.length) {
-      throw new RuntimeException("Length of beat types and positions must be the same as number of lanes.");
+    } else if (beats.length != this.lanes.length) {
+      throw new RuntimeException(
+          "Length of beat types and positions must be the same as number of lanes.");
     }
 
     for (int i = 0; i < beats.length; i++) {
@@ -399,7 +439,7 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
   public void musicEnded(Music music) {
     for (Object listener : this.listeners) {
       if (listener instanceof FlowComponentListener) {
-        ((FlowComponentListener)listener).songEnded();
+        ((FlowComponentListener) listener).songEnded();
       }
     }
   }

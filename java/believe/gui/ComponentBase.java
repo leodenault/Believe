@@ -58,7 +58,7 @@ public abstract class ComponentBase extends AbstractComponent implements Rendera
   }
 
   public void setHeight(int height) {
-    rect.setHeight(height);
+    rect = new Rectangle(rect.getX(), rect.getY(), rect.getWidth(), height);
   }
 
   @Override
@@ -67,7 +67,7 @@ public abstract class ComponentBase extends AbstractComponent implements Rendera
   }
 
   public void setWidth(int width) {
-    rect.setWidth(width);
+    rect = new Rectangle(rect.getX(), rect.getY(), width, rect.getHeight());
   }
 
   @Override
@@ -83,7 +83,7 @@ public abstract class ComponentBase extends AbstractComponent implements Rendera
   @Override
   public void setLocation(int x, int y) {
     if (rect != null) {
-      rect.setLocation(x, y);
+      rect = new Rectangle(x, y, rect.getWidth(), rect.getHeight());
       resetLayout();
     }
   }

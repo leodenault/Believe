@@ -20,7 +20,7 @@ class GuiLayoutFactory @Inject internal constructor(
      */
     inline fun <reified C, T : GuiElement> create(
         layoutBuilder: LayoutBuilder<C, T>, positionData: Rectangle = Rectangle(
-            x = 0, y = 0, width = guiContext.width, height = guiContext.height
+            x = 0f, y = 0f, width = guiContext.width.toFloat(), height = guiContext.height.toFloat()
         )
     ): T = if (Unit is C) {
         layoutBuilder.build(Unit, this, positionData)

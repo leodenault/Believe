@@ -1,6 +1,6 @@
 package believe.gui
 
-import believe.core.display.Renderable
+import believe.core.display.RenderableV2
 
 /** An element drawn to the GUI that the user can see and possibly interact with. */
-interface GuiElement : Renderable, Bindable
+interface GuiElement : RenderableV2, Bindable

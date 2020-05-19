@@ -42,7 +42,7 @@ public class CollidableTileCollisionHandlerTest {
       }
     }
 
-    final Rectangle rect;
+    Rectangle rect;
     boolean isLanded;
 
     private float verticalSpeed;
@@ -86,7 +86,7 @@ public class CollidableTileCollisionHandlerTest {
 
     @Override
     public void setLocation(float x, float y) {
-      rect.setLocation(x, y);
+      rect = new Rectangle(x, y, rect.getWidth(), rect.getHeight());
     }
 
     @Override

@@ -1,10 +1,10 @@
 package believe.gamestate
 
 import believe.core.Updatable
-import believe.core.display.Renderable
+import believe.core.display.Graphics
+import believe.core.display.RenderableV2
 import believe.gamestate.transition.GameStateTransition
 import dagger.Reusable
-import org.newdawn.slick.Graphics
 import javax.inject.Inject
 
 /** Default implementation of [GameStateRunner]. */
@@ -48,7 +48,7 @@ class GameStateRunnerImpl @Inject constructor() : GameStateRunner {
 
     private class UpdatableAndRenderable<T> internal constructor(
         private var value: T
-    ) : Updatable, Renderable where T : Updatable, T : Renderable {
+    ) : Updatable, RenderableV2 where T : Updatable, T : RenderableV2 {
 
         override fun update(delta: Int) {
             value.update(delta)

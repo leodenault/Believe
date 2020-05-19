@@ -8,6 +8,7 @@ import believe.character.playable.proto.PlayableCharacterMovementCommandProto.Pl
 import believe.core.Updatable;
 import believe.core.display.AnimationSet;
 import believe.core.display.SpriteSheetManager;
+import believe.geometry.Rectangle;
 import believe.gui.ComponentBase;
 import believe.map.collidable.tile.CollidableTileCollisionHandler.TileCollidable;
 import believe.physics.collision.Collidable;
@@ -140,7 +141,7 @@ public abstract class Character<C extends Character<C>> extends ComponentBase
   @Override
   public void setLocation(float x, float y) {
     if (rect != null) {
-      rect.setLocation(x, y);
+      rect = new Rectangle(x, y, rect.getWidth(), rect.getHeight());
       resetLayout();
     }
   }

@@ -1,7 +1,5 @@
 package believe.gui
 
-import org.newdawn.slick.Graphics
-
 /** Builder methods for constructing UIs. */
 object GuiBuilders {
     /**
@@ -18,11 +16,29 @@ object GuiBuilders {
     ): TextBox.Builder = TextBox.Builder().apply(configure)
 
     /**
-     * Creates a [GuiContainer] with a vertical layout.
+     * Creates a [VerticalContainer].
      *
      * @param configure the receiver for configuring the details of the container.
      */
-    fun verticalLayoutContainer(
-        configure: GuiContainer.Builder.() -> Unit
-    ): GuiContainer.Builder = GuiContainer.Builder().apply(configure)
+    fun verticalContainer(
+        configure: VerticalContainer.Builder.() -> Unit
+    ): VerticalContainer.Builder = VerticalContainer.Builder().apply(configure)
+
+    /**
+     * Creates a [CanvasContainer].
+     *
+     * @param configure the receiver for configuring the details of the container.
+     */
+    fun <G: GuiElement> canvasContainer(
+        configure: CanvasContainerV2.Builder<G>.() -> Unit
+    ): CanvasContainerV2.Builder<G> = CanvasContainerV2.Builder<G>().apply(configure)
+
+    /**
+     * Creates a [NumberPickerV2].
+     *
+     * @param configure the receiver for configuring the details of the number picker.
+     */
+    fun numberPicker(
+        configure: NumberPickerV2.Builder.() -> Unit
+    ): NumberPickerV2.Builder = NumberPickerV2.Builder().apply(configure)
 }

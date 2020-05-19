@@ -1,14 +1,13 @@
 package believe.gamestate
 
-import believe.gui.FocusableGroupImplFactory
+import believe.core.display.Graphics
 import believe.gui.GuiBuilders.menuSelection
-import believe.gui.GuiBuilders.verticalLayoutContainer
+import believe.gui.GuiBuilders.verticalContainer
 import believe.gui.GuiElement
 import believe.gui.GuiLayoutFactory
 import com.google.auto.factory.AutoFactory
 import com.google.auto.factory.Provided
 import org.newdawn.slick.GameContainer
-import org.newdawn.slick.Graphics
 
 @AutoFactory
 class MainMenuStateV2 constructor(
@@ -16,7 +15,7 @@ class MainMenuStateV2 constructor(
     @Provided guiLayoutFactory: GuiLayoutFactory
 ) : GameState {
 
-    private val guiLayout: GuiElement = guiLayoutFactory.create(verticalLayoutContainer {
+    private var guiLayout: GuiElement = guiLayoutFactory.create(verticalContainer {
         +menuSelection {
             +"Play Platforming Level"
         }

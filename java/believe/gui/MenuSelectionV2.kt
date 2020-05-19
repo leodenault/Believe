@@ -1,11 +1,10 @@
 package believe.gui
 
 import believe.audio.Sound
-import believe.core.display.Renderable
+import believe.core.display.Graphics
 import believe.geometry.Rectangle
 import believe.input.InputAdapter
 import dagger.Reusable
-import org.newdawn.slick.Graphics
 import javax.inject.Inject
 
 /** A GUI object presented in a menu context that can be focused and selected by the user. */
@@ -17,19 +16,15 @@ class MenuSelectionV2 private constructor(
     private val textDisplay: TextDisplay
 ) : GuiElement, Focusable {
 
-    private val inputListener = object : InputAdapter.Listener<GuiAction> {
-        override fun actionStarted(action: GuiAction) {
-            if (action == GuiAction.EXECUTE_ACTION && isFocused) {
-                configuration.selectionSound.play()
-                executeSelectionAction()
-            }
+    private val executeSelection = {
+        if (isFocused) {
+            configuration.selectionSound.play()
+            executeSelectionAction()
         }
-
-        override fun actionEnded(action: GuiAction) {}
     }
 
     private var style: MenuSelectionStyle = INACTIVE
-    private var isFocused = false;
+    private var isFocused = false
 
     override fun focus() {
         configuration.focusSound.play()
@@ -45,22 +40,20 @@ class MenuSelectionV2 private constructor(
     }
 
     override fun render(g: Graphics) {
-        g.color = style.color
-        g.fill(rect)
-        g.color = style.borderColor
-        g.lineWidth = style.borderSize.toFloat()
-        g.drawRect(borderRect.x, borderRect.y, borderRect.width, borderRect.height)
+        g.fill(rect, style.color)
+        g.draw(borderRect, style.borderColor, style.borderSize.toFloat())
         textDisplay.render(g)
     }
 
-    override fun bind() = configuration.inputAdapter.addListener(inputListener)
+    override fun bind() = configuration.inputAdapter.addActionStartListener(
+        GuiAction.EXECUTE_ACTION,
+        executeSelection
+    )
 
-    override fun unbind() = configuration.inputAdapter.removeListener(inputListener)
-
-    interface TextDisplay : GuiElement {
-        fun highlight()
-        fun unhighlight()
-    }
+    override fun unbind() = configuration.inputAdapter.removeActionStartListener(
+        GuiAction.EXECUTE_ACTION,
+        executeSelection
+    )
 
     /** Configures a [MenuSelectionV2] with dependencies injected from a framework. */
     @Reusable
@@ -79,26 +72,14 @@ class MenuSelectionV2 private constructor(
         /** Visible for testing. */
         internal var createTextDisplay: (GuiLayoutFactory, Rectangle, String) -> TextDisplay =
             { guiLayoutFactory, rectangle, text ->
-                object : TextDisplay {
-                    private val textBox = guiLayoutFactory.create(
-                        TextBox.Builder().apply {
-                            +text
-                            style = TextBoxStyle(
-                                textColour = 0xcf0498, highlightedTextColour = 0xffffff
-                            )
-                        }, rectangle
-                    )
-
-                    override fun highlight() = textBox.highlight()
-
-                    override fun unhighlight() = textBox.unhighlight()
-
-                    override fun render(g: Graphics) = textBox.render(g)
-
-                    override fun bind() = textBox.bind()
-
-                    override fun unbind() = textBox.unbind()
-                }
+                guiLayoutFactory.create(
+                    TextBox.Builder().apply {
+                        +text
+                        style = TextBoxStyle(
+                            textColour = 0xcf0498, highlightedTextColour = 0xffffff
+                        )
+                    }, rectangle
+                )
             }
 
         /** The logic executed when the [MenuSelectionV2] is selected. */
@@ -114,20 +95,21 @@ class MenuSelectionV2 private constructor(
             guiLayoutFactory: GuiLayoutFactory,
             positionData: Rectangle
         ): MenuSelectionV2 {
-            val borderPositionData: Rectangle = with(positionData) {
+            return MenuSelectionV2(configuration, positionData, with(positionData) {
                 Rectangle(
-                    x.toInt() + BORDER_SIZE / 2,
-                    y.toInt() + BORDER_SIZE / 2,
-                    width.toInt() - BORDER_SIZE,
-                    height.toInt() - BORDER_SIZE
+                    x + BORDER_SIZE / 2,
+                    y + BORDER_SIZE / 2,
+                    width - BORDER_SIZE,
+                    height - BORDER_SIZE
                 )
-            }
-            return MenuSelectionV2(
-                configuration,
-                positionData,
-                borderPositionData,
-                executeSelectionAction,
-                createTextDisplay(guiLayoutFactory, borderPositionData, text)
+            }, executeSelectionAction, createTextDisplay(guiLayoutFactory, with(positionData) {
+                Rectangle(
+                    x + BORDER_SIZE,
+                    y + BORDER_SIZE,
+                    width - BORDER_SIZE * 2,
+                    height - BORDER_SIZE * 2
+                )
+            }, text)
             )
         }
     }
@@ -135,7 +117,7 @@ class MenuSelectionV2 private constructor(
     internal class StyleSet(val focused: MenuSelectionStyle, val unfocused: MenuSelectionStyle)
 
     companion object {
-        private const val BORDER_SIZE = 5
+        private const val BORDER_SIZE = 6
         private val INACTIVE =
             MenuSelectionStyle(colour = 0x0cffb2, borderColour = 0xcf0498, borderSize = BORDER_SIZE)
         private val ACTIVE =

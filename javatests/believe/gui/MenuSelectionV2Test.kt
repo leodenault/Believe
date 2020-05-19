@@ -1,21 +1,22 @@
 package believe.gui
 
 import believe.audio.Sound
-import believe.core.display.Renderable
+import believe.core.display.Graphics
 import believe.geometry.Rectangle
 import believe.gui.GuiBuilders.menuSelection
 import believe.gui.testing.DaggerGuiTestComponent
 import believe.input.testing.FakeInputAdapter
 import com.google.common.truth.Truth.assertThat
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import org.junit.jupiter.api.Test
 import org.newdawn.slick.Font
-import org.newdawn.slick.Graphics
 
 internal class MenuSelectionV2Test {
-    private val inputAdapter = FakeInputAdapter<GuiAction>()
+    private val inputAdapter = FakeInputAdapter.create<GuiAction>()
     private val font: Font = mock()
     private val focusSound: Sound = mock()
     private val selectedSound: Sound = mock()
@@ -36,11 +37,12 @@ internal class MenuSelectionV2Test {
     fun unbind_removesListenerFromInputAdapter() {
         menuSelection.render(graphics) // Builds the menuSelection through lazy invocation.
 
-        assertThat(inputAdapter.listeners).hasSize(1) // Bind was called in the lazy invocation.
+        // Bind was called in the lazy invocation.
+        assertThat(inputAdapter.startListeners[GuiAction.EXECUTE_ACTION]).hasSize(1)
 
         menuSelection.unbind()
 
-        assertThat(inputAdapter.listeners).isEmpty()
+        assertThat(inputAdapter.startListeners[GuiAction.EXECUTE_ACTION]).isEmpty()
     }
 
     @Test
@@ -49,7 +51,7 @@ internal class MenuSelectionV2Test {
         layoutBuilder = menuSelection { executeSelectionAction = selectionAction }
 
         menuSelection.focus()
-        inputAdapter.listeners[0].actionStarted(GuiAction.EXECUTE_ACTION)
+        inputAdapter.actionStarted(GuiAction.EXECUTE_ACTION)
 
         verify(selectedSound).play()
         verify(selectionAction).invoke()
@@ -61,19 +63,7 @@ internal class MenuSelectionV2Test {
         layoutBuilder = menuSelection { executeSelectionAction = selectionAction }
         menuSelection.render(graphics)
 
-        inputAdapter.listeners[0].actionStarted(GuiAction.EXECUTE_ACTION)
-
-        verifyZeroInteractions(selectionAction)
-    }
-
-    @Test
-    fun inputActionStarted_actionIsNotExecute_doesNotExecuteAction() {
-        val selectionAction = mock<() -> Unit>()
-        layoutBuilder = menuSelection { executeSelectionAction = selectionAction }
-        menuSelection.render(graphics)
-
-        menuSelection.focus()
-        inputAdapter.listeners[0].actionStarted(GuiAction.SELECT_UP)
+        inputAdapter.actionStarted(GuiAction.EXECUTE_ACTION)
 
         verifyZeroInteractions(selectionAction)
     }
@@ -87,7 +77,7 @@ internal class MenuSelectionV2Test {
 
     @Test
     fun focus_highlightsText() {
-        val textDisplay: MenuSelectionV2.TextDisplay = mock()
+        val textDisplay: TextDisplay = mock()
         layoutBuilder = menuSelection { createTextDisplay = { _, _, _ -> textDisplay } }
 
         menuSelection.focus()
@@ -97,7 +87,7 @@ internal class MenuSelectionV2Test {
 
     @Test
     fun unfocus_unhighlightsText() {
-        val textDisplay: MenuSelectionV2.TextDisplay = mock()
+        val textDisplay: TextDisplay = mock()
         layoutBuilder = menuSelection { createTextDisplay = { _, _, _ -> textDisplay } }
 
         menuSelection.unfocus()
@@ -109,18 +99,23 @@ internal class MenuSelectionV2Test {
     fun render_successfullyRendersMenuSelection() {
         menuSelection.render(graphics)
 
-        verify(graphics).fill(POSITION_DATA)
+        verify(graphics).fill(eq(POSITION_DATA), any())
+        verify(graphics).draw(eq(with(POSITION_DATA) {
+            Rectangle(x + 3, y + 3, width - 6, height - 6)
+        }), any(), any())
     }
 
     @Test
     fun render_rendersTextCorrectly() {
-        val textDisplay: MenuSelectionV2.TextDisplay = mock()
+        val textDisplay: TextDisplay = mock()
         var actualText = ""
+        var actualPositionData = Rectangle(x = 0f, y = 0f, width = 0f, height = 0f)
         layoutBuilder = menuSelection {
             +"some text"
-            createTextDisplay = { _, _, text ->
+            createTextDisplay = { _, positionData, text ->
                 textDisplay.also {
                     actualText = text
+                    actualPositionData = positionData
                 }
             }
         }
@@ -128,10 +123,13 @@ internal class MenuSelectionV2Test {
         menuSelection.render(graphics)
 
         assertThat(actualText).isEqualTo("some text")
+        assertThat(actualPositionData).isEqualTo(with(POSITION_DATA) {
+            Rectangle(x + 6, y + 6, width - 12, height - 12)
+        })
         verify(textDisplay).render(graphics)
     }
 
     companion object {
-        private val POSITION_DATA = Rectangle(100, 1000, 1000, 100)
+        private val POSITION_DATA = Rectangle(100f, 1000f, 1000f, 100f)
     }
 }

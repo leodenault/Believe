@@ -9,7 +9,7 @@ kt_jvm_library(
     srcs = ["GameStateTransition.kt"],
     deps = [
         "//java/believe/core",
-        "//java/believe/core/display",
+        "//java/believe/core/display:display_v2",
     ],
 )
 

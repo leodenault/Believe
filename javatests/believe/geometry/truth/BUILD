@@ -6,12 +6,11 @@ package(
 )
 
 kt_junit5_test(
-    name = "FakeInputAdapterTest",
-    srcs = ["FakeInputAdapterTest.kt"],
+    name = "GeometryTruthTest",
+    srcs = ["GeometryTruthTest.kt"],
     deps = [
-        "//java/believe/input",
-        "//java/believe/input/testing",
-        "//third_party/mockito:mockito_kotlin",
+        "//java/believe/geometry",
+        "//java/believe/geometry/truth",
         "//third_party/truth",
     ],
 )

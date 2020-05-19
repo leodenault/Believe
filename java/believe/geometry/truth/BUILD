@@ -6,10 +6,10 @@ package(
 )
 
 kt_jvm_library(
-    name = "testing",
-    srcs = ["FakeInputAdapter.kt"],
+    name = "truth",
+    srcs = ["GeometryTruth.kt"],
     deps = [
-        "//java/believe/input",
-        "//java/believe/input:impl",
+        "//java/believe/geometry",
+        "//third_party/truth",
     ],
 )

@@ -1,23 +1,23 @@
 package believe.input.testing
 
 import believe.input.InputAdapter
+import believe.input.InputAdapterImpl
 
 /** A fake implementation of [InputAdapter] for testing. */
-class FakeInputAdapter<A> : InputAdapter<A> {
-    private val internalListeners: MutableList<InputAdapter.Listener<A>> = mutableListOf()
+class FakeInputAdapter<A> private constructor(
+    private val inputAdapterImpl: InputAdapterImpl<A, A>
+) : InputAdapter<A> by inputAdapterImpl {
+    val startListeners: Map<A, List<() -> Unit>>
+        get() = inputAdapterImpl.startListeners
+    val endListeners: Map<A, List<() -> Unit>>
+        get() = inputAdapterImpl.endListeners
 
-    /** The list of [InputAdapter.Listener] instances registered with this instance. */
-    val listeners
-        get() = internalListeners
+    fun actionStarted(action: A) = inputAdapterImpl.actionStarted(action)
+    fun actionEnded(action: A) = inputAdapterImpl.actionEnded(action)
 
-    override fun addListener(listener: InputAdapter.Listener<A>) {
-        internalListeners.add(listener)
+    companion object {
+        /** Creates a [FakeInputAdapter] for use in testing. */
+        @JvmStatic
+        fun <A> create(): FakeInputAdapter<A> = FakeInputAdapter(InputAdapterImpl { it })
     }
-
-    override fun removeListener(listener: InputAdapter.Listener<A>) {
-        internalListeners.remove(listener)
-    }
-
-    /** Delegates this call to each listener's [InputAdapter.Listener.actionStarted] method. */
-    fun actionStarted(action: A) = internalListeners.forEach { it.actionStarted(action) }
 }

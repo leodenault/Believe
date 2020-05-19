@@ -4,14 +4,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import believe.geometry.Rectangle;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.GUIContext;
 
-/**
- * A simple GUI container for holding components.
- */
+/** A simple GUI container for holding components. */
 public abstract class AbstractContainer extends ComponentBase implements Iterable<ComponentBase> {
 
   protected List<ComponentBase> children;
@@ -19,7 +18,7 @@ public abstract class AbstractContainer extends ComponentBase implements Iterabl
   /**
    * Creates a new AbstractContainer.
    *
-   * @param container  The context in which this container will be created and rendered.
+   * @param container The context in which this container will be created and rendered.
    */
   public AbstractContainer(GUIContext container) {
     this(container, 0, 0, 0, 0);
@@ -28,9 +27,9 @@ public abstract class AbstractContainer extends ComponentBase implements Iterabl
   /**
    * Creates a new AbstractContainer.
    *
-   * @param container  The context in which this container will be created and rendered.
-   * @param x      The x position of this container.
-   * @param y      The y position of this container.
+   * @param container The context in which this container will be created and rendered.
+   * @param x The x position of this container.
+   * @param y The y position of this container.
    */
   public AbstractContainer(GUIContext container, int x, int y) {
     this(container, x, y, 0, 0);
@@ -39,11 +38,11 @@ public abstract class AbstractContainer extends ComponentBase implements Iterabl
   /**
    * Creates a new AbstractContainer.
    *
-   * @param container  The context in which this container will be created and rendered.
-   * @param x      The x position of this container.
-   * @param y      The y position of this container.
-   * @param width    The width of this container.
-   * @param height  The height of this container.
+   * @param container The context in which this container will be created and rendered.
+   * @param x The x position of this container.
+   * @param y The y position of this container.
+   * @param width The width of this container.
+   * @param height The height of this container.
    */
   public AbstractContainer(GUIContext container, int x, int y, int width, int height) {
     super(container, x, y, width, height);
@@ -60,8 +59,8 @@ public abstract class AbstractContainer extends ComponentBase implements Iterabl
   @Override
   public void setLocation(int x, int y) {
     if (rect != null) {
-      int deltaX = x - (int)rect.getX();
-      int deltaY = y - (int)rect.getY();
+      int deltaX = x - (int) rect.getX();
+      int deltaY = y - (int) rect.getY();
 
       if (this.children != null) {
         for (AbstractComponent child : this.children) {
@@ -69,7 +68,7 @@ public abstract class AbstractContainer extends ComponentBase implements Iterabl
         }
       }
 
-      rect.setLocation(x, y);
+      rect = new Rectangle(x, y, rect.getWidth(), rect.getHeight());
     }
   }
 
@@ -81,7 +80,7 @@ public abstract class AbstractContainer extends ComponentBase implements Iterabl
   /**
    * Adds a component as a child to this container.
    *
-   * @param child  The component to be added.
+   * @param child The component to be added.
    */
   public void addChild(ComponentBase child) {
     this.children.add(child);
@@ -91,7 +90,7 @@ public abstract class AbstractContainer extends ComponentBase implements Iterabl
   /**
    * Removes the child component from this container.
    *
-   * @param child  The component to be removed.
+   * @param child The component to be removed.
    */
   public void removeChild(ComponentBase child) {
     this.children.remove(child);

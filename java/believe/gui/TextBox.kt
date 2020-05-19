@@ -1,10 +1,9 @@
 package believe.gui
 
+import believe.core.display.Graphics
 import believe.geometry.Rectangle
-import believe.util.Util.changeClipContext
 import dagger.Reusable
 import org.newdawn.slick.Font
-import org.newdawn.slick.Graphics
 import javax.inject.Inject
 
 /** A component displaying text within the bounds of a box. */
@@ -13,21 +12,17 @@ class TextBox private constructor(
     private val style: TextBoxStyle,
     private val rect: Rectangle,
     private val textFragments: List<TextFragment>
-) : GuiElement {
+) : TextDisplay {
 
     private var textColour = style.textColour
 
-    override fun render(graphics: Graphics) {
-        with(graphics) {
-            val oldClip = changeClipContext(rect)
-            val previousFont = font
-            val previousColour = color
-            font = config.font
-            color = textColour
-            textFragments.forEach { drawString(it.text, it.rect.x, it.rect.y) }
-            font = previousFont
-            color = previousColour
-            changeClipContext(oldClip)
+    override fun render(g: Graphics) {
+        with(g) {
+            pushClip(rect)
+            textFragments.forEach {
+                drawString(it.text, it.rect.x, it.rect.y, textColour, config.font)
+            }
+            popClip()
         }
     }
 
@@ -38,7 +33,7 @@ class TextBox private constructor(
     /**
      * Changes the state of this [TextBox] within the context of its surroundings being highlighted.
      */
-    fun highlight() {
+    override fun highlight() {
         textColour = style.highlightedTextColor
     }
 
@@ -46,7 +41,7 @@ class TextBox private constructor(
      * Changes the state of this [TextBox] within the context of its surroundings being in a normal
      * state.
      */
-    fun unhighlight() {
+    override fun unhighlight() {
         textColour = style.textColour
     }
 
@@ -149,13 +144,13 @@ class TextBox private constructor(
             private val font: Font,
             private val textBoxRect: Rectangle,
             private val horizontalAlignment: TextAlignment.Horizontal,
-            private val baseY: Int
+            private val baseY: Float
         ) {
             fun create(text: String, y: Int) = TextFragment(
                 text, Rectangle(
                     horizontalAlignment.calculateXPosition(
                         font.getWidth(text), textBoxRect
-                    ), baseY + y, font.getWidth(text), font.getHeight(text)
+                    ), baseY + y, font.getWidth(text).toFloat(), font.getHeight(text).toFloat()
                 )
             )
         }

@@ -5,7 +5,6 @@ kt_junit5_test(
     srcs = ["RectangleTest.kt"],
     deps = [
         "//java/believe/geometry",
-        "//third_party/hamcrest",
         "//third_party/truth",
     ],
 )

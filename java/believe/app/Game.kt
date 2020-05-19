@@ -1,12 +1,12 @@
 package believe.app
 
+import believe.core.display.Graphics
 import believe.gamestate.GameStateRunner
 import believe.gamestate.StateController
 import dagger.Lazy
 import dagger.Reusable
 import org.newdawn.slick.Game
 import org.newdawn.slick.GameContainer
-import org.newdawn.slick.Graphics
 import javax.inject.Inject
 
 /** The base class for a game.  */
@@ -22,7 +22,8 @@ class Game @Inject constructor(
 
     override fun update(container: GameContainer, delta: Int) = gameStateRunner.update(delta)
 
-    override fun render(container: GameContainer, g: Graphics) = gameStateRunner.render(g)
+    override fun render(container: GameContainer, g: org.newdawn.slick.Graphics) =
+        gameStateRunner.render(Graphics(g))
 
     override fun closeRequested(): Boolean = true
 

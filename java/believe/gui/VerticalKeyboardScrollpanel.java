@@ -90,7 +90,7 @@ public class VerticalKeyboardScrollpanel extends AbstractContainer {
 
   @Override
   protected void renderComponent(GUIContext context, Graphics g) throws SlickException {
-    Rectangle oldClip = Util.changeClipContext(g, rect);
+    Rectangle oldClip = Util.changeClipContext(g, rect.asSlickRectangle());
     super.renderComponent(context, g);
     Util.resetClipContext(g, oldClip);
 

@@ -16,8 +16,9 @@ import java.util.Set;
 public class DamageBox implements Collidable<DamageBox> {
   private final DamageBoxCollisionHandler damageBoxCollisionHandler;
   private final float damage;
-  private final Rectangle rect;
   private final Faction faction;
+
+  private Rectangle rect;
 
   DamageBox(
       @Provided DamageBoxCollisionHandler damageBoxCollisionHandler,
@@ -55,7 +56,7 @@ public class DamageBox implements Collidable<DamageBox> {
   }
 
   public void setLocation(float x, float y) {
-    this.rect.setLocation(x, y);
+    this.rect = new Rectangle(x, y, rect.getWidth(), rect.getHeight());
   }
 
   public Faction getFaction() {

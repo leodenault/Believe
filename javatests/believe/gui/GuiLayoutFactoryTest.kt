@@ -64,6 +64,6 @@ internal class GuiLayoutFactoryTest {
         private const val CONTEXT_2 = 123
         private const val GUI_CONTEXT_WIDTH = 190
         private const val GUI_CONTEXT_HEIGHT = 908
-        private val POSITION_DATA = Rectangle(1, 2, 3, 4)
+        private val POSITION_DATA = Rectangle(1f, 2f, 3f, 4f)
     }
 }

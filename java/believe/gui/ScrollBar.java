@@ -70,7 +70,7 @@ public class ScrollBar extends ComponentBase {
   @Override
   protected void renderComponent(GUIContext context, Graphics g) {
     g.setColor(BAR_COLOR);
-    g.fill(rect);
+    g.fill(rect.asSlickRectangle());
     g.setColor(CURSOR_COLOR);
     g.fill(cursor);
   }

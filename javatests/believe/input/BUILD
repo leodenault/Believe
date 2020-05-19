@@ -12,5 +12,6 @@ kt_junit5_test(
     deps = [
         "//java/believe/input:impl",
         "//third_party/mockito:mockito_kotlin",
+        "//third_party/truth",
     ],
 )

@@ -1,5 +1,6 @@
 package believe.gamestate
 
+import believe.core.display.Graphics
 import believe.gamestate.transition.GameStateTransition
 import believe.gamestate.transition.GameStateTransition.Listener
 import com.nhaarman.mockitokotlin2.inOrder
@@ -8,7 +9,6 @@ import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.newdawn.slick.Graphics
 
 internal class GameStateRunnerImplTest {
     private val previousState: GameState = mock()

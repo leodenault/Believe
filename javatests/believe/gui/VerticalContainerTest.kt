@@ -1,7 +1,8 @@
 package believe.gui
 
+import believe.core.display.Graphics
 import believe.geometry.Rectangle
-import believe.gui.GuiBuilders.verticalLayoutContainer
+import believe.gui.GuiBuilders.verticalContainer
 import believe.gui.testing.DaggerGuiTestComponent
 import believe.gui.testing.FakeLayoutBuilder
 import com.google.common.truth.Truth.assertThat
@@ -9,25 +10,24 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.jupiter.api.Test
-import org.newdawn.slick.Graphics
 
-internal class GuiContainerTest {
+internal class VerticalContainerTest {
     private val layoutFactory: GuiLayoutFactory =
-        DaggerGuiTestComponent.builder().addGuiConfiguration(GuiContainer.Configuration(mock {
+        DaggerGuiTestComponent.builder().addGuiConfiguration(VerticalContainer.Configuration(mock {
             on { create() } doReturn mock()
         })).build().guiLayoutFactory
-    private var layoutBuilder = verticalLayoutContainer { }
+    private var layoutBuilder = verticalContainer { }
     private val graphics: Graphics = mock()
     private val container: GuiElement by lazy {
         layoutFactory.create(
-            layoutBuilder, Rectangle(0, 0, 1000, 100)
+            layoutBuilder, Rectangle(0f, 0f, 1000f, 100f)
         )
     }
 
     @Test
     fun render_rendersChildren() {
         val child: FakeFocusable = mock()
-        layoutBuilder = verticalLayoutContainer { +FakeLayoutBuilder<Unit, FakeFocusable>(child) }
+        layoutBuilder = verticalContainer { +FakeLayoutBuilder<Unit, FakeFocusable>(child) }
 
         container.render(graphics)
 
@@ -42,7 +42,7 @@ internal class GuiContainerTest {
         val layoutBuilder1 = FakeLayoutBuilder<Unit, FakeFocusable>(child1)
         val layoutBuilder2 = FakeLayoutBuilder<Unit, FakeFocusable>(child2)
         val layoutBuilder3 = FakeLayoutBuilder<Unit, FakeFocusable>(child3)
-        layoutBuilder = verticalLayoutContainer {
+        layoutBuilder = verticalContainer {
             +layoutBuilder1
             +layoutBuilder2
             +layoutBuilder3
@@ -50,31 +50,16 @@ internal class GuiContainerTest {
 
         container.render(graphics)
 
-        with(layoutBuilder1) {
-            assertThat(receivedPositionData?.x).isEqualTo(250f)
-            assertThat(receivedPositionData?.y).isEqualTo(6f)
-            assertThat(receivedPositionData?.width).isEqualTo(500f)
-            assertThat(receivedPositionData?.height).isEqualTo(25f)
-        }
-        with(layoutBuilder2) {
-            assertThat(receivedPositionData?.x).isEqualTo(250f)
-            assertThat(receivedPositionData?.y).isEqualTo(38f)
-            assertThat(receivedPositionData?.width).isEqualTo(500f)
-            assertThat(receivedPositionData?.height).isEqualTo(25f)
-        }
-        with(layoutBuilder3) {
-            assertThat(receivedPositionData?.x).isEqualTo(250f)
-            assertThat(receivedPositionData?.y).isEqualTo(69f)
-            assertThat(receivedPositionData?.width).isEqualTo(500f)
-            assertThat(receivedPositionData?.height).isEqualTo(25f)
-        }
+        assertThat(layoutBuilder1.receivedPositionData).isEqualTo(Rectangle(250f, 6.25f, 500f, 25f))
+        assertThat(layoutBuilder2.receivedPositionData).isEqualTo(Rectangle(250f, 37.5f, 500f, 25f))
+        assertThat(layoutBuilder3.receivedPositionData).isEqualTo(Rectangle(250f, 68.75f, 500f, 25f))
     }
 
     @Test
     fun build_addsChildrenToFocusableGroup() {
         val child: FakeFocusable = mock()
         val group: FocusableGroup = mock()
-        layoutBuilder = verticalLayoutContainer {
+        layoutBuilder = verticalContainer {
             +FakeLayoutBuilder<Unit, FakeFocusable>(child)
             focusableGroup = group
         }
@@ -88,7 +73,7 @@ internal class GuiContainerTest {
     fun bind_bindsChildrenAndGroup() {
         val child: FakeFocusable = mock()
         val group: FocusableGroup = mock()
-        layoutBuilder = verticalLayoutContainer {
+        layoutBuilder = verticalContainer {
             +FakeLayoutBuilder<Unit, FakeFocusable>(child)
             focusableGroup = group
         }
@@ -103,7 +88,7 @@ internal class GuiContainerTest {
     fun unbind_unbindsChildrenAndGroup() {
         val child: FakeFocusable = mock()
         val group: FocusableGroup = mock()
-        layoutBuilder = verticalLayoutContainer {
+        layoutBuilder = verticalContainer {
             +FakeLayoutBuilder<Unit, FakeFocusable>(child)
             focusableGroup = group
         }

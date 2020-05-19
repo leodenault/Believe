@@ -1,19 +1,21 @@
 package believe.app
 
+import believe.core.display.Graphics
 import believe.gamestate.GameStateRunner
 import believe.gamestate.StateController
 import believe.testing.FakeGameContainer
 import com.google.common.truth.Truth.assertThat
+import com.nhaarman.mockitokotlin2.check
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import dagger.Lazy
 import org.junit.jupiter.api.Test
-import org.newdawn.slick.Graphics
+import org.newdawn.slick.Color
 
 internal class GameTest {
     private val gameStateRunner: GameStateRunner = mock()
-    private val graphics: Graphics = mock()
+    private val slickGraphics: org.newdawn.slick.Graphics = mock()
     private val stateController: StateController = mock()
     private val stateSelector: StateSelector = mock()
     private val game: Game =
@@ -37,9 +39,17 @@ internal class GameTest {
 
     @Test
     internal fun render_rendersGameStateRunner() {
-        game.render(fakeGameContainer, graphics)
+        game.render(fakeGameContainer, slickGraphics)
+        var graphics: Graphics? = null
 
-        verify(gameStateRunner).render(graphics)
+        verify(gameStateRunner).render(check {
+            // Make sure that the Believe Graphics instance is delegating to the correct Slick
+            // Graphics instance.
+            graphics = it
+        })
+
+        graphics?.drawString("some string", 1f, 2f, Color(0x123123), mock())
+        verify(slickGraphics).drawString("some string", 1f, 2f)
         verifyNoMoreInteractions(gameStateRunner)
     }
 

@@ -43,26 +43,29 @@ kt_jvm_library(
     name = "gui_v2",
     srcs = [
         "Bindable.kt",
+        "CanvasContainerV2.kt",
         "Focusable.kt",
         "FocusableGroup.kt",
         "FocusableGroupImpl.kt",
         "GuiAction.kt",
         "GuiBuilders.kt",
-        "GuiContainer.kt",
         "GuiElement.kt",
         "GuiKeyboardActionMap.kt",
         "GuiLayoutFactory.kt",
         "LayoutBuilder.kt",
         "MenuSelectionStyle.kt",
         "MenuSelectionV2.kt",
+        "NumberPickerV2.kt",
         "TextAlignment.kt",
         "TextBox.kt",
         "TextBoxStyle.kt",
+        "TextDisplay.kt",
+        "VerticalContainer.kt",
     ],
     deps = [
         ":internal_qualifiers",
         "//java/believe/audio",
-        "//java/believe/core/display",
+        "//java/believe/core/display:display_v2",
         "//java/believe/geometry",
         "//java/believe/input",
         "//java/believe/util",
@@ -100,10 +103,6 @@ java_library(
 
 kt_jvm_library(
     name = "internal_qualifiers",
-    srcs = [
-        "FocusSound.kt",
-        "GuiConfigurations.kt",
-        "SelectedSound.kt",
-    ],
+    srcs = ["InternalQualifiers.kt"],
     deps = ["//third_party/javax:annotations"],
 )

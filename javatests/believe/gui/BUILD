@@ -1,5 +1,19 @@
 load("//bazel/bzl:rules.bzl", "kt_junit5_test")
 
+kt_junit5_test(
+    name = "CanvasContainerV2Test",
+    srcs = ["CanvasContainerV2Test.kt"],
+    friends = ["//java/believe/gui:gui_v2"],
+    deps = [
+        "//java/believe/geometry",
+        "//java/believe/geometry/truth",
+        "//java/believe/gui:gui_v2",
+        "//java/believe/gui/testing:dagger_component",
+        "//third_party/mockito:mockito_kotlin",
+        "//third_party/slick",
+    ],
+)
+
 java_test(
     name = "CharacterDialogueTest",
     srcs = ["CharacterDialogueTest.java"],
@@ -39,7 +53,7 @@ kt_junit5_test(
 
 kt_junit5_test(
     name = "GuiContainerTest",
-    srcs = ["GuiContainerTest.kt"],
+    srcs = ["VerticalContainerTest.kt"],
     friends = ["//java/believe/gui:gui_v2"],
     deps = [
         "//java/believe/gui:gui_v2",
@@ -100,6 +114,19 @@ java_test(
         "//third_party/junit",
         "//third_party/mockito",
         "//third_party/slick",
+    ],
+)
+
+kt_junit5_test(
+    name = "NumberPickerV2Test",
+    srcs = ["NumberPickerV2Test.kt"],
+    friends = ["//java/believe/gui:gui_v2"],
+    deps = [
+        "//java/believe/gui:gui_v2",
+        "//java/believe/gui/testing:dagger_component",
+        "//java/believe/input/testing",
+        "//third_party/mockito:mockito_kotlin",
+        "//third_party/truth",
     ],
 )
 

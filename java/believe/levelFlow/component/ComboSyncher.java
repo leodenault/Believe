@@ -111,7 +111,7 @@ public class ComboSyncher extends ComponentBase {
     if (music != null) {
       g.setLineWidth(2f);
       g.setColor(new Color(0x00aaaa));
-      g.fill(rect);
+      g.fill(rect.asSlickRectangle());
 
       g.setLineWidth(1f);
       for (int i = 0; i < actions.get(actions.size() - 1).time + 1; i++) {

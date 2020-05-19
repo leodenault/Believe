@@ -1,5 +1,6 @@
 package believe.gui
 
+import believe.core.display.Graphics
 import believe.geometry.Rectangle
 import believe.gui.GuiBuilders.textBox
 import believe.gui.testing.DaggerGuiTestComponent
@@ -7,26 +8,17 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.inOrder
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.jupiter.api.Test
-import org.newdawn.slick.Color
 import org.newdawn.slick.Font
-import org.newdawn.slick.Graphics
-import kotlin.math.round
 
 internal class TextBoxTest {
-    private val initialGraphicsFont: Font = mock()
-    private val initialGraphicsColour = Color(0x121212)
     private val font: Font = mock {
         on { it.getWidth(any()) } doAnswer { (it.arguments[0] as String).length }
         on { it.getHeight(any()) } doReturn STRING_HEIGHT
     }
-    private val graphics: Graphics = mock {
-        on { it.font } doReturn initialGraphicsFont
-        on { it.color } doReturn initialGraphicsColour
-    }
+    private val graphics: Graphics = mock()
     private val layoutFactory: GuiLayoutFactory =
         DaggerGuiTestComponent.builder().addGuiConfiguration(TextBox.Configuration(font)).build()
             .guiLayoutFactory
@@ -37,29 +29,32 @@ internal class TextBoxTest {
 
     @Test
     fun render_unhighlighted_rendersTextNormally() {
+        layoutBuilder = textBox {
+            +"stuff"
+            style = STYLE
+        }
+
         textBox.render(graphics)
 
-        verify(graphics).color = STYLE.textColour
+        verify(graphics).drawString(eq("stuff"), any(), any(), eq(STYLE.textColour), eq(font))
     }
 
     @Test
     fun render_highlighted_rendersTextAsHighlighted() {
+        layoutBuilder = textBox {
+            +"stuff"
+            style = STYLE
+        }
         textBox.highlight()
         textBox.render(graphics)
 
-        verify(graphics).color = STYLE.highlightedTextColor
-    }
-
-    @Test
-    fun render_usesFontAndStyleAndRestoresPrevious() {
-        textBox.render(graphics)
-
-        inOrder(graphics) {
-            verify(graphics).font = font
-            verify(graphics).color = STYLE.textColour
-            verify(graphics).font = initialGraphicsFont
-            verify(graphics).color = initialGraphicsColour
-        }
+        verify(graphics).drawString(
+            eq("stuff"),
+            any(),
+            any(),
+            eq(STYLE.highlightedTextColor),
+            eq(font)
+        )
     }
 
     @Test
@@ -68,7 +63,7 @@ internal class TextBoxTest {
 
         textBox.render(graphics)
 
-        verify(graphics).drawString(eq("waylongerthanthewidth"), any(), any())
+        verify(graphics).drawString(eq("waylongerthanthewidth"), any(), any(), any(), any())
     }
 
     @Test
@@ -79,7 +74,11 @@ internal class TextBoxTest {
         textBox.render(graphics)
 
         verify(graphics).drawString(
-            text, centeredXPositionOf(text), middleYPositionFor(numLines = 1, lineIndex = 0)
+            eq(text),
+            eq(centeredXPositionOf(text)),
+            eq(middleYPositionFor(numLines = 1, lineIndex = 0)),
+            any(),
+            any()
         )
     }
 
@@ -93,7 +92,9 @@ internal class TextBoxTest {
 
         textBox.render(graphics)
 
-        verify(graphics).drawString(text, centeredXPositionOf(text), CONTAINER.y)
+        verify(graphics).drawString(
+            eq(text), eq(centeredXPositionOf(text)), eq(CONTAINER.y), any(), any()
+        )
     }
 
     @Test
@@ -107,7 +108,11 @@ internal class TextBoxTest {
         textBox.render(graphics)
 
         verify(graphics).drawString(
-            text, CONTAINER.x, middleYPositionFor(numLines = 1, lineIndex = 0)
+            eq(text),
+            eq(CONTAINER.x),
+            eq(middleYPositionFor(numLines = 1, lineIndex = 0)),
+            any(),
+            any()
         )
     }
 
@@ -122,7 +127,9 @@ internal class TextBoxTest {
 
         textBox.render(graphics)
 
-        verify(graphics).drawString(text, CONTAINER.x, CONTAINER.y)
+        verify(graphics).drawString(
+            eq(text), eq(CONTAINER.x), eq(CONTAINER.y), any(), any()
+        )
     }
 
     @Test
@@ -133,23 +140,27 @@ internal class TextBoxTest {
 
         textBox.render(graphics)
 
-        inOrder(graphics) {
-            verify(graphics).drawString(
-                "a really",
-                centeredXPositionOf("a really"),
-                middleYPositionFor(numLines = 3, lineIndex = 0)
-            )
-            verify(graphics).drawString(
-                "long piece",
-                centeredXPositionOf("long piece"),
-                middleYPositionFor(numLines = 3, lineIndex = 1)
-            )
-            verify(graphics).drawString(
-                "of text",
-                centeredXPositionOf("of text"),
-                middleYPositionFor(numLines = 3, lineIndex = 2)
-            )
-        }
+        verify(graphics).drawString(
+            eq("a really"),
+            eq(centeredXPositionOf("a really")),
+            eq(middleYPositionFor(numLines = 3, lineIndex = 0)),
+            any(),
+            any()
+        )
+        verify(graphics).drawString(
+            eq("long piece"),
+            eq(centeredXPositionOf("long piece")),
+            eq(middleYPositionFor(numLines = 3, lineIndex = 1)),
+            any(),
+            any()
+        )
+        verify(graphics).drawString(
+            eq("of text"),
+            eq(centeredXPositionOf("of text")),
+            eq(middleYPositionFor(numLines = 3, lineIndex = 2)),
+            any(),
+            any()
+        )
     }
 
     @Test
@@ -161,17 +172,23 @@ internal class TextBoxTest {
 
         textBox.render(graphics)
 
-        inOrder(graphics) {
-            verify(graphics).drawString(
-                "a really", centeredXPositionOf("a really"), CONTAINER.y
-            )
-            verify(graphics).drawString(
-                "long piece", centeredXPositionOf("long piece"), CONTAINER.y + STRING_HEIGHT
-            )
-            verify(graphics).drawString(
-                "of text", centeredXPositionOf("of text"), CONTAINER.y + STRING_HEIGHT * 2
-            )
-        }
+        verify(graphics).drawString(
+            eq("a really"), eq(centeredXPositionOf("a really")), eq(CONTAINER.y), any(), any()
+        )
+        verify(graphics).drawString(
+            eq("long piece"),
+            eq(centeredXPositionOf("long piece")),
+            eq(CONTAINER.y + STRING_HEIGHT),
+            any(),
+            any()
+        )
+        verify(graphics).drawString(
+            eq("of text"),
+            eq(centeredXPositionOf("of text")),
+            eq(CONTAINER.y + STRING_HEIGHT * 2),
+            any(),
+            any()
+        )
     }
 
     @Test
@@ -184,17 +201,27 @@ internal class TextBoxTest {
 
         textBox.render(graphics)
 
-        inOrder(graphics) {
-            verify(graphics).drawString(
-                "a really", CONTAINER.x, middleYPositionFor(numLines = 3, lineIndex = 0)
-            )
-            verify(graphics).drawString(
-                "long piece", CONTAINER.x, middleYPositionFor(numLines = 3, lineIndex = 1)
-            )
-            verify(graphics).drawString(
-                "of text", CONTAINER.x, middleYPositionFor(numLines = 3, lineIndex = 2)
-            )
-        }
+        verify(graphics).drawString(
+            eq("a really"),
+            eq(CONTAINER.x),
+            eq(middleYPositionFor(numLines = 3, lineIndex = 0)),
+            any(),
+            any()
+        )
+        verify(graphics).drawString(
+            eq("long piece"),
+            eq(CONTAINER.x),
+            eq(middleYPositionFor(numLines = 3, lineIndex = 1)),
+            any(),
+            any()
+        )
+        verify(graphics).drawString(
+            eq("of text"),
+            eq(CONTAINER.x),
+            eq(middleYPositionFor(numLines = 3, lineIndex = 2)),
+            any(),
+            any()
+        )
     }
 
     @Test
@@ -207,22 +234,26 @@ internal class TextBoxTest {
 
         textBox.render(graphics)
 
-        inOrder(graphics) {
-            verify(graphics).drawString("a really", CONTAINER.x, CONTAINER.y)
-            verify(graphics).drawString("long piece", CONTAINER.x, CONTAINER.y + STRING_HEIGHT)
-            verify(graphics).drawString("of text", CONTAINER.x, CONTAINER.y + STRING_HEIGHT * 2)
-        }
+        verify(graphics).drawString(
+            eq("a really"), eq(CONTAINER.x), eq(CONTAINER.y), any(), any()
+        )
+        verify(graphics).drawString(
+            eq("long piece"), eq(CONTAINER.x), eq(CONTAINER.y + STRING_HEIGHT), any(), any()
+        )
+        verify(graphics).drawString(
+            eq("of text"), eq(CONTAINER.x), eq(CONTAINER.y + STRING_HEIGHT * 2), any(), any()
+        )
     }
 
     companion object {
         private val STYLE = TextBoxStyle(textColour = 0x323232, highlightedTextColour = 0x989898)
-        private val CONTAINER = Rectangle(100, 1000, 10, 10)
+        private val CONTAINER = Rectangle(100f, 1000f, 10f, 10f)
         private const val STRING_HEIGHT = 4
 
         fun centeredXPositionOf(text: String): Float =
-            round(((CONTAINER.width - text.length) / 2) + CONTAINER.x)
+            ((CONTAINER.width - text.length) / 2) + CONTAINER.x
 
         fun middleYPositionFor(numLines: Int, lineIndex: Int): Float =
-            round(((CONTAINER.height - (STRING_HEIGHT * numLines)) / 2) + CONTAINER.y + lineIndex * STRING_HEIGHT)
+            ((CONTAINER.height - (STRING_HEIGHT * numLines)) / 2) + CONTAINER.y + lineIndex * STRING_HEIGHT
     }
 }

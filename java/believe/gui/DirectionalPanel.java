@@ -2,6 +2,7 @@ package believe.gui;
 
 import java.util.Iterator;
 
+import believe.geometry.Rectangle;
 import org.newdawn.slick.gui.GUIContext;
 
 public class DirectionalPanel extends AbstractContainer {
@@ -19,15 +20,20 @@ public class DirectionalPanel extends AbstractContainer {
   public DirectionalPanel(GUIContext container, int itemWidth, int itemHeight, int spacing) {
     this(container, 0, 0, itemWidth, itemHeight, spacing);
     autoposition = true;
-    rect.setCenterX(container.getWidth() / 2);
-    rect.setCenterY(container.getHeight() / 2);
+    rect =
+        new Rectangle(
+            (container.getWidth() - rect.getWidth()) / 2,
+            (container.getHeight() - rect.getHeight()) / 2,
+            rect.getWidth(),
+            rect.getHeight());
   }
 
   public DirectionalPanel(GUIContext container, int x, int y, int itemWidth, int itemHeight) {
     this(container, x, y, itemWidth, itemHeight, 0);
   }
 
-  public DirectionalPanel(GUIContext container, int x, int y, int itemWidth, int itemHeight, int spacing) {
+  public DirectionalPanel(
+      GUIContext container, int x, int y, int itemWidth, int itemHeight, int spacing) {
     super(container, x, y, itemWidth, 0);
     this.spacing = spacing;
     this.itemWidth = itemWidth;
@@ -42,12 +48,16 @@ public class DirectionalPanel extends AbstractContainer {
 
     int numChildren = this.children.size();
     int totalSpace = (numChildren - 1) * spacing;
-    rect.setHeight(numChildren * itemHeight + totalSpace);
+    float height = numChildren * itemHeight + totalSpace;
 
+    float x = rect.getX();
+    float y = rect.getY();
     if (autoposition) {
-      rect.setCenterX(container.getWidth() / 2);
-      rect.setCenterY(container.getHeight() / 2);
+      x = (container.getWidth() - rect.getWidth()) / 2;
+      y = (container.getHeight() - height) / 2;
     }
+
+    rect = new Rectangle(x, y, rect.getWidth(), height);
 
     resetLayout();
   }
@@ -65,12 +75,12 @@ public class DirectionalPanel extends AbstractContainer {
   @Override
   public void resetLayout() {
     int position = 0;
-    int parentY = (int)rect.getY();
+    int parentY = (int) rect.getY();
 
     for (Iterator<ComponentBase> it = children.iterator(); it.hasNext(); position++) {
       ComponentBase item = it.next();
       int y = parentY + (position * (itemHeight + spacing));
-      item.setLocation((int)rect.getX(), y);
+      item.setLocation((int) rect.getX(), y);
     }
   }
 }

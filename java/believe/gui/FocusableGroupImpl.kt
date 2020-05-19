@@ -11,31 +11,31 @@ class FocusableGroupImpl internal constructor(
 ) : FocusableGroup {
 
     private val focusables: MutableList<Focusable> = mutableListOf()
-    private val inputListener = object : InputAdapter.Listener<GuiAction> {
-        override fun actionStarted(action: GuiAction) {
-            if (currentFocusableIndex < 0 || focusables.size < 2) return
+    private val selectUp = selectUp@ {
+        if (groupIsEmptyOrHasFewerThan2Members()) return@selectUp
 
-            if (action == GuiAction.SELECT_UP) {
-                changeSelection(
-                    if (currentFocusableIndex == 0) {
-                        focusables.size - 1
-                    } else {
-                        currentFocusableIndex - 1
-                    }
-                )
-            } else if (action == GuiAction.SELECT_DOWN) {
-                changeSelection(
-                    if (currentFocusableIndex == focusables.size - 1) {
-                        0
-                    } else {
-                        currentFocusableIndex + 1
-                    }
-                )
+        changeSelection(
+            if (currentFocusableIndex == 0) {
+                focusables.size - 1
+            } else {
+                currentFocusableIndex - 1
             }
-        }
-
-        override fun actionEnded(action: GuiAction) {}
+        )
     }
+    private val selectDown = selectDown@ {
+        if (groupIsEmptyOrHasFewerThan2Members()) return@selectDown
+
+        changeSelection(
+            if (currentFocusableIndex == focusables.size - 1) {
+                0
+            } else {
+                currentFocusableIndex + 1
+            }
+        )
+    }
+
+    private fun groupIsEmptyOrHasFewerThan2Members() =
+        currentFocusableIndex < 0 || focusables.size < 2
 
     private var currentFocusableIndex = -1
 
@@ -53,10 +53,12 @@ class FocusableGroupImpl internal constructor(
     }
 
     override fun bind() {
-        inputAdapter.addListener(inputListener)
+        inputAdapter.addActionStartListener(GuiAction.SELECT_UP, selectUp)
+        inputAdapter.addActionStartListener(GuiAction.SELECT_DOWN, selectDown)
     }
 
     override fun unbind() {
-        inputAdapter.removeListener(inputListener)
+        inputAdapter.removeActionStartListener(GuiAction.SELECT_UP, selectUp)
+        inputAdapter.removeActionStartListener(GuiAction.SELECT_DOWN, selectDown)
     }
 }

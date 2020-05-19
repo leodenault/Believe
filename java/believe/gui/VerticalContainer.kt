@@ -1,12 +1,12 @@
 package believe.gui
 
+import believe.core.display.Graphics
 import believe.geometry.Rectangle
-import org.newdawn.slick.Graphics
 import javax.inject.Inject
 import kotlin.math.round
 
 /** A container for grouping GUI elements together in a common layout. */
-class GuiContainer private constructor(
+class VerticalContainer private constructor(
     private val focusableGroup: FocusableGroup, private val children: List<GuiElement>
 ) : GuiElement {
     override fun render(g: Graphics) = children.forEach { it.render(g) }
@@ -25,8 +25,8 @@ class GuiContainer private constructor(
         internal val focusableGroupImplFactory: FocusableGroup.Factory
     )
 
-    /** A builder for constructing instances of [GuiContainer]. */
-    class Builder : LayoutBuilder<Configuration, GuiContainer> {
+    /** A builder for constructing instances of [VerticalContainer]. */
+    class Builder : LayoutBuilder<Configuration, VerticalContainer> {
         /** The children to be contained within the container built by this builder. */
         val children: MutableList<(GuiLayoutFactory, Rectangle, FocusableGroup) -> GuiElement> =
             mutableListOf()
@@ -47,10 +47,10 @@ class GuiContainer private constructor(
             configuration: Configuration,
             guiLayoutFactory: GuiLayoutFactory,
             positionData: Rectangle
-        ): GuiContainer {
+        ): VerticalContainer {
             val childPositioner = ChildPositioner(children.size, positionData)
             val focusableGroup = focusableGroup ?: configuration.focusableGroupImplFactory.create()
-            return GuiContainer(focusableGroup, children.map {
+            return VerticalContainer(focusableGroup, children.map {
                 it(
                     guiLayoutFactory, childPositioner.nextChildPositionData(), focusableGroup
                 )
@@ -60,11 +60,10 @@ class GuiContainer private constructor(
 
     internal class ChildPositioner(private val numChildren: Int, positionData: Rectangle) {
         private val spacing = (positionData.height * SPACING_FRACTION) / (numChildren + 1)
-        private val width = round(positionData.width / 2).toInt()
-        private val height =
-            round((positionData.height * (1 - SPACING_FRACTION)) / numChildren).toInt()
-        private val x = round(positionData.width / 4).toInt()
-        private val baseY = round(positionData.y).toInt()
+        private val width = positionData.width / 2
+        private val height = (positionData.height * (1 - SPACING_FRACTION)) / numChildren
+        private val x = positionData.width / 4
+        private val baseY = positionData.y
 
         private var currentChildIndex = 0
 
@@ -75,7 +74,7 @@ class GuiContainer private constructor(
 
             return Rectangle(
                 x,
-                baseY + round(spacing + (spacing + height) * currentChildIndex++).toInt(),
+                baseY + spacing + (spacing + height) * currentChildIndex++,
                 width,
                 height
             )

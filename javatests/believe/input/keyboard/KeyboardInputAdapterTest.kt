@@ -1,6 +1,5 @@
 package believe.input.keyboard
 
-import believe.input.InputAdapter
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -13,10 +12,12 @@ internal class KeyboardInputAdapterTest {
     private val guiContext: GUIContext = mock {
         on { input }.thenReturn(input)
     }
-    private val listener: InputAdapter.Listener<String> = mock()
+    private val startListener: () -> Unit = mock()
+    private val endListener: () -> Unit = mock()
     private val inputAdapter =
-        KeyboardInputAdapter.Factory(guiContext).create { MAPPED_OUTPUT }.apply {
-            addListener(listener)
+        KeyboardInputAdapter.Factory(guiContext).create { ACTION }.apply {
+            addActionStartListener(ACTION, startListener)
+            addActionEndListener(ACTION, endListener)
         }
 
     @Test
@@ -33,18 +34,18 @@ internal class KeyboardInputAdapterTest {
     fun keyPressed_notifiesListeners() {
         inputAdapter.keyPressed(123, 'a')
 
-        verify(listener).actionStarted(MAPPED_OUTPUT)
+        verify(startListener).invoke()
     }
 
     @Test
     fun keyReleased_notifiesListeners() {
         inputAdapter.keyReleased(123, 'a')
 
-        verify(listener).actionEnded(MAPPED_OUTPUT)
+        verify(endListener).invoke()
     }
 
 
     companion object {
-        private const val MAPPED_OUTPUT = "mapped output"
+        private const val ACTION = "mapped output"
     }
 }

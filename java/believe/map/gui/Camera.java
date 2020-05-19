@@ -7,7 +7,6 @@ import believe.react.Observer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
-import org.newdawn.slick.gui.GUIContext;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,31 +35,40 @@ class Camera implements Renderable {
   }
 
   void center(float x, float y) {
-    Rectangle newRectangle = rect.get().copy();
-    newRectangle.setCenterX(x);
-    newRectangle.setCenterY(y);
+    Rectangle originalRectangle = rect.get();
+    Rectangle.Builder newRectangleBuilder =
+        Rectangle.newBuilder()
+            .setCenterX(x)
+            .setCenterY(y)
+            .setWidth(originalRectangle.getWidth())
+            .setHeight(originalRectangle.getHeight());
+    Rectangle newRectangle = newRectangleBuilder.build();
 
     if (newRectangle.getX() < 0) {
-      newRectangle.setX(0);
+      newRectangleBuilder.setX(0);
     } else if (newRectangle.getMaxX() > mapWidth) {
-      newRectangle.setX(mapWidth - newRectangle.getWidth());
+      newRectangleBuilder.setX(mapWidth - newRectangle.getWidth());
     }
 
     if (newRectangle.getY() < 0) {
-      newRectangle.setY(0);
+      newRectangleBuilder.setY(0);
     } else if (newRectangle.getMaxY() > mapHeight) {
-      newRectangle.setY(mapHeight - newRectangle.getHeight());
+      newRectangleBuilder.setY(mapHeight - newRectangle.getHeight());
     }
 
-    rect.setValue(newRectangle);
+    rect.setValue(newRectangleBuilder.build());
   }
 
   void scale(float x, float y) {
     scaleX = x;
     scaleY = y;
-    Rectangle newRectangle = rect.get().copy();
-    newRectangle.setSize(newRectangle.getWidth() * (1 / x), newRectangle.getHeight() * (1 / y));
-    rect.setValue(newRectangle);
+    Rectangle originalRectangle = rect.get();
+    rect.setValue(
+        new Rectangle(
+            originalRectangle.getX(),
+            originalRectangle.getY(),
+            originalRectangle.getWidth() * (1 / x),
+            originalRectangle.getHeight() * (1 / y)));
   }
 
   void addAllObservers(Collection<? extends Observer<Rectangle>> observers) {

@@ -1,7 +1,7 @@
 package believe.gamestate.transition
 
+import believe.core.display.Graphics
 import believe.gamestate.transition.GameStateTransition.Listener
-import org.newdawn.slick.Graphics
 
 /**
  * A [GameStateTransition] that does nothing and that immediately notifies of the end of the
@@ -18,5 +18,5 @@ class EmptyGameStateTransition : GameStateTransition {
         listeners.forEach(Listener::transitionEnded)
     }
 
-    override fun render(g: Graphics?) {}
+    override fun render(g: Graphics) {}
 }
