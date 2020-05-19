@@ -45,6 +45,9 @@ class NumberPickerV2 private constructor(
             text = this
         }
 
+        /** The callback to execute when a number has been confirmed. */
+        var confirmNumber: (Int) -> Unit = {}
+
         /** Visible for testing. */
         internal var createInnerTextDisplay: (
             String, Int, GuiLayoutFactory, Rectangle
@@ -73,7 +76,8 @@ class NumberPickerV2 private constructor(
                                 initialValue,
                                 minValue,
                                 maxValue,
-                                StyleSet(ACTIVE, INACTIVE)
+                                StyleSet(ACTIVE, INACTIVE),
+                                confirmNumber
                             ).also { textDisplay = it }
                         }
                     }, positionData
@@ -133,7 +137,8 @@ class NumberPickerV2 private constructor(
         initialValue: Int,
         minValue: Int,
         maxValue: Int,
-        styleSet: StyleSet
+        styleSet: StyleSet,
+        private val confirmNumber: (Int) -> Unit
     ) : TextDisplay {
 
         private val leftArrow: Arrow
@@ -226,6 +231,7 @@ class NumberPickerV2 private constructor(
             )
             configuration.inputAdapter.popListeners()
             configuration.numberConfirmSound.play()
+            confirmNumber(boxedValue.currentValue)
         }
 
         private fun hideLeftArrow() {
@@ -255,7 +261,7 @@ class NumberPickerV2 private constructor(
         private val handleMaxReached: () -> Unit,
         private val handleMaxLeft: () -> Unit
     ) {
-        private var currentValue = initialValue
+        internal var currentValue = initialValue
 
         internal fun increment(): () -> Unit {
             if (currentValue >= maxValue) return DO_NOTHING

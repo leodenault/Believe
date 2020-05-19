@@ -26,18 +26,18 @@ internal class NumberPickerV2Test {
     private val arrowPressedSound: Sound = mock()
     private val arrowDepressedSound: Sound = mock()
     private val numberConfirmSound: Sound = mock()
+    private val confirmNumberCallback: (Int) -> Unit = mock()
     private val layoutFactory: GuiLayoutFactory = DaggerGuiTestComponent.builder()
         .addGuiConfiguration(MenuSelectionV2.Configuration(inputAdapter, mock(), mock()))
         .addGuiConfiguration(
             NumberPickerV2.Configuration(
-                inputAdapter,
-                arrowPressedSound,
-                arrowDepressedSound,
-                numberConfirmSound
+                inputAdapter, arrowPressedSound, arrowDepressedSound, numberConfirmSound
             )
         ).build().guiLayoutFactory
-    private var layoutBuilder =
-        numberPicker { createInnerTextDisplay = { _, _, _, _ -> textDisplay } }
+    private var layoutBuilder = numberPicker {
+        createInnerTextDisplay = { _, _, _, _ -> textDisplay }
+        confirmNumber = confirmNumberCallback
+    }
     private val numberPicker: NumberPickerV2 by lazy {
         layoutFactory.create(
             layoutBuilder, Rectangle(x = 100f, y = 200f, width = 500f, height = 200f)
@@ -304,6 +304,18 @@ internal class NumberPickerV2Test {
 
         verifyZeroInteractions(arrowPressedSound)
         verifyZeroInteractions(arrowDepressedSound)
+    }
+
+    @Test
+    fun confirmNumber_callsNumberConfirmationCallback() {
+        numberPicker.bind()
+        numberPicker.focus()
+
+        inputAdapter.actionStarted(GuiAction.EXECUTE_ACTION)
+        inputAdapter.actionStarted(GuiAction.SELECT_RIGHT)
+        inputAdapter.actionStarted(GuiAction.EXECUTE_ACTION)
+
+        verify(confirmNumberCallback).invoke(1)
     }
 
     companion object {
