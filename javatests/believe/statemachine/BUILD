@@ -1,3 +1,5 @@
+load("//bazel/bzl:rules.bzl", "kt_junit5_test")
+
 java_test(
     name = "ConcurrentStateMachineTest",
     srcs = ["ConcurrentStateMachineTest.java"],
@@ -10,6 +12,16 @@ java_test(
     ],
 )
 
+kt_junit5_test(
+    name = "ConcurrentStateMachineV2Test",
+    srcs = ["ConcurrentStateMachineV2Test.kt"],
+    friends = [],
+    deps = [
+        "//java/believe/statemachine:statemachine_v2",
+        "//third_party/truth",
+    ],
+)
+
 java_test(
     name = "EntityStateMachineTest",
     srcs = ["EntityStateMachineTest.java"],
@@ -18,6 +30,16 @@ java_test(
         "//third_party/hamcrest",
         "//third_party/junit",
         "//third_party/mockito",
+    ],
+)
+
+kt_junit5_test(
+    name = "StateMachineV2Test",
+    srcs = ["StateMachineV2Test.kt"],
+    friends = [],
+    deps = [
+        "//java/believe/statemachine:statemachine_v2",
+        "//third_party/truth",
     ],
 )
 
