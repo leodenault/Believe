@@ -4,7 +4,7 @@ import static believe.util.MapEntry.entry;
 import static believe.util.Util.hashMapOf;
 import static believe.util.Util.hashSetOf;
 
-import believe.character.playable.proto.PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand.Action;
+import believe.character.playable.proto.PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand.Type;
 import believe.core.Updatable;
 import believe.core.display.AnimationSet;
 import believe.core.display.SpriteSheetManager;
@@ -34,7 +34,7 @@ public abstract class Character<C extends Character<C>> extends ComponentBase
         DamageBoxCollidable<C>,
         PhysicsManageable,
         Updatable,
-        ConcurrentStateMachine.Listener<Action> {
+        ConcurrentStateMachine.Listener<Type> {
 
   public interface DamageListener {
     DamageListener NONE = (currentFocus, inflictor) -> {};
@@ -52,14 +52,14 @@ public abstract class Character<C extends Character<C>> extends ComponentBase
 
   public static final float MAX_FOCUS = 1.0f;
 
-  protected final State<Action> standingState;
-  protected final State<Action> movingLeftState;
-  protected final State<Action> movingRightState;
-  protected final State<Action> groundedState;
-  protected final State<Action> jumpingState;
-  protected final ConcurrentStateMachine<Action> machine;
+  protected final State<Type> standingState;
+  protected final State<Type> movingLeftState;
+  protected final State<Type> movingRightState;
+  protected final State<Type> groundedState;
+  protected final State<Type> jumpingState;
+  protected final ConcurrentStateMachine<Type> machine;
 
-  private final Map<Set<State<Action>>, String> animationMap;
+  private final Map<Set<State<Type>>, String> animationMap;
   private final DamageListener damageListener;
   private final Set<CollisionHandler<? extends Collidable<?>, ? super C>> rightCompatibleHandlers;
 
@@ -113,19 +113,18 @@ public abstract class Character<C extends Character<C>> extends ComponentBase
 
   private void buildStateMachine() {
     standingState.addTransition(
-        Action.SELECT_LEFT,
+        Type.SELECT_LEFT,
         () -> updateHorizontalMovement(-1),
-        movingLeftState.addTransition(
-            Action.STOP, () -> updateHorizontalMovement(0), standingState));
+        movingLeftState.addTransition(Type.STOP, () -> updateHorizontalMovement(0), standingState));
     standingState.addTransition(
-        Action.SELECT_RIGHT,
+        Type.SELECT_RIGHT,
         () -> updateHorizontalMovement(1),
         movingRightState.addTransition(
-            Action.STOP, () -> updateHorizontalMovement(0), standingState));
+            Type.STOP, () -> updateHorizontalMovement(0), standingState));
     groundedState.addTransition(
-        Action.JUMP,
+        Type.JUMP,
         () -> verticalSpeed = JUMP_SPEED,
-        jumpingState.addTransition(Action.LAND, groundedState));
+        jumpingState.addTransition(Type.LAND, groundedState));
   }
 
   @Override
@@ -148,7 +147,7 @@ public abstract class Character<C extends Character<C>> extends ComponentBase
 
   @Override
   public void landed() {
-    machine.transition(Action.LAND);
+    machine.transition(Type.LAND);
   }
 
   @Override
@@ -195,7 +194,7 @@ public abstract class Character<C extends Character<C>> extends ComponentBase
     focus = Math.min(MAX_FOCUS, focus + health);
   }
 
-  public void transition(Action action) {
+  public void transition(Type action) {
     machine.transition(action);
   }
 
@@ -218,7 +217,7 @@ public abstract class Character<C extends Character<C>> extends ComponentBase
   }
 
   @Override
-  public void transitionEnded(Set<State<Action>> currentStates) {
+  public void transitionEnded(Set<State<Type>> currentStates) {
     anim = animSet.get(animationMap.get(currentStates));
   }
 

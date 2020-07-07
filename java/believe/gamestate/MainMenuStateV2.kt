@@ -18,6 +18,7 @@ class MainMenuStateV2 constructor(
     private var guiLayout: GuiElement = guiLayoutFactory.create(verticalContainer {
         +menuSelection {
             +"Play Platforming Level"
+            executeSelectionAction = stateController::navigateToPlatformingLevel
         }
         +menuSelection {
             +"Play Arcade Level"

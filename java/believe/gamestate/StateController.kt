@@ -7,4 +7,7 @@ interface StateController {
 
     /** Navigates to the options menu state of the game. */
     fun navigateToOptionsMenu()
+
+    /** Navigates to a level, loading its data and starting it. */
+    fun navigateToPlatformingLevel()
 }

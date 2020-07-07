@@ -42,7 +42,7 @@ internal class GameTest {
         game.render(fakeGameContainer, slickGraphics)
         var graphics: Graphics? = null
 
-        verify(gameStateRunner).render(check {
+        verify(gameStateRunner).render(check<Graphics> {
             // Make sure that the Believe Graphics instance is delegating to the correct Slick
             // Graphics instance.
             graphics = it

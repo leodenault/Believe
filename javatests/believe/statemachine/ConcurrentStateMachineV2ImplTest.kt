@@ -3,12 +3,12 @@ package believe.statemachine
 import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test
 
-internal class ConcurrentStateMachineV2Test {
+internal class ConcurrentStateMachineV2ImplTest {
     private val state11 = MutableStateV2<String, Int>("state 1.1")
     private val state12 = MutableStateV2<String, Int>("state 1.2")
     private val state21 = MutableStateV2<String, Int>("state 2.1")
     private val state22 = MutableStateV2<String, Int>("state 2.2")
-    private val concurrentStateMachine = ConcurrentStateMachineV2<FakeData, Int>(FakeData("", "")) {
+    private val concurrentStateMachine = ConcurrentStateMachineV2Impl<FakeData, Int>(FakeData("", "")) {
         add(StateMachineV2(state11) {
             addTransition(
                 VALID_ACTION_1, state11, state12
@@ -43,6 +43,5 @@ internal class ConcurrentStateMachineV2Test {
     companion object {
         private const val VALID_ACTION_1 = 123
         private const val VALID_ACTION_2 = 456
-        private const val INVALID_ACTION_2 = 987
     }
 }

@@ -1,7 +1,6 @@
 package believe.gamestate
 
 import believe.core.Updatable
-import believe.core.display.Renderable
 import believe.core.display.RenderableV2
 
 /**

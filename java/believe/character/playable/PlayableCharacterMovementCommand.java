@@ -1,6 +1,6 @@
 package believe.character.playable;
 
-import believe.character.playable.proto.PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand.Action;
+import believe.character.playable.proto.PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand.Type;
 import believe.command.Command;
 import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
@@ -13,10 +13,10 @@ import java.util.function.Supplier;
 @AutoFactory(allowSubclasses = true)
 final class PlayableCharacterMovementCommand implements Command {
   private final Supplier<Optional<PlayableCharacter>> playableCharacter;
-  private final Action movementAction;
+  private final Type movementAction;
 
   PlayableCharacterMovementCommand(
-      @Provided Supplier<Optional<PlayableCharacter>> playableCharacter, Action movementAction) {
+      @Provided Supplier<Optional<PlayableCharacter>> playableCharacter, Type movementAction) {
     this.playableCharacter = playableCharacter;
     this.movementAction = movementAction;
   }

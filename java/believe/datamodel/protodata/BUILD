@@ -8,6 +8,7 @@ kt_jvm_library(
     name = "protodata",
     srcs = [
         "BinaryProtoFile.kt",
+        "BinaryProtoFileManager.kt",
     ],
     deps = [
         "//java/believe/datamodel",

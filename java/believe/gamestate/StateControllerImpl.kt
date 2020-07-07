@@ -9,8 +9,9 @@ import javax.inject.Inject
 class StateControllerImpl @Inject internal constructor(
     private val gameStateRunner: GameStateRunner,
     private val mainMenuState: MainMenuStateV2Factory,
-    private val optionsMenuState: OptionsMenuStateV2Factory
-): StateController {
+    private val optionsMenuState: OptionsMenuStateV2Factory,
+    private val levelState: LevelStateV2Factory
+) : StateController {
 
     override fun navigateToMainMenu() {
         gameStateRunner.transitionTo(
@@ -21,6 +22,12 @@ class StateControllerImpl @Inject internal constructor(
     override fun navigateToOptionsMenu() {
         gameStateRunner.transitionTo(
             optionsMenuState.create(), EmptyGameStateTransition(), EmptyGameStateTransition()
+        )
+    }
+
+    override fun navigateToPlatformingLevel() {
+        gameStateRunner.transitionTo(
+            levelState.create("snow"), EmptyGameStateTransition(), EmptyGameStateTransition()
         )
     }
 }

@@ -64,8 +64,7 @@ public abstract class PlayableDaggerModule {
         EnemyCharacter enemyCharacter =
             enemyCharacterFactory.create(tiledObject.x(), tiledObject.y() + tiledObject.height());
         generatedMapEntityDataBuilder.addPhysicsManageable(enemyCharacter);
-        generatedMapEntityDataBuilder.addRenderable(enemyCharacter);
-        generatedMapEntityDataBuilder.addUpdatable(enemyCharacter);
+        // generatedMapEntityDataBuilder.addSceneElement(enemyCharacter);
       }
     };
   }

@@ -8,6 +8,7 @@ import dagger.Reusable
 import org.newdawn.slick.util.Log
 import java.io.InputStream
 import javax.inject.Inject
+import kotlin.reflect.KClass
 import kotlin.reflect.full.staticFunctions
 
 /**
@@ -48,11 +49,14 @@ class ProtoParserImpl<M : Message> constructor(
             ProtoParserImpl(extensionRegistry, messageParser)
 
         /** Returns a [ProtoParserImpl] for protos of type [M]. */
-        inline fun <reified M : Message> create(): ProtoParserImpl<M> {
+        fun <M : Message> create(messageType: KClass<M>): ProtoParserImpl<M> {
             // Safe cast: parser() is a static method present on any subclass of Message.
             @Suppress("UNCHECKED_CAST") val messageParser: Parser<M> =
-                M::class.staticFunctions.single { it.name == "parser" }.call() as Parser<M>
+                messageType.staticFunctions.single { it.name == "parser" }.call() as Parser<M>
             return create(messageParser)
         }
+
+        /** Returns a [ProtoParserImpl] for protos of type [M]. */
+        inline fun <reified M : Message> create(): ProtoParserImpl<M> = create(M::class)
     }
 }

@@ -1,4 +1,4 @@
-package believe.gui
+package believe.core.display
 
 /** An object that can be bound and unbound to some element displayed on screen. */
 interface Bindable {

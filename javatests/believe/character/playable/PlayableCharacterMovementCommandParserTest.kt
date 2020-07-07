@@ -1,7 +1,7 @@
 package believe.character.playable
 
 import believe.character.playable.proto.PlayableCharacterMovementCommandProto
-import believe.character.playable.proto.PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand.Action
+import believe.character.playable.proto.PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand.Type
 import believe.logging.testing.VerifiableLogSystem
 import believe.logging.testing.VerifiableLogSystem.LogSeverity
 import believe.logging.testing.VerifiesLoggingCalls
@@ -15,7 +15,7 @@ import java.util.function.Supplier
 
 internal class PlayableCharacterMovementCommandParserTest {
     val commandFactory: PlayableCharacterMovementCommandFactory = mock {
-        on { create(Action.SELECT_LEFT) } doReturn COMMAND
+        on { create(Type.SELECT_LEFT) } doReturn COMMAND
     }
     val commandParser = PlayableCharacterMovementCommandParser(commandFactory)
 
@@ -24,7 +24,7 @@ internal class PlayableCharacterMovementCommandParserTest {
     internal fun parseCommand_actionIsUnknown_logsErrorAndReturnsNull(
         logSystem: VerifiableLogSystem
     ) {
-        assertThat(commandParser.parseCommand(createCommand(Action.UNKNOWN_ACTION))).isNull()
+        assertThat(commandParser.parseCommand(createCommand(Type.UNKNOWN_COMMAND))).isNull()
         VerifiableLogSystemSubject.assertThat(logSystem).loggedAtLeastOneMessageThat()
             .hasPattern("Playable character movement command specified unknown action. No command will be output.")
             .hasSeverity(LogSeverity.ERROR)
@@ -32,16 +32,16 @@ internal class PlayableCharacterMovementCommandParserTest {
 
     @Test
     internal fun parseCommand_actionIsKnown_returnsValidCommand() {
-        assertThat(commandParser.parseCommand(createCommand(Action.SELECT_LEFT))).isEqualTo(COMMAND)
+        assertThat(commandParser.parseCommand(createCommand(Type.SELECT_LEFT))).isEqualTo(COMMAND)
     }
 
     companion object {
         val COMMAND = PlayableCharacterMovementCommand(
-            Supplier { Optional.empty<PlayableCharacter>() }, Action.SELECT_LEFT
+            Supplier { Optional.empty<PlayableCharacter>() }, Type.SELECT_LEFT
         )
 
         private fun createCommand(
-            action: Action
+            action: Type
         ): PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand {
             return PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand.newBuilder()
                 .setAction(action).build()

@@ -23,3 +23,9 @@ kt_jvm_library(
         "StateV2.kt",
     ],
 )
+
+kt_jvm_library(
+    name = "impl",
+    srcs = ["ConcurrentStateMachineV2Impl.kt"],
+    deps = [":statemachine_v2"],
+)

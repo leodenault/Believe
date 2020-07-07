@@ -1,0 +1,32 @@
+syntax = "proto2";
+
+package believe.animation.proto;
+
+option java_package = "believe.animation.proto";
+option java_outer_classname = "AnimationProto";
+
+// An tiled image with sprites within each tile. The tiles are used as frames in an animation.
+message SpriteSheet {
+  // The location of the image file.
+  optional string file_location = 1;
+  // The width of the tiles in the image.
+  optional int32 tile_width = 2;
+  // The height of the tiles in the image.
+  optional int32 tile_height = 3;
+  // The map of animations produced by this sheet keyed by their names.
+  map<string, Animation> animations = 4;
+}
+
+// Designates a set of images from a sprite sheet which form a single animation sequence.
+//
+// The first and last frames of an animation sequence are specified. It is assumed that all frames
+// between the two are included in the sequence. Indices for the frames are specified as if the
+// top-left frame of the image has index 0, and the bottom-right frame in the image has index n-1.
+message Animation {
+  // The index of the first frame of the animation sequence.
+  optional int32 start_frame = 1;
+  // The index of the last frame of the animation sequence.
+  optional int32 end_frame = 2;
+  // The amount of time, in milliseconds, a single frame should be displayed.
+  optional int32 duration = 3;
+}

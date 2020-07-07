@@ -1,0 +1,35 @@
+file_location: "/res/graphics/sprites/stickFigure.png"
+tile_width: 64
+tile_height: 96
+animations {
+  key: "idle"
+  value {
+    start_frame: 0
+    end_frame: 0
+    duration: 1000
+  }
+}
+animations {
+  key: "moving"
+  value {
+    start_frame: 10
+    end_frame: 19
+    duration: 80
+  }
+}
+animations {
+  key: "jumping"
+  value {
+    start_frame: 20
+    end_frame: 20
+    duration: 1000
+  }
+}
+animations {
+  key: "knocked_back"
+  value {
+    start_frame: 30
+    end_frame: 34
+    duration: 80
+  }
+}

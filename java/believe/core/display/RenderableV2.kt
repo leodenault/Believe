@@ -8,4 +8,8 @@ interface RenderableV2 {
      * @param g the [Graphics] instance that will be used to draw this object to the screen.
      */
     fun render(g: Graphics)
+
+    /** @depredated use [render]. */
+    @Deprecated("Rendering with Slick Graphics is deprecated.", ReplaceWith("render"))
+    fun render(g: org.newdawn.slick.Graphics) = render(Graphics(g))
 }

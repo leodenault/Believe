@@ -13,7 +13,7 @@ import believe.physics.collision.Collidable;
 import believe.physics.collision.CollisionHandler;
 import believe.physics.manager.PhysicsManager;
 import believe.statemachine.State;
-import believe.character.playable.proto.PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand.Action;
+import believe.character.playable.proto.PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand.Type;
 import believe.util.MapEntry;
 import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
@@ -36,35 +36,35 @@ public class PlayableCharacter extends Character<PlayableCharacter>
   }
 
   private static final String SPRITE_SHEET_NAME = "stickFigure";
-  private static final Map<Integer, Action> BASE_KEY_PRESSED_MAP =
+  private static final Map<Integer, Type> BASE_KEY_PRESSED_MAP =
       immutableMapOf(
-          entry(Input.KEY_LEFT, Action.SELECT_LEFT),
-          entry(Input.KEY_RIGHT, Action.SELECT_RIGHT),
-          entry(Input.KEY_SPACE, Action.JUMP));
+          entry(Input.KEY_LEFT, Type.SELECT_LEFT),
+          entry(Input.KEY_RIGHT, Type.SELECT_RIGHT),
+          entry(Input.KEY_SPACE, Type.JUMP));
 
-  private final Map<State<Action>, Set<MapEntry<Integer, Action>>> KEY_PRESSED_MODS =
+  private final Map<State<Type>, Set<MapEntry<Integer, Type>>> KEY_PRESSED_MODS =
       immutableMapOf(
           entry(
               standingState,
               hashSetOf(
-                  entry(Input.KEY_LEFT, Action.SELECT_LEFT),
-                  entry(Input.KEY_RIGHT, Action.SELECT_RIGHT))),
-          entry(movingLeftState, hashSetOf(entry(Input.KEY_RIGHT, Action.STOP))),
-          entry(movingRightState, hashSetOf(entry(Input.KEY_LEFT, Action.STOP))));
-  private final Map<State<Action>, Set<MapEntry<Integer, Action>>> KEY_RELEASED_MODS =
+                  entry(Input.KEY_LEFT, Type.SELECT_LEFT),
+                  entry(Input.KEY_RIGHT, Type.SELECT_RIGHT))),
+          entry(movingLeftState, hashSetOf(entry(Input.KEY_RIGHT, Type.STOP))),
+          entry(movingRightState, hashSetOf(entry(Input.KEY_LEFT, Type.STOP))));
+  private final Map<State<Type>, Set<MapEntry<Integer, Type>>> KEY_RELEASED_MODS =
       immutableMapOf(
           entry(
               standingState,
               hashSetOf(
-                  entry(Input.KEY_LEFT, Action.SELECT_RIGHT),
-                  entry(Input.KEY_RIGHT, Action.SELECT_LEFT))),
-          entry(movingLeftState, hashSetOf(entry(Input.KEY_LEFT, Action.STOP))),
-          entry(movingRightState, hashSetOf(entry(Input.KEY_RIGHT, Action.STOP))));
+                  entry(Input.KEY_LEFT, Type.SELECT_RIGHT),
+                  entry(Input.KEY_RIGHT, Type.SELECT_LEFT))),
+          entry(movingLeftState, hashSetOf(entry(Input.KEY_LEFT, Type.STOP))),
+          entry(movingRightState, hashSetOf(entry(Input.KEY_RIGHT, Type.STOP))));
   private final DamageProjection damageProjection;
 
   private boolean onRails;
-  private Map<Integer, Action> keyPressedActionMap;
-  private Map<Integer, Action> keyReleasedActionMap;
+  private Map<Integer, Type> keyPressedActionMap;
+  private Map<Integer, Type> keyReleasedActionMap;
 
   private SynchedComboPattern pattern;
   private List<SynchedComboListener> comboListeners;
@@ -143,19 +143,19 @@ public class PlayableCharacter extends Character<PlayableCharacter>
   }
 
   @Override
-  public void transitionEnded(Set<State<Action>> currentStates) {
+  public void transitionEnded(Set<State<Type>> currentStates) {
     super.transitionEnded(currentStates);
     remapKeys(currentStates, KEY_PRESSED_MODS, keyPressedActionMap);
     remapKeys(currentStates, KEY_RELEASED_MODS, keyReleasedActionMap);
   }
 
   private void remapKeys(
-      Set<State<Action>> states,
-      Map<State<Action>, Set<MapEntry<Integer, Action>>> mods,
-      Map<Integer, Action> keyActionMap) {
-    for (State<Action> state : states) {
+      Set<State<Type>> states,
+      Map<State<Type>, Set<MapEntry<Integer, Type>>> mods,
+      Map<Integer, Type> keyActionMap) {
+    for (State<Type> state : states) {
       if (mods.containsKey(state)) {
-        for (MapEntry<Integer, Action> entry : mods.get(state)) {
+        for (MapEntry<Integer, Type> entry : mods.get(state)) {
           keyActionMap.put(entry.getKey(), entry.getValue());
         }
       }

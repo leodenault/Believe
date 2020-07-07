@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package believe.character.proto;
+
+option java_package = "believe.character.proto";
+option java_outer_classname = "CharacterAnimationsProto";
+
+// Describes the set of animations used in rendering a character.
+message CharacterAnimations {
+  // The name of the sprite sheet containing the animations.
+  optional string sprite_sheet_name = 1;
+  // The name of the animation used in rendering the character when idle.
+  optional string idle_animation_name = 2;
+  // The name of the animation used in rendering the character when moving left or right.
+  optional string movement_animation_name = 3;
+  // The name of the animation used in rendering the character when jumping.
+  optional string jump_animation_name = 4;
+  // The name of the animation used in rendering the character when falling from being hit.
+  optional string falling_animation_name = 5;
+}

@@ -1,7 +1,7 @@
 package believe.character.playable;
 
 import believe.character.playable.proto.PlayableCharacterMovementCommandProto;
-import believe.character.playable.proto.PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand.Action;
+import believe.character.playable.proto.PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand.Type;
 import believe.command.Command;
 import believe.command.CommandParser;
 import dagger.Reusable;
@@ -31,8 +31,8 @@ final class PlayableCharacterMovementCommandParser
   @Nullable
   public Command parseCommand(
       PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand command) {
-    Action action = command.getAction();
-    if (action == Action.UNKNOWN_ACTION) {
+    Type action = command.getAction();
+    if (action == Type.UNKNOWN_COMMAND) {
       Log.error(
           "Playable character movement command specified unknown action. No command will be output.");
       return null;

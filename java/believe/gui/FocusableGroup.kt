@@ -1,5 +1,7 @@
 package believe.gui
 
+import believe.core.display.Bindable
+
 /** A grouping of [Focusable] instances that ensures only a single one is ever focused at a time. */
 interface FocusableGroup : Bindable {
     /**

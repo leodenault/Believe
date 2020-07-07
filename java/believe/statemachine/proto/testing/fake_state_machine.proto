@@ -1,0 +1,45 @@
+syntax = "proto2";
+
+package believe.statemachine.proto.testing;
+
+option java_package = "believe.statemachine.proto.testing";
+option java_outer_classname = "FakeStateMachineProto";
+
+import "java/believe/statemachine/proto/state_machine.proto";
+
+message FakeStateKey {
+  extend believe.statemachine.proto.StateKey {
+    optional FakeStateKey fake_state_key = 1000;
+  }
+
+  optional string fake_key = 1;
+}
+
+message FakeStateData {
+  extend believe.statemachine.proto.StateData {
+    optional FakeStateData fake_state_data = 1000;
+  }
+
+  optional string fake_data = 1;
+}
+
+message FakeTransitionAction {
+  extend believe.statemachine.proto.TransitionAction {
+    optional FakeTransitionAction fake_transition_action = 1000;
+  }
+
+  optional string fake_action = 1;
+}
+
+message FakeSubStateMachineKey {
+  extend believe.statemachine.proto.SubStateMachineKey {
+    optional FakeSubStateMachineKey fake_sub_state_machine_key = 1000;
+  }
+
+  enum FakeKeyType {
+    FAKE_KEY_1 = 1;
+    FAKE_KEY_2 = 2;
+  }
+
+  optional FakeKeyType fake_key_type = 1;
+}

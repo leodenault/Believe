@@ -1,6 +1,7 @@
 package believe.core.display
 
 import believe.geometry.Rectangle
+import believe.gui.testing.FakeImage
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doReturnConsecutively
@@ -69,6 +70,15 @@ internal class GraphicsTest {
             verify(slickGraphics).font = font
             verify(slickGraphics).drawString("some string", 3f, 4f)
         }
+    }
+
+    @Test
+    fun drawImage_floorsNumbersAndDelegatesToSlickGraphics() {
+        val image = FakeImage()
+
+        graphics.drawImage(image, 2.499f, 3.9999f)
+
+        verify(slickGraphics).drawImage(image, 2f, 3f)
     }
 
     @Test

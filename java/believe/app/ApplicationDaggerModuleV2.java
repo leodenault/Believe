@@ -1,9 +1,10 @@
 package believe.app;
 
+import believe.animation.AnimationDaggerModule;
 import believe.app.flag_parsers.CommandLineParser;
 import believe.app.flags.AppFlags;
 import believe.app.proto.GameOptionsProto.GameOptions;
-import believe.character.playable.PlayableDaggerModule;
+import believe.character.CharacterDaggerModule;
 import believe.command.CommandDaggerModule;
 import believe.core.io.FontLoader;
 import believe.core.io.JarClasspathLocation;
@@ -36,11 +37,9 @@ import javax.inject.Singleton;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.util.ClasspathLocation;
 import org.newdawn.slick.util.FileSystemLocation;
-import org.newdawn.slick.util.Log;
 import org.newdawn.slick.util.ResourceLocation;
 
 import java.io.File;
@@ -52,6 +51,8 @@ import java.util.function.Supplier;
 /** Dagger module used in all application components. */
 @Module(
     includes = {
+      AnimationDaggerModule.class,
+      CharacterDaggerModule.class,
       CollidableTileDaggerModule.class,
       CollisionDaggerModule.class,
       CollidableCommandDaggerModule.class,
@@ -63,7 +64,7 @@ import java.util.function.Supplier;
       IoDaggerModule.class,
       LevelDaggerModule.class,
       MapParsingDaggerModule.class,
-      PlayableDaggerModule.class,
+      // PlayableDaggerModule.class,
       ProtoDaggerModule.class,
       TiledCommandDaggerModule.class
     })

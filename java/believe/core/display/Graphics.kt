@@ -4,6 +4,7 @@ import believe.geometry.Rectangle
 import org.newdawn.slick.Color
 import org.newdawn.slick.Font
 import org.newdawn.slick.Graphics
+import org.newdawn.slick.Image
 import org.newdawn.slick.geom.Shape
 import java.util.*
 import kotlin.math.floor
@@ -42,6 +43,10 @@ open class Graphics(private val slickGraphics: Graphics) {
         slickGraphics.font = font
         slickGraphics.drawString(s, floor(x), floor(y))
     }
+
+    /** Draws [image] to the screen at position ([x], [y]). */
+    open fun drawImage(image: Image, x: Float, y: Float) =
+        slickGraphics.drawImage(image, floor(x), floor(y))
 
     /** Sets [clip] as the current rendering border and pushes the old border back. */
     open fun pushClip(clip: Rectangle) {

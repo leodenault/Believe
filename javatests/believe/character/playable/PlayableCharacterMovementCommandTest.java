@@ -7,7 +7,7 @@ import believe.logging.testing.VerifiableLogSystem;
 import believe.logging.testing.VerifiableLogSystem.LogSeverity;
 import believe.logging.testing.VerifiesLoggingCalls;
 import believe.logging.truth.VerifiableLogSystemSubject;
-import believe.character.playable.proto.PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand.Action;
+import believe.character.playable.proto.PlayableCharacterMovementCommandProto.PlayableCharacterMovementCommand.Type;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -20,17 +20,17 @@ final class PlayableCharacterMovementCommandTest {
     PlayableCharacter playableCharacter = mock(PlayableCharacter.class);
     command =
         new PlayableCharacterMovementCommand(
-            () -> Optional.of(playableCharacter), Action.SELECT_LEFT);
+            () -> Optional.of(playableCharacter), Type.SELECT_LEFT);
 
     command.execute();
 
-    verify(playableCharacter).transition(Action.SELECT_LEFT);
+    verify(playableCharacter).transition(Type.SELECT_LEFT);
   }
 
   @Test
   @VerifiesLoggingCalls
   void execute_characterIsEmpty_logsWarningAndDoesNothing(VerifiableLogSystem logSystem) {
-    command = new PlayableCharacterMovementCommand(Optional::empty, Action.JUMP);
+    command = new PlayableCharacterMovementCommand(Optional::empty, Type.JUMP);
 
     command.execute();
 

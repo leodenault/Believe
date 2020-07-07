@@ -21,9 +21,9 @@ java_library(
         "ScrollBar.java",
         "TextComponent.java",
         "VerticalKeyboardScrollpanel.java",
-        "package-info.java",
     ],
     deps = [
+        ":package-info",
         "//java/believe/app/annotation",
         "//java/believe/audio",
         "//java/believe/audio:impl",
@@ -42,7 +42,6 @@ java_library(
 kt_jvm_library(
     name = "gui_v2",
     srcs = [
-        "Bindable.kt",
         "CanvasContainerV2.kt",
         "Focusable.kt",
         "FocusableGroup.kt",
@@ -82,6 +81,7 @@ java_library(
     srcs = ["GuiDaggerModule.java"],
     deps = [
         ":gui",
+        ":package-info",
         "//third_party/dagger",
     ],
 )
@@ -92,6 +92,7 @@ java_library(
     deps = [
         ":gui_v2",
         ":internal_qualifiers",
+        ":package-info",
         "//java/believe/audio",
         "//java/believe/audio:impl",
         "//java/believe/input",
@@ -105,4 +106,13 @@ kt_jvm_library(
     name = "internal_qualifiers",
     srcs = ["InternalQualifiers.kt"],
     deps = ["//third_party/javax:annotations"],
+)
+
+java_library(
+    name = "package-info",
+    srcs = ["package-info.java"],
+    deps = [
+        "//java/believe/app/annotation",
+        "//third_party/javax:annotations",
+    ],
 )

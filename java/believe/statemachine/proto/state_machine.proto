@@ -1,0 +1,72 @@
+syntax = "proto2";
+
+package believe.statemachine.proto;
+
+option java_package = "believe.statemachine.proto";
+option java_outer_classname = "StateMachineProto";
+
+// A state within a state machine that represents particular context of data.
+message State {
+  // The key used to reference this state when parsing protos.
+  optional StateKey key = 1;
+  // The data which should be stored within the state at runtime.
+  optional StateData data = 2;
+}
+
+// A key used to reference states when parsing protos into actual objects.
+message StateKey {
+  // Next ID: 1003
+  extensions 1000 to max;
+}
+
+// Data stored within a state. This is entirely custom for each use case.
+message StateData {
+  // Next ID: 1003
+  extensions 1000 to max;
+}
+
+// A transition between two states
+message Transition {
+  // The action triggering the transition.
+  optional TransitionAction action = 1;
+  // The key of the state from which the transition may be triggered.
+  optional StateKey from = 2;
+  // The key of the state to which the transition will lead.
+  optional StateKey to = 3;
+}
+
+// An action which has the ability to trigger a transition.
+message TransitionAction {
+  // Next ID: 1002
+  extensions 1000 to max;
+}
+
+// An entity that transitions between various states, exposing its current stateful data for code to
+// poll at runtime.
+message StateMachine {
+  // The list of states which should be included in this state machine. Note that the first state in
+  // this list is used as the start state for the machine.
+  repeated State states = 1;
+  // The list of transitions which will be used to link the states together.
+  repeated Transition transitions = 2;
+}
+
+// A key used to reference sub-state machines when parsing protos into actual objects.
+message SubStateMachineKey {
+  // Next ID: 1001
+  extensions 1000 to max;
+}
+
+// A state machine within the context of a concurrent state machine.
+message SubStateMachine {
+  // The key used to identify the type of state machine which should be parsed.
+  optional SubStateMachineKey key = 1;
+  // The list of state machines that will be running concurrently within this machine.
+  optional StateMachine state_machine = 2;
+}
+
+// A state machine with multiple internal state machines running concurrently.
+message ConcurrentStateMachine {
+  // The list of state machines running concurrently in this one.
+  repeated SubStateMachine sub_state_machines = 1;
+}

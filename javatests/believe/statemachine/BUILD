@@ -14,9 +14,10 @@ java_test(
 
 kt_junit5_test(
     name = "ConcurrentStateMachineV2Test",
-    srcs = ["ConcurrentStateMachineV2Test.kt"],
+    srcs = ["ConcurrentStateMachineV2ImplTest.kt"],
     friends = [],
     deps = [
+        "//java/believe/statemachine:impl",
         "//java/believe/statemachine:statemachine_v2",
         "//third_party/truth",
     ],

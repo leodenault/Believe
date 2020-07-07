@@ -59,6 +59,7 @@ java_library(
         "//java/believe/gamestate/temporarystate:package-info",
         "//java/believe/gui",
         "//java/believe/gui:dagger_module",
+        "//java/believe/gui:package-info",
         "//java/believe/io",
         "//java/believe/io:impl",
         "//java/believe/level",

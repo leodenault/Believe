@@ -5,13 +5,13 @@ import believe.datamodel.LoadableData
 import believe.io.ResourceManager
 import believe.proto.ProtoParser
 import believe.proto.ProtoParserImpl
-import com.google.protobuf.InvalidProtocolBufferException
+import believe.util.KotlinHelpers.whenNull
 import com.google.protobuf.Message
 import com.google.protobuf.Parser
 import dagger.Reusable
-import believe.util.KotlinHelpers.whenNull
 import org.newdawn.slick.util.Log
 import javax.inject.Inject
+import kotlin.reflect.KClass
 
 /**
  * A file storing proto data in binary format.
@@ -58,6 +58,10 @@ class BinaryProtoFile<M : Message> internal constructor(
             return BinaryProtoFile(
                 resourceManager, dataLocation, protoParserFactory.create(protoParser)
             )
+        }
+
+        fun <M : Message> create(messageType: KClass<M>, dataLocation: String): BinaryProtoFile<M> {
+            return create(dataLocation, protoParserFactory.create(messageType))
         }
 
         inline fun <reified M : Message> create(dataLocation: String): BinaryProtoFile<M> {

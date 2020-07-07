@@ -1,9 +1,30 @@
 package believe.gui.testing
 
+import org.newdawn.slick.Color
 import org.newdawn.slick.Image
+import java.lang.IllegalArgumentException
+import java.lang.UnsupportedOperationException
 import java.util.*
+import kotlin.math.sqrt
 
-class FakeImage @JvmOverloads constructor(width: Int = 0, height: Int = 0) : Image() {
+class FakeImage @JvmOverloads constructor(
+    width: Int = 0, height: Int = 0, colours: List<List<Int>> = (0 until width).map {
+        (0 until height).toList()
+    }
+) : Image() {
+
+    private val internalColours: List<List<Color>>
+
+    init {
+        if (colours.size != width || colours.none { it.size == height }) {
+            throw IllegalArgumentException(
+                "Color list sizes must match width=$width and height=$height."
+            )
+        }
+
+        internalColours = colours.map { it.map { colourValue -> Color(colourValue) } }
+    }
+
     override fun getWidth(): Int {
         return width
     }
@@ -27,6 +48,10 @@ class FakeImage @JvmOverloads constructor(width: Int = 0, height: Int = 0) : Ima
         return Objects.hash(
             Integer.hashCode(width), Integer.hashCode(height)
         )
+    }
+
+    override fun getColor(x: Int, y: Int): Color {
+        return internalColours[x][y]
     }
 
     init {

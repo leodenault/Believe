@@ -21,6 +21,7 @@ java_library(
 kt_jvm_library(
     name = "display_v2",
     srcs = [
+        "Bindable.kt",
         "Graphics.kt",
         "RenderableV2.kt",
     ],

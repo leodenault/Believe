@@ -4,7 +4,12 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
 
-/** An object that can be drawn to a screen. */
+/**
+ * An object that can be drawn to a screen.
+ *
+ * @deprecated use {@link RenderableV2} instead.
+ */
+@Deprecated
 public interface Renderable {
   /**
    * Draws the object to the screen.
