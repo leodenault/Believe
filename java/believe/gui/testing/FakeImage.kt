@@ -16,7 +16,7 @@ class FakeImage @JvmOverloads constructor(
     private val internalColours: List<List<Color>>
 
     init {
-        if (colours.size != width || colours.none { it.size == height }) {
+        if (colours.size != width || (colours.isNotEmpty() && colours.none { it.size == height })) {
             throw IllegalArgumentException(
                 "Color list sizes must match width=$width and height=$height."
             )
