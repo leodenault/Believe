@@ -159,7 +159,7 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
     this.status = PlayStatus.STOPPED;
     this.song = song;
     this.song.addListener(this);
-    this.rect = new Rectangle(rect.getX(), rect.getY(), 0, rect.getHeight());
+    this.rect.setWidth(0);
     this.createLanes(numLanes, width / numLanes, subdivision, bpm, offset);
     KEY_FONT = keyFont;
   }
@@ -311,7 +311,7 @@ public class FlowComponent extends AbstractContainer implements ComponentListene
       this.notifyLanes(
           Character.toLowerCase(
               c)); // TODO: Do we really want this? Having to switch using CapsLock could be an
-                   // interesting feature... Or annoyance.
+      // interesting feature... Or annoyance.
     }
   }
 

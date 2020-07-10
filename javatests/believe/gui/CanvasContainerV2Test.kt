@@ -1,7 +1,7 @@
 package believe.gui
 
 import believe.core.display.Graphics
-import believe.geometry.Rectangle
+import believe.geometry.rectangle
 import believe.geometry.truth.Truth.assertThat
 import believe.gui.GuiBuilders.canvasContainer
 import believe.gui.testing.DaggerGuiTestComponent
@@ -22,15 +22,15 @@ internal class CanvasContainerV2Test {
         canvasContainer<GuiElement> {
             add { childBuilder1 from p(0.1f, 0.2f) to p(0.9f, 1f) }
             add { childBuilder2 from p(0f, 0.2f) to p(0.1f, 0.5f) }
-        }, Rectangle(100f, 200f, 100f, 200f)
+        }, rectangle(100f, 200f, 100f, 200f)
     )
 
     @Test
     fun build_providesCorrectPositionData() {
         assertThat(childBuilder1.receivedPositionData!!).isWithin(0.1f)
-            .of(Rectangle(110f, 240f, 80f, 160f))
+            .of(rectangle(110f, 240f, 80f, 160f))
         assertThat(childBuilder2.receivedPositionData!!).isWithin(0.1f)
-            .of(Rectangle(100f, 240f, 10f, 60f))
+            .of(rectangle(100f, 240f, 10f, 60f))
     }
 
     @Test

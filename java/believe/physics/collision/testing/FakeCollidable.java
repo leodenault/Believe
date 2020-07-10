@@ -1,5 +1,7 @@
 package believe.physics.collision.testing;
 
+import static believe.geometry.RectangleKt.rectangle;
+
 import believe.geometry.Rectangle;
 import believe.physics.collision.Collidable;
 import believe.physics.collision.CollisionHandler;
@@ -9,7 +11,7 @@ import java.util.Set;
 
 /** Fake {@link Collidable} for testing purposes. */
 public final class FakeCollidable implements Collidable<FakeCollidable> {
-  private final Rectangle rect = new Rectangle(0, 0, 0, 0);
+  private final Rectangle rect = rectangle(0, 0, 0, 0);
   private final Set<CollisionHandler<? super FakeCollidable, ? extends Collidable<?>>> leftHandlers;
   private final Set<CollisionHandler<? extends Collidable<?>, ? super FakeCollidable>>
       rightHandlers;

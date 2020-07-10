@@ -1,5 +1,7 @@
 package believe.map.collidable.tile;
 
+import static believe.geometry.RectangleKt.rectangle;
+
 import believe.geometry.Rectangle;
 import believe.map.tiled.Tile;
 import believe.physics.collision.Collidable;
@@ -18,7 +20,7 @@ public final class CollidableTile implements Collidable<CollidableTile>, Physics
       leftCompatibleHandlers;
 
   CollidableTile(Tile tile, CollidableTileCollisionHandler collisionHandler) {
-    this.rectangle = new Rectangle(tile.pixelX(), tile.pixelY(), tile.width(), tile.height());
+    this.rectangle = rectangle(tile.pixelX(), tile.pixelY(), tile.width(), tile.height());
     this.leftCompatibleHandlers = Collections.unmodifiableSet(Util.hashSetOf(collisionHandler));
   }
 

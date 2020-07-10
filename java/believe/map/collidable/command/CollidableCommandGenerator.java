@@ -1,7 +1,8 @@
 package believe.map.collidable.command;
 
+import static believe.geometry.RectangleKt.rectangle;
+
 import believe.command.Command;
-import believe.geometry.Rectangle;
 import believe.map.collidable.command.InternalQualifiers.CommandParameter;
 import believe.map.collidable.command.InternalQualifiers.ShouldDespawnParameter;
 import believe.map.data.GeneratedMapEntityData;
@@ -64,7 +65,7 @@ final class CollidableCommandGenerator implements ObjectParser {
                 collidableCommandFactory.create(
                     shouldDespawn,
                     command,
-                    new Rectangle(
+                    rectangle(
                         tiledObject.x(),
                         tiledObject.y(),
                         tiledObject.width(),

@@ -3,6 +3,7 @@ package believe.gui
 import believe.audio.Sound
 import believe.core.display.Graphics
 import believe.geometry.Rectangle
+import believe.geometry.rectangle
 import believe.input.InputAdapter
 import dagger.Reusable
 import javax.inject.Inject
@@ -46,13 +47,11 @@ class MenuSelectionV2 private constructor(
     }
 
     override fun bind() = configuration.inputAdapter.addActionStartListener(
-        GuiAction.EXECUTE_ACTION,
-        executeSelection
+        GuiAction.EXECUTE_ACTION, executeSelection
     )
 
     override fun unbind() = configuration.inputAdapter.removeActionStartListener(
-        GuiAction.EXECUTE_ACTION,
-        executeSelection
+        GuiAction.EXECUTE_ACTION, executeSelection
     )
 
     /** Configures a [MenuSelectionV2] with dependencies injected from a framework. */
@@ -96,14 +95,14 @@ class MenuSelectionV2 private constructor(
             positionData: Rectangle
         ): MenuSelectionV2 {
             return MenuSelectionV2(configuration, positionData, with(positionData) {
-                Rectangle(
+                rectangle(
                     x + BORDER_SIZE / 2,
                     y + BORDER_SIZE / 2,
                     width - BORDER_SIZE,
                     height - BORDER_SIZE
                 )
             }, executeSelectionAction, createTextDisplay(guiLayoutFactory, with(positionData) {
-                Rectangle(
+                rectangle(
                     x + BORDER_SIZE,
                     y + BORDER_SIZE,
                     width - BORDER_SIZE * 2,

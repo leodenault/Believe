@@ -1,5 +1,6 @@
 package believe.physics.collision;
 
+import static believe.geometry.RectangleKt.rectangle;
 import static believe.util.Util.hashSetOf;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -34,7 +35,7 @@ final class CollisionHandlerExecutorImplTest {
 
     @Override
     public Rectangle rect() {
-      return new Rectangle(0, 0, 0, 0);
+      return rectangle(0, 0, 0, 0);
     }
   }
 

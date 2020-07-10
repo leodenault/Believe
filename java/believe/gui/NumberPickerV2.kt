@@ -3,6 +3,7 @@ package believe.gui
 import believe.audio.Sound
 import believe.core.display.Graphics
 import believe.geometry.Rectangle
+import believe.geometry.rectangle
 import believe.input.InputAdapter
 import org.newdawn.slick.Color
 import org.newdawn.slick.geom.Polygon
@@ -153,7 +154,7 @@ class NumberPickerV2 private constructor(
             val rightArrowCenterX =
                 positionData.maxX - positionData.width * (ARROW_RELATIVE_WIDTH / 2)
             val textAreaWidth = TEXT_RELATIVE_WIDTH * positionData.width
-            val textAreaPositionData = Rectangle(
+            val textAreaPositionData = rectangle(
                 positionData.centerX - (textAreaWidth / 2),
                 positionData.y,
                 textAreaWidth,

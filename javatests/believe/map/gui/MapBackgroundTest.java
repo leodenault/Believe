@@ -1,11 +1,11 @@
 package believe.map.gui;
 
+import static believe.geometry.RectangleKt.mutableRectangle;
 import static org.mockito.ArgumentMatchers.anyFloat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-import believe.geometry.Rectangle;
 import believe.gui.testing.FakeImage;
 import believe.map.data.BackgroundSceneData;
 import believe.map.data.proto.MapMetadataProto;
@@ -13,7 +13,6 @@ import believe.testing.mockito.InstantiateMocksIn;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.gui.GUIContext;
 
 /** Unit tests for {@link MapBackground}. */
 @InstantiateMocksIn
@@ -42,7 +41,7 @@ final class MapBackgroundTest {
   @Test
   void render_backgroundIsAtTop_rendersAtTopYPosition() {
     mapBackground.valueChanged(
-        new Rectangle(
+        mutableRectangle(
             /* x= */ 0, /* y= */ 0, /* width= */ IMAGE_WIDTH, /* height= */ IMAGE_HEIGHT));
 
     mapBackground.render(graphics);
@@ -56,7 +55,7 @@ final class MapBackgroundTest {
   void render_backgroundIsAtBottom_rendersAtBottomYPosition() {
     int parentHeight = 50;
     mapBackground.valueChanged(
-        new Rectangle(
+        mutableRectangle(
             /* x= */ 0,
             /* y= */ MAP_HEIGHT - parentHeight,
             /* width= */ IMAGE_WIDTH,
@@ -73,7 +72,7 @@ final class MapBackgroundTest {
   void render_imageIsRepeatedAcrossParentWidth() {
     int parentWidth = IMAGE_WIDTH * 3;
     mapBackground.valueChanged(
-        new Rectangle(
+        mutableRectangle(
             /* x= */ 0, /* y= */ 0, /* width= */ parentWidth, /* height= */ IMAGE_HEIGHT));
 
     mapBackground.render(graphics);
@@ -91,7 +90,7 @@ final class MapBackgroundTest {
     int parentHorizontalScroll = IMAGE_WIDTH;
     float imageHorizontalScroll = HORIZONTAL_SPEED_MULTIPLIER * parentHorizontalScroll;
     mapBackground.valueChanged(
-        new Rectangle(
+        mutableRectangle(
             /* x= */ parentHorizontalScroll,
             /* y= */ 0,
             /* width= */ parentWidth,

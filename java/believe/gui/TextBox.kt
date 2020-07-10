@@ -2,6 +2,7 @@ package believe.gui
 
 import believe.core.display.Graphics
 import believe.geometry.Rectangle
+import believe.geometry.rectangle
 import dagger.Reusable
 import org.newdawn.slick.Font
 import javax.inject.Inject
@@ -147,7 +148,7 @@ class TextBox private constructor(
             private val baseY: Float
         ) {
             fun create(text: String, y: Int) = TextFragment(
-                text, Rectangle(
+                text, rectangle(
                     horizontalAlignment.calculateXPosition(
                         font.getWidth(text), textBoxRect
                     ), baseY + y, font.getWidth(text).toFloat(), font.getHeight(text).toFloat()

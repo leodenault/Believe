@@ -2,7 +2,7 @@ package believe.gui
 
 import believe.core.display.Graphics
 import believe.geometry.Rectangle
-import kotlin.math.round
+import believe.geometry.rectangle
 
 /**
  * A container that lays out its children based on relative coordinates.
@@ -32,7 +32,7 @@ class CanvasContainerV2<G : GuiElement>(val children: List<G>) : GuiElement {
             children.add { guiLayoutFactory, positionData ->
                 val child = createChild()
                 guiLayoutFactory.create(
-                    child.builder, Rectangle(
+                    child.builder, rectangle(
                         positionData.x + child.topLeft.first * positionData.width,
                         positionData.y + child.topLeft.second * positionData.height,
                         (child.bottomRight.first - child.topLeft.first) * positionData.width,

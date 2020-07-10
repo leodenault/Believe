@@ -1,7 +1,7 @@
 package believe.gui
 
 import believe.core.display.Graphics
-import believe.geometry.Rectangle
+import believe.geometry.rectangle
 import believe.gui.GuiBuilders.verticalContainer
 import believe.gui.testing.DaggerGuiTestComponent
 import believe.gui.testing.FakeLayoutBuilder
@@ -20,7 +20,7 @@ internal class VerticalContainerTest {
     private val graphics: Graphics = mock()
     private val container: GuiElement by lazy {
         layoutFactory.create(
-            layoutBuilder, Rectangle(0f, 0f, 1000f, 100f)
+            layoutBuilder, rectangle(0f, 0f, 1000f, 100f)
         )
     }
 
@@ -50,9 +50,16 @@ internal class VerticalContainerTest {
 
         container.render(graphics)
 
-        assertThat(layoutBuilder1.receivedPositionData).isEqualTo(Rectangle(250f, 6.25f, 500f, 25f))
-        assertThat(layoutBuilder2.receivedPositionData).isEqualTo(Rectangle(250f, 37.5f, 500f, 25f))
-        assertThat(layoutBuilder3.receivedPositionData).isEqualTo(Rectangle(250f, 68.75f, 500f, 25f))
+        assertThat(layoutBuilder1.receivedPositionData).isEqualTo(rectangle(250f, 6.25f, 500f, 25f))
+        assertThat(layoutBuilder2.receivedPositionData).isEqualTo(rectangle(250f, 37.5f, 500f, 25f))
+        assertThat(layoutBuilder3.receivedPositionData).isEqualTo(
+            rectangle(
+                250f,
+                68.75f,
+                500f,
+                25f
+            )
+        )
     }
 
     @Test

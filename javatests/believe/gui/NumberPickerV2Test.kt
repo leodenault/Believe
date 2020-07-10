@@ -3,6 +3,7 @@ package believe.gui
 import believe.audio.Sound
 import believe.core.display.Graphics
 import believe.geometry.Rectangle
+import believe.geometry.rectangle
 import believe.gui.GuiBuilders.numberPicker
 import believe.gui.testing.DaggerGuiTestComponent
 import believe.input.testing.FakeInputAdapter
@@ -40,7 +41,7 @@ internal class NumberPickerV2Test {
     }
     private val numberPicker: NumberPickerV2 by lazy {
         layoutFactory.create(
-            layoutBuilder, Rectangle(x = 100f, y = 200f, width = 500f, height = 200f)
+            layoutBuilder, rectangle(x = 100f, y = 200f, width = 500f, height = 200f)
         )
     }
 

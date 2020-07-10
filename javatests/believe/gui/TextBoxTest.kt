@@ -1,7 +1,7 @@
 package believe.gui
 
 import believe.core.display.Graphics
-import believe.geometry.Rectangle
+import believe.geometry.rectangle
 import believe.gui.GuiBuilders.textBox
 import believe.gui.testing.DaggerGuiTestComponent
 import com.nhaarman.mockitokotlin2.any
@@ -49,11 +49,7 @@ internal class TextBoxTest {
         textBox.render(graphics)
 
         verify(graphics).drawString(
-            eq("stuff"),
-            any(),
-            any(),
-            eq(STYLE.highlightedTextColor),
-            eq(font)
+            eq("stuff"), any(), any(), eq(STYLE.highlightedTextColor), eq(font)
         )
     }
 
@@ -247,7 +243,7 @@ internal class TextBoxTest {
 
     companion object {
         private val STYLE = TextBoxStyle(textColour = 0x323232, highlightedTextColour = 0x989898)
-        private val CONTAINER = Rectangle(100f, 1000f, 10f, 10f)
+        private val CONTAINER = rectangle(100f, 1000f, 10f, 10f)
         private const val STRING_HEIGHT = 4
 
         fun centeredXPositionOf(text: String): Float =

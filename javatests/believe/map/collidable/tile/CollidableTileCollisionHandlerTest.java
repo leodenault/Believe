@@ -1,5 +1,6 @@
 package believe.map.collidable.tile;
 
+import static believe.geometry.RectangleKt.rectangle;
 import static believe.map.collidable.tile.CollidableTileCollisionHandlerTest.FakeTileCollidable.Subject.assertThat;
 import static com.google.common.truth.Truth.assertAbout;
 
@@ -48,7 +49,7 @@ public class CollidableTileCollisionHandlerTest {
     private float verticalSpeed;
 
     FakeTileCollidable(int x1, int y1, int x2, int y2) {
-      rect = new Rectangle(x1, y1, x2 - x1, y2 - y1);
+      rect = rectangle(x1, y1, x2 - x1, y2 - y1);
       isLanded = false;
     }
 
@@ -86,7 +87,7 @@ public class CollidableTileCollisionHandlerTest {
 
     @Override
     public void setLocation(float x, float y) {
-      rect = new Rectangle(x, y, rect.getWidth(), rect.getHeight());
+      rect = rectangle(x, y, rect.getWidth(), rect.getHeight());
     }
 
     @Override

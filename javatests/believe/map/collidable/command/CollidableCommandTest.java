@@ -1,5 +1,6 @@
 package believe.map.collidable.command;
 
+import static believe.geometry.RectangleKt.rectangle;
 import static believe.util.Util.hashSetOf;
 import static com.google.common.truth.Truth.assertThat;
 
@@ -12,13 +13,14 @@ import org.junit.jupiter.api.Test;
 /** Unit tests for {@link CollidableCommand}. */
 public final class CollidableCommandTest {
   private static final Rectangle RECTANGLE =
-      new Rectangle(/* x= */ 10, /* y= */ 20, /* width= */ 100, /* height= */ 200);
+      rectangle(/* x= */ 10, /* y= */ 20, /* width= */ 100, /* height= */ 200);
   private static final CollisionHandler<? super CollidableCommand, ? extends Collidable<?>>
       COLLISION_HANDLER = CollidableCommandTest::handleCollision;
   private static final Command COMMAND = CollidableCommandTest::executeCommand;
 
   private final CollidableCommand collidableCommand =
-      new CollidableCommand(hashSetOf(COLLISION_HANDLER), /* shouldDespawn= */ true, COMMAND, RECTANGLE);
+      new CollidableCommand(
+          hashSetOf(COLLISION_HANDLER), /* shouldDespawn= */ true, COMMAND, RECTANGLE);
 
   @Test
   void getRect_returnsOriginalRectangle() {

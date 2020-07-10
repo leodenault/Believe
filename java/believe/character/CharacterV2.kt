@@ -1,7 +1,7 @@
 package believe.character
 
 import believe.core.display.Graphics
-import believe.geometry.Rectangle
+import believe.geometry.rectangle
 import believe.map.collidable.tile.CollidableTileCollisionHandler.TileCollidable
 import believe.physics.collision.Collidable
 import believe.physics.collision.CollisionHandler
@@ -82,7 +82,7 @@ class CharacterV2 private constructor(
         physicsManager.addGravityObject(this)
     }
 
-    override fun rect() = Rectangle(
+    override fun rect() = rectangle(
         x,
         y,
         stateMachine.animation.currentFrame.width.toFloat(),
@@ -105,7 +105,7 @@ class CharacterV2 private constructor(
     class Factory @Inject internal constructor(
         private val stateMachineFactory: CharacterStateMachine.Factory,
         private val verticalMovementHandlerFactory: VerticalMovementHandler.Factory
-//        private val rightCompatibleHandlers: Set<CollisionHandler<out Collidable<*>, in CharacterV2>>
+        //        private val rightCompatibleHandlers: Set<CollisionHandler<out Collidable<*>, in CharacterV2>>
     ) {
         fun create(
             animations: Animations,

@@ -1,5 +1,7 @@
 package believe.gui;
 
+import static believe.geometry.RectangleKt.mutableRectangle;
+
 import java.util.Iterator;
 
 import believe.geometry.Rectangle;
@@ -21,7 +23,7 @@ public class DirectionalPanel extends AbstractContainer {
     this(container, 0, 0, itemWidth, itemHeight, spacing);
     autoposition = true;
     rect =
-        new Rectangle(
+        mutableRectangle(
             (container.getWidth() - rect.getWidth()) / 2,
             (container.getHeight() - rect.getHeight()) / 2,
             rect.getWidth(),
@@ -57,7 +59,9 @@ public class DirectionalPanel extends AbstractContainer {
       y = (container.getHeight() - height) / 2;
     }
 
-    rect = new Rectangle(x, y, rect.getWidth(), height);
+    rect.setX(x);
+    rect.setY(y);
+    rect.setHeight(height);
 
     resetLayout();
   }

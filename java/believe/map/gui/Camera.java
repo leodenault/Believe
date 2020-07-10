@@ -1,6 +1,9 @@
 package believe.map.gui;
 
+import static believe.geometry.RectangleKt.mutableRectangle;
+
 import believe.core.display.Renderable;
+import believe.geometry.MutableRectangle;
 import believe.geometry.Rectangle;
 import believe.react.ObservableValue;
 import believe.react.Observer;
@@ -13,7 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 class Camera implements Renderable {
-  private final ObservableValue<Rectangle> rect;
+  private final ObservableValue<MutableRectangle> rect;
   private final List<Renderable> children;
   private final int mapWidth;
   private final int mapHeight;
@@ -26,7 +29,7 @@ class Camera implements Renderable {
     this.mapHeight = mapHeight;
     scaleX = 1;
     scaleY = 1;
-    rect = ObservableValue.of(new Rectangle(0, 0, width, height));
+    rect = ObservableValue.of(mutableRectangle(0, 0, width, height));
     children = new ArrayList<>();
   }
 
@@ -36,27 +39,22 @@ class Camera implements Renderable {
 
   void center(float x, float y) {
     Rectangle originalRectangle = rect.get();
-    Rectangle.Builder newRectangleBuilder =
-        Rectangle.newBuilder()
-            .setCenterX(x)
-            .setCenterY(y)
-            .setWidth(originalRectangle.getWidth())
-            .setHeight(originalRectangle.getHeight());
-    Rectangle newRectangle = newRectangleBuilder.build();
+    MutableRectangle newRectangle =
+        mutableRectangle(x, y, originalRectangle.getWidth(), originalRectangle.getHeight());
 
     if (newRectangle.getX() < 0) {
-      newRectangleBuilder.setX(0);
+      newRectangle.setX(0);
     } else if (newRectangle.getMaxX() > mapWidth) {
-      newRectangleBuilder.setX(mapWidth - newRectangle.getWidth());
+      newRectangle.setX(mapWidth - newRectangle.getWidth());
     }
 
     if (newRectangle.getY() < 0) {
-      newRectangleBuilder.setY(0);
+      newRectangle.setY(0);
     } else if (newRectangle.getMaxY() > mapHeight) {
-      newRectangleBuilder.setY(mapHeight - newRectangle.getHeight());
+      newRectangle.setY(mapHeight - newRectangle.getHeight());
     }
 
-    rect.setValue(newRectangleBuilder.build());
+    rect.setValue(newRectangle);
   }
 
   void scale(float x, float y) {
@@ -64,14 +62,14 @@ class Camera implements Renderable {
     scaleY = y;
     Rectangle originalRectangle = rect.get();
     rect.setValue(
-        new Rectangle(
+        mutableRectangle(
             originalRectangle.getX(),
             originalRectangle.getY(),
             originalRectangle.getWidth() * (1 / x),
             originalRectangle.getHeight() * (1 / y)));
   }
 
-  void addAllObservers(Collection<? extends Observer<Rectangle>> observers) {
+  void addAllObservers(Collection<? extends Observer<MutableRectangle>> observers) {
     rect.addAllObservers(observers);
   }
 

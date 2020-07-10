@@ -1,8 +1,11 @@
 package believe.physics.damage;
 
+import static believe.geometry.RectangleKt.mutableRectangle;
+import static believe.geometry.RectangleKt.rectangle;
 import static believe.util.Util.hashSetOf;
 
 import believe.character.Faction;
+import believe.geometry.MutableRectangle;
 import believe.geometry.Rectangle;
 import believe.physics.collision.Collidable;
 import believe.physics.collision.CollisionHandler;
@@ -18,7 +21,7 @@ public class DamageBox implements Collidable<DamageBox> {
   private final float damage;
   private final Faction faction;
 
-  private Rectangle rect;
+  private MutableRectangle rect;
 
   DamageBox(
       @Provided DamageBoxCollisionHandler damageBoxCollisionHandler,
@@ -29,7 +32,7 @@ public class DamageBox implements Collidable<DamageBox> {
       int height,
       float damage) {
     this.damageBoxCollisionHandler = damageBoxCollisionHandler;
-    this.rect = new Rectangle(x, y, width, height);
+    this.rect = mutableRectangle(x, y, width, height);
     this.damage = damage;
     this.faction = faction;
   }
@@ -56,7 +59,8 @@ public class DamageBox implements Collidable<DamageBox> {
   }
 
   public void setLocation(float x, float y) {
-    this.rect = new Rectangle(x, y, rect.getWidth(), rect.getHeight());
+    this.rect.setX(x);
+    this.rect.setY(y);
   }
 
   public Faction getFaction() {

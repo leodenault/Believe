@@ -2,7 +2,7 @@ package believe.gui
 
 import believe.audio.Sound
 import believe.core.display.Graphics
-import believe.geometry.Rectangle
+import believe.geometry.rectangle
 import believe.gui.GuiBuilders.menuSelection
 import believe.gui.testing.DaggerGuiTestComponent
 import believe.input.testing.FakeInputAdapter
@@ -101,7 +101,7 @@ internal class MenuSelectionV2Test {
 
         verify(graphics).fill(eq(POSITION_DATA), any())
         verify(graphics).draw(eq(with(POSITION_DATA) {
-            Rectangle(x + 3, y + 3, width - 6, height - 6)
+            rectangle(x + 3, y + 3, width - 6, height - 6)
         }), any(), any())
     }
 
@@ -109,7 +109,7 @@ internal class MenuSelectionV2Test {
     fun render_rendersTextCorrectly() {
         val textDisplay: TextDisplay = mock()
         var actualText = ""
-        var actualPositionData = Rectangle(x = 0f, y = 0f, width = 0f, height = 0f)
+        var actualPositionData = rectangle(x = 0f, y = 0f, width = 0f, height = 0f)
         layoutBuilder = menuSelection {
             +"some text"
             createTextDisplay = { _, positionData, text ->
@@ -124,12 +124,12 @@ internal class MenuSelectionV2Test {
 
         assertThat(actualText).isEqualTo("some text")
         assertThat(actualPositionData).isEqualTo(with(POSITION_DATA) {
-            Rectangle(x + 6, y + 6, width - 12, height - 12)
+            rectangle(x + 6, y + 6, width - 12, height - 12)
         })
         verify(textDisplay).render(graphics)
     }
 
     companion object {
-        private val POSITION_DATA = Rectangle(100f, 1000f, 1000f, 100f)
+        private val POSITION_DATA = rectangle(100f, 1000f, 1000f, 100f)
     }
 }

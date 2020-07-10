@@ -1,17 +1,16 @@
 package believe.map.collidable.command;
 
+import static believe.geometry.RectangleKt.rectangle;
 import static believe.util.Util.hashSetOf;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.verify;
 
-import believe.geometry.Rectangle;
 import believe.physics.collision.testing.FakeCollidable;
 import believe.physics.manager.PhysicsManager;
 import believe.testing.mockito.InstantiateMocksIn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 
 /** Unit tests for {@link CollidableCommandCollisionHandler}. */
 @InstantiateMocksIn
@@ -34,7 +33,7 @@ final class CollidableCommandCollisionHandlerTest {
             hashSetOf(collisionHandler),
             /* shouldDespawn= */ false,
             this::executeCommand,
-            new Rectangle(0, 0, 0, 0)),
+            rectangle(0, 0, 0, 0)),
         new FakeCollidable());
 
     assertThat(commandWasExecuted).isTrue();
@@ -47,7 +46,7 @@ final class CollidableCommandCollisionHandlerTest {
             hashSetOf(collisionHandler),
             /* shouldDespawn= */ true,
             this::executeCommand,
-            new Rectangle(0, 0, 0, 0));
+            rectangle(0, 0, 0, 0));
 
     collisionHandler.handleCollision(collidableCommand, new FakeCollidable());
 

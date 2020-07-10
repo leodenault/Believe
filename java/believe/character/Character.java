@@ -1,5 +1,6 @@
 package believe.character;
 
+import static believe.geometry.RectangleKt.mutableRectangle;
 import static believe.util.MapEntry.entry;
 import static believe.util.Util.hashMapOf;
 import static believe.util.Util.hashSetOf;
@@ -85,8 +86,7 @@ public abstract class Character<C extends Character<C>> extends ComponentBase
     horizontalSpeed = 0;
     animSet = SpriteSheetManager.getInstance().getAnimationSet(getSheetName());
     anim = animSet.get("idle");
-    rect =
-        new believe.geometry.Rectangle(x, y - anim.getHeight(), anim.getWidth(), anim.getHeight());
+    rect = mutableRectangle(x, y - anim.getHeight(), anim.getWidth(), anim.getHeight());
     anim.stop();
     anim.setCurrentFrame(0);
     focus = MAX_FOCUS;
@@ -140,7 +140,8 @@ public abstract class Character<C extends Character<C>> extends ComponentBase
   @Override
   public void setLocation(float x, float y) {
     if (rect != null) {
-      rect = new Rectangle(x, y, rect.getWidth(), rect.getHeight());
+      rect.setX(x);
+      rect.setY(y);
       resetLayout();
     }
   }

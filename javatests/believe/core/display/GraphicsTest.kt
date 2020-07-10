@@ -1,20 +1,15 @@
 package believe.core.display
 
-import believe.geometry.Rectangle
+import believe.geometry.rectangle
 import believe.gui.testing.FakeImage
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.doReturnConsecutively
 import com.nhaarman.mockitokotlin2.inOrder
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import org.junit.jupiter.api.Test
 import org.newdawn.slick.Color
 import org.newdawn.slick.Font
 import org.newdawn.slick.geom.Shape
-import org.newdawn.slick.geom.Transform
-import org.w3c.dom.css.Rect
 
 internal class GraphicsTest {
     private val slickGraphics: org.newdawn.slick.Graphics = mock()
@@ -24,7 +19,7 @@ internal class GraphicsTest {
     fun draw_floorsNumbersAndDelegatesToSlickGraphics() {
         val colour = Color(0x123123)
 
-        graphics.draw(Rectangle(1.1f, 2.499f, 3.5f, 4.9f), colour, 2f)
+        graphics.draw(rectangle(1.1f, 2.499f, 3.5f, 4.9f), colour, 2f)
 
         inOrder(slickGraphics) {
             verify(slickGraphics).color = colour
@@ -37,7 +32,7 @@ internal class GraphicsTest {
     fun fill_fillRectangle_floorsNumbersAndDelegatesToSlickGraphics() {
         val colour = Color(0x123123)
 
-        graphics.fill(Rectangle(1.1f, 2.499f, 3.5f, 4.9f), colour)
+        graphics.fill(rectangle(1.1f, 2.499f, 3.5f, 4.9f), colour)
 
         inOrder(slickGraphics) {
             verify(slickGraphics).color = colour
@@ -88,8 +83,8 @@ internal class GraphicsTest {
 
     @Test
     fun popClip_returnsLastPushedClip() {
-        val pushedClip1 = Rectangle(0f, 0f, 0f, 0f)
-        val pushedClip2 = Rectangle(10f, 10f, 10f, 10f)
+        val pushedClip1 = rectangle(0f, 0f, 0f, 0f)
+        val pushedClip2 = rectangle(10f, 10f, 10f, 10f)
         val graphics = Graphics(fakeSlickGraphics())
 
         graphics.pushClip(pushedClip1)

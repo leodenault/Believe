@@ -5,15 +5,47 @@ import org.junit.jupiter.api.Test
 
 internal class sRectangleTest {
     @Test
-    fun from_buildsCorrectRectangle() {
-        assertThat(
-            Rectangle.from(org.newdawn.slick.geom.Rectangle(1.2f, 3.4f, 5.6f, 7.8f))
-        ).isEqualTo(Rectangle(1.2f, 3.4f, 5.6f, 7.8f))
+    fun rectangle_fromProperties_buildsCorrectRectangle() {
+        with(rectangle(1.2f, 3.4f, 5.6f, 7.8f)) {
+            assertThat(x).isEqualTo(1.2f)
+            assertThat(y).isEqualTo(3.4f)
+            assertThat(width).isEqualTo(5.6f)
+            assertThat(height).isEqualTo(7.8f)
+        }
+    }
+
+    @Test
+    fun rectangle_fromSlickRectangle_buildsCorrectRectangle() {
+        with(rectangle(org.newdawn.slick.geom.Rectangle(1.2f, 3.4f, 5.6f, 7.8f))) {
+            assertThat(x).isEqualTo(1.2f)
+            assertThat(y).isEqualTo(3.4f)
+            assertThat(width).isEqualTo(5.6f)
+            assertThat(height).isEqualTo(7.8f)
+        }
+    }
+    @Test
+    fun mutableRectangle_fromProperties_buildsCorrectRectangle() {
+        with(mutableRectangle(1.2f, 3.4f, 5.6f, 7.8f)) {
+            assertThat(x).isEqualTo(1.2f)
+            assertThat(y).isEqualTo(3.4f)
+            assertThat(width).isEqualTo(5.6f)
+            assertThat(height).isEqualTo(7.8f)
+        }
+    }
+
+    @Test
+    fun mutableRectangle_fromSlickRectangle_buildsCorrectRectangle() {
+        with(mutableRectangle(org.newdawn.slick.geom.Rectangle(1.2f, 3.4f, 5.6f, 7.8f))) {
+            assertThat(x).isEqualTo(1.2f)
+            assertThat(y).isEqualTo(3.4f)
+            assertThat(width).isEqualTo(5.6f)
+            assertThat(height).isEqualTo(7.8f)
+        }
     }
 
     @Test
     fun asSlickRectangle_returnsCorrectSlickRectangle() {
-        with(Rectangle(1f, 2f, 3f, 4f).asSlickRectangle()) {
+        with(rectangle(1f, 2f, 3f, 4f).asSlickRectangle()) {
             assertThat(x).isEqualTo(1f)
             assertThat(y).isEqualTo(2f)
             assertThat(width).isEqualTo(3f)
@@ -23,13 +55,13 @@ internal class sRectangleTest {
 
     @Test
     fun intersectionShouldReturnIntersectionOfTwoRectangles() {
-        with(Rectangle(10f, 10f, 50f, 30f).intersection(Rectangle(0f, 10f, 20f, 10f))) {
+        with(rectangle(10f, 10f, 50f, 30f).intersection(rectangle(0f, 10f, 20f, 10f))) {
             assertThat(x).isEqualTo(10f)
             assertThat(y).isEqualTo(10f)
             assertThat(width).isEqualTo(10f)
             assertThat(height).isEqualTo(10f)
         }
-        with(Rectangle(10f, 20f, 50f, 30f).intersection(Rectangle(5f, 26f, 100f, 30f))) {
+        with(rectangle(10f, 20f, 50f, 30f).intersection(rectangle(5f, 26f, 100f, 30f))) {
             assertThat(x).isEqualTo(10f)
             assertThat(y).isEqualTo(26f)
             assertThat(width).isEqualTo(50f)
@@ -39,31 +71,31 @@ internal class sRectangleTest {
 
     @Test
     fun intersectionShouldReturnSmallestRectangleIfCompletelyInLargerOne() {
-        with(Rectangle(0f, 0f, 100f, 100f).intersection(Rectangle(0f, 0f, 50f, 50f))) {
+        with(rectangle(0f, 0f, 100f, 100f).intersection(rectangle(0f, 0f, 50f, 50f))) {
             assertThat(x).isEqualTo(0f)
             assertThat(y).isEqualTo(0f)
             assertThat(width).isEqualTo(50f)
             assertThat(height).isEqualTo(50f)
         }
-        with(Rectangle(0f, 0f, 100f, 100f).intersection(Rectangle(0f, 0f, 100f, 100f))) {
+        with(rectangle(0f, 0f, 100f, 100f).intersection(rectangle(0f, 0f, 100f, 100f))) {
             assertThat(x).isEqualTo(0f)
             assertThat(y).isEqualTo(0f)
             assertThat(width).isEqualTo(100f)
             assertThat(height).isEqualTo(100f)
         }
-        with(Rectangle(265f, 15f, 490f, 100f).intersection(Rectangle(265f, 15f, 490f, 100f))) {
+        with(rectangle(265f, 15f, 490f, 100f).intersection(rectangle(265f, 15f, 490f, 100f))) {
             assertThat(x).isEqualTo(265f)
             assertThat(y).isEqualTo(15f)
             assertThat(width).isEqualTo(490f)
             assertThat(height).isEqualTo(100f)
         }
-        with(Rectangle(0f, 0f, 100f, 100f).intersection(Rectangle(10f, 10f, 50f, 50f))) {
+        with(rectangle(0f, 0f, 100f, 100f).intersection(rectangle(10f, 10f, 50f, 50f))) {
             assertThat(x).isEqualTo(10f)
             assertThat(y).isEqualTo(10f)
             assertThat(width).isEqualTo(50f)
             assertThat(height).isEqualTo(50f)
         }
-        with(Rectangle(10f, 10f, 50f, 50f).intersection(Rectangle(0f, 0f, 100f, 100f))) {
+        with(rectangle(10f, 10f, 50f, 50f).intersection(rectangle(0f, 0f, 100f, 100f))) {
             assertThat(x).isEqualTo(10f)
             assertThat(y).isEqualTo(10f)
             assertThat(width).isEqualTo(50f)
@@ -73,19 +105,19 @@ internal class sRectangleTest {
 
     @Test
     fun intersectionShouldReturnZeroWidthHeightRectangleIfNoIntersection() {
-        with(Rectangle(0f, 0f, 10f, 15f).intersection(Rectangle(100f, 1000f, 10f, 15f))) {
+        with(rectangle(0f, 0f, 10f, 15f).intersection(rectangle(100f, 1000f, 10f, 15f))) {
             assertThat(x).isEqualTo(0f)
             assertThat(y).isEqualTo(0f)
             assertThat(width).isEqualTo(0f)
             assertThat(height).isEqualTo(0f)
         }
-        with(Rectangle(0f, 0f, 10f, 10f).intersection(Rectangle(10f, 0f, 10f, 10f))) {
+        with(rectangle(0f, 0f, 10f, 10f).intersection(rectangle(10f, 0f, 10f, 10f))) {
             assertThat(x).isEqualTo(0f)
             assertThat(y).isEqualTo(0f)
             assertThat(width).isEqualTo(0f)
             assertThat(height).isEqualTo(0f)
         }
-        with(Rectangle(0f, 0f, 10f, 10f).intersection(Rectangle(0f, 10f, 10f, 10f))) {
+        with(rectangle(0f, 0f, 10f, 10f).intersection(rectangle(0f, 10f, 10f, 10f))) {
             assertThat(x).isEqualTo(0f)
             assertThat(y).isEqualTo(0f)
             assertThat(width).isEqualTo(0f)
@@ -95,49 +127,49 @@ internal class sRectangleTest {
 
     @Test
     fun horizontalCollisionDirectionShouldReturnTrueIfRightOfCenter() {
-        val rect1 = Rectangle(0f, 0f, 20f, 20f)
-        var rect2 = Rectangle(10f, 0f, 20f, 20f)
+        val rect1 = rectangle(0f, 0f, 20f, 20f)
+        var rect2 = rectangle(10f, 0f, 20f, 20f)
 
         assertThat(rect1.horizontalCollisionDirection(rect2)).isTrue()
-        rect2 = Rectangle(1f, 20f, 20f, 20f)
+        rect2 = rectangle(1f, 20f, 20f, 20f)
         assertThat(rect1.horizontalCollisionDirection(rect2)).isTrue()
     }
 
     @Test
     fun horizontalCollisionDirectionShouldReturnFalseIfLeftOfCenter() {
-        val rect1 = Rectangle(0f, 0f, 20f, 20f)
-        var rect2 = Rectangle(-1f, 0f, 20f, 20f)
+        val rect1 = rectangle(0f, 0f, 20f, 20f)
+        var rect2 = rectangle(-1f, 0f, 20f, 20f)
 
         assertThat(rect1.horizontalCollisionDirection(rect2)).isFalse()
-        rect2 = Rectangle(0f, 20f, 20f, 20f)
+        rect2 = rectangle(0f, 20f, 20f, 20f)
         assertThat(rect1.horizontalCollisionDirection(rect2)).isFalse()
     }
 
     @Test
     fun verticalCollisionDirectionShouldReturnTrueIfBelowCenter() {
-        val rect1 = Rectangle(0f, 0f, 20f, 20f)
-        var rect2 = Rectangle(-1f, 550f, 20f, 20f)
+        val rect1 = rectangle(0f, 0f, 20f, 20f)
+        var rect2 = rectangle(-1f, 550f, 20f, 20f)
 
         assertThat(rect1.verticalCollisionDirection(rect2)).isTrue()
-        rect2 = Rectangle(0f, 1f, 20f, 20f)
+        rect2 = rectangle(0f, 1f, 20f, 20f)
         assertThat(rect1.verticalCollisionDirection(rect2)).isTrue()
     }
 
     @Test
     fun verticalCollisionDirectionShouldReturnFalseIfAboveCenter() {
-        val rect1 = Rectangle(0f, 0f, 20f, 20f)
-        var rect2 = Rectangle(-1f, -42f, 20f, 20f)
+        val rect1 = rectangle(0f, 0f, 20f, 20f)
+        var rect2 = rectangle(-1f, -42f, 20f, 20f)
 
         assertThat(rect1.verticalCollisionDirection(rect2)).isFalse()
-        rect2 = Rectangle(0f, 0f, 20f, 20f)
+        rect2 = rectangle(0f, 0f, 20f, 20f)
         assertThat(rect1.verticalCollisionDirection(rect2)).isFalse()
     }
 
     @Test
     fun intersectsShouldReturnFalseWhenTouchingSameLine() {
-        val rect1 = Rectangle(0f, 0f, 20f, 20f)
-        val rect2 = Rectangle(20f, 0f, 20f, 20f)
-        val rect3 = Rectangle(0f, 20f, 20f, 20f)
+        val rect1 = rectangle(0f, 0f, 20f, 20f)
+        val rect2 = rectangle(20f, 0f, 20f, 20f)
+        val rect3 = rectangle(0f, 20f, 20f, 20f)
 
         assertThat(rect1.intersects(rect2)).isFalse()
         assertThat(rect1.intersects(rect3)).isFalse()
@@ -145,31 +177,31 @@ internal class sRectangleTest {
 
     @Test
     fun minX_returnsMinimumX() {
-        assertThat(Rectangle(10f, 20f, 100f, 1000f).minX).isEqualTo(10f)
+        assertThat(rectangle(10f, 20f, 100f, 1000f).minX).isEqualTo(10f)
     }
 
     @Test
     fun maxX_returnsMaximumX() {
-        assertThat(Rectangle(10f, 20f, 100f, 1000f).maxX).isEqualTo(110f)
+        assertThat(rectangle(10f, 20f, 100f, 1000f).maxX).isEqualTo(110f)
     }
 
     @Test
     fun minY_returnsMinimumY() {
-        assertThat(Rectangle(10f, 20f, 100f, 1000f).minY).isEqualTo(20f)
+        assertThat(rectangle(10f, 20f, 100f, 1000f).minY).isEqualTo(20f)
     }
 
     @Test
     fun maxY_returnsMaximumY() {
-        assertThat(Rectangle(10f, 20f, 100f, 1000f).maxY).isEqualTo(1020f)
+        assertThat(rectangle(10f, 20f, 100f, 1000f).maxY).isEqualTo(1020f)
     }
 
     @Test
     fun centerX_returnsCenterX() {
-        assertThat(Rectangle(10f, 20f, 100f, 1000f).centerX).isEqualTo(60f)
+        assertThat(rectangle(10f, 20f, 100f, 1000f).centerX).isEqualTo(60f)
     }
 
     @Test
     fun centerY_returnsCenterY() {
-        assertThat(Rectangle(10f, 20f, 100f, 1000f).centerY).isEqualTo(520f)
+        assertThat(rectangle(10f, 20f, 100f, 1000f).centerY).isEqualTo(520f)
     }
 }

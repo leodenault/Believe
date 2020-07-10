@@ -103,7 +103,8 @@ public class PlayArea extends AbstractContainer {
   @Override
   public void setLocation(int x, int y) {
     if (rect != null) {
-      rect = new believe.geometry.Rectangle(x, y, rect.getWidth(), rect.getHeight());
+      rect.setX(x);
+      rect.setY(y);
     }
   }
 

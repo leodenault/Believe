@@ -1,6 +1,7 @@
 package believe.map.gui;
 
 import believe.core.display.Renderable;
+import believe.geometry.MutableRectangle;
 import believe.geometry.Rectangle;
 import believe.map.data.BackgroundSceneData;
 import believe.react.Observer;
@@ -12,7 +13,7 @@ import org.newdawn.slick.gui.GUIContext;
  * A GUI wrapper around an {@link Image} for displaying a horizontally repeating image in the
  * background of the scene.
  */
-public final class MapBackground implements Observer<Rectangle>, Renderable {
+public final class MapBackground implements Observer<MutableRectangle>, Renderable {
   private final BackgroundSceneData backgroundSceneData;
   private final float verticalWindowSpace;
   private final int mapHeight;
@@ -39,7 +40,7 @@ public final class MapBackground implements Observer<Rectangle>, Renderable {
   }
 
   @Override
-  public void valueChanged(Rectangle parentRect) {
+  public void valueChanged(MutableRectangle parentRect) {
     float parentYPositionPercent = parentRect.getY() / (mapHeight - parentRect.getHeight());
     float yPercent =
         verticalWindowSpace * parentYPositionPercent + backgroundSceneData.topYPosition();

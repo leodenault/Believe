@@ -1,6 +1,7 @@
 package believe.gui
 
 import believe.geometry.Rectangle
+import believe.geometry.rectangle
 import dagger.Reusable
 import org.newdawn.slick.gui.GUIContext
 import javax.inject.Inject
@@ -19,7 +20,7 @@ class GuiLayoutFactory @Inject internal constructor(
      * @param T the type of [GuiElement] created by [layoutBuilder].
      */
     inline fun <reified C, T : GuiElement> create(
-        layoutBuilder: LayoutBuilder<C, T>, positionData: Rectangle = Rectangle(
+        layoutBuilder: LayoutBuilder<C, T>, positionData: Rectangle = rectangle(
             x = 0f, y = 0f, width = guiContext.width.toFloat(), height = guiContext.height.toFloat()
         )
     ): T = if (Unit is C) {

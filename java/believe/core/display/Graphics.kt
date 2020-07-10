@@ -1,6 +1,7 @@
 package believe.core.display
 
 import believe.geometry.Rectangle
+import believe.geometry.rectangle
 import org.newdawn.slick.Color
 import org.newdawn.slick.Font
 import org.newdawn.slick.Graphics
@@ -8,7 +9,6 @@ import org.newdawn.slick.Image
 import org.newdawn.slick.geom.Shape
 import java.util.*
 import kotlin.math.floor
-import kotlin.math.round
 
 /**
  * A graphics context used in rendering information to the screen.
@@ -58,7 +58,7 @@ open class Graphics(private val slickGraphics: Graphics) {
 
     /** Returns the current rendering border and reinstates the previous one. */
     open fun popClip(): Rectangle? = with(slickGraphics) {
-        clip?.let { Rectangle.from(clip) }.also {
+        clip?.let { rectangle(clip) }.also {
             clip = clipContexts.poll()
         }
     }

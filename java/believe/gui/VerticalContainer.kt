@@ -2,8 +2,8 @@ package believe.gui
 
 import believe.core.display.Graphics
 import believe.geometry.Rectangle
+import believe.geometry.rectangle
 import javax.inject.Inject
-import kotlin.math.round
 
 /** A container for grouping GUI elements together in a common layout. */
 class VerticalContainer private constructor(
@@ -72,11 +72,8 @@ class VerticalContainer private constructor(
                 throw IndexOutOfBoundsException("No more children to position.")
             }
 
-            return Rectangle(
-                x,
-                baseY + spacing + (spacing + height) * currentChildIndex++,
-                width,
-                height
+            return rectangle(
+                x, baseY + spacing + (spacing + height) * currentChildIndex++, width, height
             )
         }
 

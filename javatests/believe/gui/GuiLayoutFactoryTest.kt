@@ -1,6 +1,7 @@
 package believe.gui
 
 import believe.geometry.Rectangle
+import believe.geometry.rectangle
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.check
@@ -64,6 +65,6 @@ internal class GuiLayoutFactoryTest {
         private const val CONTEXT_2 = 123
         private const val GUI_CONTEXT_WIDTH = 190
         private const val GUI_CONTEXT_HEIGHT = 908
-        private val POSITION_DATA = Rectangle(1f, 2f, 3f, 4f)
+        private val POSITION_DATA = rectangle(1f, 2f, 3f, 4f)
     }
 }

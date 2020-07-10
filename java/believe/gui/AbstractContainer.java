@@ -1,14 +1,13 @@
 package believe.gui;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
-import believe.geometry.Rectangle;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.GUIContext;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /** A simple GUI container for holding components. */
 public abstract class AbstractContainer extends ComponentBase implements Iterable<ComponentBase> {
@@ -68,7 +67,8 @@ public abstract class AbstractContainer extends ComponentBase implements Iterabl
         }
       }
 
-      rect = new Rectangle(x, y, rect.getWidth(), rect.getHeight());
+      rect.setX(x);
+      rect.setY(y);
     }
   }
 

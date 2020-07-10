@@ -4,36 +4,106 @@ import kotlin.math.max
 import kotlin.math.min
 
 /** An object containing information on a rectangular shape. */
-class Rectangle internal constructor(internalRect: org.newdawn.slick.geom.Rectangle) {
-    constructor(
-        x: Float, y: Float, width: Float, height: Float
-    ) : this(org.newdawn.slick.geom.Rectangle(x, y, width, height))
-
-    constructor(configure: XBuilder.() -> Builder) : this(configure(Builder()).innerRectangle)
-
+interface Rectangle {
     /** The X value of this [Rectangle]. */
-    val x = internalRect.x
+    val x: Float
     /** The minimum X value of this [Rectangle]. */
-    val minX = internalRect.minX
+    val minX: Float
     /** The maximum X value of this [Rectangle]. */
-    val maxX = internalRect.maxX
+    val maxX: Float
     /** The Y value of this [Rectangle]. */
-    val y = internalRect.y
+    val y: Float
     /** The minimum Y value of this [Rectangle]. */
-    val minY = internalRect.minY
+    val minY: Float
     /** The maximum Y value of this [Rectangle]. */
-    val maxY = internalRect.maxY
+    val maxY: Float
     /** The value of X at the center of this [Rectangle]. */
-    val centerX = internalRect.centerX
+    val centerX: Float
     /** The value of Y at the center of this [Rectangle]. */
-    val centerY = internalRect.centerY
+    val centerY: Float
     /** The width of this [Rectangle]. */
-    val width = internalRect.width
+    val width: Float
     /** The height of this [Rectangle]. */
-    val height = internalRect.height
+    val height: Float
 
     /** Returns whether this [Rectangle] instersects with [other]. */
-    fun intersects(other: Rectangle): Boolean {
+    fun intersects(other: Rectangle): Boolean
+
+    /** Returns a [Rectangle] that is the intersection of this and [other]. */
+    fun intersection(other: Rectangle): Rectangle
+
+    /**
+     * Returns true if the direction of the collision is to the right, otherwise false.
+     *
+     * @param other the rectangle that must move as a result of the collision.
+     */
+    fun horizontalCollisionDirection(other: Rectangle): Boolean
+
+    /**
+     * Returns true if the direction of the collision is down, otherwise false
+     *
+     * @param other the rectangle that must move as a result of the collision.
+     */
+    fun verticalCollisionDirection(other: Rectangle): Boolean
+
+    /** Returns a [org.newdawn.slick.geom.Rectangle] based on this instance. */
+    fun asSlickRectangle(): org.newdawn.slick.geom.Rectangle
+}
+
+/** An object containing information on a rectangular shape with mutable properties. */
+interface MutableRectangle : Rectangle {
+    override var x: Float
+    override var y: Float
+    override var centerX: Float
+    override var centerY: Float
+    override var width: Float
+    override var height: Float
+}
+
+private class RectangleImpl internal constructor(
+    private val internalRect: org.newdawn.slick.geom.Rectangle
+) : Rectangle, MutableRectangle {
+
+    override var x: Float
+        get() = internalRect.x
+        set(value) {
+            internalRect.x = value
+        }
+    override val minX: Float
+        get() = internalRect.minX
+    override val maxX: Float
+        get() = internalRect.maxX
+    override var y: Float
+        get() = internalRect.y
+        set(value) {
+            internalRect.y = value
+        }
+    override val minY: Float
+        get() = internalRect.minY
+    override val maxY: Float
+        get() = internalRect.maxY
+    override var centerX: Float
+        get() = internalRect.centerX
+        set(value) {
+            internalRect.centerX = value
+        }
+    override var centerY: Float
+        get() = internalRect.centerY
+        set(value) {
+            internalRect.centerY = value
+        }
+    override var width: Float
+        get() = internalRect.width
+        set(value) {
+            internalRect.width = value
+        }
+    override var height: Float
+        get() = internalRect.height
+        set(value) {
+            internalRect.height = value
+        }
+
+    override fun intersects(other: Rectangle): Boolean {
         if (x >= other.x + other.width || x + width <= other.x) {
             return false
         }
@@ -41,40 +111,33 @@ class Rectangle internal constructor(internalRect: org.newdawn.slick.geom.Rectan
     }
 
     /** Returns a [Rectangle] that is the intersection of this and [other]. */
-    fun intersection(other: Rectangle): Rectangle {
+    override fun intersection(other: Rectangle): Rectangle {
         if (!this.intersects(other)) {
-            return Rectangle(0f, 0f, 0f, 0f)
+            return RectangleImpl(org.newdawn.slick.geom.Rectangle(0f, 0f, 0f, 0f))
         }
 
         if (other.minX >= minX && other.maxX <= maxX && other.minY >= minY && other.maxY <= maxY) {
-            return Rectangle(other.x, other.y, other.width, other.height)
+            return RectangleImpl(
+                org.newdawn.slick.geom.Rectangle(
+                    other.x, other.y, other.width, other.height
+                )
+            )
         } else if (minX >= other.minX && maxX <= other.maxX && minY >= other.minY && maxY <= other.maxY) {
-            return Rectangle(x, y, width, height)
+            return RectangleImpl(org.newdawn.slick.geom.Rectangle(x, y, width, height))
         }
 
         val ix = max(other.minX, minX)
         val iy = max(other.minY, minY)
         val iwidth = min(other.maxX, maxX) - ix
         val iheight = min(other.maxY, maxY) - iy
-        return Rectangle(ix, iy, iwidth, iheight)
+        return RectangleImpl(org.newdawn.slick.geom.Rectangle(ix, iy, iwidth, iheight))
     }
 
-    /**
-     * Returns true if the direction of the collision is to the right, otherwise false.
-     *
-     * @param other the rectangle that must move as a result of the collision.
-     */
-    fun horizontalCollisionDirection(other: Rectangle) = other.centerX > this.centerX
+    override fun horizontalCollisionDirection(other: Rectangle) = other.centerX > this.centerX
 
-    /**
-     * Returns true if the direction of the collision is down, otherwise false
-     *
-     * @param other the rectangle that must move as a result of the collision.
-     */
-    fun verticalCollisionDirection(other: Rectangle) = other.centerY > this.centerY
+    override fun verticalCollisionDirection(other: Rectangle) = other.centerY > this.centerY
 
-    /** Returns a [org.newdawn.slick.geom.Rectangle] based on this instance. */
-    fun asSlickRectangle() = org.newdawn.slick.geom.Rectangle(x, y, width, height)
+    override fun asSlickRectangle() = org.newdawn.slick.geom.Rectangle(x, y, width, height)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -96,70 +159,20 @@ class Rectangle internal constructor(internalRect: org.newdawn.slick.geom.Rectan
     override fun toString(): String {
         return "Rectangle(x=$x, y=$y, width=$width, height=$height)"
     }
-
-
-    /** A builder for defining the X position of a [Rectangle]. */
-    interface XBuilder {
-        /** Sets the X position of the [Rectangle] to [x]. */
-        fun setX(x: Float): YBuilder
-
-        /** Sets the center X position of the [Rectangle] to [centerX]. */
-        fun setCenterX(centerX: Float): YBuilder
-    }
-
-    /** A builder for defining the Y position of a [Rectangle]. */
-    interface YBuilder {
-        /** Sets the Y position of the [Rectangle] to [y]. */
-        fun setY(y: Float): WidthBuilder
-
-        /** Sets the center Y position of the [Rectangle] to [centerY]. */
-        fun setCenterY(centerY: Float): WidthBuilder
-    }
-
-    /** A builder for defining the width of a [Rectangle]. */
-    interface WidthBuilder {
-        /** Sets the width of the [Rectangle] to [width]. */
-        fun setWidth(width: Float): HeightBuilder
-    }
-
-    /** A builder for defining the height of a [Rectangle]. */
-    interface HeightBuilder {
-        /** Sets the height of the [Rectangle] to [height]. */
-        fun setHeight(height: Float): Builder
-    }
-
-    /** A builder of [Rectangle] instances. */
-    class Builder internal constructor() : XBuilder, YBuilder, WidthBuilder, HeightBuilder {
-        internal val innerRectangle = org.newdawn.slick.geom.Rectangle(0f, 0f, 0f, 0f)
-
-        override fun setX(x: Float): YBuilder = this.also { innerRectangle.x = x }
-
-        override fun setCenterX(centerX: Float): YBuilder =
-            this.also { innerRectangle.centerX = centerX }
-
-        override fun setY(y: Float): WidthBuilder = this.also { innerRectangle.y = y }
-
-        override fun setCenterY(centerY: Float): WidthBuilder =
-            this.also { innerRectangle.centerY = centerY }
-
-        override fun setWidth(width: Float): HeightBuilder =
-            this.also { innerRectangle.width = width }
-
-        override fun setHeight(height: Float): Builder =
-            this.also { innerRectangle.height = height }
-
-        fun build() = Rectangle(innerRectangle)
-    }
-
-    companion object {
-        /** Constructs a [Rectangle] from a Slick [org.newdawn.slick.geom.Rectangle]. */
-        @JvmStatic
-        fun from(slickRectangle: org.newdawn.slick.geom.Rectangle) = with(slickRectangle) {
-            Rectangle(x, y, width, height)
-        }
-
-        /** Returns a new builder instance for constructing a [Rectangle]. */
-        @JvmStatic
-        fun newBuilder(): XBuilder = Builder()
-    }
 }
+
+/** Returns a [Rectangle] based on [x], [y], [width], and [height]. */
+fun rectangle(x: Float, y: Float, width: Float, height: Float): Rectangle =
+    mutableRectangle(x, y, width, height)
+
+/** Returns a [Rectangle] based on the properties within [slickRectangle]. */
+fun rectangle(slickRectangle: org.newdawn.slick.geom.Rectangle): Rectangle =
+    with(slickRectangle) { mutableRectangle(x, y, width, height) }
+
+/** Returns a [MutableRectangle] based on [x], [y], [width], and [height]. */
+fun mutableRectangle(x: Float, y: Float, width: Float, height: Float): MutableRectangle =
+    RectangleImpl(org.newdawn.slick.geom.Rectangle(x, y, width, height))
+
+/** Returns a [MutableRectangle] based on the properties within [slickRectangle]. */
+fun mutableRectangle(slickRectangle: org.newdawn.slick.geom.Rectangle): MutableRectangle =
+    with(slickRectangle) { mutableRectangle(x, y, width, height) }

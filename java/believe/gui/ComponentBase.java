@@ -1,8 +1,10 @@
 package believe.gui;
 
-import believe.core.display.Renderable;
-import believe.geometry.Rectangle;
+import static believe.geometry.RectangleKt.mutableRectangle;
 
+import believe.core.display.Renderable;
+import believe.geometry.MutableRectangle;
+import believe.geometry.Rectangle;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
@@ -11,7 +13,7 @@ import org.newdawn.slick.gui.GUIContext;
 public abstract class ComponentBase extends AbstractComponent implements Renderable {
 
   protected boolean rendering;
-  protected Rectangle rect;
+  protected MutableRectangle rect;
 
   /**
    * Creates a new ComponentBase.
@@ -44,7 +46,7 @@ public abstract class ComponentBase extends AbstractComponent implements Rendera
    */
   public ComponentBase(GUIContext container, int x, int y, int width, int height) {
     super(container);
-    this.rect = new Rectangle(x, y, width, height);
+    this.rect = mutableRectangle(x, y, width, height);
     this.rendering = true;
     // These are necessary because Slick makes it possible to enter an infinite loop. It
     // unfortunately has the capacity for modifying the list of input listeners it's iterating over.
@@ -58,7 +60,7 @@ public abstract class ComponentBase extends AbstractComponent implements Rendera
   }
 
   public void setHeight(int height) {
-    rect = new Rectangle(rect.getX(), rect.getY(), rect.getWidth(), height);
+    rect.setHeight(height);
   }
 
   @Override
@@ -67,7 +69,7 @@ public abstract class ComponentBase extends AbstractComponent implements Rendera
   }
 
   public void setWidth(int width) {
-    rect = new Rectangle(rect.getX(), rect.getY(), width, rect.getHeight());
+    rect.setWidth(width);
   }
 
   @Override
@@ -83,7 +85,8 @@ public abstract class ComponentBase extends AbstractComponent implements Rendera
   @Override
   public void setLocation(int x, int y) {
     if (rect != null) {
-      rect = new Rectangle(x, y, rect.getWidth(), rect.getHeight());
+      rect.setX(x);
+      rect.setY(y);
       resetLayout();
     }
   }
