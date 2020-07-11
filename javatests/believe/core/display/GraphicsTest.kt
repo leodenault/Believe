@@ -95,6 +95,34 @@ internal class GraphicsTest {
         assertThat(graphics.popClip()).isEqualTo(pushedClip1)
     }
 
+    @Test
+    fun pushTransform_delegatesToSlickGraphics() {
+        graphics.pushTransform()
+
+        verify(slickGraphics).pushTransform()
+    }
+
+    @Test
+    fun popTransform_delegatesToSlickGraphics() {
+        graphics.popTransform()
+
+        verify(slickGraphics).popTransform()
+    }
+
+    @Test
+    fun scale_delegatesToSlickGraphics() {
+        graphics.scale(123f, 234f)
+
+        verify(slickGraphics).scale(123f, 234f)
+    }
+
+    @Test
+    fun translate_delegatesToSlickGraphics() {
+        graphics.translate(4.999f, 3.45f)
+
+        verify(slickGraphics).translate(4.999f, 3.45f)
+    }
+
     companion object {
         fun fakeSlickGraphics() = object : org.newdawn.slick.Graphics() {
             private var clip: org.newdawn.slick.geom.Rectangle? = null

@@ -62,4 +62,12 @@ open class Graphics(private val slickGraphics: Graphics) {
             clip = clipContexts.poll()
         }
     }
+
+    open fun pushTransform() = slickGraphics.pushTransform()
+
+    open fun popTransform() = slickGraphics.popTransform()
+
+    open fun scale(scaleX: Float, scaleY: Float) = slickGraphics.scale(scaleX, scaleY)
+
+    open fun translate(x: Float, y: Float) = slickGraphics.translate(x, y)
 }
