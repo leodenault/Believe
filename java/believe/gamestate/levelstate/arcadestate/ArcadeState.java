@@ -39,6 +39,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -90,7 +91,8 @@ public class ArcadeState extends LevelState
         new FlowComponentBuilder(container, (int) (0.2 * container.getWidth()));
     try {
       new FlowFileParser(
-              new InputStreamReader(resourceManager.getResourceAsStream("levelFlowFiles/Drive.lfl")),
+              new InputStreamReader(
+                  resourceManager.getResourceAsStream("levelFlowFiles/Drive.lfl")),
               builder)
           .parse();
       component = builder.buildFlowComponent();
@@ -105,7 +107,7 @@ public class ArcadeState extends LevelState
       throw new RuntimeException(
           String.format(
               "Could not start arcade state because of the following exception:\n\n %s\n%s",
-              e.getMessage(), e.getStackTrace()));
+              e.getMessage(), Arrays.toString(e.getStackTrace())));
     }
   }
 
