@@ -70,7 +70,7 @@ class Camera implements Renderable {
   }
 
   void addAllObservers(Collection<? extends Observer<MutableRectangle>> observers) {
-    rect.addAllObservers(observers);
+    observers.forEach(rect::addObserver);
   }
 
   void addChild(Renderable child) {

@@ -52,12 +52,7 @@ public final class ObservableValue<T> implements Observable<T>, Supplier<T> {
   @Override
   public ObservableValue<T> addObserver(Observer<T> observer) {
     observers.add(observer);
-    return this;
-  }
-
-  @Override
-  public ObservableValue<T> addAllObservers(Collection<? extends Observer<T>> observers) {
-    this.observers.addAll(observers);
+    observer.valueChanged(value);
     return this;
   }
 
