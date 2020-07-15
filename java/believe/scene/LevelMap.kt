@@ -6,6 +6,8 @@ import believe.map.data.MapData
 class LevelMap private constructor(
     initialX: Float,
     initialY: Float,
+    val width: Float,
+    val height: Float,
     private val rearLayers: List<LevelMapLayer>,
     private val sceneElements: List<SceneElement>,
     private val frontLayers: List<LevelMapLayer>
@@ -50,18 +52,27 @@ class LevelMap private constructor(
          * rendered in order.
          */
         fun create(mapData: MapData, extraSceneElements: List<SceneElement>): LevelMap {
-            val sceneElements = mapData.tiledMapData().objectLayers().flatMap {
+            val tiledMapData = mapData.tiledMapData()
+            val sceneElements = tiledMapData.objectLayers().flatMap {
                 it.generatedMapEntityData().sceneElements()
             } + extraSceneElements
 
             val rearLayers = mutableListOf<LevelMapLayer>()
             val frontLayers = mutableListOf<LevelMapLayer>()
-            mapData.tiledMapData().layers().filter { it.isVisible }.forEach {
+            tiledMapData.layers().filter { it.isVisible }.forEach {
                 val layer = LevelMapLayer(it.tiledMap(), it.layerId(), x, y)
                 if (it.isFrontLayer) frontLayers.add(layer) else rearLayers.add(layer)
             }
 
-            return LevelMap(x, y, rearLayers, sceneElements, frontLayers)
+            return LevelMap(
+                x,
+                y,
+                tiledMapData.width().toFloat(),
+                tiledMapData.height().toFloat(),
+                rearLayers,
+                sceneElements,
+                frontLayers
+            )
         }
     }
 }
