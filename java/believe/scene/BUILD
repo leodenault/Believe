@@ -6,10 +6,14 @@ package(
 
 kt_jvm_library(
     name = "scene",
-    srcs = ["SceneElement.kt"],
+    srcs = [
+        "Camera.kt",
+        "SceneElement.kt",
+    ],
     deps = [
         "//java/believe/core",
         "//java/believe/core/display:display_v2",
+        "//java/believe/react",
     ],
 )
 

@@ -1,6 +1,9 @@
 package believe.character
 
 import believe.core.display.Graphics
+import believe.geometry.Point
+import believe.geometry.Rectangle
+import believe.geometry.mutableRectangle
 import believe.geometry.rectangle
 import believe.map.collidable.tile.CollidableTileCollisionHandler.TileCollidable
 import believe.physics.collision.Collidable
@@ -8,6 +11,9 @@ import believe.physics.collision.CollisionHandler
 import believe.physics.damage.DamageBoxCollidable
 import believe.physics.manager.PhysicsManageable
 import believe.physics.manager.PhysicsManager
+import believe.react.Observable
+import believe.react.ObservableValue
+import believe.react.Observer
 import believe.scene.SceneElement
 import dagger.Reusable
 import javax.inject.Inject
@@ -19,13 +25,34 @@ class CharacterV2 private constructor(
     private val verticalMovementHandler: VerticalMovementHandler,
     private val damageListener: DamageListener,
     private val rightCompatibleHandlers: Set<CollisionHandler<out Collidable<*>, in CharacterV2>>,
-    override var x: Float,
-    override var y: Float,
+    initialX: Float,
+    initialY: Float,
     private val faction: Faction
-) : SceneElement, TileCollidable<CharacterV2>, DamageBoxCollidable<CharacterV2>, PhysicsManageable {
+) : SceneElement, TileCollidable<CharacterV2>, DamageBoxCollidable<CharacterV2>, PhysicsManageable,
+    Observable<Rectangle> {
+
+    private val bounds = mutableRectangle(
+        initialX,
+        initialY,
+        stateMachine.animation.width.toFloat(),
+        stateMachine.animation.height.toFloat()
+    )
+    private val observers = mutableListOf<Observer<Rectangle>>()
 
     var focus = MAX_FOCUS
         private set
+    override var x: Float
+        get() = bounds.x
+        set(value) {
+            bounds.x = value
+            observers.forEach { it.valueChanged(bounds) }
+        }
+    override var y: Float
+        get() = bounds.y
+        set(value) {
+            bounds.y = value
+            observers.forEach { it.valueChanged(bounds) }
+        }
 
     override fun setLocation(x: Float, y: Float) {
         this.x = x
@@ -90,6 +117,11 @@ class CharacterV2 private constructor(
     )
 
     override fun getFaction() = faction
+
+    override fun addObserver(observer: Observer<Rectangle>): Observable<Rectangle> {
+        observers.add(observer)
+        return this
+    }
 
     interface DamageListener {
         fun damageInflicted(currentFocus: Float, inflictor: Faction)
