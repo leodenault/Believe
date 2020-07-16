@@ -54,7 +54,7 @@ class LevelStateV2 constructor(
             object : Observable<Point> {
                 override fun addObserver(camera: Observer<Point>): Observable<Point> {
                     character.addObserver { newValue ->
-                        camera.valueChanged(point(newValue.centerX, newValue.centerY))
+                        camera.valueChanged(newValue.center)
                     }
                     return this
                 }

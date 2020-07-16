@@ -1,7 +1,6 @@
 package believe.character
 
 import believe.core.display.Graphics
-import believe.geometry.Point
 import believe.geometry.Rectangle
 import believe.geometry.mutableRectangle
 import believe.geometry.rectangle
@@ -12,7 +11,6 @@ import believe.physics.damage.DamageBoxCollidable
 import believe.physics.manager.PhysicsManageable
 import believe.physics.manager.PhysicsManager
 import believe.react.Observable
-import believe.react.ObservableValue
 import believe.react.Observer
 import believe.scene.SceneElement
 import dagger.Reusable
