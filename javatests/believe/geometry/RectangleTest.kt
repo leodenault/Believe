@@ -3,7 +3,7 @@ package believe.geometry
 import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test
 
-internal class sRectangleTest {
+internal class RectangleTest {
     @Test
     fun rectangle_fromProperties_buildsCorrectRectangle() {
         with(rectangle(1.2f, 3.4f, 5.6f, 7.8f)) {
@@ -203,5 +203,26 @@ internal class sRectangleTest {
     @Test
     fun centerY_returnsCenterY() {
         assertThat(rectangle(10f, 20f, 100f, 1000f).centerY).isEqualTo(520f)
+    }
+
+    @Test
+    fun center_returnsCenterCoordinates() {
+        val rectangle = rectangle(10f, 10f, 100f, 100f)
+
+        with(rectangle.center) {
+            assertThat(x).isEqualTo(rectangle.centerX)
+            assertThat(y).isEqualTo(rectangle.centerY)
+        }
+    }
+
+    @Test
+    fun center_rectangleIsMutated_returnsCenterCoordinates() {
+        val rectangle = mutableRectangle(10f, 10f, 100f, 100f)
+        rectangle.x = 100f
+
+        with(rectangle.center) {
+            assertThat(x).isEqualTo(rectangle.centerX)
+            assertThat(y).isEqualTo(rectangle.centerY)
+        }
     }
 }

@@ -25,6 +25,8 @@ interface Rectangle {
     val width: Float
     /** The height of this [Rectangle]. */
     val height: Float
+    /** The center of this [Rectangle] expressed as a [Point]. */
+    val center: Point
 
     /** Returns whether this [Rectangle] instersects with [other]. */
     fun intersects(other: Rectangle): Boolean
@@ -102,6 +104,8 @@ private class RectangleImpl internal constructor(
         set(value) {
             internalRect.height = value
         }
+    override val center: Point
+        get() = DeferredPoint(this::centerX, this::centerY)
 
     override fun intersects(other: Rectangle): Boolean {
         if (x >= other.x + other.width || x + width <= other.x) {
@@ -158,6 +162,15 @@ private class RectangleImpl internal constructor(
 
     override fun toString(): String {
         return "Rectangle(x=$x, y=$y, width=$width, height=$height)"
+    }
+
+    private class DeferredPoint(
+        internal val getX: () -> Float, internal val getY: () -> Float
+    ) : Point {
+        override val x: Float
+            get() = getX()
+        override val y: Float
+            get() = getY()
     }
 }
 
