@@ -4,9 +4,7 @@ import believe.logging.testing.VerifiableLogSystem.LogSeverity;
 import com.google.auto.value.AutoValue;
 import javax.annotation.Nullable;
 
-/**
- * A message that was logged with a logger.
- */
+/** A message that was logged with a logger. */
 @AutoValue
 public abstract class LogMessage {
   public abstract LogSeverity logSeverity();
@@ -30,5 +28,17 @@ public abstract class LogMessage {
     public abstract Builder setMessage(String message);
 
     public abstract LogMessage build();
+  }
+
+  @Override
+  public String toString() {
+    Throwable throwable = throwable();
+    String message = message();
+    return "Severity:  "
+        + logSeverity().name()
+        + "\nThrowable: "
+        + (throwable == null ? "None" : throwable.getClass().getSimpleName())
+        + "\nMessage:   "
+        + (message == null || message.isEmpty() ? "None" : "\"" + message + "\"");
   }
 }

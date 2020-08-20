@@ -8,7 +8,7 @@ import believe.proto.TextProtoParser
 import dagger.Reusable
 import org.newdawn.slick.util.Log
 import java.io.ByteArrayInputStream
-import believe.util.KotlinHelpers.whenEmpty
+import believe.util.KotlinHelpers.whenNull
 import javax.inject.Inject
 
 /** Default implementation of [TiledCommandParser]. */
@@ -20,7 +20,7 @@ internal class TiledCommandParserImpl @Inject constructor(
 ) : TiledCommandParser {
 
     override fun parseTiledCommand(propertyProvider: PropertyProvider): Command? =
-        propertyProvider.getProperty(commandParameter).whenEmpty {
+        propertyProvider.getProperty(commandParameter).whenNull {
             Log.error("Expected to find a '$commandParameter' parameter.")
         }?.let { commandText ->
             textProtoParser.parse(ByteArrayInputStream(commandText.toByteArray()))

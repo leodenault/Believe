@@ -6,7 +6,7 @@ import believe.datamodel.MutableValue;
 import believe.map.collidable.command.CollidableCommandCollisionHandler;
 import believe.map.collidable.tile.CollidableTileCollisionHandler;
 import believe.map.io.ObjectParser;
-import believe.map.tiled.EntityType;
+import believe.map.data.EntityType;
 import believe.physics.collision.Collidable;
 import believe.physics.collision.CollisionHandler;
 import believe.physics.damage.DamageBoxCollisionHandler;
@@ -59,10 +59,11 @@ public abstract class PlayableDaggerModule {
   @Provides
   @IntoSet
   static ObjectParser provideEnemyCharacterGenerator(EnemyCharacterFactory enemyCharacterFactory) {
-    return (tiledObject, generatedMapEntityDataBuilder) -> {
-      if (tiledObject.entityType() == EntityType.ENEMY) {
+    return (entityType, tiledObject, generatedMapEntityDataBuilder) -> {
+      if (entityType == EntityType.ENEMY) {
         EnemyCharacter enemyCharacter =
-            enemyCharacterFactory.create(tiledObject.x(), tiledObject.y() + tiledObject.height());
+            enemyCharacterFactory.create(
+                (int) tiledObject.getX(), (int) (tiledObject.getY() + tiledObject.getHeight()));
         generatedMapEntityDataBuilder.addPhysicsManageable(enemyCharacter);
         // generatedMapEntityDataBuilder.addSceneElement(enemyCharacter);
       }

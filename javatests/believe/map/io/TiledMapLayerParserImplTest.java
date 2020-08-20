@@ -1,32 +1,32 @@
 package believe.map.io;
 
+import static believe.map.tiled.testing.TiledFakes.fakeLayer;
+import static believe.map.tiled.testing.TiledFakes.fakeTile;
+import static believe.util.MapEntry.entry;
+import static believe.util.Util.hashMapOf;
 import static believe.util.Util.hashSetOf;
 import static com.google.common.truth.Truth.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonList;
 
+import believe.map.data.EntityType;
 import believe.map.data.GeneratedMapEntityData;
 import believe.map.data.LayerData;
-import believe.map.tiled.EntityType;
-import believe.map.tiled.Tile;
-import believe.map.tiled.TiledMap;
+import believe.map.data.TileData;
+import believe.map.tiled.Layer;
 import believe.physics.manager.PhysicsManageable;
 import believe.physics.manager.PhysicsManager;
-import believe.testing.mockito.InstantiateMocksIn;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 /** Unit tests for {@link TiledMapLayerParserImpl}. */
-@InstantiateMocksIn
 final class TiledMapLayerParserImplTest {
   private static final class FakePhysicsManageable implements PhysicsManageable {
-    final List<Tile> tiles = new ArrayList<>();
+    final List<TileData> tiles = new ArrayList<>();
 
     @Override
     public void addToPhysicsManager(PhysicsManager physicsManager) {}
@@ -42,18 +42,12 @@ final class TiledMapLayerParserImplTest {
       new TiledMapLayerParserImpl(
           IS_FRONT_PROPERTY, IS_VISIBLE_PROPERTY, ENTITY_TYPE_PROPERTY, tileParsers);
 
-  @Mock private TiledMap tiledMap;
-
   @Test
   void parseLayer_propertiesDoNotExist_returnsLayerWithDefaults() {
-    when(tiledMap.getLayerProperty(/* layerIndex= */ 0, IS_VISIBLE_PROPERTY))
-        .thenReturn(Optional.empty());
-    when(tiledMap.getLayerProperty(/* layerIndex= */ 0, IS_FRONT_PROPERTY))
-        .thenReturn(Optional.empty());
-
-    assertThat(parser.parseLayer(tiledMap, /* layerId= */ 0))
+    Layer layer = fakeLayer();
+    assertThat(parser.parseLayer(layer))
         .isEqualTo(
-            LayerData.newBuilder(tiledMap, /* layerId= */ 0)
+            LayerData.newBuilder(layer)
                 .setIsFrontLayer(/* isFrontLayer= */ false)
                 .setIsVisible(/* isVisible= */ true)
                 .setGeneratedMapEntityData(GeneratedMapEntityData.newBuilder().build())
@@ -62,14 +56,11 @@ final class TiledMapLayerParserImplTest {
 
   @Test
   void parseLayer_propertiesHaveErrors_returnsLayerWithDefaults() {
-    when(tiledMap.getLayerProperty(/* layerIndex= */ 0, IS_FRONT_PROPERTY))
-        .thenReturn(Optional.of("987"));
-    when(tiledMap.getLayerProperty(/* layerIndex= */ 0, IS_VISIBLE_PROPERTY))
-        .thenReturn(Optional.of("nope"));
-
-    assertThat(parser.parseLayer(tiledMap, /* layerId= */ 0))
+    Layer layer =
+        fakeLayer(hashMapOf(entry(IS_FRONT_PROPERTY, "987"), entry(IS_VISIBLE_PROPERTY, "nope")));
+    assertThat(parser.parseLayer(layer))
         .isEqualTo(
-            LayerData.newBuilder(tiledMap, /* layerId= */ 0)
+            LayerData.newBuilder(layer)
                 .setIsFrontLayer(/* isFrontLayer= */ false)
                 .setIsVisible(/* isVisible= */ true)
                 .setGeneratedMapEntityData(GeneratedMapEntityData.newBuilder().build())
@@ -78,26 +69,23 @@ final class TiledMapLayerParserImplTest {
 
   @Test
   void parseLayer_propertiesExist_returnsLayerWithValues() {
-    when(tiledMap.getLayerProperty(/* layerIndex= */ 0, IS_FRONT_PROPERTY))
-        .thenReturn(Optional.of("true"));
-    when(tiledMap.getLayerProperty(/* layerIndex= */ 0, IS_VISIBLE_PROPERTY))
-        .thenReturn(Optional.of("true"));
-    when(tiledMap.getLayerProperty(/* layerIndex= */ 1, IS_FRONT_PROPERTY))
-        .thenReturn(Optional.of("false"));
-    when(tiledMap.getLayerProperty(/* layerIndex= */ 1, IS_VISIBLE_PROPERTY))
-        .thenReturn(Optional.of("false"));
+    Layer layer1 =
+        fakeLayer(hashMapOf(entry(IS_FRONT_PROPERTY, "true"), entry(IS_VISIBLE_PROPERTY, "true")));
+    Layer layer2 =
+        fakeLayer(
+            hashMapOf(entry(IS_FRONT_PROPERTY, "false"), entry(IS_VISIBLE_PROPERTY, "false")));
 
-    assertThat(parser.parseLayer(tiledMap, /* layerId= */ 0))
+    assertThat(parser.parseLayer(layer1))
         .isEqualTo(
-            LayerData.newBuilder(tiledMap, /* layerId= */ 0)
+            LayerData.newBuilder(layer1)
                 .setIsFrontLayer(/* isFrontLayer= */ true)
                 .setIsVisible(/* isVisible= */ true)
                 .setGeneratedMapEntityData(GeneratedMapEntityData.newBuilder().build())
                 .build());
 
-    assertThat(parser.parseLayer(tiledMap, /* layerId= */ 1))
+    assertThat(parser.parseLayer(layer2))
         .isEqualTo(
-            LayerData.newBuilder(tiledMap, /* layerId= */ 1)
+            LayerData.newBuilder(layer2)
                 .setIsFrontLayer(/* isFrontLayer= */ false)
                 .setIsVisible(/* isVisible= */ false)
                 .setGeneratedMapEntityData(GeneratedMapEntityData.newBuilder().build())
@@ -106,56 +94,56 @@ final class TiledMapLayerParserImplTest {
 
   @Test
   void parseLayer_tilesAreParsed_returnsLayerWithTiles() {
-    when(tiledMap.getLayerCount()).thenReturn(1);
-    when(tiledMap.getWidth()).thenReturn(2);
-    when(tiledMap.getHeight()).thenReturn(2);
-    when(tiledMap.getTileWidth()).thenReturn(10);
-    when(tiledMap.getTileHeight()).thenReturn(100);
-    when(tiledMap.getTileId(anyInt(), anyInt(), anyInt())).thenReturn(1);
-    when(tiledMap.getTileProperty(anyInt(), eq(ENTITY_TYPE_PROPERTY)))
-        .thenReturn(Optional.of(EntityType.ENEMY.name()));
+    Layer layer =
+        fakeLayer(
+            emptyMap(),
+            Arrays.asList(
+                fakeTile(
+                    /* pixelX= */ 0,
+                    /* pixelY= */ 0,
+                    /* width= */ 10,
+                    /* height= */ 100,
+                    hashMapOf(entry(ENTITY_TYPE_PROPERTY, EntityType.ENEMY.name()))),
+                fakeTile(
+                    /* pixelX= */ 10,
+                    /* pixelY= */ 100,
+                    /* width= */ 10,
+                    /* height= */ 100,
+                    hashMapOf(entry(ENTITY_TYPE_PROPERTY, EntityType.ENEMY.name())))));
     FakePhysicsManageable physicsManageable = new FakePhysicsManageable();
     tileParsers.add(createTileParser(physicsManageable));
 
-    LayerData layerData = parser.parseLayer(tiledMap, /* layerId= */ 0);
+    LayerData layerData = parser.parseLayer(layer);
 
     assertThat(layerData.generatedMapEntityData().physicsManageables())
         .containsExactly(physicsManageable);
-    assertThat(physicsManageable.tiles.get(0).entityType()).isEqualTo(EntityType.ENEMY);
-    assertThat(physicsManageable.tiles.get(0).tileX()).isEqualTo(0);
-    assertThat(physicsManageable.tiles.get(0).pixelX()).isEqualTo(0);
-    assertThat(physicsManageable.tiles.get(0).tileY()).isEqualTo(0);
-    assertThat(physicsManageable.tiles.get(0).pixelY()).isEqualTo(0);
-    assertThat(physicsManageable.tiles.get(0).width()).isEqualTo(10);
-    assertThat(physicsManageable.tiles.get(0).height()).isEqualTo(100);
-    assertThat(physicsManageable.tiles.get(0).layerId()).isEqualTo(0);
-    assertThat(physicsManageable.tiles.get(3).entityType()).isEqualTo(EntityType.ENEMY);
-    assertThat(physicsManageable.tiles.get(3).tileX()).isEqualTo(1);
-    assertThat(physicsManageable.tiles.get(3).pixelX()).isEqualTo(10);
-    assertThat(physicsManageable.tiles.get(3).tileY()).isEqualTo(1);
-    assertThat(physicsManageable.tiles.get(3).pixelY()).isEqualTo(100);
-    assertThat(physicsManageable.tiles.get(3).width()).isEqualTo(10);
-    assertThat(physicsManageable.tiles.get(3).height()).isEqualTo(100);
-    assertThat(physicsManageable.tiles.get(3).layerId()).isEqualTo(0);
+    TileData tileData1 = physicsManageable.tiles.get(0);
+    TileData tileData2 = physicsManageable.tiles.get(1);
+    assertThat(tileData1.getEntityType()).isEqualTo(EntityType.ENEMY);
+    assertThat(tileData1.getPixelX()).isEqualTo(0);
+    assertThat(tileData1.getPixelY()).isEqualTo(0);
+    assertThat(tileData1.getWidth()).isEqualTo(10);
+    assertThat(tileData1.getHeight()).isEqualTo(100);
+    assertThat(tileData2.getEntityType()).isEqualTo(EntityType.ENEMY);
+    assertThat(tileData2.getPixelX()).isEqualTo(10);
+    assertThat(tileData2.getPixelY()).isEqualTo(100);
+    assertThat(tileData2.getWidth()).isEqualTo(10);
+    assertThat(tileData2.getHeight()).isEqualTo(100);
   }
 
   @Test
   void parseLayer_tileHasNoEntityType_createsTileDataWithNoneType() {
-    when(tiledMap.getLayerCount()).thenReturn(1);
-    when(tiledMap.getWidth()).thenReturn(1);
-    when(tiledMap.getHeight()).thenReturn(1);
-    when(tiledMap.getTileId(anyInt(), anyInt(), anyInt())).thenReturn(1);
-    when(tiledMap.getTileProperty(anyInt(), eq(ENTITY_TYPE_PROPERTY))).thenReturn(Optional.empty());
+    Layer layer = fakeLayer(emptyMap(), singletonList(fakeTile()));
     FakePhysicsManageable physicsManageable = new FakePhysicsManageable();
     tileParsers.add(createTileParser(physicsManageable));
 
-    parser.parseLayer(tiledMap, /* layerId= */ 0);
+    parser.parseLayer(layer);
 
-    assertThat(physicsManageable.tiles.get(0).entityType()).isEqualTo(EntityType.NONE);
+    assertThat(physicsManageable.tiles.get(0).getEntityType()).isEqualTo(EntityType.NONE);
   }
 
   private static TileParser createTileParser(FakePhysicsManageable fakePhysicsManageable) {
-    return (map, tile, generatedMapEntityDataBuilder) -> {
+    return (tile, generatedMapEntityDataBuilder) -> {
       fakePhysicsManageable.tiles.add(tile);
       generatedMapEntityDataBuilder.addPhysicsManageable(fakePhysicsManageable);
     };

@@ -11,8 +11,7 @@ java_junit5_test(
     deps = [
         "//java/believe/geometry",
         "//java/believe/map/collidable/tile",
-        "//java/believe/map/tiled",
-        "//java/believe/map/tiled/testing",
+        "//java/believe/map/data",
         "//java/believe/physics/collision",
         "//third_party/truth",
     ],
@@ -38,8 +37,7 @@ java_junit5_test(
     deps = [
         "//java/believe/geometry",
         "//java/believe/map/collidable/tile",
-        "//java/believe/map/tiled",
-        "//java/believe/map/tiled/testing",
+        "//java/believe/map/data",
         "//java/believe/testing/mockito",
         "//third_party/mockito",
         "//third_party/truth",

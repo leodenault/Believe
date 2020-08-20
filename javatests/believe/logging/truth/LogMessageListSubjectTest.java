@@ -10,15 +10,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Unit tests for {@link LogMessageListSubject}.
- */
+/** Unit tests for {@link LogMessageListSubject}. */
 public final class LogMessageListSubjectTest {
   private final List<LogMessage> logMessageList = new ArrayList<>();
 
   @Test
   public void hasPattern_messageListContainsPattern_succeeds() {
-    logMessages(LogMessage.newBuilder(LogSeverity.ERROR).setMessage("a logged message").build(),
+    logMessages(
+        LogMessage.newBuilder(LogSeverity.ERROR).setMessage("a logged message").build(),
         LogMessage.newBuilder(LogSeverity.DEBUG).setMessage("another logged message").build());
 
     LogMessageListSubject.withMessages(logMessageList, 2).hasPattern("a.* logged message");
@@ -26,12 +25,37 @@ public final class LogMessageListSubjectTest {
 
   @Test
   public void hasPattern_messageListDoesNotContainCorrectNumberOfPattern_fails() {
-    logMessages(LogMessage.newBuilder(LogSeverity.ERROR).setMessage("a logged message").build(),
+    logMessages(
+        LogMessage.newBuilder(LogSeverity.ERROR).setMessage("a logged message").build(),
         LogMessage.newBuilder(LogSeverity.DEBUG).setMessage("not really logged").build());
 
-    AssertionError
-        assertionError =
-        expectFailure(whenTesting -> whenTesting.that(logMessageList).hasPattern("not .+ logged"),
+    AssertionError assertionError =
+        expectFailure(
+            whenTesting -> whenTesting.that(logMessageList).hasPattern("not .+ logged"), 2);
+
+    ExpectFailure.assertThat(assertionError).factValue("expected to be at least").isEqualTo("2");
+    ExpectFailure.assertThat(assertionError).factValue("but was").isEqualTo("1");
+  }
+
+  @Test
+  public void containsExactly_messageListContainsText_succeeds() {
+    logMessages(
+        LogMessage.newBuilder(LogSeverity.ERROR).setMessage("a logged message").build(),
+        LogMessage.newBuilder(LogSeverity.DEBUG).setMessage("another logged message").build());
+
+    LogMessageListSubject.withMessages(logMessageList, 1).containsExactly("a logged message");
+    LogMessageListSubject.withMessages(logMessageList, 1).containsExactly("another logged message");
+  }
+
+  @Test
+  public void containsExactly_messageListDoesNotContainCorrectNumber_fails() {
+    logMessages(
+        LogMessage.newBuilder(LogSeverity.ERROR).setMessage("a logged message").build(),
+        LogMessage.newBuilder(LogSeverity.DEBUG).setMessage("not really logged").build());
+
+    AssertionError assertionError =
+        expectFailure(
+            whenTesting -> whenTesting.that(logMessageList).containsExactly("not really logged"),
             2);
 
     ExpectFailure.assertThat(assertionError).factValue("expected to be at least").isEqualTo("2");
@@ -39,8 +63,31 @@ public final class LogMessageListSubjectTest {
   }
 
   @Test
+  public void contains_messageListContainsText_succeeds() {
+    logMessages(
+        LogMessage.newBuilder(LogSeverity.ERROR).setMessage("a logged message").build(),
+        LogMessage.newBuilder(LogSeverity.DEBUG).setMessage("another logged message").build());
+
+    LogMessageListSubject.withMessages(logMessageList, 2).contains("logged message");
+  }
+
+  @Test
+  public void contains_messageListDoesNotContainCorrectNumber_fails() {
+    logMessages(
+        LogMessage.newBuilder(LogSeverity.ERROR).setMessage("a logged message").build(),
+        LogMessage.newBuilder(LogSeverity.DEBUG).setMessage("not really logged").build());
+
+    AssertionError assertionError =
+        expectFailure(whenTesting -> whenTesting.that(logMessageList).contains("never"), 2);
+
+    ExpectFailure.assertThat(assertionError).factValue("expected to be at least").isEqualTo("2");
+    ExpectFailure.assertThat(assertionError).factValue("but was").isEqualTo("0");
+  }
+
+  @Test
   public void hasSeverity_messageListContainsSeverity_succeeds() {
-    logMessages(LogMessage.newBuilder(LogSeverity.ERROR).setMessage("a logged message").build(),
+    logMessages(
+        LogMessage.newBuilder(LogSeverity.ERROR).setMessage("a logged message").build(),
         LogMessage.newBuilder(LogSeverity.DEBUG).setMessage("another logged message").build());
 
     LogMessageListSubject.withMessages(logMessageList, 1).hasSeverity(LogSeverity.DEBUG);
@@ -48,13 +95,13 @@ public final class LogMessageListSubjectTest {
 
   @Test
   public void hasSeverity_messageListDoesNotContainCorrectNumberOfSeverity_fails() {
-    logMessages(LogMessage.newBuilder(LogSeverity.ERROR).setMessage("a logged message").build(),
+    logMessages(
+        LogMessage.newBuilder(LogSeverity.ERROR).setMessage("a logged message").build(),
         LogMessage.newBuilder(LogSeverity.DEBUG).setMessage("another logged message").build());
 
-    AssertionError
-        assertionError =
-        expectFailure(whenTesting -> whenTesting.that(logMessageList).hasSeverity(LogSeverity.INFO),
-            1);
+    AssertionError assertionError =
+        expectFailure(
+            whenTesting -> whenTesting.that(logMessageList).hasSeverity(LogSeverity.INFO), 1);
 
     ExpectFailure.assertThat(assertionError).factValue("expected to be at least").isEqualTo("1");
     ExpectFailure.assertThat(assertionError).factValue("but was").isEqualTo("0");
@@ -75,11 +122,11 @@ public final class LogMessageListSubjectTest {
         LogMessage.newBuilder(LogSeverity.ERROR).setThrowable(new RuntimeException()).build(),
         LogMessage.newBuilder(LogSeverity.DEBUG).setThrowable(new IllegalAccessError()).build());
 
-    AssertionError
-        assertionError =
-        expectFailure(whenTesting -> whenTesting
-            .that(logMessageList)
-            .hasThrowable(IllegalArgumentException.class), 1);
+    AssertionError assertionError =
+        expectFailure(
+            whenTesting ->
+                whenTesting.that(logMessageList).hasThrowable(IllegalArgumentException.class),
+            1);
 
     ExpectFailure.assertThat(assertionError).factValue("expected to be at least").isEqualTo("1");
     ExpectFailure.assertThat(assertionError).factValue("but was").isEqualTo("0");
@@ -91,8 +138,7 @@ public final class LogMessageListSubjectTest {
         LogMessage.newBuilder(LogSeverity.ERROR).setThrowable(new RuntimeException()).build(),
         LogMessage.newBuilder(LogSeverity.DEBUG).setMessage("not really logged").build());
 
-    LogMessageListSubject
-        .withMessages(logMessageList, 0)
+    LogMessageListSubject.withMessages(logMessageList, 0)
         .hasThrowable(IllegalArgumentException.class);
     LogMessageListSubject.withMessages(logMessageList, 0).hasPattern("always logged");
     LogMessageListSubject.withMessages(logMessageList, 0).hasSeverity(LogSeverity.INFO);
@@ -105,16 +151,13 @@ public final class LogMessageListSubjectTest {
         LogMessage.newBuilder(LogSeverity.DEBUG).setThrowable(new RuntimeException()).build(),
         LogMessage.newBuilder(LogSeverity.DEBUG).setMessage("another message").build());
 
-    LogMessageListSubject
-        .withMessages(logMessageList, 1)
+    LogMessageListSubject.withMessages(logMessageList, 1)
         .hasThrowable(RuntimeException.class)
         .hasSeverity(LogSeverity.DEBUG);
-    LogMessageListSubject
-        .withMessages(logMessageList, 1)
+    LogMessageListSubject.withMessages(logMessageList, 1)
         .hasSeverity(LogSeverity.ERROR)
         .hasThrowable(RuntimeException.class);
-    LogMessageListSubject
-        .withMessages(logMessageList, 1)
+    LogMessageListSubject.withMessages(logMessageList, 1)
         .hasPattern("another message")
         .hasSeverity(LogSeverity.DEBUG);
   }
@@ -122,8 +165,8 @@ public final class LogMessageListSubjectTest {
   private AssertionError expectFailure(
       SimpleSubjectBuilderCallback<LogMessageListSubject, List<LogMessage>> callback,
       int numExpectedMessages) {
-    return ExpectFailure.expectFailureAbout(LogMessageListSubject.logMessageLists(
-        numExpectedMessages), callback);
+    return ExpectFailure.expectFailureAbout(
+        LogMessageListSubject.logMessageLists(numExpectedMessages), callback);
   }
 
   private void logMessages(LogMessage... messages) {

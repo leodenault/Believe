@@ -2,6 +2,7 @@ filegroup(
     name = "maps",
     srcs = [
         ":map_files",
+        ":object_templates",
         ":tilesets",
     ],
     visibility = [
@@ -18,4 +19,9 @@ filegroup(
 filegroup(
     name = "tilesets",
     srcs = glob(["tilesets/*"]),
+)
+
+filegroup(
+    name = "object_templates",
+    srcs = glob(["object_templates/*"]),
 )

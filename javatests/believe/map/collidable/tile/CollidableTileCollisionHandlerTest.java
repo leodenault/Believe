@@ -6,9 +6,8 @@ import static com.google.common.truth.Truth.assertAbout;
 
 import believe.geometry.Rectangle;
 import believe.map.collidable.tile.CollidableTileCollisionHandler.TileCollidable;
-import believe.map.tiled.EntityType;
-import believe.map.tiled.Tile;
-import believe.map.tiled.testing.FakeTiledMap;
+import believe.map.data.EntityType;
+import believe.map.data.TileData;
 import believe.physics.collision.Collidable;
 import believe.physics.collision.CollisionHandler;
 import com.google.common.truth.FailureMetadata;
@@ -125,51 +124,39 @@ public class CollidableTileCollisionHandlerTest {
   private final FakeTileCollidable subject = new FakeTileCollidable(80, 80, 220, 220);
   private final CollidableTile leftTile =
       new CollidableTile(
-          Tile.create(
-              FakeTiledMap.tiledMapWithDefaultPropertyValues(),
+          TileData.create(
               EntityType.COLLIDABLE_TILE,
-              /* tileId= */ 0,
-              /* x= */ 0,
-              /* y= */ 1,
+              /* pixelX= */ 0,
+              /* pixelY= */ TILE_LENGTH,
               /* width= */ TILE_LENGTH,
-              /* height= */ TILE_LENGTH,
-              /* layerId= */ 0),
+              /* height= */ TILE_LENGTH),
           handler);
   private final CollidableTile upTile =
       new CollidableTile(
-          Tile.create(
-              FakeTiledMap.tiledMapWithDefaultPropertyValues(),
+          TileData.create(
               EntityType.COLLIDABLE_TILE,
-              /* tileId= */ 0,
-              /* x= */ 1,
-              /* y= */ 0,
+              /* pixelX= */ TILE_LENGTH,
+              /* pixelY= */ 0,
               /* width= */ TILE_LENGTH,
-              /* height= */ TILE_LENGTH,
-              /* layerId= */ 0),
+              /* height= */ TILE_LENGTH),
           handler);
   private final CollidableTile rightTile =
       new CollidableTile(
-          Tile.create(
-              FakeTiledMap.tiledMapWithDefaultPropertyValues(),
+          TileData.create(
               EntityType.COLLIDABLE_TILE,
-              /* tileId= */ 0,
-              /* x= */ 2,
-              /* y= */ 1,
+              /* pixelX= */ 2 * TILE_LENGTH,
+              /* pixelY= */ TILE_LENGTH,
               /* width= */ TILE_LENGTH,
-              /* height= */ TILE_LENGTH,
-              /* layerId= */ 0),
+              /* height= */ TILE_LENGTH),
           handler);
   private final CollidableTile downTile =
       new CollidableTile(
-          Tile.create(
-              FakeTiledMap.tiledMapWithDefaultPropertyValues(),
+          TileData.create(
               EntityType.COLLIDABLE_TILE,
-              /* tileId= */ 0,
-              /* x= */ 1,
-              /* y= */ 2,
+              /* pixelX= */ TILE_LENGTH,
+              /* pixelY= */ 2 * TILE_LENGTH,
               /* width= */ TILE_LENGTH,
-              /* height= */ TILE_LENGTH,
-              /* layerId= */ 0),
+              /* height= */ TILE_LENGTH),
           handler);
 
   @Test

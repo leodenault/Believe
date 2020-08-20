@@ -1,14 +1,12 @@
 package believe.map.collidable.tile;
 
 import believe.map.data.GeneratedMapEntityData;
+import believe.map.data.TileData;
 import believe.map.io.TileParser;
-import believe.map.tiled.EntityType;
-import believe.map.tiled.Tile;
+import believe.map.data.EntityType;
 import believe.map.tiled.TiledMap;
 import dagger.Reusable;
 import javax.inject.Inject;
-
-import java.util.Optional;
 
 @Reusable
 final class CollidableTileGenerator implements TileParser {
@@ -21,12 +19,13 @@ final class CollidableTileGenerator implements TileParser {
 
   @Override
   public void parseTile(
-      TiledMap map, Tile tile, GeneratedMapEntityData.Builder generatedMapEntityDataBuilder) {
-    if (tile.entityType() != EntityType.COLLIDABLE_TILE) {
+      TileData tileData,
+      GeneratedMapEntityData.Builder generatedMapEntityDataBuilder) {
+    if (tileData.getEntityType() != EntityType.COLLIDABLE_TILE) {
       return;
     }
 
     generatedMapEntityDataBuilder.addPhysicsManageable(
-        new CollidableTile(tile, collidableTileCollisionHandler));
+        new CollidableTile(tileData, collidableTileCollisionHandler));
   }
 }

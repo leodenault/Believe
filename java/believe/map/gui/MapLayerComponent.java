@@ -24,6 +24,6 @@ final class MapLayerComponent extends ComponentBase {
 
   @Override
   protected void renderComponent(GUIContext context, Graphics g) {
-    layerData.tiledMap().render(getX(), getY(), layerData.layerId());
+    layerData.layer().render(getX(), getY());
   }
 }

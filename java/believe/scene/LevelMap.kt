@@ -60,7 +60,7 @@ class LevelMap private constructor(
             val rearLayers = mutableListOf<LevelMapLayer>()
             val frontLayers = mutableListOf<LevelMapLayer>()
             tiledMapData.layers().filter { it.isVisible }.forEach {
-                val layer = LevelMapLayer(it.tiledMap(), it.layerId(), x, y)
+                val layer = LevelMapLayer(it.layer(), x, y)
                 if (it.isFrontLayer) frontLayers.add(layer) else rearLayers.add(layer)
             }
 

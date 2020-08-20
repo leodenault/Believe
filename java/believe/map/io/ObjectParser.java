@@ -1,6 +1,7 @@
 package believe.map.io;
 
 import believe.map.data.GeneratedMapEntityData;
+import believe.map.data.EntityType;
 import believe.map.tiled.TiledObject;
 
 /** Parses an object from a Tiled map. */
@@ -12,5 +13,7 @@ public interface ObjectParser {
    *     GeneratedMapEntityData}.
    */
   void parseObject(
-      TiledObject tiledObject, GeneratedMapEntityData.Builder generatedMapEntityDataBuilder);
+      EntityType entityType,
+      TiledObject tiledObject,
+      GeneratedMapEntityData.Builder generatedMapEntityDataBuilder);
 }

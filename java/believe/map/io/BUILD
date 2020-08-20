@@ -16,6 +16,7 @@ java_library(
         "//java/believe/map/data",
         "//java/believe/map/data/proto:map_metadata_java_proto",
         "//java/believe/map/tiled",
+        "//java/believe/map/tiled:impl",
         "//third_party/slick",
     ],
 )
@@ -39,6 +40,7 @@ java_library(
         "//java/believe/map/data",
         "//java/believe/map/data/proto:map_metadata_java_proto",
         "//java/believe/map/tiled",
+        "//java/believe/map/tiled:impl",
         "//java/believe/physics/manager",
         "//java/believe/xml",
         "//third_party/auto_value",

@@ -1,7 +1,9 @@
 package believe.map.io;
 
 import believe.map.data.TiledMapData;
+import believe.map.tiled.Layer;
 import believe.map.tiled.TiledMap;
+import believe.map.tiled.TiledObjectGroup;
 import org.newdawn.slick.util.Log;
 
 import java.util.Optional;
@@ -22,14 +24,11 @@ interface TiledMapParser {
                 /* width= */ tiledMap.getWidth() * tiledMap.getTileWidth(),
                 /* height= */ tiledMap.getHeight() * tiledMap.getTileHeight());
 
-        for (int layerId = 0; layerId < tiledMap.getLayerCount(); layerId++) {
-          tiledMapData.addLayer(tiledMapLayerParser.parseLayer(tiledMap, layerId));
+        for (Layer layer : tiledMap.getLayers()) {
+          tiledMapData.addLayer(tiledMapLayerParser.parseLayer(layer));
         }
-        for (int objectGroupId = 0;
-            objectGroupId < tiledMap.getObjectGroupCount();
-            objectGroupId++) {
-          tiledMapData.addObjectLayer(
-              tiledMapObjectLayerParser.parseObjectLayer(tiledMap, objectGroupId));
+        for (TiledObjectGroup tiledObjectGroup : tiledMap.getObjectGroups()) {
+          tiledMapData.addObjectLayer(tiledMapObjectLayerParser.parseObjectGroup(tiledObjectGroup));
         }
         return tiledMapData.build();
       }

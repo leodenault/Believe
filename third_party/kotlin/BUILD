@@ -5,6 +5,11 @@ package(
 )
 
 alias(
+    name = "kotlin",
+    actual = "@com_github_jetbrains_kotlin//:kotlin-stdlib",
+)
+
+alias(
     name = "kotlin_reflect",
     actual = "@com_github_jetbrains_kotlin//:kotlin-reflect",
 )

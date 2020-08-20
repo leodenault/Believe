@@ -13,11 +13,10 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-/**
- * Subject class for executing assertions on a list of {@link LogMessage} instances.
- */
+/** Subject class for executing assertions on a list of {@link LogMessage} instances. */
 public final class LogMessageListSubject extends Subject<LogMessageListSubject, List<LogMessage>> {
   private final int expectedNumMessages;
+  private final List<LogMessage> allMessages;
   private List<LogMessage> actualMessages;
 
   private LogMessageListSubject(
@@ -25,6 +24,7 @@ public final class LogMessageListSubject extends Subject<LogMessageListSubject, 
     super(metadata, actual);
 
     this.expectedNumMessages = expectedNumMessages;
+    this.allMessages = new ArrayList<>(actual);
     this.actualMessages = new ArrayList<>(actual);
   }
 
@@ -41,8 +41,31 @@ public final class LogMessageListSubject extends Subject<LogMessageListSubject, 
    * the given pattern.
    */
   public LogMessageListSubject hasPattern(String regex) {
-    filterMessages(logMessage -> logMessage.message() != null && Pattern.matches(regex,
-        logMessage.message()), "matching regex '%s'.", regex);
+    filterMessages(
+        logMessage -> logMessage.message() != null && Pattern.matches(regex, logMessage.message()),
+        "matching regex '%s'.",
+        regex);
+    return this;
+  }
+
+  /**
+   * Asserts that the set of messages that were logged contains at least the number of messages
+   * containing the exact text in {@code text}.
+   */
+  public LogMessageListSubject containsExactly(String text) {
+    filterMessages(logMessage -> text.equals(logMessage.message()), "contains exactly '%s'.", text);
+    return this;
+  }
+
+  /**
+   * Asserts that the set of messages that were logged contains at least the number of messages
+   * containing {@code substring}.
+   */
+  public LogMessageListSubject contains(String substring) {
+    filterMessages(
+        logMessage -> logMessage.message() != null && logMessage.message().contains(substring),
+        "contains '%s'.",
+        substring);
     return this;
   }
 
@@ -51,9 +74,8 @@ public final class LogMessageListSubject extends Subject<LogMessageListSubject, 
    * number of messages with the given pattern.
    */
   public LogMessageListSubject hasSeverity(LogSeverity severity) {
-    filterMessages(logMessage -> logMessage.logSeverity() == severity,
-        "having severity %s",
-        severity.name());
+    filterMessages(
+        logMessage -> logMessage.logSeverity() == severity, "having severity %s", severity.name());
     return this;
   }
 
@@ -62,10 +84,13 @@ public final class LogMessageListSubject extends Subject<LogMessageListSubject, 
    * number of messages with a {@link Throwable} of type {@code clazz}.
    */
   public LogMessageListSubject hasThrowable(Class<? extends Throwable> clazz) {
-    filterMessages(logMessage -> {
-      Throwable throwable = logMessage.throwable();
-      return throwable != null && throwable.getClass().equals(clazz);
-    }, "having throwable of type %s", clazz.getName());
+    filterMessages(
+        logMessage -> {
+          Throwable throwable = logMessage.throwable();
+          return throwable != null && throwable.getClass().equals(clazz);
+        },
+        "having throwable of type %s",
+        clazz.getName());
     return this;
   }
 
@@ -91,9 +116,14 @@ public final class LogMessageListSubject extends Subject<LogMessageListSubject, 
     messageParams[numMessageParams - 1] = pluralSuffix(numRemainingMessages);
 
     check()
-        .withMessage("Expected at least %s message%s "
-            + messageCondition
-            + ". Found %s matching message%s instead.", messageParams)
+        .withMessage(
+            "Expected at least %s message%s "
+                + messageCondition
+                + ". Found %s matching message%s instead.\n\n"
+                + "Logged messages:\n"
+                + allMessages.stream().map(LogMessage::toString).collect(Collectors.joining("\n\n"))
+                + "\n",
+            messageParams)
         .that(numRemainingMessages)
         .isAtLeast(expectedNumMessages);
   }

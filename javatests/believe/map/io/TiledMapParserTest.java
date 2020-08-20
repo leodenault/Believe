@@ -1,17 +1,22 @@
 package believe.map.io;
 
+import static believe.map.tiled.testing.TiledFakes.fakeLayer;
+import static believe.map.tiled.testing.TiledFakes.fakeTiledObjectGroup;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
 import believe.map.data.LayerData;
 import believe.map.data.ObjectLayerData;
 import believe.map.data.TiledMapData;
+import believe.map.tiled.Layer;
 import believe.map.tiled.TiledMap;
+import believe.map.tiled.TiledObjectGroup;
 import believe.testing.mockito.InstantiateMocksIn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @InstantiateMocksIn
@@ -34,8 +39,8 @@ final class TiledMapParserTest {
     parser =
         TiledMapParser.create(
             PLAYER_START_X_PROPERTY, PLAYER_START_Y_PROPERTY, layerParser, objectLayerParser);
-    firstLayer = LayerData.newBuilder(tiledMap, 0).build();
-    secondLayer = LayerData.newBuilder(tiledMap, 1).build();
+    firstLayer = LayerData.newBuilder(fakeLayer()).build();
+    secondLayer = LayerData.newBuilder(fakeLayer()).build();
   }
 
   @Test
@@ -66,9 +71,11 @@ final class TiledMapParserTest {
 
   @Test
   void parseMap_returnsMapDataWithLayerData() {
-    when(tiledMap.getLayerCount()).thenReturn(2);
-    when(layerParser.parseLayer(tiledMap, 0)).thenReturn(firstLayer);
-    when(layerParser.parseLayer(tiledMap, 1)).thenReturn(secondLayer);
+    Layer layer1 = fakeLayer();
+    Layer layer2 = fakeLayer();
+    when(tiledMap.getLayers()).thenReturn(Arrays.asList(layer1, layer2));
+    when(layerParser.parseLayer(layer1)).thenReturn(firstLayer);
+    when(layerParser.parseLayer(layer2)).thenReturn(secondLayer);
 
     TiledMapData mapData = parser.parse(tiledMap);
 
@@ -77,9 +84,12 @@ final class TiledMapParserTest {
 
   @Test
   void parseMap_returnsMapDataWithObjectLayerData() {
-    when(tiledMap.getObjectGroupCount()).thenReturn(2);
-    when(objectLayerParser.parseObjectLayer(tiledMap, 0)).thenReturn(firstObjectLayerData);
-    when(objectLayerParser.parseObjectLayer(tiledMap, 1)).thenReturn(secondObjectLayerData);
+    TiledObjectGroup tiledObjectGroup1 = fakeTiledObjectGroup();
+    TiledObjectGroup tiledObjectGroup2 = fakeTiledObjectGroup();
+    when(tiledMap.getObjectGroups())
+        .thenReturn(Arrays.asList(tiledObjectGroup1, tiledObjectGroup2));
+    when(objectLayerParser.parseObjectGroup(tiledObjectGroup1)).thenReturn(firstObjectLayerData);
+    when(objectLayerParser.parseObjectGroup(tiledObjectGroup2)).thenReturn(secondObjectLayerData);
 
     TiledMapData mapData = parser.parse(tiledMap);
 

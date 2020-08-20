@@ -9,7 +9,7 @@ kt_jvm_library(
     srcs = ["TiledCommandParser.kt"],
     deps = [
         "//java/believe/command",
-        "//java/believe/core",
+        "//java/believe/core:core_kt",
     ],
 )
 

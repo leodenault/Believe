@@ -1,3 +1,5 @@
+load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kt_jvm_library")
+
 package(
     default_visibility = ["//:believe_all_pkgs"],
 )
@@ -5,7 +7,6 @@ package(
 java_library(
     name = "core",
     srcs = [
-        "PropertyProvider.java",
         "SynchedComboPattern.java",
         "Timer.java",
         "Updatable.java",
@@ -14,4 +15,9 @@ java_library(
         "//java/believe/xml",
         "//third_party/slick",
     ],
+)
+
+kt_jvm_library(
+    name = "core_kt",
+    srcs = ["PropertyProvider.kt"],
 )

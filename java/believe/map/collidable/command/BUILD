@@ -18,6 +18,7 @@ java_library(
         "//java/believe/map/data",
         "//java/believe/map/io",
         "//java/believe/map/tiled",
+        "//java/believe/map/tiled:impl",
         "//java/believe/map/tiled/command",
         "//java/believe/physics/collision",
         "//java/believe/physics/manager",

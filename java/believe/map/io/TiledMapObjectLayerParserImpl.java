@@ -2,50 +2,35 @@ package believe.map.io;
 
 import believe.map.data.GeneratedMapEntityData;
 import believe.map.data.ObjectLayerData;
-import believe.map.io.InternalQualifiers.EntityTypeProperty;
-import believe.map.tiled.EntityType;
-import believe.map.tiled.TiledMap;
-import believe.map.tiled.TiledMapObjectPropertyProvider;
+import believe.map.data.EntityType;
 import believe.map.tiled.TiledObject;
+import believe.map.tiled.TiledObjectGroup;
 import dagger.Reusable;
 import javax.inject.Inject;
 
-import java.util.Optional;
 import java.util.Set;
 
 @Reusable
 final class TiledMapObjectLayerParserImpl implements TiledMapObjectLayerParser {
-  private final String entityTypeProperty;
   private final Set<ObjectParser> objectParsers;
 
   @Inject
-  TiledMapObjectLayerParserImpl(
-      @EntityTypeProperty String entityTypeProperty, Set<ObjectParser> objectParsers) {
-    this.entityTypeProperty = entityTypeProperty;
+  TiledMapObjectLayerParserImpl(Set<ObjectParser> objectParsers) {
     this.objectParsers = objectParsers;
   }
 
   @Override
-  public ObjectLayerData parseObjectLayer(TiledMap tiledMap, int layerId) {
+  public ObjectLayerData parseObjectGroup(TiledObjectGroup tiledObjectGroup) {
     GeneratedMapEntityData.Builder generatedMapEntityDataBuilder =
         GeneratedMapEntityData.newBuilder();
 
-    for (int objectId = 0; objectId < tiledMap.getObjectCount(layerId); objectId++) {
-      Optional<String> entityTypeName =
-          tiledMap.getObjectProperty(layerId, objectId, entityTypeProperty);
-      EntityType entityType = entityTypeName.map(EntityType::forName).orElse(EntityType.NONE);
+    for (TiledObject tiledObject : tiledObjectGroup.getObjects()) {
+      EntityType entityType =
+          tiledObject.getType() == null
+              ? EntityType.NONE
+              : EntityType.forName(tiledObject.getType());
       for (ObjectParser objectParser : objectParsers) {
-        int objectHeight = tiledMap.getObjectHeight(layerId, objectId);
-        int finalObjectId = objectId;
-        objectParser.parseObject(
-            TiledObject.create(
-                entityType,
-                TiledMapObjectPropertyProvider.create(tiledMap, layerId, objectId),
-                tiledMap.getObjectX(layerId, objectId),
-                tiledMap.getObjectY(layerId, objectId) - objectHeight,
-                tiledMap.getObjectWidth(layerId, objectId),
-                objectHeight),
-            generatedMapEntityDataBuilder);
+        objectParser.parseObject(entityType, tiledObject, generatedMapEntityDataBuilder);
       }
     }
     return ObjectLayerData.create(generatedMapEntityDataBuilder.build());

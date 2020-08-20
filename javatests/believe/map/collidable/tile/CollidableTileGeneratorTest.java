@@ -2,10 +2,9 @@ package believe.map.collidable.tile;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import believe.map.data.EntityType;
 import believe.map.data.GeneratedMapEntityData;
-import believe.map.tiled.EntityType;
-import believe.map.tiled.Tile;
-import believe.map.tiled.TiledMap;
+import believe.map.data.TileData;
 import believe.physics.manager.PhysicsManageable;
 import believe.testing.mockito.InstantiateMocksIn;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +22,6 @@ final class CollidableTileGeneratorTest {
   private CollidableTileGenerator generator;
 
   @Mock private CollidableTileCollisionHandler collidableTileCollisionHandler;
-  @Mock private TiledMap tiledMap;
 
   @BeforeEach
   void setUp() {
@@ -33,16 +31,12 @@ final class CollidableTileGeneratorTest {
   @Test
   void parseTile_entityIsNotTile_doesNothing() {
     generator.parseTile(
-        tiledMap,
-        Tile.create(
-            tiledMap,
+        TileData.create(
             EntityType.ENEMY,
-            /* tileId= */ 0,
             /* tileX= */ 0,
             /* tileY= */ 0,
             /* tileWidth= */ 0,
-            /* tileHeight= */ 0,
-            /* layerId= */ 0),
+            /* tileHeight= */ 0),
         generatedMapEntityDataBuilder);
 
     assertThat(generatedMapEntityDataBuilder.build().physicsManageables()).isEmpty();
@@ -51,16 +45,12 @@ final class CollidableTileGeneratorTest {
   @Test
   void parseTile_entityIsTile_generatesValidTile() {
     generator.parseTile(
-        tiledMap,
-        Tile.create(
-            tiledMap,
+        TileData.create(
             EntityType.COLLIDABLE_TILE,
-            /* tileId= */ 0,
             /* tileX= */ 0,
             /* tileY= */ 0,
             /* tileWidth= */ 0,
-            /* tileHeight= */ 0,
-            /* layerId= */ 0),
+            /* tileHeight= */ 0),
         generatedMapEntityDataBuilder);
 
     Set<PhysicsManageable> physicsManageables =

@@ -4,10 +4,9 @@ import believe.map.data.MapData;
 import believe.map.data.proto.MapMetadataProto.MapBackground;
 import believe.map.data.proto.MapMetadataProto.MapMetadata;
 import believe.map.tiled.TiledMap;
-import believe.map.tiled.TiledMapFactory;
 import dagger.Reusable;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.Log;
 
 import java.util.Optional;
@@ -15,6 +14,7 @@ import java.util.Optional;
 @Reusable
 public final class MapMetadataParserImpl implements MapMetadataParser {
   interface TiledMapProvider {
+    @Nullable
     TiledMap provideTiledMap(String mapLocation, String tileSetsLocation);
   }
 
@@ -24,10 +24,10 @@ public final class MapMetadataParserImpl implements MapMetadataParser {
 
   @Inject
   MapMetadataParserImpl(
-      TiledMapFactory tiledMapFactory,
-      TiledMapParser tiledMapParser,
+      TiledMap.Parser tiledMapParser,
+      TiledMapParser tiledMapConverter,
       BackgroundSceneParser backgroundSceneParser) {
-    this(tiledMapFactory::create, tiledMapParser, backgroundSceneParser);
+    this(tiledMapParser::parse, tiledMapConverter, backgroundSceneParser);
   }
 
   MapMetadataParserImpl(
@@ -45,10 +45,8 @@ public final class MapMetadataParserImpl implements MapMetadataParser {
         tiledMapProvider.provideTiledMap(
             mapMetadata.getMapLocation(), mapMetadata.getTileSetsLocation());
 
-    try {
-      tiledMap.load();
-    } catch (SlickException e) {
-      Log.error("Failed to load Tiled map.", e);
+    if (tiledMap == null) {
+      Log.error("Failed to load Tiled map.");
       return Optional.empty();
     }
 

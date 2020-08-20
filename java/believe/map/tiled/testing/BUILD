@@ -1,21 +1,21 @@
+load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kt_jvm_library")
+
 package(
     default_testonly = True,
     default_visibility = ["//:believe_test_pkgs"],
 )
 
-java_library(
+kt_jvm_library(
     name = "testing",
     srcs = [
-        "FakeTiledMap.java",
-        "FakeTiledObjectFactory.java",
-        "package-info.java",
+        "FakeElement.kt",
+        "TiledFakes.kt",
     ],
     deps = [
-        "//java/believe/app/annotation",
-        "//java/believe/core",
         "//java/believe/io",
         "//java/believe/io/testing",
         "//java/believe/map/tiled",
-        "//third_party/javax:annotations",
+        "//java/believe/map/tiled:impl",
+        "//third_party/mockito:mockito_kotlin",
     ],
 )

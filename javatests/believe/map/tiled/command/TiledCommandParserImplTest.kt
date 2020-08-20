@@ -28,7 +28,7 @@ internal class TiledCommandParserImplTest {
     @Test
     fun parseTiledCommand_returnsCommandGeneratorResult() {
         assertThat(
-            commandParserImpl.parseTiledCommand(PropertyProvider { Optional.of(COMMAND_PARAMETER) })
+            commandParserImpl.parseTiledCommand(propertyProviderReturning(COMMAND_PARAMETER))
         ).isEqualTo(COMMAND)
     }
 
@@ -38,7 +38,7 @@ internal class TiledCommandParserImplTest {
         logSystem: VerifiableLogSystem
     ) {
         assertThat(
-            commandParserImpl.parseTiledCommand(PropertyProvider { Optional.empty() })
+            commandParserImpl.parseTiledCommand(propertyProviderReturning(null))
         ).isNull()
         VerifiableLogSystemSubject.assertThat(logSystem).loggedAtLeastOneMessageThat()
             .hasPattern("Expected to find a '$COMMAND_PARAMETER' parameter.")
@@ -50,7 +50,7 @@ internal class TiledCommandParserImplTest {
         textProtoParser = FakeTextProtoParserFactoryFactory.createFailing().create()
 
         assertThat(
-            commandParserImpl.parseTiledCommand(PropertyProvider { Optional.of(COMMAND_PARAMETER) })
+            commandParserImpl.parseTiledCommand(propertyProviderReturning(COMMAND_PARAMETER))
         ).isNull()
     }
 
@@ -61,4 +61,8 @@ internal class TiledCommandParserImplTest {
             override fun execute() {}
         }
     }
+}
+
+private fun propertyProviderReturning(value: String?) = object : PropertyProvider {
+    override fun getProperty(key: String) = value
 }

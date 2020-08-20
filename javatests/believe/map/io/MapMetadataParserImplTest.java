@@ -69,15 +69,17 @@ final class MapMetadataParserImplTest {
 
   @Test
   @VerifiesLoggingCalls
-  void parse_tiledMapFailsToLoad_returnsEmptyAndLogsError(VerifiableLogSystem logSystem)
-      throws SlickException {
-    doThrow(SlickException.class).when(tiledMap).load();
+  void parse_tiledMapFailsToLoad_returnsEmptyAndLogsError(VerifiableLogSystem logSystem) {
+    parser =
+        new MapMetadataParserImpl(
+            (mapLocation, tileSetsLocation) -> null,
+            tiledMap -> TILED_MAP_DATA,
+            mapBackground -> Optional.of(BACKGROUND_SCENE_DATA));
 
     assertThat(parser.parse(MAP_METADATA)).isEmpty();
     VerifiableLogSystemSubject.assertThat(logSystem)
         .loggedAtLeastOneMessageThat()
         .hasSeverity(LogSeverity.ERROR)
-        .hasPattern("Failed to load Tiled map.")
-        .hasThrowable(SlickException.class);
+        .containsExactly("Failed to load Tiled map.");
   }
 }

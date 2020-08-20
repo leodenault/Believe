@@ -14,6 +14,7 @@ kt_jvm_library(
     srcs = ["ResourceManagerImpl.kt"],
     deps = [
         ":io",
+        "//third_party/dagger",
         "//third_party/javax:annotations",
         "//third_party/slick",
     ],
@@ -21,10 +22,14 @@ kt_jvm_library(
 
 java_library(
     name = "dagger_module",
-    srcs = ["IoDaggerModule.java"],
+    srcs = [
+        "DefaultProvidersDaggerModule.java",
+        "IoDaggerModule.java",
+    ],
     deps = [
         ":impl",
         ":io",
+        "//java/believe/core/io",
         "//third_party/dagger",
         "//third_party/javax:annotations",
         "//third_party/slick",

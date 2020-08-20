@@ -1,16 +1,19 @@
 package believe.io
 
+import dagger.Reusable
 import org.newdawn.slick.util.FileSystemLocation
 import org.newdawn.slick.util.Log
 import org.newdawn.slick.util.ResourceLoader
 import org.newdawn.slick.util.ResourceLocation
-import java.io.*
-import java.lang.RuntimeException
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import java.net.URL
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+@Reusable
 internal class ResourceManagerImpl @Inject internal constructor(
     fileResourceLocation: FileSystemLocation,
     resourceLocations: Set<@JvmSuppressWildcards ResourceLocation>
