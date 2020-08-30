@@ -46,6 +46,22 @@ kt_junit5_test(
 )
 
 kt_junit5_test(
+    name = "PlayerObjectParserTest",
+    srcs = ["PlayerObjectParserTest.kt"],
+    friends = ["//java/believe/character:character_v2"],
+    deps = [
+        "//java/believe/character:character_v2",
+        "//java/believe/datamodel",
+        "//java/believe/logging/testing",
+        "//java/believe/logging/truth",
+        "//java/believe/map/data",
+        "//java/believe/map/tiled/testing",
+        "//third_party/mockito:mockito_kotlin",
+        "//third_party/truth",
+    ],
+)
+
+kt_junit5_test(
     name = "VerticalMovementHandlerTest",
     srcs = ["VerticalMovementHandlerTest.kt"],
     friends = ["//java/believe/character:character_v2"],

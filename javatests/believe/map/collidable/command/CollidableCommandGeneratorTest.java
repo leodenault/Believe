@@ -51,7 +51,7 @@ public final class CollidableCommandGeneratorTest {
     collidableCommandGenerator.parseObject(
         EntityType.COMMAND,
         fakeTiledObject(
-            "", /* x= */ 100, /* y= */ 200, /* width= */ 100, /* height= */ 200, PROPERTIES),
+            "", "", /* x= */ 100, /* y= */ 200, /* width= */ 100, /* height= */ 200, PROPERTIES),
         generatedMapEntityDataBuilder);
 
     // Ensure that collidableCommandFactory is triggered so we can assert on the parameters passed
@@ -97,7 +97,7 @@ public final class CollidableCommandGeneratorTest {
 
     collidableCommandGenerator.parseObject(
         EntityType.COMMAND,
-        fakeTiledObject("", /* x= */ 100, /* y= */ 200, /* width= */ 100, /* height= */ 200),
+        fakeTiledObject("", "", /* x= */ 100, /* y= */ 200, /* width= */ 100, /* height= */ 200),
         generatedMapEntityDataBuilder);
 
     assertThat(collidableCommandFactory.shouldDespawn).isFalse();
@@ -117,7 +117,7 @@ public final class CollidableCommandGeneratorTest {
 
     collidableCommandGenerator.parseObject(
         EntityType.COMMAND,
-        fakeTiledObject("", /* x= */ 100, /* y= */ 200, /* width= */ 100, /* height= */ 200),
+        fakeTiledObject("", "", /* x= */ 100, /* y= */ 200, /* width= */ 100, /* height= */ 200),
         generatedMapEntityDataBuilder);
 
     assertThat(collidableCommandFactory.shouldDespawn).isFalse();
@@ -131,7 +131,7 @@ public final class CollidableCommandGeneratorTest {
 
     collidableCommandGenerator.parseObject(
         EntityType.COLLIDABLE_TILE,
-        fakeTiledObject("", /* x= */ 0, /* y= */ 0, /* width= */ 0, /* height= */ 0),
+        fakeTiledObject("", "", /* x= */ 0, /* y= */ 0, /* width= */ 0, /* height= */ 0),
         generatedMapEntityDataBuilder);
 
     GeneratedMapEntityData generatedMapEntityData = generatedMapEntityDataBuilder.build();

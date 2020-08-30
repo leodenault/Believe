@@ -18,17 +18,69 @@ import javax.inject.Inject
 import kotlin.math.max
 import kotlin.math.min
 
-class CharacterV2 private constructor(
+interface CharacterV2 : SceneElement, TileCollidable<CharacterV2>, DamageBoxCollidable<CharacterV2>,
+    PhysicsManageable, Observable<Rectangle> {
+
+    val focus: Float
+
+    fun heal(health: Float)
+
+    interface DamageListener {
+        fun damageInflicted(currentFocus: Float, inflictor: Faction)
+
+        companion object {
+            val NONE = object : DamageListener {
+                override fun damageInflicted(currentFocus: Float, inflictor: Faction) {}
+            }
+        }
+    }
+
+    // Open for mocking.
+    @Reusable
+    open class Factory @Inject internal constructor(
+        private val stateMachineFactory: CharacterStateMachine.Factory,
+        private val verticalMovementHandlerFactory: VerticalMovementHandler.Factory
+    ) {
+        open fun create(
+            animations: Animations,
+            damageListener: DamageListener,
+            x: Float,
+            y: Float,
+            faction: Faction
+        ): CharacterV2 {
+            with(animations) {
+                val stateMachine: CharacterStateMachine = stateMachineFactory.create(
+                    BidirectionalAnimation.from(idleAnimation),
+                    BidirectionalAnimation.from(movementAnimation),
+                    BidirectionalAnimation.from(jumpingAnimation),
+                    MOVEMENT_SPEED
+                )
+                return CharacterV2Impl(
+                    stateMachine, verticalMovementHandlerFactory.create(
+                        stateMachine, INITIAL_JUMP_VELOCITY, LANDED_VERTICAL_VELOCITY_TOLERANCE
+                    ), damageListener, emptySet(), x, y, faction
+                )
+            }
+        }
+    }
+
+    companion object {
+        private const val MOVEMENT_SPEED = 0.2f
+        private const val INITIAL_JUMP_VELOCITY = -0.5f
+        private const val LANDED_VERTICAL_VELOCITY_TOLERANCE = 0.1f
+        const val MAX_FOCUS = 1.0f
+    }
+}
+
+private class CharacterV2Impl constructor(
     private val stateMachine: CharacterStateMachine,
     private val verticalMovementHandler: VerticalMovementHandler,
-    private val damageListener: DamageListener,
+    private val damageListener: CharacterV2.DamageListener,
     private val rightCompatibleHandlers: Set<CollisionHandler<out Collidable<*>, in CharacterV2>>,
     initialX: Float,
     initialY: Float,
     private val faction: Faction
-) : SceneElement, TileCollidable<CharacterV2>, DamageBoxCollidable<CharacterV2>, PhysicsManageable,
-    Observable<Rectangle> {
-
+) : CharacterV2 {
     private val bounds = mutableRectangle(
         initialX,
         initialY,
@@ -37,7 +89,7 @@ class CharacterV2 private constructor(
     )
     private val observers = mutableListOf<Observer<Rectangle>>()
 
-    var focus = MAX_FOCUS
+    override var focus = CharacterV2.MAX_FOCUS
         private set
     override var x: Float
         get() = bounds.x
@@ -92,8 +144,8 @@ class CharacterV2 private constructor(
         damageListener.damageInflicted(focus, inflictor)
     }
 
-    fun heal(health: Float) {
-        focus = min(MAX_FOCUS, focus + health)
+    override fun heal(health: Float) {
+        focus = min(CharacterV2.MAX_FOCUS, focus + health)
     }
 
     override fun update(delta: Int) {
@@ -119,51 +171,5 @@ class CharacterV2 private constructor(
     override fun addObserver(observer: Observer<Rectangle>): Observable<Rectangle> {
         observers.add(observer)
         return this
-    }
-
-    interface DamageListener {
-        fun damageInflicted(currentFocus: Float, inflictor: Faction)
-
-        companion object {
-            val NONE = object : DamageListener {
-                override fun damageInflicted(currentFocus: Float, inflictor: Faction) {}
-            }
-        }
-    }
-
-    @Reusable
-    class Factory @Inject internal constructor(
-        private val stateMachineFactory: CharacterStateMachine.Factory,
-        private val verticalMovementHandlerFactory: VerticalMovementHandler.Factory
-        //        private val rightCompatibleHandlers: Set<CollisionHandler<out Collidable<*>, in CharacterV2>>
-    ) {
-        fun create(
-            animations: Animations,
-            damageListener: DamageListener,
-            x: Float,
-            y: Float,
-            faction: Faction
-        ): CharacterV2 {
-            with(animations) {
-                val stateMachine: CharacterStateMachine = stateMachineFactory.create(
-                    BidirectionalAnimation.from(idleAnimation),
-                    BidirectionalAnimation.from(movementAnimation),
-                    BidirectionalAnimation.from(jumpingAnimation),
-                    MOVEMENT_SPEED
-                )
-                return CharacterV2(
-                    stateMachine, verticalMovementHandlerFactory.create(
-                        stateMachine, INITIAL_JUMP_VELOCITY, LANDED_VERTICAL_VELOCITY_TOLERANCE
-                    ), damageListener, emptySet(), x, y, faction
-                )
-            }
-        }
-    }
-
-    companion object {
-        private const val MOVEMENT_SPEED = 0.2f
-        private const val INITIAL_JUMP_VELOCITY = -0.5f
-        private const val LANDED_VERTICAL_VELOCITY_TOLERANCE = 0.1f
-        const val MAX_FOCUS = 1.0f
     }
 }

@@ -35,6 +35,7 @@ final class TiledMapObjectLayerParserImplTest {
     TiledObject tiledObject =
         fakeTiledObject(
             EntityType.COLLIDABLE_TILE.name(),
+            "",
             /* x= */ 1,
             /* y= */ 1,
             /* width= */ 3,
@@ -51,7 +52,7 @@ final class TiledMapObjectLayerParserImplTest {
   void parseObjectLayer_objectHasNoEntityType_parsesWithNoneType() {
     TiledObject tiledObject =
         fakeTiledObject(
-            EntityType.NONE.name(), /* x= */ 0, /* y= */ 0, /* width= */ 0, /* height= */ 0);
+            EntityType.NONE.name(), "", /* x= */ 0, /* y= */ 0, /* width= */ 0, /* height= */ 0);
 
     parser.parseObjectGroup(
         fakeTiledObjectGroup("some name", Collections.singletonList(tiledObject)));

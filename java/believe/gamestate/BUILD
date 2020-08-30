@@ -107,6 +107,7 @@ java_library(
     deps = [
         "gamestate_kt",
         ":impl_kt",
+        "//java/believe/character:dagger_module",
         "//third_party/dagger",
     ],
 )

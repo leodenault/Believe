@@ -2,14 +2,11 @@ package believe.gamestate
 
 import believe.character.Animations
 import believe.character.CharacterV2
-import believe.character.Faction
-import believe.character.proto.CharacterAnimationsProto.CharacterAnimations
 import believe.core.Updatable
 import believe.core.display.Bindable
 import believe.core.display.Graphics
 import believe.core.display.RenderableV2
 import believe.geometry.Point
-import believe.geometry.point
 import believe.geometry.rectangle
 import believe.gui.GuiAction
 import believe.input.InputAdapter
@@ -21,19 +18,18 @@ import believe.scene.LevelMap
 import com.google.auto.factory.AutoFactory
 import com.google.auto.factory.Provided
 import org.newdawn.slick.gui.GUIContext
+import org.newdawn.slick.util.Log
+import java.util.function.Supplier
 
 @AutoFactory
 class LevelStateV2 constructor(
-    @Provided private val guiContext: GUIContext,
-    @Provided private val levelManager: LevelManager,
+    @Provided private val guiContext: GUIContext, @Provided private val levelManager: LevelManager,
     @Provided
     private val inputAdapter: InputAdapter<GuiAction>,
     @Provided
     private val stateController: StateController,
     @Provided
-    private val characterFactory: CharacterV2.Factory,
-    @Provided
-    private val animationsParser: Animations.Parser, private val levelName: String
+    private val playerSupplier: Supplier<CharacterV2?>, private val levelName: String
 ) : GameState {
 
     private var loadedState: LoadedState? = null
@@ -42,18 +38,12 @@ class LevelStateV2 constructor(
         val levelMap =
             levelManager.getLevel(levelName)?.let { LevelMap.create(it.mapData, emptyList()) }
                 ?: throw RuntimeException("Could not load level map.")
-        val characterData = CharacterAnimations.newBuilder().setSpriteSheetName("jacob")
-            .setIdleAnimationName("idle").setMovementAnimationName("moving")
-            .setJumpAnimationName("jumping").build()
-        val character = characterFactory.create(
-            animationsParser.parse(
-                characterData
-            ), CharacterV2.DamageListener.NONE, 0f, 0f, Faction.GOOD
-        )
+        val player: CharacterV2 = playerSupplier.get()
+            ?: return Unit.also { Log.error("No player was loaded from the map.") }
         val camera = Camera(
             object : Observable<Point> {
                 override fun addObserver(camera: Observer<Point>): Observable<Point> {
-                    character.addObserver { newValue ->
+                    player.addObserver { newValue ->
                         camera.valueChanged(newValue.center)
                     }
                     return this
@@ -67,7 +57,7 @@ class LevelStateV2 constructor(
         )
 
         loadedState = LoadedState(
-            inputAdapter, stateController, levelMap, character, camera
+            inputAdapter, stateController, levelMap, camera
         ).also { it.bind() }
     }
 
@@ -92,14 +82,12 @@ class LevelStateV2 constructor(
         private val inputAdapter: InputAdapter<GuiAction>,
         private val stateController: StateController,
         private val levelMap: LevelMap,
-        private var character: CharacterV2,
         private var camera: Camera
     ) : Bindable, Updatable, RenderableV2 {
 
         override fun bind() {
             inputAdapter.addActionStartListener(GuiAction.EXECUTE_ACTION, this::leaveState)
             levelMap.bind()
-            character.bind()
             camera.bind()
         }
 
@@ -108,16 +96,14 @@ class LevelStateV2 constructor(
         override fun unbind() {
             inputAdapter.removeActionStartListener(GuiAction.EXECUTE_ACTION, this::leaveState)
             levelMap.unbind()
-            character.unbind()
-            camera.bind()
+            camera.unbind()
         }
 
-        override fun update(delta: Int) = character.update(delta)
+        override fun update(delta: Int) = levelMap.update(delta)
 
         override fun render(g: Graphics) {
             camera.pushTransformOn(g)
             levelMap.render(g)
-            character.render(g)
             g.popTransform()
         }
     }

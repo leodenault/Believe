@@ -42,12 +42,14 @@ kt_jvm_library(
         "InputAction.kt",
         "MovementStateMachine.kt",
         "OrientationStateMachine.kt",
+        "PlayerObjectParser.kt",
         "VerticalMovementHandler.kt",
     ],
     deps = [
         "//java/believe/character/proto:character_animations_java_proto",
         "//java/believe/core/display:display_v2",
         "//java/believe/datamodel",
+        "//java/believe/datamodel:impl",
         "//java/believe/input",
         "//java/believe/map/collidable/tile",
         "//java/believe/physics/collision",
@@ -65,9 +67,14 @@ java_library(
     srcs = ["CharacterDaggerModule.java"],
     deps = [
         ":character_v2",
+        "//java/believe/character/proto:character_animations_java_proto",
+        "//java/believe/datamodel",
+        "//java/believe/datamodel:impl",
         "//java/believe/input",
         "//java/believe/input/keyboard",
+        "//java/believe/map/io",
         "//third_party/dagger",
+        "//third_party/kotlin",
     ],
 )
 

@@ -7,11 +7,20 @@ import org.newdawn.slick.Animation
 import org.newdawn.slick.util.Log
 import javax.inject.Inject
 
-class Animations private constructor(
-    internal val idleAnimation: Animation,
-    internal val movementAnimation: Animation,
-    internal val jumpingAnimation: Animation
-) {
+/** A set of animations used in animating a [CharacterV2]. */
+interface Animations {
+    /** The animation used when the character is idle. */
+    val idleAnimation: Animation
+    /** The animation used when the character is moving. */
+    val movementAnimation: Animation
+    /** The animation used when the character is jumping. */
+    val jumpingAnimation: Animation
+
+    companion object {
+        internal val EMPTY: Animations = AnimationsImpl(
+            Animation(), Animation(), Animation()
+        )
+    }
 
     @Reusable
     class Parser @Inject internal constructor(
@@ -19,13 +28,11 @@ class Animations private constructor(
     ) {
         fun parse(data: CharacterAnimationsProto.CharacterAnimations): Animations {
             val spriteSheetManager =
-                animationManager.getDataFor(data.spriteSheetName) ?: return Animations(
-                    Animation(), Animation(), Animation()
-                ).also {
+                animationManager.getDataFor(data.spriteSheetName) ?: return EMPTY.also {
                     Log.error("Could not find a managed sprite sheet with name '${data.spriteSheetName}'.")
                 }
 
-            return Animations(
+            return AnimationsImpl(
                 idleAnimation = spriteSheetManager.getDataFor(data.idleAnimationName)
                     ?: Animation(), movementAnimation = spriteSheetManager.getDataFor(
                     data.movementAnimationName
@@ -36,3 +43,9 @@ class Animations private constructor(
         }
     }
 }
+
+private class AnimationsImpl constructor(
+    override val idleAnimation: Animation,
+    override val movementAnimation: Animation,
+    override val jumpingAnimation: Animation
+) : Animations

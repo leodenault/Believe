@@ -1,9 +1,10 @@
 package believe.gamestate;
 
+import believe.character.CharacterDaggerModule;
 import dagger.Binds;
 import dagger.Module;
 
-@Module
+@Module(includes = CharacterDaggerModule.class)
 public abstract class GamestateDaggerModule {
   @Binds
   abstract GameStateRunner bindGameStateRunner(GameStateRunnerImpl impl);

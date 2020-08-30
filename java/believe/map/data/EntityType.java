@@ -8,7 +8,8 @@ public enum EntityType {
   NONE,
   ENEMY,
   COMMAND,
-  COLLIDABLE_TILE;
+  COLLIDABLE_TILE,
+  PLAYER;
 
   /**
    * Returns an [EntityType] with the given `name`, or [UNKNOWN] if none match. Unlike
