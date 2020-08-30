@@ -11,7 +11,8 @@ object TiledFakes {
     @JvmStatic
     @JvmOverloads
     fun fakeTiledObject(
-        entityType: String,
+        type: String,
+        name: String? = null,
         x: Float = 0f,
         y: Float = 0f,
         width: Float = 0f,
@@ -19,7 +20,8 @@ object TiledFakes {
         properties: Map<String, String> = mapOf()
     ) = object : TiledObject {
 
-        override val type = entityType
+        override val name = name
+        override val type = type
         override val x = x
         override val y = y
         override val width = width

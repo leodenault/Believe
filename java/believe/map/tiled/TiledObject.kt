@@ -8,7 +8,9 @@ import javax.inject.Inject
 
 /** An object from a Tiled map. */
 interface TiledObject : PropertyProvider {
-    /** The type of entity parsed from the object. */
+    /** The name assigned to the object. */
+    val name: String?
+    /** The type assigned to the object. */
     val type: String?
     /** The x pixel position of the object within the map. */
     val x: Float

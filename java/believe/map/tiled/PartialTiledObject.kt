@@ -7,6 +7,8 @@ import javax.inject.Inject
 class PartialTiledObject private constructor() {
     val properties = Properties.empty()
 
+    var name: String? = null
+        private set
     var type: String? = null
         private set
     var x: Float? = null
@@ -19,6 +21,7 @@ class PartialTiledObject private constructor() {
         private set
 
     fun overrideWith(other: PartialTiledObject) {
+        name = other.name ?: name
         type = other.type ?: type
         x = other.x ?: x
         y = other.y ?: y
@@ -28,6 +31,7 @@ class PartialTiledObject private constructor() {
     }
 
     fun toTiledObject() = object : TiledObject {
+        override val name = this@PartialTiledObject.name
         override val type = this@PartialTiledObject.type
         override val x = this@PartialTiledObject.x ?: 0f
         override val y = this@PartialTiledObject.y ?: 0f
@@ -43,7 +47,8 @@ class PartialTiledObject private constructor() {
         private val tileSetGroup: TileSetGroup
     ) : ElementParser<PartialTiledObject> by {
         PartialTiledObject()
-    }.byCombining(stringAttributeParser("type") withSetter { type = it },
+    }.byCombining(stringAttributeParser("name") withSetter { name = it },
+        stringAttributeParser("type") withSetter { type = it },
         floatAttributeParser("width") withSetter { width = it },
         floatAttributeParser("height") withSetter { height = it },
         floatAttributeParser("x") withSetter { x = it },

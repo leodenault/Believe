@@ -23,6 +23,7 @@ internal class PartialTiledObjectTest {
         val tiledObject = parseTiledObject(
             fakeElement(
                 attributes = arrayOf(
+                    "name" to "a name",
                     "type" to "object type",
                     "x" to "123",
                     "y" to "234",
@@ -35,6 +36,7 @@ internal class PartialTiledObjectTest {
         )
 
         with(tiledObject) {
+            assertThat(name).isEqualTo("a name")
             assertThat(type).isEqualTo("object type")
             assertThat(x).isEqualTo(123f)
             assertThat(y).isEqualTo(-222f)
@@ -82,6 +84,7 @@ internal class PartialTiledObjectTest {
         val partialObject2 = parseTiledObject(
             fakeElement(
                 attributes = arrayOf(
+                    "name" to "a name",
                     "type" to "object type",
                     "x" to "123",
                     "y" to "234",
@@ -96,6 +99,7 @@ internal class PartialTiledObjectTest {
         partialObject1.overrideWith(partialObject2)
 
         with(partialObject1) {
+            assertThat(name).isEqualTo("a name")
             assertThat(type).isEqualTo("object type")
             assertThat(x).isEqualTo(123f)
             assertThat(y).isEqualTo(-222f)
@@ -111,6 +115,7 @@ internal class PartialTiledObjectTest {
         val partialObject1 = parseTiledObject(
             fakeElement(
                 attributes = arrayOf(
+                    "name" to "a name",
                     "type" to "object type",
                     "x" to "123",
                     "y" to "234",
@@ -126,6 +131,7 @@ internal class PartialTiledObjectTest {
         partialObject1.overrideWith(partialObject2)
 
         with(partialObject1) {
+            assertThat(name).isEqualTo("a name")
             assertThat(type).isEqualTo("object type")
             assertThat(x).isEqualTo(123f)
             assertThat(y).isEqualTo(-222f)
@@ -141,6 +147,7 @@ internal class PartialTiledObjectTest {
         val tiledObject = parseTiledObject(
             fakeElement(
                 attributes = arrayOf(
+                    "name" to "a name",
                     "type" to "object type",
                     "x" to "123",
                     "y" to "234",
@@ -153,6 +160,7 @@ internal class PartialTiledObjectTest {
         ).toTiledObject()
 
         with(tiledObject) {
+            assertThat(name).isEqualTo("a name")
             assertThat(type).isEqualTo("object type")
             assertThat(x).isEqualTo(123f)
             assertThat(y).isEqualTo(-222f)
@@ -168,6 +176,7 @@ internal class PartialTiledObjectTest {
         val tiledObject = parseTiledObject(fakeElement()).toTiledObject()
 
         with(tiledObject) {
+            assertThat(name).isNull()
             assertThat(type).isNull()
             assertThat(x).isEqualTo(0f)
             assertThat(y).isEqualTo(0f)
