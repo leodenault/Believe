@@ -107,12 +107,8 @@ private class RectangleImpl internal constructor(
     override val center: Point
         get() = DeferredPoint(this::centerX, this::centerY)
 
-    override fun intersects(other: Rectangle): Boolean {
-        if (x >= other.x + other.width || x + width <= other.x) {
-            return false
-        }
-        return !(y >= other.y + other.height || y + height <= other.y)
-    }
+    override fun intersects(other: Rectangle): Boolean =
+        !(x >= other.maxX || maxX <= other.x || y >= other.maxY || maxY <= other.y)
 
     /** Returns a [Rectangle] that is the intersection of this and [other]. */
     override fun intersection(other: Rectangle): Rectangle {

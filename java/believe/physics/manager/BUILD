@@ -8,6 +8,7 @@ java_library(
     deps = [
         "//java/believe/physics/collision",
         "//java/believe/physics/gravity",
+        "//third_party/dagger",
         "//third_party/javax:annotations",
     ],
 )

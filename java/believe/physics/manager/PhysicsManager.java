@@ -3,6 +3,7 @@ package believe.physics.manager;
 import believe.physics.collision.Collidable;
 import believe.physics.collision.CollisionHandlerExecutor;
 import believe.physics.gravity.GravityObject;
+import dagger.Reusable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -14,7 +15,7 @@ import java.util.Set;
  * A manager for physical interactions in the game. This object manages all instances of objects
  * that are affected by gravity or that can collide with each other.
  */
-@Singleton
+@Reusable
 public class PhysicsManager {
   public static final float GRAVITY = 0.00125f; // Pixels per millisecond^2
 

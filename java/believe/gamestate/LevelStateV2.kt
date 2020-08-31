@@ -11,6 +11,7 @@ import believe.geometry.rectangle
 import believe.gui.GuiAction
 import believe.input.InputAdapter
 import believe.level.LevelManager
+import believe.physics.manager.PhysicsManager
 import believe.react.Observable
 import believe.react.Observer
 import believe.scene.Camera
@@ -29,15 +30,20 @@ class LevelStateV2 constructor(
     @Provided
     private val stateController: StateController,
     @Provided
-    private val playerSupplier: Supplier<CharacterV2?>, private val levelName: String
+    private val playerSupplier: Supplier<CharacterV2?>,
+    @Provided
+    private val levelMapFactory: LevelMap.Factory,
+    @Provided
+    private val physicsManager: PhysicsManager,
+    private val levelName: String
 ) : GameState {
 
     private var loadedState: LoadedState? = null
 
     override fun enter() {
-        val levelMap =
-            levelManager.getLevel(levelName)?.let { LevelMap.create(it.mapData, emptyList()) }
-                ?: throw RuntimeException("Could not load level map.")
+        val levelMap = levelManager.getLevel(levelName)?.let {
+            levelMapFactory.create(it.mapData, emptyList())
+        } ?: throw RuntimeException("Could not load level map.")
         val player: CharacterV2 = playerSupplier.get()
             ?: return Unit.also { Log.error("No player was loaded from the map.") }
         val camera = Camera(
@@ -57,7 +63,7 @@ class LevelStateV2 constructor(
         )
 
         loadedState = LoadedState(
-            inputAdapter, stateController, levelMap, camera
+            inputAdapter, stateController, levelMap, physicsManager, camera
         ).also { it.bind() }
     }
 
@@ -82,6 +88,7 @@ class LevelStateV2 constructor(
         private val inputAdapter: InputAdapter<GuiAction>,
         private val stateController: StateController,
         private val levelMap: LevelMap,
+        private val physicsManager: PhysicsManager,
         private var camera: Camera
     ) : Bindable, Updatable, RenderableV2 {
 
@@ -99,7 +106,10 @@ class LevelStateV2 constructor(
             camera.unbind()
         }
 
-        override fun update(delta: Int) = levelMap.update(delta)
+        override fun update(delta: Int) {
+            levelMap.update(delta)
+            physicsManager.update(delta)
+        }
 
         override fun render(g: Graphics) {
             camera.pushTransformOn(g)

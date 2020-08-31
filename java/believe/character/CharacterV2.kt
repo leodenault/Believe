@@ -4,6 +4,7 @@ import believe.core.display.Graphics
 import believe.geometry.Rectangle
 import believe.geometry.mutableRectangle
 import believe.geometry.rectangle
+import believe.map.collidable.tile.CollidableTileCollisionHandler
 import believe.map.collidable.tile.CollidableTileCollisionHandler.TileCollidable
 import believe.physics.collision.Collidable
 import believe.physics.collision.CollisionHandler
@@ -14,6 +15,7 @@ import believe.react.Observable
 import believe.react.Observer
 import believe.scene.SceneElement
 import dagger.Reusable
+import org.newdawn.slick.util.Log
 import javax.inject.Inject
 import kotlin.math.max
 import kotlin.math.min
@@ -39,7 +41,8 @@ interface CharacterV2 : SceneElement, TileCollidable<CharacterV2>, DamageBoxColl
     @Reusable
     open class Factory @Inject internal constructor(
         private val stateMachineFactory: CharacterStateMachine.Factory,
-        private val verticalMovementHandlerFactory: VerticalMovementHandler.Factory
+        private val verticalMovementHandlerFactory: VerticalMovementHandler.Factory,
+        private val collidableTileCollisionHandler: CollidableTileCollisionHandler
     ) {
         open fun create(
             animations: Animations,
@@ -58,7 +61,7 @@ interface CharacterV2 : SceneElement, TileCollidable<CharacterV2>, DamageBoxColl
                 return CharacterV2Impl(
                     stateMachine, verticalMovementHandlerFactory.create(
                         stateMachine, INITIAL_JUMP_VELOCITY, LANDED_VERTICAL_VELOCITY_TOLERANCE
-                    ), damageListener, emptySet(), x, y, faction
+                    ), damageListener, setOf(collidableTileCollisionHandler), x, y, faction
                 )
             }
         }

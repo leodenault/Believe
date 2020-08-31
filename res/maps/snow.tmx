@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="250" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="8">
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="250" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="9">
  <properties>
   <property name="player_start_x" value="1"/>
   <property name="player_start_y" value="33"/>
@@ -18,7 +18,7 @@
   <object id="2" gid="18" x="1216" y="1088" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="4" name="Player">
-  <object id="7" template="object_templates/player.tx" name="Jacob" x="32" y="992"/>
+  <object id="8" template="object_templates/player.tx" name="Jacob" x="32" y="992"/>
  </objectgroup>
  <layer id="3" name="Front" width="250" height="50">
   <properties>

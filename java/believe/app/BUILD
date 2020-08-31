@@ -143,6 +143,7 @@ java_library(
         "//java/believe/proto:impl",
         "//java/believe/react:impl",
         "//java/believe/scene",
+        "//java/believe/scene:impl",
         "//third_party/dagger",
         "//third_party/kotlin",
         "//third_party/slick",
