@@ -52,11 +52,7 @@ class PartialTiledObject private constructor() {
         floatAttributeParser("width") withSetter { width = it },
         floatAttributeParser("height") withSetter { height = it },
         floatAttributeParser("x") withSetter { x = it },
-        // Due to the Tiled issue found at https://github.com/bjorn/tiled/issues/91 we have to
-        // adjust the y position of objects by subtracting the height. The reason for this is that,
-        // unlike tiles, the y position for objects is defined at the bottom of the object rather
-        // than the top.
-        floatAttributeParser("y") withSetter { y = it - (height ?: 0f) },
+        floatAttributeParser("y") withSetter { y = it },
         attributeParser("gid") { stringGid ->
             stringGid.toIntOrNull()?.let { gid ->
                 val tileSet = tileSetGroup.tileSetForGid(gid)
