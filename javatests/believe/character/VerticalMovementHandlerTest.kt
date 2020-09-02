@@ -58,6 +58,24 @@ internal class VerticalMovementHandlerTest {
     }
 
     @Test
+    fun land_isJumping_allowsJumpingAgain() {
+        inputAdapter.actionStarted(CharacterMovementInputAction.JUMP)
+
+        handler.land()
+        handler.verticalVelocity = -1f
+        inputAdapter.actionStarted(CharacterMovementInputAction.JUMP)
+
+        assertThat(handler.verticalVelocity).isEqualTo(INITIAL_JUMP_VELOCITY)
+    }
+
+    @Test
+    fun land_isLanded_doesNothing() {
+        handler.land()
+
+        assertThat(handler.verticalVelocity).isEqualTo(0f)
+    }
+
+    @Test
     fun setVerticalVelocity_setsVerticalVelocityCorrectly() {
         handler.verticalVelocity = 9.8f
 
@@ -65,15 +83,31 @@ internal class VerticalMovementHandlerTest {
     }
 
     @Test
-    fun setVerticalVelocity_exceedsMaximumLandedTolerance_updatesCharacterStateMachine() {
+    fun setVerticalVelocity_exceedsMaximumLandedTolerance_updatesCharacterStateMachineAndPreventsJump() {
         handler.verticalVelocity = 10.1f
+        inputAdapter.actionStarted(CharacterMovementInputAction.JUMP)
 
         assertThat(stateMachine.animation).isEqualTo(JUMP_ANIMATION.rightAnimation)
+        assertThat(handler.verticalVelocity).isEqualTo(10.1f)
 
         stateMachine.land()
+        handler.land()
         handler.verticalVelocity = -10.1f
 
+        inputAdapter.actionStarted(CharacterMovementInputAction.JUMP)
         assertThat(stateMachine.animation).isEqualTo(JUMP_ANIMATION.rightAnimation)
+        assertThat(handler.verticalVelocity).isEqualTo(-10.1f)
+    }
+
+    @Test
+    fun jump_previouslyLandedMultipleTimesBeforeExceedingMaximumTolerance_ignores() {
+        handler.land()
+        handler.land()
+
+        handler.verticalVelocity = 10.1f
+        inputAdapter.actionStarted(CharacterMovementInputAction.JUMP)
+
+        assertThat(handler.verticalVelocity).isEqualTo(10.1f)
     }
 
     companion object {

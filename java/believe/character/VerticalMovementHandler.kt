@@ -4,6 +4,7 @@ import believe.core.display.Bindable
 import believe.input.InputAdapter
 import dagger.Reusable
 import javax.inject.Inject
+import kotlin.math.abs
 
 internal class VerticalMovementHandler private constructor(
     private val inputAdapter: InputAdapter<CharacterMovementInputAction>,
@@ -12,10 +13,18 @@ internal class VerticalMovementHandler private constructor(
     private val maximumLandedVerticalVelocityTolerance: Float
 ) : Bindable {
 
+    private var isAirborne = false
+
     internal var verticalVelocity = 0f
         set(value) {
             field = value
-            if (value > maximumLandedVerticalVelocityTolerance || value < -maximumLandedVerticalVelocityTolerance) characterStateMachine.jump()
+            if (!isAirborne && abs(value) > abs(maximumLandedVerticalVelocityTolerance)) {
+                isAirborne = true
+                characterStateMachine.jump()
+                inputAdapter.removeActionStartListener(
+                    CharacterMovementInputAction.JUMP, this::jump
+                )
+            }
         }
 
     override fun bind() =
@@ -24,8 +33,19 @@ internal class VerticalMovementHandler private constructor(
     override fun unbind() =
         inputAdapter.removeActionStartListener(CharacterMovementInputAction.JUMP, this::jump)
 
-    private fun jump() {
-        if (!characterStateMachine.isJumping()) verticalVelocity = initialJumpVelocity
+    internal fun jump() {
+        if (!isAirborne) {
+            isAirborne = true
+            inputAdapter.removeActionStartListener(CharacterMovementInputAction.JUMP, this::jump)
+            verticalVelocity = initialJumpVelocity
+        }
+    }
+
+    internal fun land() {
+        if (isAirborne) {
+            isAirborne = false
+            inputAdapter.addActionStartListener(CharacterMovementInputAction.JUMP, this::jump)
+        }
     }
 
     @Reusable

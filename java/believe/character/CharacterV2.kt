@@ -68,9 +68,9 @@ interface CharacterV2 : SceneElement, TileCollidable<CharacterV2>, DamageBoxColl
     }
 
     companion object {
-        private const val MOVEMENT_SPEED = 0.2f
-        private const val INITIAL_JUMP_VELOCITY = -0.5f
-        private const val LANDED_VERTICAL_VELOCITY_TOLERANCE = 0.1f
+        private const val MOVEMENT_SPEED = 0.2f // Pixels per millisecond
+        private const val INITIAL_JUMP_VELOCITY = -0.5f // Pixels per millisecond
+        private const val LANDED_VERTICAL_VELOCITY_TOLERANCE = 0.1f // Pixels per millisecond
         const val MAX_FOCUS = 1.0f
     }
 }
@@ -112,7 +112,10 @@ private class CharacterV2Impl constructor(
         this.y = y
     }
 
-    override fun landed() = stateMachine.land()
+    override fun landed() {
+        stateMachine.land()
+        verticalMovementHandler.land()
+    }
 
     override fun getVerticalSpeed() = verticalMovementHandler.verticalVelocity
 

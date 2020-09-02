@@ -91,10 +91,7 @@ public class PhysicsManager {
 
   private void applyGravity(int delta) {
     for (GravityObject grav : gravityObjects) {
-      float speed = grav.getVerticalSpeed();
-      grav.setLocation(grav.getFloatX(), grav.getFloatY() + speed * delta);
-      speed += GRAVITY * delta;
-      grav.setVerticalSpeed(speed);
+      grav.setVerticalSpeed(grav.getVerticalSpeed() + GRAVITY * delta);
     }
   }
 
@@ -134,7 +131,7 @@ public class PhysicsManager {
 
   private void engageCollision(Collidable<?> c1, Collidable<?> c2) {
     if (c1.rect().intersects(c2.rect())) {
-      collisionHandlerExecutor.execute(c1, c2);
+        collisionHandlerExecutor.execute(c1, c2);
     }
   }
 }

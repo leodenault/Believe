@@ -30,8 +30,6 @@ internal class CharacterStateMachine private constructor(
 
     internal fun land() = movementStateMachine.land()
 
-    internal fun isJumping() = movementStateMachine.isJumping()
-
     internal class Factory @Inject internal constructor(
         private val orientationStateMachineFactory: OrientationStateMachine.Factory,
         private val movementStateMachineFactory: MovementStateMachine.Factory
