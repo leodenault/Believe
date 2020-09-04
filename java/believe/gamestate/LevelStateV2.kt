@@ -1,6 +1,5 @@
 package believe.gamestate
 
-import believe.character.Animations
 import believe.character.CharacterV2
 import believe.core.Updatable
 import believe.core.display.Bindable

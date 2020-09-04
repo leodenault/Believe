@@ -36,7 +36,7 @@ internal class TiledObjectTest {
         with(tiledObject) {
             assertThat(type).isEqualTo("object type")
             assertThat(x).isEqualTo(123f)
-            assertThat(y).isEqualTo(-222f)
+            assertThat(y).isEqualTo(234f)
             assertThat(width).isEqualTo(345f)
             assertThat(height).isEqualTo(456f)
             assertThat(getProperty("prop1")).isEqualTo("value1")
