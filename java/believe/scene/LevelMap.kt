@@ -1,18 +1,21 @@
 package believe.scene
 
 import believe.core.display.Graphics
+import believe.geometry.Rectangle
 import believe.map.data.MapData
 import believe.physics.manager.PhysicsManager
+import believe.react.Observer
 import dagger.Reusable
 import javax.inject.Inject
 
 class LevelMap private constructor(
     val width: Float,
     val height: Float,
+    private val mapBackgrounds: List<MapBackground>,
     private val rearLayers: List<LevelMapLayer>,
     private val sceneElements: List<SceneElement>,
     private val frontLayers: List<LevelMapLayer>
-) : SceneElement {
+) : SceneElement, Observer<Rectangle> {
 
     override var x: Float = 0f
         set(value) {
@@ -29,6 +32,7 @@ class LevelMap private constructor(
         }
 
     override fun render(g: Graphics) {
+        mapBackgrounds.forEach { it.render(g) }
         rearLayers.forEach { it.render(g) }
         sceneElements.forEach { it.render(g) }
         frontLayers.forEach { it.render(g) }
@@ -37,6 +41,10 @@ class LevelMap private constructor(
     override fun bind() = sceneElements.forEach(SceneElement::bind)
     override fun unbind() = sceneElements.forEach(SceneElement::unbind)
     override fun update(delta: Int) = sceneElements.forEach { it.update(delta) }
+
+    override fun valueChanged(newValue: Rectangle) {
+        mapBackgrounds.forEach { it.valueChanged(newValue) }
+    }
 
     @Reusable
     class Factory @Inject internal constructor(private val physicsManager: PhysicsManager) {
@@ -54,23 +62,21 @@ class LevelMap private constructor(
             val sceneElements =
                 generatedEntities.flatMap { it.sceneElements() } + extraSceneElements
 
-            val rearLayers = mutableListOf<LevelMapLayer>()
-            val frontLayers = mutableListOf<LevelMapLayer>()
-            tiledMapData.layers().filter { it.isVisible }.forEach {
-                val layer = LevelMapLayer(it.layer())
-                if (it.isFrontLayer) frontLayers.add(layer) else rearLayers.add(layer)
-            }
+            val layerData =
+                tiledMapData.layers().filter { it.isVisible }.partition { it.isFrontLayer }
             val physicsManageables = tiledMapData.layers().flatMap {
                 it.generatedMapEntityData().physicsManageables()
             } + generatedEntities.flatMap { it.physicsManageables() }
             physicsManageables.forEach { it.addToPhysicsManager(physicsManager) }
 
+            val mapHeight = tiledMapData.height()
             return LevelMap(
                 tiledMapData.width().toFloat(),
-                tiledMapData.height().toFloat(),
-                rearLayers,
+                mapHeight.toFloat(),
+                mapData.backgroundScenes().map { MapBackground(it, mapHeight) },
+                layerData.second.map { LevelMapLayer(it.layer()) },
                 sceneElements,
-                frontLayers
+                layerData.first.map { LevelMapLayer(it.layer()) }
             )
         }
     }

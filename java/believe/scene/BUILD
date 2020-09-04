@@ -22,6 +22,7 @@ kt_jvm_library(
     srcs = [
         "LevelMap.kt",
         "LevelMapLayer.kt",
+        "MapBackground.kt",
     ],
     deps = [
         ":scene",

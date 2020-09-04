@@ -61,6 +61,7 @@ class LevelStateV2 constructor(
             scaleX = guiContext.width / TARGET_WIDTH,
             scaleY = guiContext.height / TARGET_HEIGHT
         )
+        camera.bounds.addObserver(levelMap)
 
         loadedState = LoadedState(
             inputAdapter, stateController, levelMap, physicsManager, camera

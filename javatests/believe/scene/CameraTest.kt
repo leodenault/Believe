@@ -1,11 +1,16 @@
 package believe.scene
 
 import believe.core.display.Graphics
+import believe.geometry.Rectangle
 import believe.geometry.point
 import believe.geometry.rectangle
 import believe.react.ObservableValue
+import believe.react.Observer
+import com.google.common.truth.Truth.assertThat
+import com.nhaarman.mockitokotlin2.check
 import com.nhaarman.mockitokotlin2.inOrder
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -89,6 +94,25 @@ internal class CameraTest {
                 -INITIAL_FOCUS_X + (CAMERA_WIDTH / 2), -BOUNDS.maxY + CAMERA_HEIGHT
             )
         }
+    }
+
+    @Test
+    fun cameraPositionChanges_notifiesObservers() {
+        val boundsObserver = mock<Observer<Rectangle>>()
+
+        camera.bounds.addObserver(boundsObserver)
+        focus.setValue(point(BOUNDS.centerX, BOUNDS.centerY))
+
+        verify(boundsObserver).valueChanged(check { bounds ->
+            assertThat(bounds).isEqualTo(
+                rectangle(
+                    BOUNDS.centerX - CAMERA_WIDTH / 2,
+                    BOUNDS.centerY - CAMERA_HEIGHT / 2,
+                    CAMERA_WIDTH,
+                    CAMERA_HEIGHT
+                )
+            )
+        })
     }
 
     companion object {
