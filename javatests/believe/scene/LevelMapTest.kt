@@ -93,9 +93,9 @@ internal class LevelMapTest {
 
         inOrder(graphics, visibleRearLayer, objectSceneElement, visibleFrontLayer) {
             verify(graphics).drawImage(eq(backgroundImage), any(), any())
-            verify(visibleRearLayer).render(0, 0)
+            verify(visibleRearLayer).render(0f, 0f)
             verify(objectSceneElement).render(graphics)
-            verify(visibleFrontLayer).render(0, 0)
+            verify(visibleFrontLayer).render(0f, 0f)
         }
         verifyZeroInteractions(invisibleBackLayer)
         verifyZeroInteractions(invisibleBackLayerWithData)
@@ -125,7 +125,7 @@ internal class LevelMapTest {
         levelMap.x = 123f
         levelMap.render(graphics)
 
-        verify(visibleRearLayer).render(123, 0)
+        verify(visibleRearLayer).render(123f, 0f)
     }
 
     @Test
@@ -135,6 +135,6 @@ internal class LevelMapTest {
         levelMap.y = 123f
         levelMap.render(graphics)
 
-        verify(visibleRearLayer).render(0, 123)
+        verify(visibleRearLayer).render(0f, 123f)
     }
 }

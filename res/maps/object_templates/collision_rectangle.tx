@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template>
- <object type="Player" width="64" height="96"/>
+ <object type="collidable_tile" width="32" height="32"/>
 </template>

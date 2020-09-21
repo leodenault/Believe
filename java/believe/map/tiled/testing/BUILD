@@ -9,13 +9,14 @@ kt_jvm_library(
     name = "testing",
     srcs = [
         "FakeElement.kt",
+        "PropertiesTruth.kt",
         "TiledFakes.kt",
     ],
     deps = [
         "//java/believe/io",
         "//java/believe/io/testing",
-        "//java/believe/map/tiled",
         "//java/believe/map/tiled:impl",
         "//third_party/mockito:mockito_kotlin",
+        "//third_party/truth",
     ],
 )

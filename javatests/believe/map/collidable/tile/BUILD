@@ -12,6 +12,7 @@ java_junit5_test(
         "//java/believe/geometry",
         "//java/believe/map/collidable/tile",
         "//java/believe/map/data",
+        "//java/believe/map/tiled/testing",
         "//java/believe/physics/collision",
         "//third_party/truth",
     ],
@@ -19,11 +20,13 @@ java_junit5_test(
 
 java_junit5_test(
     name = "CollidableTileGeneratorTest",
-    srcs = ["CollidableTileGeneratorTest.java"],
+    srcs = ["CollidableTileParserTest.java"],
     deps = [
         "//java/believe/map/collidable/tile",
         "//java/believe/map/data",
         "//java/believe/map/tiled",
+        "//java/believe/map/tiled:impl",
+        "//java/believe/map/tiled/testing",
         "//java/believe/physics/manager",
         "//java/believe/testing/mockito",
         "//third_party/mockito",
@@ -38,6 +41,7 @@ java_junit5_test(
         "//java/believe/geometry",
         "//java/believe/map/collidable/tile",
         "//java/believe/map/data",
+        "//java/believe/map/tiled/testing",
         "//java/believe/testing/mockito",
         "//third_party/mockito",
         "//third_party/truth",

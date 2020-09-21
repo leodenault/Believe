@@ -7,7 +7,7 @@ java_library(
     srcs = [
         "CollidableTile.java",
         "CollidableTileCollisionHandler.java",
-        "CollidableTileGenerator.java",
+        "CollidableTileParser.java",
         "package-info.java",
     ],
     deps = [
@@ -16,6 +16,7 @@ java_library(
         "//java/believe/map/data",
         "//java/believe/map/io",
         "//java/believe/map/tiled",
+        "//java/believe/map/tiled:impl",
         "//java/believe/physics/collision",
         "//java/believe/physics/gravity",
         "//java/believe/physics/manager",

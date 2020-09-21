@@ -1,6 +1,7 @@
 package believe.map.tiled.testing
 
 import believe.map.tiled.Layer
+import believe.map.tiled.Properties
 import believe.map.tiled.Tile
 import believe.map.tiled.TiledObject
 import believe.map.tiled.TiledObjectGroup
@@ -52,12 +53,11 @@ object TiledFakes {
     @JvmStatic
     @JvmOverloads
     fun fakeLayer(
-        properties: Map<String, String> = mapOf(), tiles: List<Tile> = listOf()
+        properties: Map<String, String> = mapOf()
     ) = object : Layer {
         override val name = ""
-        override val tiles = tiles
 
-        override fun render(x: Int, y: Int) = Unit
+        override fun render(x: Float, y: Float) = Unit
 
         override fun getProperty(key: String) = properties[key]
     }
@@ -66,19 +66,18 @@ object TiledFakes {
     @JvmStatic
     @JvmOverloads
     fun fakeTile(
-        pixelX: Int = 0,
-        pixelY: Int = 0,
+        type: String? = null,
         width: Int = 0,
         height: Int = 0,
         properties: Map<String, String> = mapOf()
     ) = object : Tile {
-        override val pixelX = pixelX
-        override val pixelY = pixelY
+        override val id: Int = 0
+        override val type: String? = type
         override val width = width
         override val height = height
+        override val properties: Properties = Properties.fromMap(properties)
 
-        override fun renderInUse(x: Int, y: Int) = Unit
+        override fun render(x: Float, y: Float) = Unit
 
-        override fun getProperty(key: String): String? = properties[key]
     }
 }

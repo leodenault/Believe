@@ -3,13 +3,12 @@ package believe.map.collidable.tile;
 import static believe.geometry.RectangleKt.rectangle;
 
 import believe.geometry.Rectangle;
-import believe.map.data.TileData;
+import believe.map.tiled.TiledObject;
 import believe.physics.collision.Collidable;
 import believe.physics.collision.CollisionHandler;
 import believe.physics.manager.PhysicsManageable;
 import believe.physics.manager.PhysicsManager;
 import believe.util.Util;
-
 import java.util.Collections;
 import java.util.Set;
 
@@ -19,10 +18,13 @@ public final class CollidableTile implements Collidable<CollidableTile>, Physics
   private final Set<CollisionHandler<? super CollidableTile, ? extends Collidable<?>>>
       leftCompatibleHandlers;
 
-  CollidableTile(TileData tileData, CollidableTileCollisionHandler collisionHandler) {
+  CollidableTile(TiledObject tiledObject, CollidableTileCollisionHandler collisionHandler) {
     this.rectangle =
         rectangle(
-            tileData.getPixelX(), tileData.getPixelY(), tileData.getWidth(), tileData.getHeight());
+            tiledObject.getX(),
+            tiledObject.getY(),
+            tiledObject.getWidth(),
+            tiledObject.getHeight());
     this.leftCompatibleHandlers = Collections.unmodifiableSet(Util.hashSetOf(collisionHandler));
   }
 

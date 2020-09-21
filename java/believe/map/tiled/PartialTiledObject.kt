@@ -1,7 +1,6 @@
 package believe.map.tiled
 
 import dagger.Reusable
-import java.util.function.Supplier
 import javax.inject.Inject
 
 class PartialTiledObject private constructor() {
@@ -48,17 +47,21 @@ class PartialTiledObject private constructor() {
     ) : ElementParser<PartialTiledObject> by {
         PartialTiledObject()
     }.byCombining(stringAttributeParser("name") withSetter { name = it },
-        stringAttributeParser("type") withSetter { type = it },
-        floatAttributeParser("width") withSetter { width = it },
-        floatAttributeParser("height") withSetter { height = it },
         floatAttributeParser("x") withSetter { x = it },
         floatAttributeParser("y") withSetter { y = it },
         attributeParser("gid") { stringGid ->
             stringGid.toIntOrNull()?.let { gid ->
-                val tileSet = tileSetGroup.tileSetForGid(gid)
-                tileSet?.getPropertiesForTile(gid)
-            }?.let { Properties.fromJava(it) }
-        } withSetter { properties.overrideWith(it) },
+                tileSetGroup.tileSetForGid(gid)?.get(gid)
+            }
+        } withSetter {
+            type = it.type
+            width = it.width.toFloat()
+            height = it.height.toFloat()
+            properties.overrideWith(it.properties)
+        },
+        stringAttributeParser("type") withSetter { type = it },
+        floatAttributeParser("width") withSetter { width = it },
+        floatAttributeParser("height") withSetter { height = it },
         Properties.parser() withSetter { properties.overrideWith(it) })
 
     companion object {

@@ -10,5 +10,5 @@ internal class LevelMapLayer constructor(private val layer: Layer) : RenderableV
     var x: Float = 0f
     var y: Float = 0f
 
-    override fun render(g: Graphics) = layer.render(x.toInt(), y.toInt())
+    override fun render(g: Graphics) = layer.render(x, y)
 }

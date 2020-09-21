@@ -2,26 +2,26 @@ package believe.map.collidable.tile;
 
 import static believe.geometry.RectangleKt.rectangle;
 import static believe.map.collidable.tile.CollidableTileCollisionHandlerTest.FakeTileCollidable.Subject.assertThat;
+import static believe.map.tiled.testing.TiledFakes.fakeTiledObject;
 import static com.google.common.truth.Truth.assertAbout;
 
 import believe.geometry.Rectangle;
 import believe.map.collidable.tile.CollidableTileCollisionHandler.TileCollidable;
-import believe.map.data.EntityType;
-import believe.map.data.TileData;
 import believe.physics.collision.Collidable;
 import believe.physics.collision.CollisionHandler;
 import com.google.common.truth.FailureMetadata;
 import org.junit.jupiter.api.Test;
-
 import java.util.Collections;
 import java.util.Set;
 
 public class CollidableTileCollisionHandlerTest {
   static final class FakeTileCollidable implements TileCollidable<FakeTileCollidable> {
-    static final class Subject
-        extends com.google.common.truth.Subject<Subject, FakeTileCollidable> {
-      private Subject(FailureMetadata failureMetadata, FakeTileCollidable fakeTileCollidable) {
-        super(failureMetadata, fakeTileCollidable);
+    static final class Subject extends com.google.common.truth.Subject {
+      private final FakeTileCollidable actual;
+
+      private Subject(FailureMetadata failureMetadata, FakeTileCollidable actual) {
+        super(failureMetadata, actual);
+        this.actual = actual;
       }
 
       static Factory<Subject, FakeTileCollidable> fakeTileCollidables() {
@@ -33,12 +33,12 @@ public class CollidableTileCollisionHandlerTest {
       }
 
       void isLocatedAt(float x, float y) {
-        check().withMessage("x value is different").that(actual().rect.getX()).isEqualTo(x);
-        check().withMessage("y value is different").that(actual().rect.getY()).isEqualTo(y);
+        check("x").withMessage("x value is different").that(actual.rect.getX()).isEqualTo(x);
+        check("y").withMessage("y value is different").that(actual.rect.getY()).isEqualTo(y);
       }
 
       void isLanded() {
-        check().that(actual().isLanded).isTrue();
+        check("is landed").that(actual.isLanded).isTrue();
       }
     }
 
@@ -124,37 +124,41 @@ public class CollidableTileCollisionHandlerTest {
   private final FakeTileCollidable subject = new FakeTileCollidable(80, 80, 220, 220);
   private final CollidableTile leftTile =
       new CollidableTile(
-          TileData.create(
-              EntityType.COLLIDABLE_TILE,
-              /* pixelX= */ 0,
-              /* pixelY= */ TILE_LENGTH,
+          fakeTiledObject(
+              "",
+              "",
+              /* x= */ 0,
+              /* y= */ TILE_LENGTH,
               /* width= */ TILE_LENGTH,
               /* height= */ TILE_LENGTH),
           handler);
   private final CollidableTile upTile =
       new CollidableTile(
-          TileData.create(
-              EntityType.COLLIDABLE_TILE,
-              /* pixelX= */ TILE_LENGTH,
-              /* pixelY= */ 0,
+          fakeTiledObject(
+              "",
+              "",
+              /* x= */ TILE_LENGTH,
+              /* y= */ 0,
               /* width= */ TILE_LENGTH,
               /* height= */ TILE_LENGTH),
           handler);
   private final CollidableTile rightTile =
       new CollidableTile(
-          TileData.create(
-              EntityType.COLLIDABLE_TILE,
-              /* pixelX= */ 2 * TILE_LENGTH,
-              /* pixelY= */ TILE_LENGTH,
+          fakeTiledObject(
+              "",
+              "",
+              /* x= */ 2 * TILE_LENGTH,
+              /* y= */ TILE_LENGTH,
               /* width= */ TILE_LENGTH,
               /* height= */ TILE_LENGTH),
           handler);
   private final CollidableTile downTile =
       new CollidableTile(
-          TileData.create(
-              EntityType.COLLIDABLE_TILE,
-              /* pixelX= */ TILE_LENGTH,
-              /* pixelY= */ 2 * TILE_LENGTH,
+          fakeTiledObject(
+              "",
+              "",
+              /* x= */ TILE_LENGTH,
+              /* y= */ 2 * TILE_LENGTH,
               /* width= */ TILE_LENGTH,
               /* height= */ TILE_LENGTH),
           handler);

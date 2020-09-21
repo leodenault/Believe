@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset name="commands" tilewidth="32" tileheight="32" tilecount="12" columns="4">
+<tileset version="1.4" tiledversion="1.4.2" name="commands" tilewidth="32" tileheight="32" tilecount="12" columns="4">
  <image source="commands.png" width="144" height="96"/>
  <tile id="0">
   <properties>

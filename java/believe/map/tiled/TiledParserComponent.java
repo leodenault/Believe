@@ -9,7 +9,12 @@ import org.w3c.dom.Element;
 
 /** A Dagger component encapsulating the Tiled integration package. */
 @Component(
-    modules = {DefaultProvidersDaggerModule.class, IoDaggerModule.class, TiledDaggerModule.class})
+    modules = {
+      DefaultProvidersDaggerModule.class,
+      IoDaggerModule.class,
+      TiledDaggerModule.class,
+      TiledParserDaggerModule.class
+    })
 interface TiledParserComponent {
   /** The element parser used in parsing {@link TiledObjectGroup} instances. */
   Function1<Element, TiledObjectGroup> getTiledObjectGroupParser();

@@ -24,11 +24,13 @@ kt_jvm_library(
         "ElementParser.kt",
         "Layer.kt",
         "ObjectTemplateManager.kt",
+        "PartialTileSet.kt",
         "PartialTiledObject.kt",
         "Properties.kt",
         "Tile.kt",
         "TileSet.kt",
         "TileSetGroup.kt",
+        "TileSetManager.kt",
         "TiledObject.kt",
         "TiledObjectGroup.kt",
     ],
@@ -44,25 +46,42 @@ kt_jvm_library(
     ],
 )
 
-kt_jvm_library(
-    name = "dagger_module",
-    srcs = ["TiledDaggerModule.kt"],
+java_library(
+    name = "tiled_parser_dagger_module",
+    srcs = ["TiledParserDaggerModule.java"],
     deps = [
         ":impl",
+        "//java/believe/datamodel",
         "//third_party/dagger",
+        "//third_party/kotlin",
+        "//third_party/slick",
+    ],
+)
+
+java_library(
+    name = "tiled_dagger_module",
+    srcs = ["TiledDaggerModule.java"],
+    visibility = ["//visibility:private"],
+    deps = [
+        ":impl",
+        "//java/believe/datamodel",
+        "//third_party/dagger",
+        "//third_party/kotlin",
+        "//third_party/slick",
     ],
 )
 
 java_library(
     name = "dagger_component",
     srcs = [
-        "TileSetParserComponent.java",
+        "TileSetComponent.java",
         "TiledParserComponent.java",
     ],
     deps = [
         ":annotations",
-        ":dagger_module",
         ":impl",
+        ":tiled_dagger_module",
+        ":tiled_parser_dagger_module",
         "//java/believe/core/io",
         "//java/believe/datamodel",
         "//java/believe/io",

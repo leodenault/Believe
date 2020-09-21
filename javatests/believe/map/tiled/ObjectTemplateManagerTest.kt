@@ -5,39 +5,44 @@ import believe.logging.testing.VerifiableLogSystem
 import believe.logging.testing.VerifiableLogSystem.LogSeverity
 import believe.logging.testing.VerifiesLoggingCalls
 import believe.logging.truth.VerifiableLogSystemSubject
+import believe.map.tiled.testing.fakeElement
 import com.google.common.truth.Truth.assertThat
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.jupiter.api.Test
+import org.w3c.dom.Document
 import org.xml.sax.SAXParseException
+import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.InputStream
+import javax.xml.parsers.DocumentBuilder
 
 internal class ObjectTemplateManagerTest {
     private val resourceManager = mock<ResourceManager> {
-        on { getResourceAsStream(VALID_TEMPLATE_LOCATION) } doReturn """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <template>
-             <object type="a type" width="32" height="96"/>
-            </template>
-        """.trimIndent().byteInputStream()
-        on { getResourceAsStream(IO_ERROR_TEMPLATE_LOCATION) } doReturn object : InputStream() {
-            override fun read(): Int = throw IOException()
+        on { getResourceAsStream(any()) } doAnswer { invocation ->
+            when (invocation.arguments[0]) {
+                UNLOADABLE_TEMPLATE_LOCATION -> null
+                UNPARSABLE_TEMPLATE_LOCATION -> UNPARSABLE_DOCUMENT_STREAM
+                INVALID_TEMPLATE_LOCATION -> INVALID_DOCUMENT_STREAM
+                else -> VALID_DOCUMENT_STREAM
+            }
         }
-        on { getResourceAsStream(UNPARSABLE_TEMPLATE_LOCATION) } doReturn """
-            o372423q5bqt7ob587qct3o45q837t45oc8q3 NOPE
-        """.trimIndent().byteInputStream()
-        on { getResourceAsStream(INVALID_TEMPLATE_LOCATION) } doReturn """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <template>
-             <notanobject height="96"/>
-            </template>
-        """.trimIndent().byteInputStream()
+    }
+    private val documentBuilder = mock<DocumentBuilder> {
+        on { parse(any<InputStream>()) } doAnswer { invocation ->
+            when (invocation.arguments[0]) {
+                UNPARSABLE_DOCUMENT_STREAM -> throw SAXParseException("", "", "", 0, 0)
+                INVALID_DOCUMENT_STREAM -> INVALID_DOCUMENT
+                else -> VALID_DOCUMENT
+            }
+        }
     }
     private val manager = ObjectTemplateManager(
-        resourceManager, PartialTiledObject.Parser(TileSetGroup {}), MAP_LOCATION
+        resourceManager, documentBuilder, PartialTiledObject.Parser(TileSetGroup {}), MAP_LOCATION
     )
 
     @Test
@@ -60,10 +65,10 @@ internal class ObjectTemplateManagerTest {
     @Test
     @VerifiesLoggingCalls
     fun getDataFor_documentFailsToLoad_returnsNullAndLogsError(logSystem: VerifiableLogSystem) {
-        assertThat(manager.getDataFor(IO_ERROR_TEMPLATE_RELATIVE_LOCATION)).isNull()
+        assertThat(manager.getDataFor(UNLOADABLE_TEMPLATE_RELATIVE_LOCATION)).isNull()
         VerifiableLogSystemSubject.assertThat(logSystem).loggedAtLeastOneMessageThat().hasSeverity(
             LogSeverity.ERROR
-        ).hasThrowable(IOException::class.java)
+        )
     }
 
     @Test
@@ -96,18 +101,36 @@ internal class ObjectTemplateManagerTest {
             "$TEMPLATE_DIRECTORY/$VALID_TEMPLATE_NAME"
         private const val VALID_TEMPLATE_LOCATION =
             "$MAP_DIRECTORY/$VALID_TEMPLATE_RELATIVE_LOCATION"
+        private val VALID_DOCUMENT_STREAM = ByteArrayInputStream(byteArrayOf(1, 2, 3))
+        private val VALID_ELEMENT = fakeElement(
+            tagName = "template", children = arrayOf(
+                fakeElement(
+                    tagName = "object",
+                    attributes = arrayOf("width" to "32", "height" to "96", "type" to "a type")
+                )
+            )
+        )
+        private val VALID_DOCUMENT = mock<Document> {
+            on { documentElement } doReturn VALID_ELEMENT
+        }
 
-        private const val IO_ERROR_TEMPLATE_RELATIVE_LOCATION = "$TEMPLATE_DIRECTORY/io_error.tx"
-        private const val IO_ERROR_TEMPLATE_LOCATION =
-            "$MAP_DIRECTORY/$IO_ERROR_TEMPLATE_RELATIVE_LOCATION"
+        private const val UNLOADABLE_TEMPLATE_RELATIVE_LOCATION = "$TEMPLATE_DIRECTORY/io_error.tx"
+        private const val UNLOADABLE_TEMPLATE_LOCATION =
+            "$MAP_DIRECTORY/$UNLOADABLE_TEMPLATE_RELATIVE_LOCATION"
 
         private const val UNPARSABLE_TEMPLATE_RELATIVE_LOCATION =
             "$TEMPLATE_DIRECTORY/unparsable.tx"
         private const val UNPARSABLE_TEMPLATE_LOCATION =
             "$MAP_DIRECTORY/$UNPARSABLE_TEMPLATE_RELATIVE_LOCATION"
+        private val UNPARSABLE_DOCUMENT_STREAM = ByteArrayInputStream(byteArrayOf(2, 3, 4))
 
         private const val INVALID_TEMPLATE_RELATIVE_LOCATION = "$TEMPLATE_DIRECTORY/invalid.tx"
         private const val INVALID_TEMPLATE_LOCATION =
             "$MAP_DIRECTORY/$INVALID_TEMPLATE_RELATIVE_LOCATION"
+        private val INVALID_DOCUMENT_STREAM = ByteArrayInputStream(byteArrayOf(3, 4, 5))
+        private val INVALID_ELEMENT = fakeElement(tagName = "template")
+        private val INVALID_DOCUMENT = mock<Document> {
+            on { documentElement } doReturn INVALID_ELEMENT
+        }
     }
 }

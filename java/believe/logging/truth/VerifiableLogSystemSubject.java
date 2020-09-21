@@ -12,11 +12,8 @@ import org.junit.jupiter.api.Assertions;
 
 import java.util.List;
 
-/**
- * Makes assertions about a {@link VerifiableLogSystem}.
- */
-public final class VerifiableLogSystemSubject
-    extends Subject<VerifiableLogSystemSubject, VerifiableLogSystem> {
+/** Makes assertions about a {@link VerifiableLogSystem}. */
+public final class VerifiableLogSystemSubject extends Subject {
   /**
    * Callback defining a set of assertions on a {@link LogMessageListSubject}. This is typically
    * used in determining that a particular logging call was never performed.
@@ -26,14 +23,16 @@ public final class VerifiableLogSystemSubject
      * Runs assertions that a particular logging call was performed.
      *
      * @param loggedMessage the {@link LogMessageListSubject} used in running assertions for a
-     * particular logging call.
+     *     particular logging call.
      */
     void assertLoggingCall(LogMessageListSubject loggedMessage);
   }
 
-  private VerifiableLogSystemSubject(
-      FailureMetadata metadata, VerifiableLogSystem actual) {
+  private final VerifiableLogSystem actual;
+
+  private VerifiableLogSystemSubject(FailureMetadata metadata, VerifiableLogSystem actual) {
     super(metadata, actual);
+    this.actual = actual;
   }
 
   /**
@@ -68,9 +67,7 @@ public final class VerifiableLogSystemSubject
     return VerifiableLogSystemSubject::new;
   }
 
-  /**
-   * Runs assertions on a {@link VerifiableLogSystem}.
-   */
+  /** Runs assertions on a {@link VerifiableLogSystem}. */
   public static VerifiableLogSystemSubject assertThat(VerifiableLogSystem verifiableLogSystem) {
     return assertAbout(verifiableLogSystems()).that(verifiableLogSystem);
   }
@@ -88,9 +85,8 @@ public final class VerifiableLogSystemSubject
    * whatever properties are to be specified in future calls.
    */
   public LogMessageListSubjectDelegator loggedAtLeast(int numExpectedMessages) {
-    return new LogMessageListSubjectDelegator(actual().getLogMessages(),
-        check(),
-        numExpectedMessages);
+    return new LogMessageListSubjectDelegator(
+        actual.getLogMessages(), check("getLogMessages()"), numExpectedMessages);
   }
 
   /**
@@ -98,7 +94,8 @@ public final class VerifiableLogSystemSubject
    * future calls.
    */
   public void neverLoggedMessageThat(LogMessageListSubjectCallback callback) {
-    Assertions.assertThrows(AssertionError.class,
+    Assertions.assertThrows(
+        AssertionError.class,
         () -> callback.assertLoggingCall(loggedAtLeastOneMessageThat()),
         "Expected no messages to be logged with given properties, but at least one was logged.");
   }

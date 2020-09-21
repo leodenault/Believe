@@ -7,7 +7,7 @@ package(
 kt_jvm_library(
     name = "geometry",
     srcs = [
-        "Point.kt",
+        "FloatPoint.kt",
         "Rectangle.kt",
     ],
     deps = ["//third_party/slick"],

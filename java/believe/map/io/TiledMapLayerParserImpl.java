@@ -41,24 +41,10 @@ final class TiledMapLayerParserImpl implements TiledMapLayerParser {
 
   @Override
   public LayerData parseLayer(Layer layer) {
-    LayerData.Builder builder =
-        LayerData.newBuilder(layer)
-            .setIsFrontLayer(parseBoolean(isFrontLayerProperty, layer).orElse(false))
-            .setIsVisible(parseBoolean(isVisibleProperty, layer).orElse(true));
-
-    GeneratedMapEntityData.Builder generatedMapEntityDataBuilder =
-        GeneratedMapEntityData.newBuilder();
-    for (Tile tile : layer.getTiles()) {
-      @Nullable String entityType = tile.getProperty(entityTypeProperty);
-      TileData tileData =
-          TileData.create(
-              tile, entityType == null ? EntityType.NONE : EntityType.forName(entityType));
-      for (TileParser tileParser : tileParsers) {
-        tileParser.parseTile(tileData, generatedMapEntityDataBuilder);
-      }
-    }
-
-    return builder.setGeneratedMapEntityData(generatedMapEntityDataBuilder.build()).build();
+    return LayerData.newBuilder(layer)
+        .setIsFrontLayer(parseBoolean(isFrontLayerProperty, layer).orElse(false))
+        .setIsVisible(parseBoolean(isVisibleProperty, layer).orElse(true))
+        .build();
   }
 
   private static Optional<Boolean> parseBoolean(String property, Layer layer) {

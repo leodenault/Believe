@@ -13,3 +13,6 @@ annotation class TiledMapTileHeight
 
 @Qualifier
 annotation class TiledMapTileWidth
+
+@Qualifier
+annotation class IsHeadless

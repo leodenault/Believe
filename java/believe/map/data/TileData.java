@@ -55,11 +55,7 @@ public abstract class TileData implements PropertyProvider {
    * @param height the height of the tile.
    */
   public static TileData create(
-      EntityType entityType,
-      int pixelX,
-      int pixelY,
-      int width,
-      int height) {
+      EntityType entityType, int pixelX, int pixelY, int width, int height) {
     return new AutoValue_TileData(key -> null, entityType, pixelX, pixelY, width, height);
   }
 
@@ -70,12 +66,6 @@ public abstract class TileData implements PropertyProvider {
    * @param entityType the x pixel position of the tile within the map.
    */
   public static TileData create(believe.map.tiled.Tile tiledTile, EntityType entityType) {
-    return create(
-        key -> tiledTile.getProperty(key),
-        entityType,
-        tiledTile.getPixelX(),
-        tiledTile.getPixelY(),
-        tiledTile.getWidth(),
-        tiledTile.getHeight());
+    return create(key -> null, entityType, 0, 0, tiledTile.getWidth(), tiledTile.getHeight());
   }
 }

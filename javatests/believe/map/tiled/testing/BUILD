@@ -8,9 +8,19 @@ package(
 kt_junit5_test(
     name = "FakeElementTest",
     srcs = ["FakeElementTest.kt"],
-    friends = ["//java/believe/map/tiled:tiled"],
+    friends = ["//java/believe/map/tiled:impl"],
     deps = [
-        "//java/believe/map/tiled",
+        "//java/believe/map/tiled:impl",
+        "//java/believe/map/tiled/testing",
+        "//third_party/truth",
+    ],
+)
+
+kt_junit5_test(
+    name = "PropertiesTruthTest",
+    srcs = ["PropertiesTruthTest.kt"],
+    deps = [
+        "//java/believe/map/tiled:impl",
         "//java/believe/map/tiled/testing",
         "//third_party/truth",
     ],

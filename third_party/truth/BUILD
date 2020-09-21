@@ -7,7 +7,10 @@ package(
 
 java_library(
     name = "truth",
-    exports = ["@maven//:com_google_truth_truth"],
+    exports = [
+        #        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_truth",
+    ],
 )
 
 java_library(

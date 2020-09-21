@@ -25,7 +25,7 @@ kt_junit5_test(
         "//java/believe/io",
         "//java/believe/logging/testing",
         "//java/believe/logging/truth",
-        "//java/believe/map/tiled",
+        "//java/believe/map/tiled/testing",
         "//third_party/mockito:mockito_kotlin",
         "//third_party/truth",
     ],
@@ -36,7 +36,17 @@ kt_junit5_test(
     srcs = ["PartialTiledObjectTest.kt"],
     friends = ["//java/believe/map/tiled:impl"],
     deps = [
-        "//java/believe/map/tiled",
+        "//java/believe/map/tiled/testing",
+        "//third_party/truth",
+    ],
+)
+
+kt_junit5_test(
+    name = "PartialTileSetTest",
+    srcs = ["PartialTileSetTest.kt"],
+    friends = ["//java/believe/map/tiled:impl"],
+    deps = [
+        "//java/believe/gui/testing",
         "//java/believe/map/tiled/testing",
         "//third_party/truth",
     ],
@@ -88,6 +98,47 @@ kt_junit5_test(
         "//java/believe/logging/testing",
         "//java/believe/logging/truth",
         "//java/believe/map/tiled",
+        "//third_party/mockito:mockito_kotlin",
+        "//third_party/truth",
+    ],
+)
+
+kt_junit5_test(
+    name = "TileSetManagerTest",
+    srcs = ["TileSetManagerTest.kt"],
+    friends = ["//java/believe/map/tiled:impl"],
+    deps = [
+        "//java/believe/datamodel",
+        "//java/believe/logging/testing",
+        "//java/believe/logging/truth",
+        "//java/believe/map/tiled/testing",
+        "//third_party/mockito:mockito_kotlin",
+        "//third_party/truth",
+    ],
+)
+
+kt_junit5_test(
+    name = "TileSetTest",
+    srcs = ["TileSetTest.kt"],
+    friends = ["//java/believe/map/tiled:impl"],
+    deps = [
+        "//java/believe/datamodel",
+        "//java/believe/map/tiled/testing",
+        "//third_party/mockito:mockito_kotlin",
+        "//third_party/truth",
+    ],
+)
+
+kt_junit5_test(
+    name = "TileTest",
+    srcs = ["TileTest.kt"],
+    friends = ["//java/believe/map/tiled:impl"],
+    deps = [
+        "//java/believe/gui/testing",
+        "//java/believe/logging/testing",
+        "//java/believe/logging/truth",
+        "//java/believe/map/tiled:impl",
+        "//java/believe/map/tiled/testing",
         "//third_party/mockito:mockito_kotlin",
         "//third_party/truth",
     ],

@@ -1,19 +1,25 @@
 package believe.map.tiled
 
+import believe.map.tiled.testing.TiledFakes
+import believe.map.tiled.testing.Truth
+import believe.map.tiled.testing.Truth.assertThat
 import believe.map.tiled.testing.fakeElement
 import believe.map.tiled.testing.fakeProperties
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.jupiter.api.Test
-import java.util.Properties
-import java.util.function.Supplier
 
 internal class PartialTiledObjectTest {
     private val tileSetGroup = TileSetGroup {
         add(mock {
             on { contains(VALID_GID) } doReturn true
-            on { getPropertiesForTile(VALID_GID) } doReturn TILE_PROPERTIES
+            on { get(VALID_GID) } doReturn TiledFakes.fakeTile(
+                type = TILE_TYPE,
+                width = TILE_WIDTH,
+                height = TILE_HEIGHT,
+                properties = TILE_PROPERTIES
+            )
         })
     }
     private val parseTiledObject = PartialTiledObject.Parser(tileSetGroup)
@@ -42,24 +48,44 @@ internal class PartialTiledObjectTest {
             assertThat(y).isEqualTo(234f)
             assertThat(width).isEqualTo(345f)
             assertThat(height).isEqualTo(456f)
-            assertThat(properties.getProperty("prop1")).isEqualTo("val1")
-            assertThat(properties.getProperty("prop2")).isEqualTo("val2")
+            assertThat(properties).containsAll("prop1" to "val1", "prop2" to "val2")
         }
     }
 
     @Test
-    fun parse_gidIsSpecified_overridesTileProperties() {
+    fun parse_gidIsSpecified_includesTileFields() {
+        val tiledObject = parseTiledObject(
+            fakeElement(attributes = arrayOf("gid" to VALID_GID.toString()))
+        )
+
+        with(tiledObject) {
+            assertThat(type).isEqualTo(TILE_TYPE)
+            assertThat(width).isEqualTo(TILE_WIDTH)
+            assertThat(height).isEqualTo(TILE_HEIGHT)
+            assertThat(properties).containsAll("prop1" to "value1", "prop2" to "value2.1")
+        }
+    }
+
+    @Test
+    fun parse_gidIsSpecified_tileFieldsAreOverridden() {
         val tiledObject = parseTiledObject(
             fakeElement(
-                attributes = arrayOf("gid" to VALID_GID.toString()),
-                children = arrayOf(fakeProperties("prop2" to "value2.2", "prop3" to "value3"))
+                attributes = arrayOf(
+                    "gid" to "$VALID_GID",
+                    "type" to "object type",
+                    "width" to "345",
+                    "height" to "456"
+                ), children = arrayOf(fakeProperties("prop2" to "value2.2", "prop3" to "value3"))
             )
         )
 
         with(tiledObject) {
-            assertThat(properties.getProperty("prop1")).isEqualTo("value1")
-            assertThat(properties.getProperty("prop2")).isEqualTo("value2.2")
-            assertThat(properties.getProperty("prop3")).isEqualTo("value3")
+            assertThat(type).isEqualTo("object type")
+            assertThat(width).isEqualTo(345)
+            assertThat(height).isEqualTo(456)
+            assertThat(properties).containsAll(
+                "prop1" to "value1", "prop2" to "value2.2", "prop3" to "value3"
+            )
         }
     }
 
@@ -72,10 +98,7 @@ internal class PartialTiledObjectTest {
             )
         )
 
-        with(tiledObject) {
-            assertThat(properties.getProperty("prop2")).isEqualTo("value2.2")
-            assertThat(properties.getProperty("prop3")).isEqualTo("value3")
-        }
+        assertThat(tiledObject.properties).containsAll("prop2" to "value2.2", "prop3" to "value3")
     }
 
     @Test
@@ -188,9 +211,9 @@ internal class PartialTiledObjectTest {
     companion object {
         private const val VALID_GID = 456
         private const val INVALID_GID = 654
-        private val TILE_PROPERTIES = Properties().apply {
-            put("prop1", "value1")
-            put("prop2", "value2.1")
-        }
+        private const val TILE_TYPE = "some tile type"
+        private const val TILE_WIDTH = 12
+        private const val TILE_HEIGHT = 14
+        private val TILE_PROPERTIES = mapOf("prop1" to "value1", "prop2" to "value2.1")
     }
 }

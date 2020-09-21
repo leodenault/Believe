@@ -15,7 +15,7 @@ import java.util.Optional;
 public final class MapMetadataParserImpl implements MapMetadataParser {
   interface TiledMapProvider {
     @Nullable
-    TiledMap provideTiledMap(String mapLocation, String tileSetsLocation);
+    TiledMap provideTiledMap(String mapLocation);
   }
 
   private final TiledMapProvider tiledMapProvider;
@@ -27,7 +27,10 @@ public final class MapMetadataParserImpl implements MapMetadataParser {
       TiledMap.Parser tiledMapParser,
       TiledMapParser tiledMapConverter,
       BackgroundSceneParser backgroundSceneParser) {
-    this(tiledMapParser::parse, tiledMapConverter, backgroundSceneParser);
+    this(
+        mapLocation -> tiledMapParser.parse(mapLocation, /* isHeadless= */ false),
+        tiledMapConverter,
+        backgroundSceneParser);
   }
 
   MapMetadataParserImpl(
@@ -41,9 +44,7 @@ public final class MapMetadataParserImpl implements MapMetadataParser {
 
   @Override
   public Optional<MapData> parse(MapMetadata mapMetadata) {
-    TiledMap tiledMap =
-        tiledMapProvider.provideTiledMap(
-            mapMetadata.getMapLocation(), mapMetadata.getTileSetsLocation());
+    TiledMap tiledMap = tiledMapProvider.provideTiledMap(mapMetadata.getMapLocation());
 
     if (tiledMap == null) {
       Log.error("Failed to load Tiled map.");

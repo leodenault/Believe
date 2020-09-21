@@ -2,7 +2,7 @@ package believe.scene
 
 import believe.core.display.Bindable
 import believe.core.display.Graphics
-import believe.geometry.Point
+import believe.geometry.FloatPoint
 import believe.geometry.Rectangle
 import believe.geometry.mutableRectangle
 import believe.react.Observable
@@ -20,7 +20,7 @@ import believe.react.Observer
  * @param scaleY the scale at which the camera views the Y dimension.
  */
 class Camera(
-    private val observableFocus: Observable<Point>,
+    private val observableFocus: Observable<FloatPoint>,
     private val outerBounds: Rectangle,
     private val cameraWidth: Float,
     private val cameraHeight: Float,

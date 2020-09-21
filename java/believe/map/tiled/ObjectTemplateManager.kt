@@ -2,27 +2,24 @@ package believe.map.tiled
 
 import believe.datamodel.DataManager
 import believe.io.ResourceManager
+import believe.util.KotlinHelpers.whenNull
 import dagger.Reusable
 import org.newdawn.slick.util.Log
 import org.w3c.dom.Element
-import org.xml.sax.InputSource
 import org.xml.sax.SAXException
-import java.io.ByteArrayInputStream
 import java.io.IOException
 import javax.inject.Inject
-import javax.xml.parsers.DocumentBuilderFactory
-import believe.util.KotlinHelpers.whenNull
+import javax.xml.parsers.DocumentBuilder
 
 @Reusable
 class ObjectTemplateManager @Inject internal constructor(
     private val resourceManager: ResourceManager,
+    private val documentBuilder: DocumentBuilder,
     parsePartialTiledObject: @JvmSuppressWildcards ElementParser<PartialTiledObject>,
     @TiledMapLocation tiledMapLocation: String
 ) : DataManager<PartialTiledObject> {
 
     private val tiledMapDirectory = tiledMapLocation.substring(0, tiledMapLocation.lastIndexOf("/"))
-    private val documentBuilderFactory =
-        DocumentBuilderFactory.newInstance().apply { isValidating = false }
     private val parseTemplate = object : ElementParser<PartialTiledObject?> {
         private val parseObjects = {
             mutableListOf<PartialTiledObject>()
@@ -39,11 +36,7 @@ class ObjectTemplateManager @Inject internal constructor(
 
         val xmlTemplateLocation = "$tiledMapDirectory/$name"
         return resourceManager.getResourceAsStream(xmlTemplateLocation)?.let { xmlTemplate ->
-            documentBuilderFactory.newDocumentBuilder().run {
-                setEntityResolver { _, _ ->
-                    InputSource(ByteArrayInputStream(byteArrayOf()))
-                }
-
+            documentBuilder.run {
                 try {
                     parse(xmlTemplate)
                 } catch (e: IOException) {

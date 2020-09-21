@@ -18,7 +18,7 @@ filegroup(
 
 filegroup(
     name = "tilesets",
-    srcs = glob(["tilesets/*"]),
+    srcs = glob(["tilesets/**/*"]),
 )
 
 filegroup(

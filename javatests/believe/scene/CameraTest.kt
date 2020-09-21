@@ -2,7 +2,7 @@ package believe.scene
 
 import believe.core.display.Graphics
 import believe.geometry.Rectangle
-import believe.geometry.point
+import believe.geometry.floatPoint
 import believe.geometry.rectangle
 import believe.react.ObservableValue
 import believe.react.Observer
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test
 
 internal class CameraTest {
     private val graphics: Graphics = mock()
-    private val focus = ObservableValue.of(point(INITIAL_FOCUS_X, INITIAL_FOCUS_Y))
+    private val focus = ObservableValue.of(floatPoint(INITIAL_FOCUS_X, INITIAL_FOCUS_Y))
     private val camera = Camera(
         focus, BOUNDS, CAMERA_WIDTH, CAMERA_HEIGHT, SCALE_X, SCALE_Y
     )
@@ -41,7 +41,7 @@ internal class CameraTest {
 
     @Test
     fun pushTransformOn_focusNearLeft_cameraClipsToLeftEdge() {
-        focus.setValue(point(BOUNDS.x, INITIAL_FOCUS_Y))
+        focus.setValue(floatPoint(BOUNDS.x, INITIAL_FOCUS_Y))
 
         camera.pushTransformOn(graphics)
 
@@ -54,7 +54,7 @@ internal class CameraTest {
 
     @Test
     fun pushTransformOn_focusNearRight_cameraClipsToRightEdge() {
-        focus.setValue(point(BOUNDS.maxX, INITIAL_FOCUS_Y))
+        focus.setValue(floatPoint(BOUNDS.maxX, INITIAL_FOCUS_Y))
 
         camera.pushTransformOn(graphics)
 
@@ -69,7 +69,7 @@ internal class CameraTest {
 
     @Test
     fun pushTransformOn_focusNearTop_cameraClipsToTopEdge() {
-        focus.setValue(point(INITIAL_FOCUS_X, BOUNDS.y))
+        focus.setValue(floatPoint(INITIAL_FOCUS_X, BOUNDS.y))
 
         camera.pushTransformOn(graphics)
 
@@ -83,7 +83,7 @@ internal class CameraTest {
 
     @Test
     fun pushTransformOn_focusNearBottom_cameraClipsToBottomEdge() {
-        focus.setValue(point(INITIAL_FOCUS_X, BOUNDS.maxY))
+        focus.setValue(floatPoint(INITIAL_FOCUS_X, BOUNDS.maxY))
 
         camera.pushTransformOn(graphics)
 
@@ -101,7 +101,7 @@ internal class CameraTest {
         val boundsObserver = mock<Observer<Rectangle>>()
 
         camera.bounds.addObserver(boundsObserver)
-        focus.setValue(point(BOUNDS.centerX, BOUNDS.centerY))
+        focus.setValue(floatPoint(BOUNDS.centerX, BOUNDS.centerY))
 
         verify(boundsObserver).valueChanged(check { bounds ->
             assertThat(bounds).isEqualTo(

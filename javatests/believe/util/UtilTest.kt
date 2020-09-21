@@ -53,12 +53,12 @@ class UtilTest {
 
     @Test
     fun hashSetOf_returnsProperHashSet() {
-        assertThat(hashSetOf("one", "two", "three")).containsAllOf("one", "two", "three")
+        assertThat(hashSetOf("one", "two", "three")).containsExactly("one", "two", "three")
     }
 
     @Test
     fun immutableSetOf_cannotBeModified() {
-        assertThat(immutableSetOf("one", "two", "three")).containsAllOf("one", "two", "three")
+        assertThat(immutableSetOf("one", "two", "three")).containsExactly("one", "two", "three")
     }
 
     @Test

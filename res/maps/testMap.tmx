@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="250" height="30" tilewidth="32" tileheight="32">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="250" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="1">
  <properties>
   <property name="playerStartX" value="1"/>
   <property name="playerStartY" value="19"/>
  </properties>
- <tileset firstgid="1" name="Test Set" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="Test Set" tilewidth="32" tileheight="32" tilecount="12" columns="4">
   <image source="tilesets/testSet.png" width="128" height="96"/>
  </tileset>
- <tileset firstgid="13" name="Background" tilewidth="32" tileheight="32">
+ <tileset firstgid="13" name="Background" tilewidth="32" tileheight="32" tilecount="1400" columns="50">
   <image source="tilesets/background.png" width="1600" height="900"/>
  </tileset>
- <tileset firstgid="1413" name="collision" tilewidth="32" tileheight="32">
-  <image source="tilesets/collision.png" width="32" height="32"/>
+ <tileset firstgid="1413" name="collision" tilewidth="32" tileheight="32" tilecount="4" columns="2">
+  <image source="tilesets/collision.png" width="64" height="64"/>
  </tileset>
- <layer name="Collision" width="250" height="30">
+ <layer id="1" name="Collision" width="250" height="30">
   <properties>
    <property name="collision" value=""/>
   </properties>
@@ -21,12 +21,12 @@
    H4sIAAAAAAAAA+3VIQ6AMBQFwRqOzr0JohJXAtnOJM/X7O8YAAAAAAAAAMB5fP0C4E134zqHNp1Dn86hT+fQt6pztwL+y38OfTqHPp1Dn86hT+fQ99S59qFjdm5m7QEAAAAAAAAAwA4u0WyEejB1AAA=
   </data>
  </layer>
- <layer name="Ground" width="250" height="30">
+ <layer id="2" name="Ground" width="250" height="30">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAA+3YMQqAMBBE0Y14UI/iUTyqEWu7hMD4HnxstxkCVgEAAAAAAAAAe9W5+gZgnr7xalXX6juAefrGDzuHbHYO+ewc8o3aeRtwCzCH9xzy2Tnks3PIZ+eQz84h39fO/T+HHM/Ot/crKbRNkiRJkiRJkiRJkiRJ+kk3nEX9jDB1AAA=
   </data>
  </layer>
- <layer name="Enemies" width="250" height="30">
+ <layer id="3" name="Enemies" width="250" height="30">
   <properties>
    <property name="enemies" value=""/>
   </properties>
@@ -34,7 +34,7 @@
    H4sIAAAAAAAAA+3MsQ0AAAQAQY3R7W0FiY67+vMRAAAAAAAAAAAAAAAAAAAAAAAAfFa576YPAAAAAAAAAAAAAO5r9DUu0TB1AAA=
   </data>
  </layer>
- <layer name="Fence" width="250" height="30">
+ <layer id="4" name="Fence" width="250" height="30">
   <properties>
    <property name="front" value=""/>
   </properties>
@@ -42,7 +42,7 @@
    H4sIAAAAAAAAA+3PwQ0AEBAAwfsg6L9fGvB0iZhJtoCNAAAAAAAAAAAAAAAAAAAAAADgN2VXL9USP4CzvhuXmokfAAAAAAAAAAAAALxnAVvo5N4wdQAA
   </data>
  </layer>
- <layer name="Foliage" width="250" height="30">
+ <layer id="5" name="Foliage" width="250" height="30">
   <properties>
    <property name="front" value=""/>
   </properties>

@@ -6,14 +6,11 @@ import dagger.Reusable
 import org.newdawn.slick.util.Log
 import org.w3c.dom.Document
 import org.w3c.dom.Element
-import org.xml.sax.InputSource
 import org.xml.sax.SAXException
-import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.util.*
 import java.util.Properties
 import javax.inject.Inject
-import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.parsers.ParserConfigurationException
 
 /**
@@ -82,7 +79,7 @@ interface TiledMap {
      * @param x The x location to render at
      * @param y The y location to render at
      */
-    fun render(x: Int, y: Int)
+    fun render(x: Float, y: Float)
 
     /**
      * Render a single layer from the map
@@ -91,31 +88,26 @@ interface TiledMap {
      * @param y The y location to render at
      * @param layer The layer to render
      */
-    fun render(x: Int, y: Int, layer: Layer)
+    fun render(x: Float, y: Float, layer: Layer)
 
     /** A parser for loading [TiledMap] instances from a file on disk.  */
     @Reusable
     class Parser @Inject internal constructor(private val resourceManager: ResourceManager) {
-        private val tileSetParserComponentFactory: TileSetParserComponent.Factory =
-            DaggerTileSetParserComponent.factory()
+        private val tileSetComponentFactory: TileSetComponent.Factory =
+            DaggerTileSetComponent.factory()
         private val tiledParserComponentFactory: TiledParserComponent.Factory =
             DaggerTiledParserComponent.factory()
 
         /** Parse a TilED map  */
         @JvmOverloads
         fun parse(
-            tileMapLocation: String?, tileSetsLocation: String?, isHeadless: Boolean = false
+            tileMapLocation: String, isHeadless: Boolean = false
         ): TiledMap? {
-            val `in` = resourceManager.getResourceAsStream(tileMapLocation!!) ?: return null
+            val inputStream = resourceManager.getResourceAsStream(tileMapLocation) ?: return null
+            val tileSetComponent = tileSetComponentFactory.create(tileMapLocation, isHeadless)
             val doc: Document
             try {
-                val factory = DocumentBuilderFactory.newInstance()
-                factory.isValidating = false
-                val builder = factory.newDocumentBuilder()
-                builder.setEntityResolver { _: String, _: String ->
-                    InputSource(ByteArrayInputStream(ByteArray(0)))
-                }
-                doc = builder.parse(`in`)
+                doc = tileSetComponent.documentBuilder.parse(inputStream)
             } catch (e: ParserConfigurationException) {
                 Log.error("Failed to parse tilemap", e)
                 return null
@@ -148,18 +140,17 @@ interface TiledMap {
                     }
                 }
             }
-            val tileSetParserComponent =
-                tileSetParserComponentFactory.create(tileMapLocation, tileSetsLocation)
-            val tileSetParser = tileSetParserComponent.tileSetParser
+            val parseTileSet = tileSetComponent.tileSetParser
             val tileSets = ArrayList<TileSet>()
-            var tileSet: TileSet
-            var lastGid = Int.MAX_VALUE
             val setNodes = docElement.getElementsByTagName("tileset")
             for (i in setNodes.length - 1 downTo -1 + 1) {
                 val current = setNodes.item(i) as Element
-                tileSet = tileSetParser.parse(current, i, lastGid, !isHeadless)
-                tileSets.add(tileSet)
-                lastGid = tileSet.firstGID - 1
+                val tileSet = parseTileSet(current)
+                if (tileSet == null) {
+                    Log.error("Failed to parse tile set.")
+                } else {
+                    tileSets.add(tileSet)
+                }
             }
             val tileSetGroup = create(tileSets)
             val tiledParserComponent = tiledParserComponentFactory.create(
@@ -270,7 +261,7 @@ private class TiledMapImpl constructor(
      * @param x The x location to render at
      * @param y The y location to render at
      */
-    override fun render(x: Int, y: Int) = layers.forEach { render(x, y, it) }
+    override fun render(x: Float, y: Float) = layers.forEach { render(x, y, it) }
 
     /**
      * Render a single layer from the map
@@ -279,5 +270,5 @@ private class TiledMapImpl constructor(
      * @param y The y location to render at
      * @param layer The layer to render
      */
-    override fun render(x: Int, y: Int, layer: Layer) = layer.render(x, y)
+    override fun render(x: Float, y: Float, layer: Layer) = layer.render(x, y)
 }

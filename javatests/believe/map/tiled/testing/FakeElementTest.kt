@@ -41,6 +41,16 @@ internal class FakeElementTest {
     }
 
     @Test
+    fun textContent_exists_returnsTextContent() {
+        assertThat(fakeElement(textContent = "some content").textContent).isEqualTo("some content")
+    }
+
+    @Test
+    fun textContent_doesNotexist_returnsNull() {
+        assertThat(fakeElement().textContent).isNull()
+    }
+
+    @Test
     fun getElementsByTagName_returnsCorrectlyConfiguredNodeList() {
         val element = fakeElement(
             children = arrayOf(
@@ -80,20 +90,84 @@ internal class FakeElementTest {
         val properties = fakeProperties("first_prop" to "first_val", "second_prop" to "second_val")
 
         assertThat(properties.tagName).isEqualTo("properties")
-        val propertyNodeList = properties.getElementsByTagName("property")
-        assertThat(propertyNodeList.length).isEqualTo(2)
+        val children = properties.getChildrenWithTagName("property")
+        assertThat(children).hasSize(2)
 
-        val property1 = propertyNodeList.item(0) as Element
-        val property2 = propertyNodeList.item(1) as Element
-        with(property1) {
+        with(children[0]) {
             assertThat(tagName).isEqualTo("property")
             assertThat(getAttribute("name")).isEqualTo("first_prop")
             assertThat(getAttribute("value")).isEqualTo("first_val")
         }
-        with(property2) {
+        with(children[1]) {
             assertThat(tagName).isEqualTo("property")
             assertThat(getAttribute("name")).isEqualTo("second_prop")
             assertThat(getAttribute("value")).isEqualTo("second_val")
         }
     }
+
+    @Test
+    fun fakeGridTileSet_returnsCorrectElement() {
+        val tileSet = fakeGridTileSet(
+            name = "some tile set",
+            tileWidth = 32,
+            tileHeight = 64,
+            columns = 2,
+            children = arrayOf(
+                fakeElement(tagName = "child"), fakeElement(tagName = "child")
+            )
+        )
+
+        with(tileSet) {
+            assertThat(tagName).isEqualTo("tileset")
+            assertThat(getAttribute("name")).isEqualTo("some tile set")
+            assertThat(getAttribute("tilewidth")).isEqualTo("32")
+            assertThat(getAttribute("tileheight")).isEqualTo("64")
+            assertThat(getAttribute("columns")).isEqualTo("2")
+            assertThat(getChildrenWithTagName("child")).hasSize(2)
+        }
+    }
+
+    @Test
+    fun fakeMultiImageTileSet_returnsCorrectElement() {
+        val tileSet = fakeMultiImageTileSet(
+            name = "some tile set",
+            children = arrayOf(fakeElement(tagName = "child"), fakeElement(tagName = "child"))
+        )
+
+        with(tileSet) {
+            assertThat(tagName).isEqualTo("tileset")
+            assertThat(getAttribute("name")).isEqualTo("some tile set")
+            assertThat(getChildrenWithTagName("child")).hasSize(2)
+        }
+    }
+
+    @Test
+    fun fakeGridTile_returnsCorrectElement() {
+        val tile = fakeGridTile(id = 1, type = "some type")
+
+        with(tile) {
+            assertThat(tagName).isEqualTo("tile")
+            assertThat(getAttribute("id")).isEqualTo("1")
+            assertThat(getAttribute("type")).isEqualTo("some type")
+        }
+    }
+
+    @Test
+    fun fakeSingleImageTile_returnsCorrectElement() {
+        val tile = fakeSingleImageTile(id = 3, type = "some type")
+
+        with(tile) {
+            assertThat(tagName).isEqualTo("tile")
+            assertThat(getAttribute("id")).isEqualTo("3")
+            assertThat(getAttribute("type")).isEqualTo("some type")
+            with(getChildrenWithTagName("image").first()) {
+                assertThat(getAttribute("source")).isEqualTo("")
+            }
+        }
+    }
 }
+
+private fun Element.getChildrenWithTagName(tagName: String): List<Element> =
+    getElementsByTagName(tagName).let { nodeList ->
+        return (0 until nodeList.length).map { nodeList.item(it) as Element }
+    }

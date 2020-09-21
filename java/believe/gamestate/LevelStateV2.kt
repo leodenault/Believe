@@ -5,7 +5,7 @@ import believe.core.Updatable
 import believe.core.display.Bindable
 import believe.core.display.Graphics
 import believe.core.display.RenderableV2
-import believe.geometry.Point
+import believe.geometry.FloatPoint
 import believe.geometry.rectangle
 import believe.gui.GuiAction
 import believe.input.InputAdapter
@@ -23,17 +23,13 @@ import java.util.function.Supplier
 
 @AutoFactory
 class LevelStateV2 constructor(
-    @Provided private val guiContext: GUIContext, @Provided private val levelManager: LevelManager,
-    @Provided
-    private val inputAdapter: InputAdapter<GuiAction>,
-    @Provided
-    private val stateController: StateController,
-    @Provided
-    private val playerSupplier: Supplier<CharacterV2?>,
-    @Provided
-    private val levelMapFactory: LevelMap.Factory,
-    @Provided
-    private val physicsManager: PhysicsManager,
+    @Provided private val guiContext: GUIContext,
+    @Provided private val levelManager: LevelManager,
+    @Provided private val inputAdapter: InputAdapter<GuiAction>,
+    @Provided private val stateController: StateController,
+    @Provided private val playerSupplier: Supplier<CharacterV2?>,
+    @Provided private val levelMapFactory: LevelMap.Factory,
+    @Provided private val physicsManager: PhysicsManager,
     private val levelName: String
 ) : GameState {
 
@@ -46,8 +42,8 @@ class LevelStateV2 constructor(
         val player: CharacterV2 = playerSupplier.get()
             ?: return Unit.also { Log.error("No player was loaded from the map.") }
         val camera = Camera(
-            object : Observable<Point> {
-                override fun addObserver(camera: Observer<Point>): Observable<Point> {
+            object : Observable<FloatPoint> {
+                override fun addObserver(camera: Observer<FloatPoint>): Observable<FloatPoint> {
                     player.addObserver { newValue ->
                         camera.valueChanged(newValue.center)
                     }

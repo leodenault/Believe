@@ -66,7 +66,7 @@ class CommandGeneratorImplTest {
             commandGeneratorImpl.generateCommand(createCommand {
                 setFakeCommandExtension("some data")
             })
-        ).isSameAs(COMMAND)
+        ).isSameInstanceAs(COMMAND)
     }
 
     companion object {

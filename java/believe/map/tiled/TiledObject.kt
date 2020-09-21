@@ -10,14 +10,19 @@ import javax.inject.Inject
 interface TiledObject : PropertyProvider {
     /** The name assigned to the object. */
     val name: String?
+
     /** The type assigned to the object. */
     val type: String?
+
     /** The x pixel position of the object within the map. */
     val x: Float
+
     /** The y pixel position of the object within the map. */
     val y: Float
+
     /** The width of the object. */
     val width: Float
+
     /** The height of the object. */
     val height: Float
 

@@ -1,0 +1,114 @@
+{
+    "activeFile": "tilesets/commands.tsx",
+    "expandedProjectPaths": [
+        "tilesets/enemies",
+        "object_templates",
+        ".",
+        "tilesets/protagonists",
+        "tilesets"
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "/home/leo/SkyMordhaus/workspace-eclipse/believe/bazel-bin/LevelEditor_bin/res/maps/snow.tmx": {
+            "scale": 1,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 1611,
+                "y": 1302
+            }
+        },
+        "/home/leo/SkyMordhaus/workspace-eclipse/believe/javatests/believe/map/io/data/test_map.tmx": {
+            "scale": 1,
+            "selectedLayer": -1,
+            "viewCenter": {
+                "x": 160,
+                "y": 320
+            }
+        },
+        "pipeTown.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 698,
+                "y": 1329.3333333333335
+            }
+        },
+        "snow.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 1016,
+                "y": 790
+            }
+        },
+        "testMap.tmx#Background": {
+            "scaleInDock": 1
+        },
+        "testMap.tmx#Test Set": {
+            "scaleInDock": 1
+        },
+        "testMap.tmx#collision": {
+            "scaleInDock": 1
+        },
+        "tilesets/commands.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1.5
+        },
+        "tilesets/enemies/enemies.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tilesets/entities.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tilesets/protagonists/protagonists.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1.5
+        },
+        "tilesets/snow.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "map.height": 20,
+    "map.orientation": 1,
+    "map.tileHeight": 32,
+    "map.tileWidth": 32,
+    "map.width": 10,
+    "openFiles": [
+        "snow.tmx",
+        "tilesets/protagonists/protagonists.tsx",
+        "tilesets/commands.tsx"
+    ],
+    "project": "believe.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "snow.tmx",
+        "tilesets/protagonists/protagonists.tsx",
+        "tilesets/commands.tsx",
+        "tilesets/snow.tsx",
+        "tilesets/entities.tsx",
+        "testMap.tmx",
+        "tilesets/enemies/enemies.tsx"
+    ],
+    "tileset.embedInMap": false,
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.margin": 0,
+    "tileset.spacing": 0,
+    "tileset.tileSize": {
+        "height": 1,
+        "width": 1
+    },
+    "tileset.transparentColor": "#ff00ff",
+    "tileset.type": 1,
+    "tileset.useTransparentColor": false
+}

@@ -3,8 +3,7 @@ package believe.map.collidable.tile;
 import static com.google.common.truth.Truth.assertThat;
 
 import believe.geometry.Rectangle;
-import believe.map.data.EntityType;
-import believe.map.data.TileData;
+import believe.map.tiled.testing.TiledFakes;
 import believe.testing.mockito.InstantiateMocksIn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,12 +20,8 @@ final class CollidableTileTest {
   void setUp() {
     collidableTile =
         new CollidableTile(
-            TileData.create(
-                EntityType.COLLIDABLE_TILE,
-                /* pixelX= */ 300,
-                /* pixelY= */ 500,
-                /* width= */ 100,
-                /* height= */ 100),
+            TiledFakes.fakeTiledObject(
+                "", "", /* x= */ 300, /* y= */ 500, /* width= */ 100, /* height= */ 100),
             collidableTileCollisionHandler);
   }
 

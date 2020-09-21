@@ -1,6 +1,6 @@
 package believe.map.collidable.tile;
 
-import believe.map.io.TileParser;
+import believe.map.io.ObjectParser;
 import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoSet;
@@ -10,6 +10,5 @@ import dagger.multibindings.IntoSet;
 public abstract class CollidableTileDaggerModule {
   @Binds
   @IntoSet
-  abstract TileParser provideCollidableTileGenerator(
-      CollidableTileGenerator collidableTileGenerator);
+  abstract ObjectParser provideCollidableTileParser(CollidableTileParser collidableTileParser);
 }

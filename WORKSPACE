@@ -49,7 +49,8 @@ maven_install(
         "com.google.auto.value:auto-value:1.6.2",
         "com.google.auto.value:auto-value-annotations:1.6.2",
         "com.google.code.findbugs:jsr305:3.0.2",
-        "com.google.truth:truth:0.42",
+        "com.google.guava:guava:29.0-jre",
+        "com.google.truth:truth:1.0.1",
         "com.google.truth.extensions:truth-java8-extension:0.42",
         "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0",
         # This is unfortunately required because of a bug in JUnit 5 where it requires

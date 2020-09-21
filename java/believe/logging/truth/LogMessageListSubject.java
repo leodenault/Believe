@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /** Subject class for executing assertions on a list of {@link LogMessage} instances. */
-public final class LogMessageListSubject extends Subject<LogMessageListSubject, List<LogMessage>> {
+public final class LogMessageListSubject extends Subject {
   private final int expectedNumMessages;
   private final List<LogMessage> allMessages;
   private List<LogMessage> actualMessages;
@@ -115,8 +115,7 @@ public final class LogMessageListSubject extends Subject<LogMessageListSubject, 
     messageParams[numMessageParams - 2] = numRemainingMessages;
     messageParams[numMessageParams - 1] = pluralSuffix(numRemainingMessages);
 
-    check()
-        .withMessage(
+    check(
             "Expected at least %s message%s "
                 + messageCondition
                 + ". Found %s matching message%s instead.\n\n"

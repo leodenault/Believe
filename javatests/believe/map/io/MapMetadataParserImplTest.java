@@ -55,7 +55,7 @@ final class MapMetadataParserImplTest {
   void setUp() {
     parser =
         new MapMetadataParserImpl(
-            (mapLocation, tileSetsLocation) -> tiledMap,
+            (mapLocation) -> tiledMap,
             tiledMap -> TILED_MAP_DATA,
             mapBackground -> Optional.of(BACKGROUND_SCENE_DATA));
   }
@@ -72,7 +72,7 @@ final class MapMetadataParserImplTest {
   void parse_tiledMapFailsToLoad_returnsEmptyAndLogsError(VerifiableLogSystem logSystem) {
     parser =
         new MapMetadataParserImpl(
-            (mapLocation, tileSetsLocation) -> null,
+            (mapLocation) -> null,
             tiledMap -> TILED_MAP_DATA,
             mapBackground -> Optional.of(BACKGROUND_SCENE_DATA));
 

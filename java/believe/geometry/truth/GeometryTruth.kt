@@ -15,9 +15,10 @@ object Truth {
 
 class RectangleSubject private constructor(
     failureMetadata: FailureMetadata, private val actual: Rectangle
-) : Subject<RectangleSubject, Rectangle>(failureMetadata, actual) {
+) : Subject(failureMetadata, actual) {
 
-    fun isWithin(tolerance: Float) = ExpectRectangleComparator(tolerance, actual, check())
+    fun isWithin(tolerance: Float) =
+        ExpectRectangleComparator(tolerance, actual, check("dimensions"))
 
     class ExpectRectangleComparator internal constructor(
         private val tolerance: Float,
@@ -25,12 +26,12 @@ class RectangleSubject private constructor(
         private val check: StandardSubjectBuilder
     ) {
         fun of(expected: Rectangle) {
-            check.withMessage("expected rectangle X position to be within tolerance")
-                .that(actual.x).isWithin(tolerance).of(expected.x)
-            check.withMessage("expected rectangle Y position to be within tolerance")
-                .that(actual.y).isWithin(tolerance).of(expected.y)
-            check.withMessage("expected rectangle width to be within tolerance")
-                .that(actual.width).isWithin(tolerance).of(expected.width)
+            check.withMessage("expected rectangle X position to be within tolerance").that(actual.x)
+                .isWithin(tolerance).of(expected.x)
+            check.withMessage("expected rectangle Y position to be within tolerance").that(actual.y)
+                .isWithin(tolerance).of(expected.y)
+            check.withMessage("expected rectangle width to be within tolerance").that(actual.width)
+                .isWithin(tolerance).of(expected.width)
             check.withMessage("expected rectangle height to be within tolerance")
                 .that(actual.height).isWithin(tolerance).of(expected.height)
         }

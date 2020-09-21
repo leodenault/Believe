@@ -11,7 +11,8 @@ message MapMetadata {
   // The file location of the Tiled map that should be loaded.
   optional string map_location = 1;
   // The location of the tile sets used in the Tiled map.
-  optional string tile_sets_location = 2;
+  // DEPRECATED: Tile set location is pulled from the map.
+  optional string tile_sets_location = 2 [deprecated = true];
   // The set of backgrounds displayed behind the map. Backgrounds should be
   // ordered from top to bottom in layer order.
   repeated MapBackground map_backgrounds = 3;
