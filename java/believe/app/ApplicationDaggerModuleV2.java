@@ -24,6 +24,7 @@ import believe.map.collidable.command.CollidableCommandDaggerModule;
 import believe.map.collidable.tile.CollidableTileDaggerModule;
 import believe.map.io.MapParsingDaggerModule;
 import believe.map.tiled.command.TiledCommandDaggerModule;
+import believe.mob.MobDaggerModule;
 import believe.physics.collision.CollisionDaggerModule;
 import believe.proto.ProtoDaggerModule;
 import believe.util.Util;
@@ -64,7 +65,7 @@ import java.util.function.Supplier;
       IoDaggerModule.class,
       LevelDaggerModule.class,
       MapParsingDaggerModule.class,
-      // PlayableDaggerModule.class,
+      MobDaggerModule.class,
       ProtoDaggerModule.class,
       TiledCommandDaggerModule.class
     })

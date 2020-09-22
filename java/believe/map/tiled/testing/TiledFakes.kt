@@ -12,7 +12,7 @@ object TiledFakes {
     @JvmStatic
     @JvmOverloads
     fun fakeTiledObject(
-        type: String,
+        type: String? = null,
         name: String? = null,
         x: Float = 0f,
         y: Float = 0f,

@@ -1,10 +1,10 @@
 {
-    "activeFile": "tilesets/commands.tsx",
+    "activeFile": "snow.tmx",
     "expandedProjectPaths": [
-        "tilesets/enemies",
-        "object_templates",
-        ".",
         "tilesets/protagonists",
+        "object_templates",
+        "tilesets/enemies",
+        ".",
         "tilesets"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -38,10 +38,10 @@
         },
         "snow.tmx": {
             "scale": 0.5,
-            "selectedLayer": 2,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 1016,
-                "y": 790
+                "x": 920,
+                "y": 920
             }
         },
         "testMap.tmx#Background": {
@@ -92,9 +92,9 @@
     "project": "believe.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "snow.tmx",
-        "tilesets/protagonists/protagonists.tsx",
         "tilesets/commands.tsx",
+        "tilesets/protagonists/protagonists.tsx",
+        "snow.tmx",
         "tilesets/snow.tsx",
         "tilesets/entities.tsx",
         "testMap.tmx",
