@@ -58,20 +58,6 @@ public abstract class PlayableDaggerModule {
 
   @Provides
   @IntoSet
-  static ObjectParser provideEnemyCharacterGenerator(EnemyCharacterFactory enemyCharacterFactory) {
-    return (entityType, tiledObject, generatedMapEntityDataBuilder) -> {
-      if (entityType == EntityType.ENEMY) {
-        EnemyCharacter enemyCharacter =
-            enemyCharacterFactory.create(
-                (int) tiledObject.getX(), (int) (tiledObject.getY() + tiledObject.getHeight()));
-        generatedMapEntityDataBuilder.addPhysicsManageable(enemyCharacter);
-        // generatedMapEntityDataBuilder.addSceneElement(enemyCharacter);
-      }
-    };
-  }
-
-  @Provides
-  @IntoSet
   static CollisionHandler<? extends Collidable<?>, ? super EnemyCharacter>
       provideEnemyCollisionHandler(CollidableTileCollisionHandler collidableTileCollisionHandler) {
     return collidableTileCollisionHandler;
