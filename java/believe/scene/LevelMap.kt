@@ -40,7 +40,7 @@ class LevelMap private constructor(
 
     override fun bind() = sceneElements.forEach(SceneElement::bind)
     override fun unbind() = sceneElements.forEach(SceneElement::unbind)
-    override fun update(delta: Int) = sceneElements.forEach { it.update(delta) }
+    override fun update(delta: Long) = sceneElements.forEach { it.update(delta) }
 
     override fun valueChanged(newValue: Rectangle) {
         mapBackgrounds.forEach { it.valueChanged(newValue) }

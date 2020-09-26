@@ -68,7 +68,7 @@ public class EnemyCharacter extends Character<EnemyCharacter> {
   }
 
   @Override
-  public void update(int delta) {
+  public void update(long delta) {
     if (punchTimer.getElapsedTime() >= PUNCH_PERIOD) {
       anim.stop();
       anim = punch;

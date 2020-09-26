@@ -210,7 +210,7 @@ public abstract class Character<C extends Character<C>> extends ComponentBase
   }
 
   @Override
-  public void update(int delta) {
+  public void update(long delta) {
     if (horizontalSpeed != 0) {
       setLocation(getFloatX() + delta * horizontalSpeed, getFloatY());
     }

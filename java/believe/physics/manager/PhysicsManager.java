@@ -84,12 +84,12 @@ public class PhysicsManager {
     this.removed.add(collidable);
   }
 
-  public void update(int delta) {
+  public void update(long delta) {
     applyGravity(delta);
     checkCollisions();
   }
 
-  private void applyGravity(int delta) {
+  private void applyGravity(long delta) {
     for (GravityObject grav : gravityObjects) {
       grav.setVerticalSpeed(grav.getVerticalSpeed() + GRAVITY * delta);
     }

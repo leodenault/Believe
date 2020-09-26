@@ -41,5 +41,5 @@ class MainMenuStateV2 constructor(
         guiLayout.render(g)
     }
 
-    override fun update(delta: Int) {}
+    override fun update(delta: Long) {}
 }

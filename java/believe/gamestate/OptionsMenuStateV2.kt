@@ -52,5 +52,5 @@ class OptionsMenuStateV2 constructor(
 
     override fun render(g: Graphics) = gui.render(g)
 
-    override fun update(delta: Int) {}
+    override fun update(delta: Long) {}
 }

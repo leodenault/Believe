@@ -67,7 +67,7 @@ class LevelStateV2 constructor(
         loadedState?.unbind()?.also { loadedState = null }
     }
 
-    override fun update(delta: Int) {
+    override fun update(delta: Long) {
         loadedState?.update(delta)
     }
 
@@ -102,7 +102,7 @@ class LevelStateV2 constructor(
             camera.unbind()
         }
 
-        override fun update(delta: Int) {
+        override fun update(delta: Long) {
             levelMap.update(delta)
             physicsManager.update(delta)
         }

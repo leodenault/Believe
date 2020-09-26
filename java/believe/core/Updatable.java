@@ -5,7 +5,7 @@ public interface Updatable {
   /**
    * Updates the internal state of this instance.
    *
-   * @param delta the time that has passed since the last update.
+   * @param delta the time, in milliseconds, that has passed since the last update.
    */
-  void update(int delta);
+  void update(long delta);
 }

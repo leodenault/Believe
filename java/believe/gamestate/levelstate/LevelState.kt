@@ -76,9 +76,9 @@ abstract class LevelState(
         container: GameContainer, game: StateBasedGame, delta: Int
     ) {
         playArea?.update(delta)
-        physicsManager.update(delta)
+        physicsManager.update(delta.toLong())
         player?.let {
-            it.update(delta)
+            it.update(delta.toLong())
             focusBar.setProgress(it.focus)
         }
     }
@@ -155,9 +155,10 @@ abstract class LevelState(
     private fun initPhysics() {
         physicsManager.reset()
         val mapData = levelData!!.mapData
-        Stream.concat(mapData.tiledMapData().objectLayers().stream().flatMap { objectLayerData: ObjectLayerData ->
-            objectLayerData.generatedMapEntityData().physicsManageables().stream()
-        }, mapData.tiledMapData().layers().stream().flatMap { layerData: LayerData ->
+        Stream.concat(mapData.tiledMapData().objectLayers().stream()
+            .flatMap { objectLayerData: ObjectLayerData ->
+                objectLayerData.generatedMapEntityData().physicsManageables().stream()
+            }, mapData.tiledMapData().layers().stream().flatMap { layerData: LayerData ->
             layerData.generatedMapEntityData().physicsManageables().stream()
         }).forEach { entity: PhysicsManageable ->
             entity.addToPhysicsManager(physicsManager)
@@ -173,6 +174,7 @@ abstract class LevelState(
     }
 
     protected abstract fun providePlayArea(mapData: MapData?, player: PlayableCharacter?): PlayArea?
+
     @Throws(SlickException::class)
     protected abstract fun levelEnter(container: GameContainer?, game: StateBasedGame?)
 

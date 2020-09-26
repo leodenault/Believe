@@ -17,5 +17,5 @@ internal class StationaryEnemy(
 
     override fun unbind() {}
 
-    override fun update(delta: Int) {}
+    override fun update(delta: Long) {}
 }

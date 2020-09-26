@@ -13,7 +13,7 @@ public class Timer {
     status = Status.STOPPED;
   }
 
-  public void update(int delta) {
+  public void update(long delta) {
     if (status == Status.PLAYING) {
       current += delta;
     }

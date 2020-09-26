@@ -63,7 +63,7 @@ final class DamageProjection implements GravityObject {
   }
 
   /** Updates the animation if it is still active. */
-  void update(int delta) {
+  void update(long delta) {
     elapsedTime += delta;
     if (orientation == Orientation.RIGHT) {
       x -= Math.round(recoilXRate * delta);

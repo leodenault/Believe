@@ -154,10 +154,10 @@ private class CharacterV2Impl constructor(
         focus = min(CharacterV2.MAX_FOCUS, focus + health)
     }
 
-    override fun update(delta: Int) {
+    override fun update(delta: Long) {
         x += stateMachine.horizontalMovementSpeed * delta
         y += verticalSpeed * delta
-        stateMachine.animation.update(delta.toLong())
+        stateMachine.animation.update(delta)
     }
 
     override fun addToPhysicsManager(physicsManager: PhysicsManager) {

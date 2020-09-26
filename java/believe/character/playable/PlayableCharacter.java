@@ -111,7 +111,7 @@ public class PlayableCharacter extends Character<PlayableCharacter>
   }
 
   @Override
-  public void update(int delta) {
+  public void update(long delta) {
     super.update(delta);
     if (!damageProjection.isStopped()) {
       damageProjection.update(delta);

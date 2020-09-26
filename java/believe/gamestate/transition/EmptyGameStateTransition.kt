@@ -14,7 +14,7 @@ class EmptyGameStateTransition : GameStateTransition {
         listeners.add(listener)
     }
 
-    override fun update(delta: Int) {
+    override fun update(delta: Long) {
         listeners.forEach(Listener::transitionEnded)
     }
 

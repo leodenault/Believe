@@ -14,7 +14,7 @@ class GameStateRunnerImpl @Inject constructor() : GameStateRunner {
     private var currentUpdatableAndRenderable: UpdatableAndRenderable<*> =
         UpdatableAndRenderable(EmptyGameState)
 
-    override fun update(delta: Int) = currentUpdatableAndRenderable.update(delta)
+    override fun update(delta: Long) = currentUpdatableAndRenderable.update(delta)
 
     override fun render(g: Graphics) = currentUpdatableAndRenderable.render(g)
 
@@ -42,7 +42,7 @@ class GameStateRunnerImpl @Inject constructor() : GameStateRunner {
     private object EmptyGameState : GameState {
         override fun enter() {}
         override fun leave() {}
-        override fun update(delta: Int) {}
+        override fun update(delta: Long) {}
         override fun render(g: Graphics) {}
     }
 
@@ -50,7 +50,7 @@ class GameStateRunnerImpl @Inject constructor() : GameStateRunner {
         private var value: T
     ) : Updatable, RenderableV2 where T : Updatable, T : RenderableV2 {
 
-        override fun update(delta: Int) {
+        override fun update(delta: Long) {
             value.update(delta)
         }
 
