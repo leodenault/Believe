@@ -1,5 +1,6 @@
 package believe.gui;
 
+import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyFloat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -12,8 +13,10 @@ import believe.core.io.testing.FakeFontLoader;
 import believe.gui.CharacterDialogue.DialogueResponse;
 import believe.gui.testing.FakeGuiContext;
 import believe.gui.testing.FakeImage;
+import com.google.common.truth.Truth;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -55,7 +58,11 @@ public final class CharacterDialogueTest {
     dialogue.render(context, graphics);
     dialogue.scroll();
     dialogue.render(context, graphics);
-    verify(graphics, times(2)).drawImage(eq(new FakeImage(100, 100)), anyFloat(), anyFloat());
+    ArgumentCaptor<Image> imageArgumentCaptor = ArgumentCaptor.forClass(Image.class);
+    verify(graphics, times(2)).drawImage(imageArgumentCaptor.capture(), anyFloat(), anyFloat());
+    Image actualImage = imageArgumentCaptor.getValue();
+    assertThat(actualImage.getWidth()).isEqualTo(100);
+    assertThat(actualImage.getHeight()).isEqualTo(100);
   }
 
   @Test

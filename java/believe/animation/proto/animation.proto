@@ -23,10 +23,22 @@ message SpriteSheet {
 // between the two are included in the sequence. Indices for the frames are specified as if the
 // top-left frame of the image has index 0, and the bottom-right frame in the image has index n-1.
 message Animation {
+  // The mode used to determine how an [Animation] iterates through its frames.
+  enum IterationMode {
+    // The animation will iterate from start frame to end frame.
+    LINEAR = 1;
+    // The animation will iterate from start frame to end frame and then back to the start frame.
+    PING_PONG = 2;
+  }
+
   // The index of the first frame of the animation sequence.
   optional int32 start_frame = 1;
   // The index of the last frame of the animation sequence.
   optional int32 end_frame = 2;
   // The amount of time, in milliseconds, a single frame should be displayed.
   optional int32 duration = 3;
+  // The mode used to determine how the animation should iterate through its frames.
+  optional IterationMode iteration_mode = 4 [default = LINEAR];
+  // Whether the animation should endlessly loop through its frames.
+  optional bool is_looping = 5;
 }

@@ -1,5 +1,6 @@
 package believe.character
 
+import believe.animation.BidirectionalAnimation
 import believe.core.display.Bindable
 import believe.input.InputAdapter
 import dagger.Reusable

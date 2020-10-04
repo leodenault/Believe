@@ -1,9 +1,10 @@
 package believe.character
 
+import believe.animation.Animation
+import believe.animation.emptyAnimation
 import believe.character.proto.CharacterAnimationsProto
 import believe.datamodel.DataManager
 import dagger.Reusable
-import org.newdawn.slick.Animation
 import org.newdawn.slick.util.Log
 import javax.inject.Inject
 
@@ -18,7 +19,7 @@ interface Animations {
 
     companion object {
         internal val EMPTY: Animations = AnimationsImpl(
-            Animation(), Animation(), Animation()
+            emptyAnimation(), emptyAnimation(), emptyAnimation()
         )
     }
 
@@ -34,11 +35,11 @@ interface Animations {
 
             return AnimationsImpl(
                 idleAnimation = spriteSheetManager.getDataFor(data.idleAnimationName)
-                    ?: Animation(), movementAnimation = spriteSheetManager.getDataFor(
+                    ?: emptyAnimation(), movementAnimation = spriteSheetManager.getDataFor(
                     data.movementAnimationName
-                ) ?: Animation(), jumpingAnimation = spriteSheetManager.getDataFor(
+                ) ?: emptyAnimation(), jumpingAnimation = spriteSheetManager.getDataFor(
                     data.jumpAnimationName
-                ) ?: Animation()
+                ) ?: emptyAnimation()
             )
         }
     }

@@ -1,10 +1,11 @@
 package believe.character
 
+import believe.animation.BidirectionalAnimation
+import believe.animation.emptyAnimation
 import believe.input.testing.FakeInputAdapter
 import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.newdawn.slick.Animation
 
 internal class OrientationStateMachineTest {
     private val inputAdapter = FakeInputAdapter.create<CharacterMovementInputAction>()
@@ -20,7 +21,7 @@ internal class OrientationStateMachineTest {
         assertThat(stateMachine.data.movementMultiplier).isEqualTo(1)
         assertThat(
             stateMachine.data.chooseAnimationDirection(BIDIRECTIONAL_ANIMATION)
-        ).isEqualTo(RIGHT_ANIMATION)
+        ).isEqualTo(BIDIRECTIONAL_ANIMATION.rightAnimation)
     }
 
     @Test
@@ -30,7 +31,7 @@ internal class OrientationStateMachineTest {
         assertThat(stateMachine.data.movementMultiplier).isEqualTo(-1)
         assertThat(
             stateMachine.data.chooseAnimationDirection(BIDIRECTIONAL_ANIMATION)
-        ).isEqualTo(LEFT_ANIMATION)
+        ).isEqualTo(BIDIRECTIONAL_ANIMATION.leftAnimation)
     }
 
     @Test
@@ -40,7 +41,7 @@ internal class OrientationStateMachineTest {
         assertThat(stateMachine.data.movementMultiplier).isEqualTo(-1)
         assertThat(
             stateMachine.data.chooseAnimationDirection(BIDIRECTIONAL_ANIMATION)
-        ).isEqualTo(LEFT_ANIMATION)
+        ).isEqualTo(BIDIRECTIONAL_ANIMATION.leftAnimation)
     }
 
     @Test
@@ -50,7 +51,7 @@ internal class OrientationStateMachineTest {
         assertThat(stateMachine.data.movementMultiplier).isEqualTo(1)
         assertThat(
             stateMachine.data.chooseAnimationDirection(BIDIRECTIONAL_ANIMATION)
-        ).isEqualTo(RIGHT_ANIMATION)
+        ).isEqualTo(BIDIRECTIONAL_ANIMATION.rightAnimation)
     }
 
     @Test
@@ -60,7 +61,7 @@ internal class OrientationStateMachineTest {
         assertThat(stateMachine.data.movementMultiplier).isEqualTo(1)
         assertThat(
             stateMachine.data.chooseAnimationDirection(BIDIRECTIONAL_ANIMATION)
-        ).isEqualTo(RIGHT_ANIMATION)
+        ).isEqualTo(BIDIRECTIONAL_ANIMATION.rightAnimation)
     }
 
     @Test
@@ -71,7 +72,7 @@ internal class OrientationStateMachineTest {
         assertThat(stateMachine.data.movementMultiplier).isEqualTo(1)
         assertThat(
             stateMachine.data.chooseAnimationDirection(BIDIRECTIONAL_ANIMATION)
-        ).isEqualTo(RIGHT_ANIMATION)
+        ).isEqualTo(BIDIRECTIONAL_ANIMATION.rightAnimation)
     }
 
     @Test
@@ -82,7 +83,7 @@ internal class OrientationStateMachineTest {
         assertThat(stateMachine.data.movementMultiplier).isEqualTo(1)
         assertThat(
             stateMachine.data.chooseAnimationDirection(BIDIRECTIONAL_ANIMATION)
-        ).isEqualTo(RIGHT_ANIMATION)
+        ).isEqualTo(BIDIRECTIONAL_ANIMATION.rightAnimation)
     }
 
     @Test
@@ -93,7 +94,7 @@ internal class OrientationStateMachineTest {
         assertThat(stateMachine.data.movementMultiplier).isEqualTo(-1)
         assertThat(
             stateMachine.data.chooseAnimationDirection(BIDIRECTIONAL_ANIMATION)
-        ).isEqualTo(LEFT_ANIMATION)
+        ).isEqualTo(BIDIRECTIONAL_ANIMATION.leftAnimation)
     }
 
     @Test
@@ -104,7 +105,7 @@ internal class OrientationStateMachineTest {
         assertThat(stateMachine.data.movementMultiplier).isEqualTo(-1)
         assertThat(
             stateMachine.data.chooseAnimationDirection(BIDIRECTIONAL_ANIMATION)
-        ).isEqualTo(LEFT_ANIMATION)
+        ).isEqualTo(BIDIRECTIONAL_ANIMATION.leftAnimation)
     }
 
     @Test
@@ -116,7 +117,7 @@ internal class OrientationStateMachineTest {
         assertThat(stateMachine.data.movementMultiplier).isEqualTo(-1)
         assertThat(
             stateMachine.data.chooseAnimationDirection(BIDIRECTIONAL_ANIMATION)
-        ).isEqualTo(LEFT_ANIMATION)
+        ).isEqualTo(BIDIRECTIONAL_ANIMATION.leftAnimation)
     }
 
     @Test
@@ -128,7 +129,7 @@ internal class OrientationStateMachineTest {
         assertThat(stateMachine.data.movementMultiplier).isEqualTo(-1)
         assertThat(
             stateMachine.data.chooseAnimationDirection(BIDIRECTIONAL_ANIMATION)
-        ).isEqualTo(LEFT_ANIMATION)
+        ).isEqualTo(BIDIRECTIONAL_ANIMATION.leftAnimation)
     }
 
     @Test
@@ -140,7 +141,7 @@ internal class OrientationStateMachineTest {
         assertThat(stateMachine.data.movementMultiplier).isEqualTo(1)
         assertThat(
             stateMachine.data.chooseAnimationDirection(BIDIRECTIONAL_ANIMATION)
-        ).isEqualTo(RIGHT_ANIMATION)
+        ).isEqualTo(BIDIRECTIONAL_ANIMATION.rightAnimation)
     }
 
     @Test
@@ -152,13 +153,10 @@ internal class OrientationStateMachineTest {
         assertThat(stateMachine.data.movementMultiplier).isEqualTo(1)
         assertThat(
             stateMachine.data.chooseAnimationDirection(BIDIRECTIONAL_ANIMATION)
-        ).isEqualTo(RIGHT_ANIMATION)
+        ).isEqualTo(BIDIRECTIONAL_ANIMATION.rightAnimation)
     }
 
     companion object {
-        private val LEFT_ANIMATION = Animation()
-        private val RIGHT_ANIMATION = Animation()
-        private val BIDIRECTIONAL_ANIMATION =
-            BidirectionalAnimation(LEFT_ANIMATION, RIGHT_ANIMATION)
+        private val BIDIRECTIONAL_ANIMATION = BidirectionalAnimation.from(emptyAnimation())
     }
 }

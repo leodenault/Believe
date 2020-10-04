@@ -1,5 +1,7 @@
 package believe.character
 
+import believe.animation.BidirectionalAnimation
+import believe.animation.emptyAnimation
 import believe.input.testing.FakeInputAdapter
 import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -91,8 +93,8 @@ internal class HorizontalMovementStateMachineTest {
     }
 
     companion object {
-        private val IDLE_ANIMATION = BidirectionalAnimation.from(Animation())
-        private val MOVEMENT_ANIMATION = BidirectionalAnimation.from(Animation())
+        private val IDLE_ANIMATION = BidirectionalAnimation.from(emptyAnimation())
+        private val MOVEMENT_ANIMATION = BidirectionalAnimation.from(emptyAnimation())
         private const val MOVEMENT_SPEED = 1f
     }
 }

@@ -5,6 +5,7 @@ kt_junit5_test(
     srcs = ["GraphicsTest.kt"],
     friends = [],
     deps = [
+        "//java/believe/animation/testing",
         "//java/believe/core/display:display_v2",
         "//java/believe/geometry",
         "//java/believe/gui/testing",

@@ -1,11 +1,12 @@
 package believe.character
 
+import believe.animation.Animation
+import believe.animation.BidirectionalAnimation
 import believe.core.display.Bindable
 import believe.input.InputAdapter
 import believe.statemachine.MutableStateV2
 import believe.statemachine.StateMachineV2
 import dagger.Reusable
-import org.newdawn.slick.Animation
 import javax.inject.Inject
 
 internal class OrientationStateMachine private constructor(

@@ -33,7 +33,6 @@ kt_jvm_library(
     name = "character_v2",
     srcs = [
         "Animations.kt",
-        "BidirectionalAnimation.kt",
         "CharacterKeyboardActionMap.kt",
         "CharacterMovementInputAction.kt",
         "CharacterStateMachine.kt",
@@ -46,6 +45,7 @@ kt_jvm_library(
         "VerticalMovementHandler.kt",
     ],
     deps = [
+        "//java/believe/animation",
         "//java/believe/character/proto:character_animations_java_proto",
         "//java/believe/core/display:display_v2",
         "//java/believe/datamodel",

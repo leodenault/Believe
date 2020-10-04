@@ -26,6 +26,7 @@ kt_jvm_library(
         "RenderableV2.kt",
     ],
     deps = [
+        "//java/believe/animation",
         "//java/believe/geometry",
         "//third_party/slick",
     ],

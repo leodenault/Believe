@@ -1,5 +1,6 @@
 package believe.character
 
+import believe.animation.BidirectionalAnimation
 import believe.core.display.Graphics
 import believe.geometry.Rectangle
 import believe.geometry.mutableRectangle
@@ -15,7 +16,6 @@ import believe.react.Observable
 import believe.react.Observer
 import believe.scene.SceneElement
 import dagger.Reusable
-import org.newdawn.slick.util.Log
 import javax.inject.Inject
 import kotlin.math.max
 import kotlin.math.min
@@ -85,10 +85,7 @@ private class CharacterV2Impl constructor(
     private val faction: Faction
 ) : CharacterV2 {
     private val bounds = mutableRectangle(
-        initialX,
-        initialY,
-        stateMachine.animation.width.toFloat(),
-        stateMachine.animation.height.toFloat()
+        initialX, initialY, stateMachine.animation.width, stateMachine.animation.height
     )
     private val observers = mutableListOf<Observer<Rectangle>>()
 
@@ -127,7 +124,7 @@ private class CharacterV2Impl constructor(
         verticalMovementHandler.verticalVelocity = speed
     }
 
-    override fun render(g: Graphics) = g.drawImage(stateMachine.animation.currentFrame, x, y)
+    override fun render(g: Graphics) = g.drawAnimation(stateMachine.animation, x, y)
 
     override fun bind() {
         stateMachine.bind()
@@ -165,12 +162,7 @@ private class CharacterV2Impl constructor(
         physicsManager.addGravityObject(this)
     }
 
-    override fun rect() = rectangle(
-        x,
-        y,
-        stateMachine.animation.currentFrame.width.toFloat(),
-        stateMachine.animation.currentFrame.height.toFloat()
-    )
+    override fun rect() = bounds
 
     override fun getFaction() = faction
 

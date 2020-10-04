@@ -3,12 +3,10 @@ package believe.animation
 import believe.animation.proto.AnimationProto
 import believe.datamodel.DataManager
 import dagger.Reusable
-import org.newdawn.slick.Animation
 import org.newdawn.slick.Image
 import org.newdawn.slick.SpriteSheet
 import org.newdawn.slick.util.Log
 import believe.util.KotlinHelpers.whenNull
-import java.lang.RuntimeException
 import javax.inject.Inject
 
 internal class SpriteSheetDataParser private constructor(
@@ -37,28 +35,17 @@ internal class SpriteSheetDataParser private constructor(
         private val loadedAnimations: MutableMap<String, Animation> = mutableMapOf()
 
         override fun getDataFor(name: String): Animation? {
-            val loadedAnimation = loadedAnimations[name]
-            if (loadedAnimation != null) return loadedAnimation
-
-            return animationData[name].whenNull {
+            return loadedAnimations[name] ?: animationData[name].whenNull {
                 Log.error("Animation data does not exist for name '$name'.")
             }?.let { animationData ->
-                try {
-                    Animation(
-                        spriteSheet,
-                        animationData.startFrame % spriteSheet.horizontalCount,
-                        animationData.startFrame / spriteSheet.horizontalCount,
-                        animationData.endFrame % spriteSheet.horizontalCount,
-                        animationData.endFrame / spriteSheet.horizontalCount,
-                        true,
-                        animationData.duration,
-                        false
-                    ).also { loadedAnimations[name] = it }
-                } catch (e: RuntimeException) {
-                    Log.error("Animation data is invalid. Are the indices correct? Offending data:\n${animationData}")
-                    null
-                }
-            }
+                animation(
+                    spriteSheet,
+                    frameRange = animationData.startFrame..animationData.endFrame,
+                    frameDuration = animationData.duration,
+                    iterationMode = animationData.iterationMode,
+                    isLooping = animationData.isLooping
+                )
+            }?.also { loadedAnimations[name] = it }
         }
     }
 

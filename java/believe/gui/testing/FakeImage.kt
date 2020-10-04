@@ -37,19 +37,6 @@ class FakeImage @JvmOverloads constructor(
         return FakeImage((width * scale).toInt(), (height * scale).toInt())
     }
 
-    override fun equals(other: Any?): Boolean {
-        if (other !is FakeImage) {
-            return false
-        }
-        return width == other.width && height == other.height
-    }
-
-    override fun hashCode(): Int {
-        return Objects.hash(
-            Integer.hashCode(width), Integer.hashCode(height)
-        )
-    }
-
     override fun getColor(x: Int, y: Int): Color {
         return internalColours[x][y]
     }

@@ -1,11 +1,12 @@
 package believe.core.display
 
+import believe.animation.proto.AnimationProto
+import believe.animation.proto.AnimationProto.Animation.IterationMode
+import believe.animation.testing.fakeAnimation
 import believe.geometry.rectangle
 import believe.gui.testing.FakeImage
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.inOrder
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import org.junit.jupiter.api.Test
 import org.newdawn.slick.Color
 import org.newdawn.slick.Font
@@ -74,6 +75,15 @@ internal class GraphicsTest {
         graphics.drawImage(image, 2.499f, 3.9999f)
 
         verify(slickGraphics).drawImage(image, 2f, 3f)
+    }
+
+    @Test
+    fun drawAnimation_floorsNumbersAndDelegatesToSlickGraphics() {
+        val animation = fakeAnimation(IterationMode.LINEAR, false, 2, 2)
+
+        graphics.drawAnimation(animation, 2.499f, 3.9999f)
+
+        verify(slickGraphics).drawAnimation(any(), eq(2f), eq(3f))
     }
 
     @Test

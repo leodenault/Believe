@@ -1,7 +1,8 @@
 package believe.character
 
+import believe.animation.Animation
+import believe.animation.BidirectionalAnimation
 import believe.core.display.Bindable
-import org.newdawn.slick.Animation
 import javax.inject.Inject
 
 internal class CharacterStateMachine private constructor(

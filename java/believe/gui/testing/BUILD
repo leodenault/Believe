@@ -2,7 +2,7 @@ load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kt_jvm_library")
 
 package(
     default_testonly = 1,
-    default_visibility = ["//:believe_test_pkgs"],
+    default_visibility = ["//:believe_all_pkgs"],
 )
 
 kt_jvm_library(

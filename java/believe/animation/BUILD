@@ -7,12 +7,15 @@ package(
 kt_jvm_library(
     name = "animation",
     srcs = [
+        "Animation.kt",
+        "BidirectionalAnimation.kt",
         "SpriteSheetDataManagerFactory.kt",
         "SpriteSheetDataParser.kt",
     ],
     deps = [
         ":internal_qualifiers",
         "//java/believe/animation/proto:animation_java_proto",
+        "//java/believe/core",
         "//java/believe/datamodel",
         "//java/believe/datamodel/protodata",
         "//java/believe/util",

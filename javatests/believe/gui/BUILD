@@ -25,6 +25,7 @@ java_test(
         "//third_party/junit",
         "//third_party/mockito",
         "//third_party/slick",
+        "//third_party/truth",
     ],
 )
 

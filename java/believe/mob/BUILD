@@ -7,6 +7,7 @@ kt_jvm_library(
     srcs = [
         "StationaryEnemy.kt",
         "StationaryEnemyParser.kt",
+        "StationaryEnemyStateMachine.kt",
     ],
     deps = [
         "//java/believe/map/data",

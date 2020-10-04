@@ -3,7 +3,6 @@ package believe.animation
 import believe.datamodel.DataManager
 import believe.datamodel.protodata.BinaryProtoFileManager
 import dagger.Reusable
-import org.newdawn.slick.Animation
 import javax.inject.Inject
 
 @Reusable

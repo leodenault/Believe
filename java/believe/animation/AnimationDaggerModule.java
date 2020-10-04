@@ -4,7 +4,6 @@ import believe.datamodel.DataManager;
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
-import org.newdawn.slick.Animation;
 
 @Module
 public abstract class AnimationDaggerModule {

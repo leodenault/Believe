@@ -7,6 +7,8 @@ animations {
     start_frame: 0
     end_frame: 0
     duration: 1000
+    iteration_mode: LINEAR
+    is_looping: false
   }
 }
 animations {
@@ -15,6 +17,8 @@ animations {
     start_frame: 10
     end_frame: 19
     duration: 80
+    iteration_mode: LINEAR
+    is_looping: true
   }
 }
 animations {
@@ -23,6 +27,8 @@ animations {
     start_frame: 20
     end_frame: 20
     duration: 1000
+    iteration_mode: LINEAR
+    is_looping: false
   }
 }
 animations {
@@ -31,5 +37,7 @@ animations {
     start_frame: 30
     end_frame: 34
     duration: 80
+    iteration_mode: LINEAR
+    is_looping: false
   }
 }
