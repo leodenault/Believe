@@ -15,7 +15,7 @@ animations {
   key: "attacking"
   value {
     start_frame: 4
-    end_frame: 7
+    end_frame: 6
     duration: 80
     iteration_mode: PING_PONG
     is_looping: true
