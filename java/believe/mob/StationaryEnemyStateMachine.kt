@@ -21,14 +21,14 @@ internal class StationaryEnemyStateMachine(
     private var idleIterations = 0
 
     override fun bind() {
-        idleAnimation.addAnimationEndedListener {
+        idleAnimation.addFrameListener(0) {
             idleIterations = (idleIterations + 1) % 2
             if (idleIterations == 0) {
                 idleAnimation.restart()
                 currentAnimation = attackAnimation
             }
         }
-        attackAnimation.addAnimationEndedListener {
+        attackAnimation.addFrameListener(0) {
             attackAnimation.restart()
             currentAnimation = idleAnimation
         }

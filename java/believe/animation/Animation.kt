@@ -1,5 +1,7 @@
 package believe.animation
 
+import believe.animation.AnimationUpdater.FrameInfo.MultiIndexedFrameInfo
+import believe.animation.AnimationUpdater.FrameInfo.SimpleFrameInfo
 import believe.animation.proto.AnimationProto.Animation.IterationMode
 import believe.animation.proto.AnimationProto.Animation.IterationMode.LINEAR
 import believe.animation.proto.AnimationProto.Animation.IterationMode.PING_PONG
@@ -27,21 +29,27 @@ interface Animation : Updatable {
     /** Returns an [org.newdawn.slick.Animation] equivalent to this instance. */
     fun asSlickAnimation(): org.newdawn.slick.Animation
 
-    /** Adds [loopEnded] so it can be executed at the end of every animation loop. */
-    fun addAnimationEndedListener(loopEnded: () -> Unit)
+    /**
+     * Adds [frameReached] so it can be executed once the frame corresponding to [frameIndex] is
+     * reached.
+     *
+     * **Note**: Since the first frame has index 0, it isn't actually reached until either the
+     * animation ends or it loops around.
+     */
+    fun addFrameListener(frameIndex: Int, frameReached: () -> Unit)
 
     /** Resets the animation to its first frame. */
     fun restart()
 }
 
 private sealed class AnimationUpdater : Updatable {
-    abstract fun addListener(listener: () -> Unit)
+    abstract fun addListener(frameIndex: Int, listener: () -> Unit)
     abstract fun restart()
 
     private class SimpleUpdater(
         private val animation: org.newdawn.slick.Animation
     ) : AnimationUpdater() {
-        override fun addListener(listener: () -> Unit) {}
+        override fun addListener(frameIndex: Int, listener: () -> Unit) {}
         override fun update(delta: Long) = animation.update(delta)
         override fun restart() {
             animation.restart()
@@ -54,74 +62,96 @@ private sealed class AnimationUpdater : Updatable {
 
     private class NotifyingUpdater(
         private val animation: org.newdawn.slick.Animation,
-        private val firstIterationAnimationTime: Long,
-        private val subsequentIterationAnimationTime: Long
+        private val frameSequence: Sequence<FrameInfo>
     ) : AnimationUpdater() {
 
-        private var listeners = mutableListOf<() -> Unit>(this::changeAnimationTimes)
-        private var elapsedTime = 0L
-        private var totalAnimationTime = firstIterationAnimationTime
+        private var listeners = Array(size = animation.frameCount) {
+            mutableListOf<() -> Unit>()
+        }
+        private var frameIterator: Iterator<FrameInfo> = frameSequence.iterator()
+        private var timeUntilNextFrame: Long = frameIterator.next().duration
 
-        override fun addListener(listener: () -> Unit) {
-            listeners.add(listener)
+        override fun addListener(frameIndex: Int, listener: () -> Unit) {
+            listeners[frameIndex].add(listener)
         }
 
         override fun update(delta: Long) {
-            elapsedTime += delta
             animation.update(delta)
-            while (elapsedTime >= totalAnimationTime) {
-                elapsedTime -= totalAnimationTime
-                listeners.forEach { it() }
+
+            if (!frameIterator.hasNext()) return
+
+            var remainingTime = delta - timeUntilNextFrame
+            while (remainingTime >= 0) {
+                val nextFrame = frameIterator.next()
+                timeUntilNextFrame = nextFrame.duration
+                listeners[nextFrame.index].forEach { it() }
+                remainingTime -= timeUntilNextFrame
             }
+            timeUntilNextFrame = -remainingTime
         }
 
         override fun restart() {
-            totalAnimationTime = firstIterationAnimationTime
-            elapsedTime = 0
-            if (listeners.isEmpty() || listeners[0] != this::changeAnimationTimes) {
-                listeners =
-                    (listOf<() -> Unit>(this::changeAnimationTimes) + listeners).toMutableList()
-            }
+            frameIterator = frameSequence.iterator()
+            timeUntilNextFrame = frameIterator.next().duration
             animation.restart()
-            // Artificially update the animation by a single millisecond due to a bug in Slick code
-            // where the first frame of an animation is attributed an extra millisecond due to an error
-            // in a comparison between numbers (nextChange < 0 instead of nextChange <= 0).
             animation.update(1)
         }
+    }
 
-        private fun changeAnimationTimes() {
-            totalAnimationTime = subsequentIterationAnimationTime
-            listeners = if (listeners.isEmpty()) {
-                mutableListOf()
-            } else {
-                listeners.slice(1 until listeners.size).toMutableList()
-            }
-        }
+    private sealed class FrameInfo(val index: Int, val duration: Long) {
+        class SimpleFrameInfo(index: Int, duration: Long) : FrameInfo(index, duration)
+        class MultiIndexedFrameInfo(
+            val sequenceIndex: Int, index: Int, duration: Long
+        ) : FrameInfo(index, duration)
     }
 
     companion object {
         fun createAnimationUpdater(
             animation: org.newdawn.slick.Animation, iterationMode: IterationMode, isLooping: Boolean
-        ): AnimationUpdater = when (iterationMode) {
-            LINEAR -> animation.durations.sum().let { Pair(it, it) }
-            PING_PONG -> when (animation.durations.size) {
-                0 -> Pair(0, 0)
-                1 -> Pair(animation.durations.first(), animation.durations.first())
-                else -> Pair(
-                    animation.durations.sum() + animation.durations.slice(
-                        0..animation.durations.size - 2
-                    ).sum(), animation.durations.slice(
-                        1..animation.durations.size - 2
-                    ).sum() * 2 + animation.durations.last() + animation.durations.first()
+        ): AnimationUpdater = if (animation.frameCount == 0) {
+            SimpleUpdater(animation)
+        } else {
+            when (iterationMode) {
+                LINEAR -> {
+                    val frameInfo = animation.durations.mapIndexed { index, duration ->
+                        SimpleFrameInfo(index, duration.toLong())
+                    }
+                    generateSequence(frameInfo[0]) { previous ->
+                        frameInfo[(previous.index + 1) % frameInfo.size]
+                    }
+                }
+                PING_PONG -> {
+                    if (animation.durations.size == 1) {
+                        generateSequence { SimpleFrameInfo(0, animation.getDuration(0).toLong()) }
+                    } else {
+                        val rawFrameInfo = animation.durations.mapIndexed { index, duration ->
+                            SimpleFrameInfo(index, duration.toLong())
+                        }
+                        val combinedFrameInfo =
+                            rawFrameInfo + rawFrameInfo.slice(1..rawFrameInfo.size - 2).asReversed()
+
+                        val indexedFrameInfo = combinedFrameInfo.mapIndexed { index, frameInfo ->
+                            MultiIndexedFrameInfo(
+                                index, frameInfo.index, frameInfo.duration
+                            )
+                        }
+                        generateSequence(indexedFrameInfo[0]) { previous ->
+                            indexedFrameInfo[(previous.sequenceIndex + 1) % indexedFrameInfo.size]
+                        }
+                    }
+                }
+            }.let {
+                NotifyingUpdater(
+                    animation, if (isLooping) it else it.take(
+                        if (iterationMode == LINEAR) {
+                            animation.frameCount + 1
+                        } else {
+                            animation.frameCount * 2 - 1
+                        }
+                    )
                 )
             }
-        }.takeIf { it.first > 0 && it.second > 0 }?.let {
-            NotifyingUpdater(
-                animation,
-                it.first.toLong(),
-                if (isLooping) it.second.toLong() else it.first.toLong()
-            )
-        } ?: SimpleUpdater(animation)
+        }
     }
 }
 
@@ -142,8 +172,8 @@ private class AnimationImpl(
     override fun update(delta: Long) = animationUpdater.update(delta)
 
     override fun asSlickAnimation(): org.newdawn.slick.Animation = internalAnimation
-    override fun addAnimationEndedListener(loopEnded: () -> Unit) {
-        animationUpdater.addListener(loopEnded)
+    override fun addFrameListener(frameIndex: Int, frameReached: () -> Unit) {
+        animationUpdater.addListener(frameIndex, frameReached)
     }
 
     override fun restart() {
@@ -171,7 +201,7 @@ private object EmptyAnimation : Animation {
     override val height: Float = 0f
 
     override fun asSlickAnimation(): org.newdawn.slick.Animation = internalAnimation
-    override fun addAnimationEndedListener(loopEnded: () -> Unit) {}
+    override fun addFrameListener(frameIndex: Int, frameReached: () -> Unit) {}
     override fun update(delta: Long) {}
     override fun restart() {}
 }

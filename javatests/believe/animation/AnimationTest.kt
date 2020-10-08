@@ -48,7 +48,7 @@ internal class AnimationTest {
     }
 
     @Test
-    fun addAnimationEndedListener_linear_doesNotLoop_callsAtEnd() {
+    fun addFrameListener_linear_doesNotLoop_callsWhenFrameIsReached() {
         val animation = animation(
             SPRITE_SHEET,
             frameRange = 2..4,
@@ -56,21 +56,41 @@ internal class AnimationTest {
             iterationMode = IterationMode.LINEAR,
             isLooping = false
         )
-        var calls = 0
+        var frame0Calls = 0
+        var frame2Calls = 0
         val animationTime = animation.frames().durations().sum().toLong()
 
-        animation.addAnimationEndedListener { calls++ }
-        animation.update(animationTime)
+        animation.addFrameListener(0) { frame0Calls++ }
+        animation.addFrameListener(2) { frame2Calls++ }
+
+        animation.update(1)
+        assertThat(frame0Calls).isEqualTo(0)
+        assertThat(frame2Calls).isEqualTo(0)
+
+        animation.update(animationTime - 2)
+        assertThat(frame0Calls).isEqualTo(0)
+        assertThat(frame2Calls).isEqualTo(1)
+
+        animation.update(1)
+        assertThat(frame0Calls).isEqualTo(1)
+        assertThat(frame2Calls).isEqualTo(1)
+
+        animation.update(animationTime * 10)
+        assertThat(frame0Calls).isEqualTo(1)
+        assertThat(frame2Calls).isEqualTo(1)
+
         animation.restart()
         animation.update(animationTime - 1)
-        assertThat(calls).isEqualTo(1)
-        animation.update(1)
+        assertThat(frame0Calls).isEqualTo(1)
+        assertThat(frame2Calls).isEqualTo(2)
 
-        assertThat(calls).isEqualTo(2)
+        animation.update(1)
+        assertThat(frame0Calls).isEqualTo(2)
+        assertThat(frame2Calls).isEqualTo(2)
     }
 
     @Test
-    fun addAnimationEndedListener_pingPong_doesNotLoop_callsAtEnd() {
+    fun addFrameListener_pingPong_doesNotLoop_callsWhenFrameIsReached() {
         val animation = animation(
             SPRITE_SHEET,
             frameRange = 2..4,
@@ -78,21 +98,41 @@ internal class AnimationTest {
             iterationMode = IterationMode.PING_PONG,
             isLooping = false
         )
-        var calls = 0
+        var frame0Calls = 0
+        var frame2Calls = 0
         val animationTime = animation.frames().durations().sum().toLong()
 
-        animation.addAnimationEndedListener { calls++ }
-        animation.update(animationTime)
-        animation.restart()
-        animation.update(animationTime - 1)
-        assertThat(calls).isEqualTo(1)
-        animation.update(1)
+        animation.addFrameListener(0) { frame0Calls++ }
+        animation.addFrameListener(2) { frame2Calls++ }
 
-        assertThat(calls).isEqualTo(2)
+        animation.update(1)
+        assertThat(frame0Calls).isEqualTo(0)
+        assertThat(frame2Calls).isEqualTo(0)
+
+        animation.update(animationTime - 12)
+        assertThat(frame0Calls).isEqualTo(0)
+        assertThat(frame2Calls).isEqualTo(1)
+
+        animation.update(1)
+        assertThat(frame0Calls).isEqualTo(1)
+        assertThat(frame2Calls).isEqualTo(1)
+
+        animation.update(animationTime * 10)
+        assertThat(frame0Calls).isEqualTo(1)
+        assertThat(frame2Calls).isEqualTo(1)
+
+        animation.restart()
+        animation.update(animationTime - 11)
+        assertThat(frame0Calls).isEqualTo(1)
+        assertThat(frame2Calls).isEqualTo(2)
+
+        animation.update(1)
+        assertThat(frame0Calls).isEqualTo(2)
+        assertThat(frame2Calls).isEqualTo(2)
     }
 
     @Test
-    fun addAnimationEndedListener_linear_isLooping_callsAtEndOfLoop() {
+    fun addFrameListener_linear_isLooping_callsWhenFrameIsReached() {
         val animation = animation(
             SPRITE_SHEET,
             frameRange = 2..4,
@@ -101,17 +141,32 @@ internal class AnimationTest {
             isLooping = true
         )
         val animationTime = animation.frames(iterations = 10).durations().sum().toLong()
-        var calls = 0
+        var frame0Calls = 0
+        var frame2Calls = 0
 
-        animation.addAnimationEndedListener { calls++ }
-        animation.update(animationTime - 1)
-        assertThat(calls).isEqualTo(9)
+        animation.addFrameListener(0) { frame0Calls++ }
+        animation.addFrameListener(2) { frame2Calls++ }
+
         animation.update(1)
-        assertThat(calls).isEqualTo(10)
+        assertThat(frame2Calls).isEqualTo(0)
+        assertThat(frame2Calls).isEqualTo(0)
+
+        animation.update(animationTime - 2)
+        assertThat(frame0Calls).isEqualTo(9)
+        assertThat(frame2Calls).isEqualTo(10)
+
+        animation.update(1)
+        assertThat(frame0Calls).isEqualTo(10)
+        assertThat(frame2Calls).isEqualTo(10)
+
+        animation.restart()
+        animation.update(animationTime)
+        assertThat(frame0Calls).isEqualTo(20)
+        assertThat(frame2Calls).isEqualTo(20)
     }
 
     @Test
-    fun addAnimationEndedListener_linear_isLooping_emptyAnimation_neverCalls() {
+    fun addFrameListener_linear_isLooping_emptyAnimation_neverCalls() {
         val animation = animation(
             SPRITE_SHEET,
             frameRange = IntRange.EMPTY,
@@ -121,14 +176,14 @@ internal class AnimationTest {
         )
         var executed = false
 
-        animation.addAnimationEndedListener { executed = true }
-        animation.update(1000L)
+        animation.addFrameListener(0) { executed = true }
+        animation.update(Long.MAX_VALUE)
 
         assertThat(executed).isFalse()
     }
 
     @Test
-    fun addAnimationEndedListener_linear_isLooping_singleFrameAnimation_callsAtEndOfLoop() {
+    fun addFrameListener_linear_isLooping_singleFrameAnimation_callsWhenFrameIsReached() {
         val animation = animation(
             SPRITE_SHEET,
             frameRange = 2..2,
@@ -139,7 +194,7 @@ internal class AnimationTest {
         var calls = 0
         val animationTime = animation.frames(iterations = 10).durations().sum().toLong()
 
-        animation.addAnimationEndedListener { calls++ }
+        animation.addFrameListener(0) { calls++ }
         animation.update(animationTime - 1)
         assertThat(calls).isEqualTo(9)
         animation.update(1)
@@ -147,7 +202,7 @@ internal class AnimationTest {
     }
 
     @Test
-    fun addAnimationEndedListener_pingPongs_callsAtEnd() {
+    fun addFrameListener_pingPongs_isLooping_callsWhenFrameIsReached() {
         val animation = animation(
             SPRITE_SHEET,
             frameRange = 2..4,
@@ -156,17 +211,32 @@ internal class AnimationTest {
             isLooping = true
         )
         val animationTime = animation.frames(iterations = 10).durations().sum().toLong()
-        var calls = 0
+        var frame0Calls = 0
+        var frame2Calls = 0
 
-        animation.addAnimationEndedListener { calls++ }
-        animation.update(animationTime - 1)
-        assertThat(calls).isEqualTo(9)
+        animation.addFrameListener(0) { frame0Calls++ }
+        animation.addFrameListener(2) { frame2Calls++ }
+
         animation.update(1)
-        assertThat(calls).isEqualTo(10)
+        assertThat(frame2Calls).isEqualTo(0)
+        assertThat(frame2Calls).isEqualTo(0)
+
+        animation.update(animationTime - 12)
+        assertThat(frame0Calls).isEqualTo(9)
+        assertThat(frame2Calls).isEqualTo(10)
+
+        animation.update(1)
+        assertThat(frame0Calls).isEqualTo(10)
+        assertThat(frame2Calls).isEqualTo(10)
+
+        animation.restart()
+        animation.update(animationTime)
+        assertThat(frame0Calls).isEqualTo(20)
+        assertThat(frame2Calls).isEqualTo(20)
     }
 
     @Test
-    fun addAnimationEndedListener_pingPong_isLooping_emptyAnimation_neverCalls() {
+    fun addFrameListener_pingPong_isLooping_emptyAnimation_neverCalls() {
         val animation = animation(
             SPRITE_SHEET,
             frameRange = IntRange.EMPTY,
@@ -176,14 +246,14 @@ internal class AnimationTest {
         )
         var executed = false
 
-        animation.addAnimationEndedListener { executed = true }
-        animation.update(1000L)
+        animation.addFrameListener(0) { executed = true }
+        animation.update(Long.MAX_VALUE)
 
         assertThat(executed).isFalse()
     }
 
     @Test
-    fun addAnimationEndedListener_pingPong_isLooping_singleFrameAnimation_callsAtEndOfLoop() {
+    fun addFrameListener_pingPong_isLooping_singleFrameAnimation_callsWhenFrameIsReached() {
         val animation = animation(
             SPRITE_SHEET,
             frameRange = 2..2,
@@ -194,7 +264,7 @@ internal class AnimationTest {
         var calls = 0
         val animationTime = animation.frames(iterations = 10).durations().sum().toLong()
 
-        animation.addAnimationEndedListener { calls++ }
+        animation.addFrameListener(0) { calls++ }
         animation.update(animationTime - 1)
         assertThat(calls).isEqualTo(9)
         animation.update(1)
@@ -231,7 +301,7 @@ internal class AnimationTest {
         )
         val animationTime = animation.frames().durations().sum().toLong()
         var calls = 0
-        animation.addAnimationEndedListener { calls++ }
+        animation.addFrameListener(0) { calls++ }
 
         animation.restart()
         animation.update(animationTime - 1)
@@ -269,7 +339,7 @@ internal class AnimationTest {
         )
         val animationTime = animation.frames().durations().sum().toLong()
         var calls = 0
-        animation.addAnimationEndedListener { calls++ }
+        animation.addFrameListener(0) { calls++ }
 
         animation.restart()
         animation.update(animationTime - 1)
@@ -307,10 +377,10 @@ internal class AnimationTest {
         )
         val animationTime = animation.frames().durations().sum().toLong()
         var calls = 0
-        animation.addAnimationEndedListener { calls++ }
+        animation.addFrameListener(0) { calls++ }
 
         animation.restart()
-        animation.update(animationTime - 1)
+        animation.update(animationTime - 11)
         assertThat(calls).isEqualTo(0)
         animation.update(1)
         assertThat(calls).isEqualTo(1)
@@ -345,10 +415,10 @@ internal class AnimationTest {
         )
         val animationTime = animation.frames().durations().sum().toLong()
         var calls = 0
-        animation.addAnimationEndedListener { calls++ }
+        animation.addFrameListener(0) { calls++ }
 
         animation.restart()
-        animation.update(animationTime - 1)
+        animation.update(animationTime - 11)
         assertThat(calls).isEqualTo(0)
         animation.update(1)
         assertThat(calls).isEqualTo(1)
