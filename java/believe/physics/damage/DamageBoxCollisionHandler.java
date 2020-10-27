@@ -12,7 +12,7 @@ public class DamageBoxCollisionHandler
   private final PhysicsManager physicsManager;
 
   @Inject
-  DamageBoxCollisionHandler(PhysicsManager physicsManager) {
+  public DamageBoxCollisionHandler(PhysicsManager physicsManager) {
     this.physicsManager = physicsManager;
   }
 

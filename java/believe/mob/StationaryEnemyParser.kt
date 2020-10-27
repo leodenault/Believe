@@ -12,7 +12,9 @@ import javax.inject.Inject
 
 @Reusable
 internal class StationaryEnemyParser @Inject internal constructor(
-    private val animationsManager: DataManager<DataManager<Animation>>
+    private val spriteSheetDataManager: DataManager<DataManager<Animation>>,
+    private val mobSpriteSheetManager: DataManager<DataManager<MobAnimation>>,
+    private val stationaryEnemyFactory: StationaryEnemy.Factory
 ) : ObjectParser {
 
     override fun parseObject(
@@ -22,13 +24,16 @@ internal class StationaryEnemyParser @Inject internal constructor(
     ) {
         if (entityType != EntityType.ENEMY) return
 
-        val spriteSheetManager = animationsManager.getDataFor("stationary_enemy")
+        val mobAnimationManager = mobSpriteSheetManager.getDataFor("stationary_enemy")
+        val attackAnimation = mobAnimationManager?.getDataFor("attacking")
         generatedMapEntityDataBuilder.addSceneElement(
-            StationaryEnemy(
-                tiledObject.x, tiledObject.y, StationaryEnemyStateMachine(
-                    spriteSheetManager?.getDataFor("idle") ?: emptyAnimation(),
-                    spriteSheetManager?.getDataFor("attacking") ?: emptyAnimation()
-                )
+            stationaryEnemyFactory.create(
+                tiledObject.x,
+                tiledObject.y,
+                spriteSheetDataManager.getDataFor("stationary_enemy")?.getDataFor("idle")
+                    ?: emptyAnimation(),
+                attackAnimation?.animation ?: emptyAnimation(),
+                attackAnimation?.damageFrames ?: emptyList()
             )
         )
     }

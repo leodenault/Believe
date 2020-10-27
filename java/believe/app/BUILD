@@ -135,6 +135,8 @@ java_library(
         "//java/believe/map/tiled/command:dagger_module",
         "//java/believe/map/tiled/command:impl",
         "//java/believe/mob",
+        "//java/believe/mob:dagger_module",
+        "//java/believe/mob/proto:mob_animation_data_java_proto",
         "//java/believe/physics/collision",
         "//java/believe/physics/collision:impl",
         "//java/believe/physics/damage",

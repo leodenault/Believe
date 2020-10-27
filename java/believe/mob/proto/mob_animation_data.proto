@@ -1,0 +1,38 @@
+syntax = "proto2";
+
+package believe.mob.proto;
+
+option java_package = "believe.mob.proto";
+option java_outer_classname = "MobAnimationDataProto";
+
+// A frame within an animation where a damage box is generated.
+message DamageFrame {
+    // The index of the frame in the animation within which a damage box should exist.
+    optional int32 frame_index = 1;
+    // The dimensions of the damage box.
+    optional DamageBoxDimensions dimensions = 2;
+}
+
+// The dimensions of a damage box.
+message DamageBoxDimensions {
+    // The X position, in pixels, of the damage box relative to the left of the frame.
+    optional int32 x = 1;
+    // The Y position, in pixels, of the damage box relative to the left of the frame.
+    optional int32 y = 2;
+    // The width of the damage box, in pixels.
+    optional int32 width = 3;
+    // The height of the damage box, in pixels.
+    optional int32 height = 4;
+}
+
+// A collection of frames that should generate a damage box.
+message DamageFrames {
+    // The collection of frames that should generate a damage box.
+    repeated DamageFrame damage_frames = 1;
+}
+
+// A mapping of animation names to their damage frame lists.
+message MobAnimationData {
+    // Maps animation names to their respective damage frame lists.
+    map<string, DamageFrames> damage_frames_by_animation = 1;
+}

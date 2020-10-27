@@ -1,19 +1,76 @@
 package believe.mob
 
+import believe.animation.Animation
+import believe.animation.CompoundAnimation
+import believe.animation.compoundAnimation
+import believe.character.Faction
 import believe.core.display.Graphics
+import believe.mob.proto.MobAnimationDataProto
+import believe.mob.proto.MobAnimationDataProto.DamageFrame
+import believe.physics.damage.DamageBox
+import believe.physics.damage.DamageBoxFactory
+import believe.physics.manager.PhysicsManager
 import believe.scene.SceneElement
+import dagger.Reusable
+import org.newdawn.slick.Color
+import javax.inject.Inject
 
-internal class StationaryEnemy(
+internal class StationaryEnemy private constructor(
     override var x: Float,
     override var y: Float,
-    private val stateMachine: StationaryEnemyStateMachine
+    private val physicsManager: PhysicsManager,
+    private val damageBoxFactory: DamageBoxFactory,
+    idleAnimation: Animation,
+    private val attackAnimation: Animation,
+    private val attackDamageFrames: List<DamageFrame>
 ) : SceneElement {
 
-    override fun render(g: Graphics) = g.drawAnimation(stateMachine.animation, x, y)
+    private val animation: CompoundAnimation =
+        compoundAnimation(true, 2 to idleAnimation, 1 to attackAnimation)
 
-    override fun bind() = stateMachine.bind()
+    override fun bind() {
+        attackDamageFrames.map {
+            it to with(it.dimensions) {
+                damageBoxFactory.create(
+                    Faction.BAD,
+                    this@StationaryEnemy.x.toInt() + x,
+                    this@StationaryEnemy.y.toInt() + y,
+                    width,
+                    height,
+                    0.1f
+                )
+            }
+        }.forEach { pair ->
+            val (damageFrame, damageBox) = pair
+            animation.addFrameListener(attackAnimation, damageFrame.frameIndex) {
+                physicsManager.addCollidable(damageBox)
+            }
+            animation.addFrameListener(
+                attackAnimation, (damageFrame.frameIndex + 1) % attackAnimation.numFrames
+            ) {
+                physicsManager.removeCollidable(damageBox)
+            }
+        }
+    }
 
-    override fun unbind() = stateMachine.unbind()
+    override fun unbind() {}
 
-    override fun update(delta: Long) = stateMachine.update(delta)
+    override fun update(delta: Long) = animation.update(delta)
+
+    override fun render(g: Graphics) = g.drawAnimation(animation, x, y)
+
+    @Reusable
+    class Factory @Inject internal constructor(
+        private val physicsManager: PhysicsManager, private val damageBoxFactory: DamageBoxFactory
+    ) {
+        fun create(
+            x: Float,
+            y: Float,
+            idleAnimation: Animation,
+            attackAnimation: Animation,
+            damageFrames: List<DamageFrame>
+        ) = StationaryEnemy(
+            x, y, physicsManager, damageBoxFactory, idleAnimation, attackAnimation, damageFrames
+        )
+    }
 }
