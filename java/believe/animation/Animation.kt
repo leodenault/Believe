@@ -26,6 +26,14 @@ interface Animation : Updatable {
     /** The height of the animation, in pixels. */
     val height: Float
 
+    /**
+     * The number of frames involved in the animation.
+     *
+     * **Note**: This does not necessarily correspond to the number of iterated frames in a single
+     * animation iteration.
+     */
+    val numFrames: Int
+
     /** Returns an [org.newdawn.slick.Animation] equivalent to this instance. */
     fun asSlickAnimation(): org.newdawn.slick.Animation
 
@@ -168,6 +176,7 @@ private class AnimationImpl(
         if (internalAnimation.frameCount == 0) 0f else internalAnimation.width.toFloat()
     override val height: Float =
         if (internalAnimation.frameCount == 0) 0f else internalAnimation.height.toFloat()
+    override val numFrames: Int = internalAnimation.frameCount
 
     override fun update(delta: Long) = animationUpdater.update(delta)
 
@@ -199,6 +208,7 @@ private object EmptyAnimation : Animation {
     override val isLooping: Boolean = false
     override val width: Float = 0f
     override val height: Float = 0f
+    override val numFrames: Int = 0
 
     override fun asSlickAnimation(): org.newdawn.slick.Animation = internalAnimation
     override fun addFrameListener(frameIndex: Int, frameReached: () -> Unit) {}

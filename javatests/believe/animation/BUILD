@@ -13,6 +13,18 @@ kt_junit5_test(
 )
 
 kt_junit5_test(
+    name = "CompoundAnimationTest",
+    srcs = ["CompoundAnimationTest.kt"],
+    deps = [
+        "//java/believe/animation/testing",
+        "//java/believe/gui/testing",
+        "//third_party/mockito:mockito_kotlin",
+        "//third_party/slick",
+        "//third_party/truth",
+    ],
+)
+
+kt_junit5_test(
     name = "FakeSpriteSheetTest",
     srcs = ["FakeSpriteSheetTest.kt"],
     deps = [

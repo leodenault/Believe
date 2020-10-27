@@ -9,6 +9,7 @@ kt_jvm_library(
     srcs = [
         "Animation.kt",
         "BidirectionalAnimation.kt",
+        "CompoundAnimation.kt",
         "SpriteSheetDataManagerFactory.kt",
         "SpriteSheetDataParser.kt",
     ],

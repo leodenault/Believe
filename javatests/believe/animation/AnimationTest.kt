@@ -23,6 +23,7 @@ internal class AnimationTest {
         assertThat(frames.durations()).containsExactlyElementsIn((0 until 8).map { 50 })
         assertThat(animation.width).isEqualTo(spriteSheet.imageAt(0).width)
         assertThat(animation.height).isEqualTo(spriteSheet.imageAt(0).height)
+        assertThat(animation.numFrames).isEqualTo(8)
         assertThat(
             frames.images()
         ).containsExactlyElementsIn(spriteSheet.imagesBetween(2..9)).inOrder()

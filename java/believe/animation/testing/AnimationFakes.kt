@@ -79,7 +79,7 @@ fun Animation.frames(iterations: Int = 1): List<FrameData> = if (iterations <= 0
 }
 
 /** Returns a list of images corresponding to each of the frames in this list. */
-fun List<FrameData>.images(): List<Image> = map { it.image }
+fun Iterable<FrameData>.images(): List<Image> = map { it.image }
 
 /** Returns a list of integers indicating each of the durations of the frames in this list. */
-fun List<FrameData>.durations(): List<Int> = map { it.duration }
+fun Iterable<FrameData>.durations(): List<Int> = map { it.duration }
