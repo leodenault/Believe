@@ -42,3 +42,6 @@ bazel-*
 .idea
 *.iml
 .ijwb
+
+# Tiled
+**/*.tiled-session
