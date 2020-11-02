@@ -7,6 +7,7 @@ import believe.geometry.Rectangle
  *
  * It is intended to be paired with [GuiBuilders] to provide an intuitive API for constructing GUIs.
  *
+ * @param C the type of the configuration object used in configuring the object of type [T].
  * @param T the type of [GuiElement] constructed by this builder.
  */
 interface LayoutBuilder<C, T : GuiElement> {

@@ -136,6 +136,18 @@ kt_junit5_test(
 )
 
 kt_junit5_test(
+    name = "ProgressBarV2Test",
+    srcs = ["ProgressBarV2Test.kt"],
+    friends = ["//java/believe/gui:gui_v2"],
+    deps = [
+        "//java/believe/geometry",
+        "//java/believe/gui:gui_v2",
+        "//java/believe/gui/testing:dagger_component",
+        "//third_party/mockito:mockito_kotlin",
+    ],
+)
+
+kt_junit5_test(
     name = "TextAlignmentTest",
     srcs = ["TextAlignmentTest.kt"],
     friends = ["//java/believe/gui:gui_v2"],
