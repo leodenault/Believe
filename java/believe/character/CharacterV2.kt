@@ -4,15 +4,16 @@ import believe.animation.BidirectionalAnimation
 import believe.core.display.Graphics
 import believe.geometry.Rectangle
 import believe.geometry.mutableRectangle
-import believe.geometry.rectangle
 import believe.map.collidable.tile.CollidableTileCollisionHandler
 import believe.map.collidable.tile.CollidableTileCollisionHandler.TileCollidable
 import believe.physics.collision.Collidable
 import believe.physics.collision.CollisionHandler
 import believe.physics.damage.DamageBoxCollidable
+import believe.physics.damage.DamageBoxCollisionHandler
 import believe.physics.manager.PhysicsManageable
 import believe.physics.manager.PhysicsManager
 import believe.react.Observable
+import believe.react.ObservableValue
 import believe.react.Observer
 import believe.scene.SceneElement
 import dagger.Reusable
@@ -23,7 +24,7 @@ import kotlin.math.min
 interface CharacterV2 : SceneElement, TileCollidable<CharacterV2>, DamageBoxCollidable<CharacterV2>,
     PhysicsManageable, Observable<Rectangle> {
 
-    val focus: Float
+    val observableFocus: Observable<Float>
 
     fun heal(health: Float)
 
@@ -42,7 +43,8 @@ interface CharacterV2 : SceneElement, TileCollidable<CharacterV2>, DamageBoxColl
     open class Factory @Inject internal constructor(
         private val stateMachineFactory: CharacterStateMachine.Factory,
         private val verticalMovementHandlerFactory: VerticalMovementHandler.Factory,
-        private val collidableTileCollisionHandler: CollidableTileCollisionHandler
+        private val collidableTileCollisionHandler: CollidableTileCollisionHandler,
+        private val damageBoxCollisionHandler: DamageBoxCollisionHandler
     ) {
         open fun create(
             animations: Animations,
@@ -59,9 +61,15 @@ interface CharacterV2 : SceneElement, TileCollidable<CharacterV2>, DamageBoxColl
                     MOVEMENT_SPEED
                 )
                 return CharacterV2Impl(
-                    stateMachine, verticalMovementHandlerFactory.create(
+                    stateMachine,
+                    verticalMovementHandlerFactory.create(
                         stateMachine, INITIAL_JUMP_VELOCITY, LANDED_VERTICAL_VELOCITY_TOLERANCE
-                    ), damageListener, setOf(collidableTileCollisionHandler), x, y, faction
+                    ),
+                    damageListener,
+                    setOf(collidableTileCollisionHandler, damageBoxCollisionHandler),
+                    x,
+                    y,
+                    faction
                 )
             }
         }
@@ -84,13 +92,16 @@ private class CharacterV2Impl constructor(
     initialY: Float,
     private val faction: Faction
 ) : CharacterV2 {
+    private val internalObservableFocus = ObservableValue.of(CharacterV2.MAX_FOCUS)
+    private var focus: Float
+        get() = internalObservableFocus.get()
+        set(value) = internalObservableFocus.setValue(value)
     private val bounds = mutableRectangle(
         initialX, initialY, stateMachine.animation.width, stateMachine.animation.height
     )
     private val observers = mutableListOf<Observer<Rectangle>>()
 
-    override var focus = CharacterV2.MAX_FOCUS
-        private set
+    override val observableFocus: Observable<Float> = internalObservableFocus
     override var x: Float
         get() = bounds.x
         set(value) {

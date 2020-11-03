@@ -8,6 +8,10 @@ import believe.core.display.RenderableV2
 import believe.geometry.FloatPoint
 import believe.geometry.rectangle
 import believe.gui.GuiAction
+import believe.gui.GuiBuilders.canvasContainer
+import believe.gui.GuiBuilders.progressBar
+import believe.gui.GuiElement
+import believe.gui.GuiLayoutFactory
 import believe.input.InputAdapter
 import believe.level.LevelManager
 import believe.physics.manager.PhysicsManager
@@ -30,6 +34,7 @@ class LevelStateV2 constructor(
     @Provided private val playerSupplier: Supplier<CharacterV2?>,
     @Provided private val levelMapFactory: LevelMap.Factory,
     @Provided private val physicsManager: PhysicsManager,
+    @Provided private val guiLayoutFactory: GuiLayoutFactory,
     private val levelName: String
 ) : GameState {
 
@@ -59,7 +64,13 @@ class LevelStateV2 constructor(
         camera.bounds.addObserver(levelMap)
 
         loadedState = LoadedState(
-            inputAdapter, stateController, levelMap, physicsManager, camera
+            inputAdapter,
+            stateController,
+            levelMap,
+            physicsManager,
+            camera,
+            player,
+            guiLayoutFactory
         ).also { it.bind() }
     }
 
@@ -85,13 +96,25 @@ class LevelStateV2 constructor(
         private val stateController: StateController,
         private val levelMap: LevelMap,
         private val physicsManager: PhysicsManager,
-        private var camera: Camera
+        private var camera: Camera,
+        private val player: CharacterV2,
+        guiLayoutFactory: GuiLayoutFactory
     ) : Bindable, Updatable, RenderableV2 {
+
+        private val hud = guiLayoutFactory.create(canvasContainer<GuiElement> {
+            add {
+                progressBar {
+                    initialProgress = 1f
+                    getProgressObservable = { player.observableFocus }
+                } from p(0.05f, 0.05f) to p(0.25f, 0.075f)
+            }
+        })
 
         override fun bind() {
             inputAdapter.addActionStartListener(GuiAction.EXECUTE_ACTION, this::leaveState)
             levelMap.bind()
             camera.bind()
+            hud.bind()
         }
 
         private fun leaveState() = stateController.navigateToMainMenu()
@@ -100,17 +123,27 @@ class LevelStateV2 constructor(
             inputAdapter.removeActionStartListener(GuiAction.EXECUTE_ACTION, this::leaveState)
             levelMap.unbind()
             camera.unbind()
+            hud.unbind()
         }
 
         override fun update(delta: Long) {
             levelMap.update(delta)
             physicsManager.update(delta)
+            player.heal(delta * FOCUS_RECHARGE_RATE)
         }
 
         override fun render(g: Graphics) {
             camera.pushTransformOn(g)
             levelMap.render(g)
             g.popTransform()
+            hud.render(g)
+        }
+
+        companion object {
+            private const val FOCUS_RECHARGE_TIME =
+                60f // Time in seconds for recharging focus fully
+            private const val FOCUS_RECHARGE_RATE =
+                CharacterV2.MAX_FOCUS / (FOCUS_RECHARGE_TIME * 1000f)
         }
     }
 }

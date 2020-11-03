@@ -55,6 +55,7 @@ kt_jvm_library(
         "//java/believe/physics/collision",
         "//java/believe/physics/damage",
         "//java/believe/physics/manager",
+        "//java/believe/react:impl",
         "//java/believe/scene",
         "//java/believe/statemachine:statemachine_v2",
         "//third_party/dagger",
