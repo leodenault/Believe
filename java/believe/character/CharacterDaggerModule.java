@@ -41,4 +41,28 @@ public abstract class CharacterDaggerModule {
   @Binds
   @IntoSet
   abstract ObjectParser bindPlayerObjectParser(PlayerObjectParser impl);
+
+  @Provides
+  @InvulnerabilityLength
+  static long provideInvulnerabilityLength() {
+    return 1000 * 2L;
+  }
+
+  @Provides
+  @AnimationFlashLength
+  static long provideAnimationFlashLength() {
+    return 15L;
+  }
+
+  @Provides
+  @MaxFocus
+  static float provideMaxFocus() {
+    return 1f;
+  }
+
+  @Provides
+  @FocusRechargeTime
+  static long provideFocusRechargeTime() {
+    return 1000 * 60L;
+  }
 }

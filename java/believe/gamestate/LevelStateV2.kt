@@ -129,7 +129,6 @@ class LevelStateV2 constructor(
         override fun update(delta: Long) {
             levelMap.update(delta)
             physicsManager.update(delta)
-            player.heal(delta * FOCUS_RECHARGE_RATE)
         }
 
         override fun render(g: Graphics) {

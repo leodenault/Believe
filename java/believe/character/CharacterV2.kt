@@ -26,18 +26,6 @@ interface CharacterV2 : SceneElement, TileCollidable<CharacterV2>, DamageBoxColl
 
     val observableFocus: Observable<Float>
 
-    fun heal(health: Float)
-
-    interface DamageListener {
-        fun damageInflicted(currentFocus: Float, inflictor: Faction)
-
-        companion object {
-            val NONE = object : DamageListener {
-                override fun damageInflicted(currentFocus: Float, inflictor: Faction) {}
-            }
-        }
-    }
-
     // Open for mocking.
     @Reusable
     open class Factory @Inject internal constructor(
@@ -47,11 +35,7 @@ interface CharacterV2 : SceneElement, TileCollidable<CharacterV2>, DamageBoxColl
         private val damageBoxCollisionHandler: DamageBoxCollisionHandler
     ) {
         open fun create(
-            animations: Animations,
-            damageListener: DamageListener,
-            x: Float,
-            y: Float,
-            faction: Faction
+            animations: Animations, x: Float, y: Float, faction: Faction
         ): CharacterV2 {
             with(animations) {
                 val stateMachine: CharacterStateMachine = stateMachineFactory.create(
@@ -65,7 +49,6 @@ interface CharacterV2 : SceneElement, TileCollidable<CharacterV2>, DamageBoxColl
                     verticalMovementHandlerFactory.create(
                         stateMachine, INITIAL_JUMP_VELOCITY, LANDED_VERTICAL_VELOCITY_TOLERANCE
                     ),
-                    damageListener,
                     setOf(collidableTileCollisionHandler, damageBoxCollisionHandler),
                     x,
                     y,
@@ -86,7 +69,6 @@ interface CharacterV2 : SceneElement, TileCollidable<CharacterV2>, DamageBoxColl
 private class CharacterV2Impl constructor(
     private val stateMachine: CharacterStateMachine,
     private val verticalMovementHandler: VerticalMovementHandler,
-    private val damageListener: CharacterV2.DamageListener,
     private val rightCompatibleHandlers: Set<CollisionHandler<out Collidable<*>, in CharacterV2>>,
     initialX: Float,
     initialY: Float,
@@ -101,7 +83,7 @@ private class CharacterV2Impl constructor(
     )
     private val observers = mutableListOf<Observer<Rectangle>>()
 
-    override val observableFocus: Observable<Float> = internalObservableFocus
+    override val observableFocus: Observable<Float> = stateMachine.focus
     override var x: Float
         get() = bounds.x
         set(value) {
@@ -135,7 +117,11 @@ private class CharacterV2Impl constructor(
         verticalMovementHandler.verticalVelocity = speed
     }
 
-    override fun render(g: Graphics) = g.drawAnimation(stateMachine.animation, x, y)
+    override fun render(g: Graphics) {
+        if (stateMachine.isAnimationVisible) {
+            g.drawAnimation(stateMachine.animation, x, y)
+        }
+    }
 
     override fun bind() {
         stateMachine.bind()
@@ -153,19 +139,13 @@ private class CharacterV2Impl constructor(
     override fun rightCompatibleHandlers(): Set<CollisionHandler<out Collidable<*>, in CharacterV2>> =
         rightCompatibleHandlers
 
-    override fun inflictDamage(damage: Float, inflictor: Faction) {
-        focus = max(0f, focus - damage)
-        damageListener.damageInflicted(focus, inflictor)
-    }
-
-    override fun heal(health: Float) {
-        focus = min(CharacterV2.MAX_FOCUS, focus + health)
-    }
+    override fun inflictDamage(damage: Float, inflictor: Faction) =
+        stateMachine.inflictDamage(damage)
 
     override fun update(delta: Long) {
         x += stateMachine.horizontalMovementSpeed * delta
         y += verticalSpeed * delta
-        stateMachine.animation.update(delta)
+        stateMachine.update(delta)
     }
 
     override fun addToPhysicsManager(physicsManager: PhysicsManager) {

@@ -72,3 +72,13 @@ kt_junit5_test(
         "//third_party/truth",
     ],
 )
+
+kt_junit5_test(
+    name = "VulnerabilityStateMachineTest",
+    srcs = ["VulnerabilityStateMachineTest.kt"],
+    friends = ["//java/believe/character:character_v2"],
+    deps = [
+        "//java/believe/character:character_v2",
+        "//third_party/truth",
+    ],
+)

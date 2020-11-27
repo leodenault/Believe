@@ -43,8 +43,10 @@ kt_jvm_library(
         "OrientationStateMachine.kt",
         "PlayerObjectParser.kt",
         "VerticalMovementHandler.kt",
+        "VulnerabilityStateMachine.kt",
     ],
     deps = [
+        ":annotations",
         "//java/believe/animation",
         "//java/believe/character/proto:character_animations_java_proto",
         "//java/believe/core/display:display_v2",
@@ -67,6 +69,7 @@ java_library(
     name = "dagger_module",
     srcs = ["CharacterDaggerModule.java"],
     deps = [
+        ":annotations",
         ":character_v2",
         "//java/believe/character/proto:character_animations_java_proto",
         "//java/believe/datamodel",
@@ -77,6 +80,12 @@ java_library(
         "//third_party/dagger",
         "//third_party/kotlin",
     ],
+)
+
+kt_jvm_library(
+    name = "annotations",
+    srcs = ["Annotations.kt"],
+    deps = ["//third_party/javax:annotations"],
 )
 
 java_library(

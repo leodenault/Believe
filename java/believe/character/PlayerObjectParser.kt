@@ -33,7 +33,7 @@ internal class PlayerObjectParser @Inject internal constructor(
                 ).setIdleAnimationName(
                     "idle"
                 ).setMovementAnimationName("moving").setJumpAnimationName("jumping").build()
-            ), CharacterV2.DamageListener.NONE, tiledObject.x, tiledObject.y, Faction.GOOD
+            ), tiledObject.x, tiledObject.y, Faction.GOOD
         )
         generatedMapEntityDataBuilder.addPhysicsManageable {
             it.addCollidable(player)
