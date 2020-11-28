@@ -28,7 +28,7 @@ java_library(
         ":gamestate",
         ":package-info",
         "//java/believe/action",
-        "//java/believe/app:qualifiers",
+        "//java/believe/app:annotations",
         "//java/believe/app/proto:game_options_java_proto",
         "//java/believe/audio",
         "//java/believe/character",
@@ -74,13 +74,13 @@ kt_jvm_library(
     name = "impl_kt",
     srcs = [
         "GameStateRunnerImpl.kt",
-        "LevelStateV2.kt",
         "MainMenuStateV2.kt",
         "OptionsMenuStateV2.kt",
         "StateControllerImpl.kt",
     ],
     deps = [
         ":gamestate_kt",
+        "//java/believe/app:annotations_v2",
         "//java/believe/app/proto:game_options_java_proto",
         "//java/believe/character:character_v2",
         "//java/believe/core",
@@ -88,6 +88,7 @@ kt_jvm_library(
         "//java/believe/core/display:display_v2",
         "//java/believe/datamodel",
         "//java/believe/datamodel:impl",
+        "//java/believe/gamestate/levelstate:levelstate_v2_impl",
         "//java/believe/gamestate/transition",
         "//java/believe/gamestate/transition:impl",
         "//java/believe/gui",
@@ -107,7 +108,9 @@ java_library(
     deps = [
         "gamestate_kt",
         ":impl_kt",
+        "//java/believe/app:annotations_v2",
         "//java/believe/character:dagger_module",
+        "//java/believe/gamestate/levelstate:levelstate_v2",
         "//third_party/dagger",
     ],
 )

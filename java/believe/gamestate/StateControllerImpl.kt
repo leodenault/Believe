@@ -1,5 +1,7 @@
 package believe.gamestate
 
+import believe.app.ApplicationGameStateRunner
+import believe.gamestate.levelstate.LevelStateV2Factory
 import believe.gamestate.transition.EmptyGameStateTransition
 import dagger.Reusable
 import javax.inject.Inject
@@ -7,7 +9,7 @@ import javax.inject.Inject
 /** Default implementation of [StateController]. */
 @Reusable
 class StateControllerImpl @Inject internal constructor(
-    private val gameStateRunner: GameStateRunner,
+    @ApplicationGameStateRunner private val gameStateRunner: GameStateRunner,
     private val mainMenuState: MainMenuStateV2Factory,
     private val optionsMenuState: OptionsMenuStateV2Factory,
     private val levelState: LevelStateV2Factory

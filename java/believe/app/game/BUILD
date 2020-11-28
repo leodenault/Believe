@@ -100,7 +100,7 @@ java_library(
         "//java/believe/action",
         "//java/believe/app",
         "//java/believe/app:dagger_module",
-        "//java/believe/app:qualifiers",
+        "//java/believe/app:annotations",
         "//java/believe/core/io",
         "//java/believe/gamestate",
         "//java/believe/gamestate:impl",
@@ -127,7 +127,7 @@ java_library(
     srcs = ["BelieveDaggerModuleV2.java"],
     deps = [
         "//java/believe/app:app_kt",
-        "//java/believe/app:qualifiers_v2",
+        "//java/believe/app:annotations_v2",
         "//third_party/dagger",
     ],
 )

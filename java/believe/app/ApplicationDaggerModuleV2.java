@@ -14,6 +14,7 @@ import believe.datamodel.protodata.BinaryProtoFile;
 import believe.datamodel.protodata.BinaryProtoFile.BinaryProtoFileFactory;
 import believe.dialogue.DialogueDaggerModule;
 import believe.gamestate.GamestateDaggerModule;
+import believe.gamestate.levelstate.LevelStateDaggerModule;
 import believe.gamestate.levelstate.platformingstate.EventActions;
 import believe.gamestate.levelstate.platformingstate.PlatformingState;
 import believe.gui.GuiDaggerModule;
@@ -64,6 +65,7 @@ import java.util.function.Supplier;
       GuiDaggerModuleV2.class,
       IoDaggerModule.class,
       LevelDaggerModule.class,
+      LevelStateDaggerModule.class,
       MapParsingDaggerModule.class,
       MobDaggerModule.class,
       ProtoDaggerModule.class,

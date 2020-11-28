@@ -3,12 +3,11 @@ package believe.gamestate
 import believe.core.Updatable
 import believe.core.display.Graphics
 import believe.core.display.RenderableV2
+import believe.gamestate.transition.EmptyGameStateTransition
 import believe.gamestate.transition.GameStateTransition
-import dagger.Reusable
 import javax.inject.Inject
 
 /** Default implementation of [GameStateRunner]. */
-@Reusable
 class GameStateRunnerImpl @Inject constructor() : GameStateRunner {
     private var previousState: GameState = EmptyGameState
     private var currentUpdatableAndRenderable: UpdatableAndRenderable<*> =
@@ -38,6 +37,9 @@ class GameStateRunnerImpl @Inject constructor() : GameStateRunner {
         })
         currentUpdatableAndRenderable = UpdatableAndRenderable(leaveTransition)
     }
+
+    override fun exitCurrentState(leaveTransition: GameStateTransition) =
+        transitionTo(EmptyGameState, leaveTransition, EmptyGameStateTransition())
 
     private object EmptyGameState : GameState {
         override fun enter() {}

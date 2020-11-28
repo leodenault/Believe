@@ -28,3 +28,54 @@ kt_jvm_library(
         "//third_party/slick",
     ],
 )
+
+kt_jvm_library(
+    name = "levelstate_v2",
+    srcs = [
+        "LevelStateController.kt",
+    ],
+)
+
+kt_jvm_library(
+    name = "levelstate_v2_impl",
+    srcs = [
+        "LevelStateControllerImpl.kt",
+        "LevelStateV2.kt",
+        "RunningGameState.kt",
+    ],
+    deps = [
+        ":annotations",
+        ":levelstate_v2",
+        "//java/believe/character:character_v2",
+        "//java/believe/gamestate:gamestate_kt",
+        "//java/believe/gamestate/transition:impl",
+        "//java/believe/gui:gui_v2",
+        "//java/believe/input",
+        "//java/believe/level",
+        "//java/believe/physics/manager",
+        "//java/believe/react",
+        "//java/believe/scene",
+        "//java/believe/scene:impl",
+        "//third_party/auto_factory",
+        "//third_party/javax:annotations",
+    ],
+)
+
+java_library(
+    name = "dagger_module",
+    srcs = ["LevelStateDaggerModule.java"],
+    deps = [
+        ":annotations",
+        ":levelstate_v2",
+        ":levelstate_v2_impl",
+        "//java/believe/gamestate:gamestate_kt",
+        "//java/believe/gamestate:impl_kt",
+        "//third_party/dagger",
+    ],
+)
+
+kt_jvm_library(
+    name = "annotations",
+    srcs = ["Annotations.kt"],
+    deps = ["//third_party/javax:annotations"],
+)

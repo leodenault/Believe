@@ -90,7 +90,7 @@ java_library(
         ":package-info",
         "//java/believe/action",
         "//java/believe/app:dagger_module",
-        "//java/believe/app:qualifiers",
+        "//java/believe/app:annotations",
         "//java/believe/gamestate",
         "//java/believe/gamestate:impl",
         "//java/believe/gamestate/levelstate/platformingstate",

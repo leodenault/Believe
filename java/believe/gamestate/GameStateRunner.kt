@@ -17,4 +17,7 @@ interface GameStateRunner : Updatable, RenderableV2 {
         leaveTransition: GameStateTransition,
         enterTransition: GameStateTransition
     )
+
+    /** Transitions out of the currently-running state and executes [leaveTransition]. */
+    fun exitCurrentState(leaveTransition: GameStateTransition)
 }

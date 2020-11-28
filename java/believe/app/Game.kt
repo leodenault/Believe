@@ -13,7 +13,7 @@ import javax.inject.Inject
 @Reusable
 class Game @Inject constructor(
     @ApplicationTitle private val applicationTitle: String,
-    private val gameStateRunner: GameStateRunner,
+    @ApplicationGameStateRunner private val gameStateRunner: GameStateRunner,
     private val stateController: Lazy<StateController>,
     private val stateSelector: StateSelector
 ) : Game {

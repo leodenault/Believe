@@ -1,10 +1,11 @@
-package believe.gamestate
+package believe.gamestate.levelstate
 
 import believe.character.CharacterV2
 import believe.core.Updatable
 import believe.core.display.Bindable
 import believe.core.display.Graphics
 import believe.core.display.RenderableV2
+import believe.gamestate.GameState
 import believe.geometry.FloatPoint
 import believe.geometry.rectangle
 import believe.gui.GuiAction
@@ -26,11 +27,11 @@ import org.newdawn.slick.util.Log
 import java.util.function.Supplier
 
 @AutoFactory
-class LevelStateV2 constructor(
+class RunningGameState constructor(
     @Provided private val guiContext: GUIContext,
     @Provided private val levelManager: LevelManager,
     @Provided private val inputAdapter: InputAdapter<GuiAction>,
-    @Provided private val stateController: StateController,
+    @Provided private val stateController: LevelStateController,
     @Provided private val playerSupplier: Supplier<CharacterV2?>,
     @Provided private val levelMapFactory: LevelMap.Factory,
     @Provided private val physicsManager: PhysicsManager,
@@ -93,7 +94,7 @@ class LevelStateV2 constructor(
 
     class LoadedState(
         private val inputAdapter: InputAdapter<GuiAction>,
-        private val stateController: StateController,
+        private val stateController: LevelStateController,
         private val levelMap: LevelMap,
         private val physicsManager: PhysicsManager,
         private var camera: Camera,
@@ -136,13 +137,6 @@ class LevelStateV2 constructor(
             levelMap.render(g)
             g.popTransform()
             hud.render(g)
-        }
-
-        companion object {
-            private const val FOCUS_RECHARGE_TIME =
-                60f // Time in seconds for recharging focus fully
-            private const val FOCUS_RECHARGE_RATE =
-                CharacterV2.MAX_FOCUS / (FOCUS_RECHARGE_TIME * 1000f)
         }
     }
 }

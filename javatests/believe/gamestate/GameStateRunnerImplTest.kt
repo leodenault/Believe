@@ -11,25 +11,21 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 internal class GameStateRunnerImplTest {
-    private val previousState: GameState = mock()
     private val nextState: GameState = mock()
     private val leaveTransition: FakeTransition = spy()
     private val enterTransition: FakeTransition = spy()
     private val graphics: Graphics = mock()
     private val gameStateRunner = GameStateRunnerImpl()
 
-    @BeforeEach
-    fun setUp() {
-        gameStateRunner.transitionTo(nextState, leaveTransition, enterTransition)
-    }
-
     @Test
     fun update_leaveTransitionIsActive_updatesLeaveTransition() {
+        gameStateRunner.transitionTo(nextState, leaveTransition, enterTransition)
         gameStateRunner.update(123)
     }
 
     @Test
     fun update_enterTransitionIsActive_updatesEnterTransition() {
+        gameStateRunner.transitionTo(nextState, leaveTransition, enterTransition)
         leaveTransition.transitionEnded()
         gameStateRunner.update(123)
 
@@ -38,6 +34,7 @@ internal class GameStateRunnerImplTest {
 
     @Test
     fun update_nextStateIsActive_entersNextStateAndUpdatesNextState() {
+        gameStateRunner.transitionTo(nextState, leaveTransition, enterTransition)
         leaveTransition.transitionEnded()
         enterTransition.transitionEnded()
         gameStateRunner.update(123)
@@ -50,6 +47,7 @@ internal class GameStateRunnerImplTest {
 
     @Test
     fun transitionTo_leavesPreviousState() {
+        gameStateRunner.transitionTo(nextState, leaveTransition, enterTransition)
         leaveTransition.transitionEnded()
         enterTransition.transitionEnded()
         gameStateRunner.transitionTo(nextState, leaveTransition, enterTransition)
@@ -59,6 +57,7 @@ internal class GameStateRunnerImplTest {
 
     @Test
     fun render_leaveTransitionIsActive_rendersLeaveTransition() {
+        gameStateRunner.transitionTo(nextState, leaveTransition, enterTransition)
         gameStateRunner.render(graphics)
 
         verify(leaveTransition).render(graphics)
@@ -66,6 +65,7 @@ internal class GameStateRunnerImplTest {
 
     @Test
     fun render_enterTransitionIsActive_rendersEnterTransition() {
+        gameStateRunner.transitionTo(nextState, leaveTransition, enterTransition)
         leaveTransition.transitionEnded()
         gameStateRunner.render(graphics)
 
@@ -74,11 +74,33 @@ internal class GameStateRunnerImplTest {
 
     @Test
     fun render_gameStateIsActive_rendersGameState() {
+        gameStateRunner.transitionTo(nextState, leaveTransition, enterTransition)
         leaveTransition.transitionEnded()
         enterTransition.transitionEnded()
         gameStateRunner.render(graphics)
 
         verify(nextState).render(graphics)
+    }
+
+    @Test
+    fun exitCurrentState_exitsCurrentStateAndAllowsEnteringNewState() {
+        gameStateRunner.exitCurrentState(leaveTransition)
+        gameStateRunner.update(123)
+        leaveTransition.transitionEnded()
+        gameStateRunner.transitionTo(nextState, leaveTransition, enterTransition)
+        gameStateRunner.update(234)
+        leaveTransition.transitionEnded()
+        gameStateRunner.update(345)
+        enterTransition.transitionEnded()
+        gameStateRunner.update(456)
+
+        inOrder(leaveTransition, enterTransition, nextState) {
+            verify(leaveTransition).update(123)
+            verify(leaveTransition).update(234)
+            verify(enterTransition).update(345)
+            verify(nextState).enter()
+            verify(nextState).update(456)
+        }
     }
 
     private abstract class FakeTransition : GameStateTransition {

@@ -16,8 +16,8 @@ java_library(
         "Application.java",
     ],
     deps = [
+        ":annotations",
         ":game_container_supplier",
-        ":qualifiers",
         "//java/believe/core/io",
         "//java/believe/gamestate",
         "//java/believe/util",
@@ -36,7 +36,7 @@ kt_jvm_library(
         "StateSelector.kt",
     ],
     deps = [
-        ":qualifiers_v2",
+        ":annotations_v2",
         "//java/believe/app/flags",
         "//java/believe/gamestate:gamestate_kt",
         "//java/believe/gamestate:impl_kt",
@@ -84,9 +84,9 @@ java_library(
     name = "dagger_component_v2",
     srcs = ["ApplicationComponentV2.java"],
     deps = [
+        ":annotations_v2",
         ":app_kt",
         ":dagger_module_v2",
-        ":qualifiers_v2",
         "//java/believe/animation",
         "//java/believe/animation:dagger_module",
         "//java/believe/app/flag_parsers:impl",
@@ -113,6 +113,8 @@ java_library(
         "//java/believe/gamestate:gamestate_kt",
         "//java/believe/gamestate:impl_kt",
         "//java/believe/gamestate:package-info",
+        "//java/believe/gamestate/levelstate:levelstate_v2",
+        "//java/believe/gamestate/levelstate:levelstate_v2_impl",
         "//java/believe/gui",
         "//java/believe/gui:dagger_module",
         "//java/believe/gui:dagger_module_v2",
@@ -158,8 +160,8 @@ java_library(
     name = "dagger_module_v2",
     srcs = ["ApplicationDaggerModuleV2.java"],
     deps = [
+        ":annotations_v2",
         ":app_kt",
-        ":qualifiers_v2",
         "//java/believe/action",
         "//java/believe/animation:dagger_module",
         "//java/believe/app/flag_parsers:impl",
@@ -174,6 +176,7 @@ java_library(
         "//java/believe/dialogue:dagger_module",
         "//java/believe/gamestate:dagger_module",
         "//java/believe/gamestate:impl",
+        "//java/believe/gamestate/levelstate:dagger_module",
         "//java/believe/gamestate/levelstate/platformingstate",
         "//java/believe/gamestate/levelstate/platformingstate:qualifiers",
         "//java/believe/gui:dagger_module",
@@ -199,9 +202,9 @@ java_library(
     name = "dagger_module",
     srcs = ["ApplicationModule.java"],
     deps = [
+        ":annotations",
         ":app",
         ":game_container_supplier",
-        ":qualifiers",
         "//java/believe/action",
         "//java/believe/app/proto:game_options_java_proto",
         "//java/believe/character/playable:dagger_module",
@@ -230,23 +233,17 @@ java_library(
     ],
 )
 
-java_library(
-    name = "qualifiers",
-    srcs = [
-        "ApplicationTitle.java",
-        "FirstState.java",
-        "GameStates.java",
-    ],
+kt_jvm_library(
+    name = "annotations",
+    srcs = ["Annotations.kt"],
     deps = ["//third_party/javax:annotations"],
 )
 
 kt_jvm_library(
-    name = "qualifiers_v2",
+    name = "annotations_v2",
     srcs = [
-        "ApplicationTitle.java",
-        "FirstState.java",
-        "GameStates.java",
-        "NativeLibraryPaths.kt",
+        "Annotations.kt",
+        "AnnotationsV2.kt",
     ],
     deps = ["//third_party/javax:annotations"],
 )
