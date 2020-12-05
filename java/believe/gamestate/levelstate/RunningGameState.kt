@@ -36,7 +36,7 @@ class RunningGameState constructor(
     @Provided private val levelMapFactory: LevelMap.Factory,
     @Provided private val physicsManager: PhysicsManager,
     @Provided private val guiLayoutFactory: GuiLayoutFactory,
-    private val levelName: String
+    @Provided @LevelName private val levelName: String
 ) : GameState {
 
     private var loadedState: LoadedState? = null
@@ -112,16 +112,16 @@ class RunningGameState constructor(
         })
 
         override fun bind() {
-            inputAdapter.addActionStartListener(GuiAction.EXECUTE_ACTION, this::leaveState)
+            inputAdapter.addActionStartListener(GuiAction.GO_BACK, this::pause)
             levelMap.bind()
             camera.bind()
             hud.bind()
         }
 
-        private fun leaveState() = stateController.navigateToMainMenu()
+        private fun pause() = stateController.navigateToPauseMenu()
 
         override fun unbind() {
-            inputAdapter.removeActionStartListener(GuiAction.EXECUTE_ACTION, this::leaveState)
+            inputAdapter.removeActionStartListener(GuiAction.GO_BACK, this::pause)
             levelMap.unbind()
             camera.unbind()
             hud.unbind()

@@ -110,6 +110,8 @@ java_library(
         "//java/believe/dialogue",
         "//java/believe/dialogue:dagger_module",
         "//java/believe/dialogue/proto:dialogue_java_proto",
+        "//java/believe/gamestate:controller",
+        "//java/believe/gamestate:controller_impl",
         "//java/believe/gamestate:gamestate_kt",
         "//java/believe/gamestate:impl_kt",
         "//java/believe/gamestate:package-info",

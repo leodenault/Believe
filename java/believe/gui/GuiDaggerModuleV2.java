@@ -4,11 +4,13 @@ import static believe.util.Util.hashSetOf;
 
 import believe.audio.Sound;
 import believe.audio.SoundImpl;
+import believe.core.io.FontLoader;
 import believe.input.InputAdapter;
 import believe.input.keyboard.KeyboardInputAdapter;
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
+import org.newdawn.slick.Font;
 
 import java.util.Set;
 
@@ -64,5 +66,16 @@ public abstract class GuiDaggerModuleV2 {
   static FocusableGroup.Factory provideFocusableGroupFactory(
       FocusableGroupImplFactory focusableGroupImplFactory) {
     return focusableGroupImplFactory::create;
+  }
+
+  @Provides
+  static ImageSupplier provideImageSupplier() {
+    return ImageSupplier.DEFAULT;
+  }
+
+  @Provides
+  @Reusable
+  static Font provideFont(FontLoader fontLoader) {
+    return fontLoader.getBaseFont();
   }
 }

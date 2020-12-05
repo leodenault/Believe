@@ -51,6 +51,7 @@ kt_jvm_library(
         "GuiElement.kt",
         "GuiKeyboardActionMap.kt",
         "GuiLayoutFactory.kt",
+        "ImageSupplier.java",
         "LayoutBuilder.kt",
         "MenuSelectionStyle.kt",
         "MenuSelectionV2.kt",
@@ -63,7 +64,7 @@ kt_jvm_library(
         "VerticalContainer.kt",
     ],
     deps = [
-        ":internal_qualifiers",
+        ":annotations",
         "//java/believe/audio",
         "//java/believe/core/display:display_v2",
         "//java/believe/geometry",
@@ -93,21 +94,23 @@ java_library(
     name = "dagger_module_v2",
     srcs = ["GuiDaggerModuleV2.java"],
     deps = [
+        ":annotations",
         ":gui_v2",
-        ":internal_qualifiers",
         ":package-info",
         "//java/believe/audio",
         "//java/believe/audio:impl",
+        "//java/believe/core/io",
         "//java/believe/input",
         "//java/believe/input/keyboard",
         "//java/believe/util",
         "//third_party/dagger",
+        "//third_party/slick",
     ],
 )
 
 kt_jvm_library(
-    name = "internal_qualifiers",
-    srcs = ["InternalQualifiers.kt"],
+    name = "annotations",
+    srcs = ["Annotations.kt"],
     deps = ["//third_party/javax:annotations"],
 )
 

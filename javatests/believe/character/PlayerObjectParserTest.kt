@@ -27,7 +27,7 @@ internal class PlayerObjectParserTest {
             on { invoke(any()) } doReturn Animations.EMPTY
         }
     private val characterFactory = mock<CharacterV2.Factory> {
-        on { create(any(), any(), any(), any(), any()) } doReturn expectedPlayer
+        on { create(any(), any(), any(), any()) } doReturn expectedPlayer
     }
     private val parser = PlayerObjectParser(characterFactory, parseAnimations, mutablePlayer)
     private val generatedMapEntityDataBuilder = GeneratedMapEntityData.newBuilder()
@@ -48,7 +48,7 @@ internal class PlayerObjectParserTest {
             assertThat(sceneElements()).contains(expectedPlayer)
         }
         assertThat(mutablePlayer.get()).isEqualTo(expectedPlayer)
-        verify(characterFactory).create(any(), any(), eq(123f), eq(234f), eq(Faction.GOOD))
+        verify(characterFactory).create(any(), eq(123f), eq(234f), eq(Faction.GOOD))
         verify(physicsManager).addCollidable(expectedPlayer)
         verify(physicsManager).addGravityObject(expectedPlayer)
     }

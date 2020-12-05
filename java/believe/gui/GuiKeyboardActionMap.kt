@@ -9,6 +9,7 @@ import javax.inject.Inject
 internal class GuiKeyboardActionMap @Inject internal constructor() : (Int) -> GuiAction {
     override fun invoke(key: Int): GuiAction = when (key) {
         Input.KEY_ENTER, Input.KEY_NUMPADENTER -> GuiAction.EXECUTE_ACTION
+        Input.KEY_ESCAPE -> GuiAction.GO_BACK
         Input.KEY_UP -> GuiAction.SELECT_UP
         Input.KEY_DOWN -> GuiAction.SELECT_DOWN
         Input.KEY_RIGHT -> GuiAction.SELECT_RIGHT

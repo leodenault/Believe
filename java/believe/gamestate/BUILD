@@ -61,7 +61,6 @@ kt_jvm_library(
     srcs = [
         "GameState.kt",
         "GameStateRunner.kt",
-        "StateController.kt",
     ],
     deps = [
         "//java/believe/core",
@@ -76,9 +75,9 @@ kt_jvm_library(
         "GameStateRunnerImpl.kt",
         "MainMenuStateV2.kt",
         "OptionsMenuStateV2.kt",
-        "StateControllerImpl.kt",
     ],
     deps = [
+        ":controller",
         ":gamestate_kt",
         "//java/believe/app:annotations_v2",
         "//java/believe/app/proto:game_options_java_proto",
@@ -88,7 +87,6 @@ kt_jvm_library(
         "//java/believe/core/display:display_v2",
         "//java/believe/datamodel",
         "//java/believe/datamodel:impl",
-        "//java/believe/gamestate/levelstate:levelstate_v2_impl",
         "//java/believe/gamestate/transition",
         "//java/believe/gamestate/transition:impl",
         "//java/believe/gui",
@@ -102,15 +100,33 @@ kt_jvm_library(
     ],
 )
 
+kt_jvm_library(
+    name = "controller",
+    srcs = ["StateController.kt"],
+)
+
+kt_jvm_library(
+    name = "controller_impl",
+    srcs = ["StateControllerImpl.kt"],
+    deps = [
+        ":controller",
+        "//java/believe/gamestate/levelstate:levelstate_v2",
+        "//java/believe/gamestate/transition:impl",
+        "//third_party/dagger",
+        "//third_party/javax:annotations",
+    ],
+)
+
 java_library(
     name = "dagger_module",
     srcs = ["GamestateDaggerModule.java"],
     deps = [
         "gamestate_kt",
+        ":controller",
+        ":controller_impl",
         ":impl_kt",
         "//java/believe/app:annotations_v2",
         "//java/believe/character:dagger_module",
-        "//java/believe/gamestate/levelstate:levelstate_v2",
         "//third_party/dagger",
     ],
 )

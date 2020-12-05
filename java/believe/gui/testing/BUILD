@@ -31,7 +31,7 @@ java_library(
         "//java/believe/audio",
         "//java/believe/audio/testing",
         "//java/believe/gui:gui_v2",
-        "//java/believe/gui:internal_qualifiers",
+        "//java/believe/gui:annotations",
         "//java/believe/input",
         "//java/believe/input/testing",
         "//third_party/dagger",

@@ -10,19 +10,24 @@ import javax.inject.Inject
 internal class LevelStateControllerImpl @Inject internal constructor(
     @LevelStateRunner private val levelStateRunner: GameStateRunner,
     private val stateController: StateController,
-    private val runningGameStateFactory: RunningGameStateFactory
+    private val runningGameStateFactory: RunningGameStateFactory,
+    private val pauseStateFactory: PauseStateFactory
 ) : LevelStateController {
 
-    override fun navigateToRunningGameState(levelName: String) {
+    override fun navigateToRunningGameState() {
         levelStateRunner.transitionTo(
-            runningGameStateFactory.create(levelName),
-            EmptyGameStateTransition(),
-            EmptyGameStateTransition()
+            runningGameStateFactory.create(), EmptyGameStateTransition(), EmptyGameStateTransition()
         )
     }
 
     override fun navigateToMainMenu() {
         levelStateRunner.exitCurrentState(EmptyGameStateTransition())
         stateController.navigateToMainMenu()
+    }
+
+    override fun navigateToPauseMenu() {
+        levelStateRunner.transitionTo(
+            pauseStateFactory.create(), EmptyGameStateTransition(), EmptyGameStateTransition()
+        )
     }
 }

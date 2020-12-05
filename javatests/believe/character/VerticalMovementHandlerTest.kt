@@ -13,7 +13,7 @@ internal class VerticalMovementHandlerTest {
     private val stateMachine: CharacterStateMachine = CharacterStateMachine.Factory(
         OrientationStateMachine.Factory(inputAdapter), MovementStateMachine.Factory(
             inputAdapter, HorizontalMovementStateMachine.Factory(inputAdapter)
-        )
+        ), VulnerabilityStateMachine(10L, 10L, 1f, 10L)
     ).create(IDLE_ANIMATION, MOVEMENT_ANIMATION, JUMP_ANIMATION, HORIZONTAL_MOVEMENT_SPEED)
     private val handler: VerticalMovementHandler =
         VerticalMovementHandler.Factory(inputAdapter).create(
