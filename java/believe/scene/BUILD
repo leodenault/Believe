@@ -8,12 +8,16 @@ kt_jvm_library(
     name = "scene",
     srcs = [
         "Camera.kt",
+        "GeneratedMapEntityData.kt",
         "SceneElement.kt",
     ],
     deps = [
         "//java/believe/core",
+        "//java/believe/core/display",
         "//java/believe/core/display:display_v2",
+        "//java/believe/physics/manager",
         "//java/believe/react",
+        "//third_party/auto_value",
     ],
 )
 

@@ -14,6 +14,6 @@ internal class SpriteSheetDataManagerFactory @Inject internal constructor(
 
     private val parser = parserFactory.create()
 
-    fun create(): DataManager<DataManager<Animation>> =
+    fun create(): DataManager<DataManager<AnimationFactory>> =
         binaryProtoFileManagerFactory.create(spriteSheetDirectoryName, parser)
 }

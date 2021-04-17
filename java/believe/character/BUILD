@@ -76,6 +76,8 @@ java_library(
         "//java/believe/datamodel:impl",
         "//java/believe/input",
         "//java/believe/input/keyboard",
+        "//java/believe/map/data",
+        "//java/believe/map/data:annotations",
         "//java/believe/map/io",
         "//third_party/dagger",
         "//third_party/kotlin",

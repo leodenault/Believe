@@ -1,3 +1,5 @@
+load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kt_jvm_library")
+
 package(
     default_visibility = ["//:believe_all_pkgs"],
 )
@@ -7,9 +9,9 @@ java_library(
     srcs = [
         "BackgroundSceneData.java",
         "EntityType.java",
-        "GeneratedMapEntityData.java",
         "LayerData.java",
         "MapData.java",
+        "ObjectFactory.java",
         "ObjectLayerData.java",
         "TileData.java",
         "TiledMapData.java",
@@ -28,5 +30,14 @@ java_library(
         "//third_party/auto_value",
         "//third_party/javax:annotations",
         "//third_party/slick",
+    ],
+)
+
+kt_jvm_library(
+    name = "annotations",
+    srcs = ["EntityTypeKey.kt"],
+    deps = [
+        ":data",
+        "//third_party/dagger",
     ],
 )

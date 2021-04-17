@@ -61,6 +61,7 @@ java_library(
         "//java/believe/map/collidable/command",
         "//java/believe/map/collidable/command:dagger_module",
         "//java/believe/map/collidable/tile",
+        "//java/believe/map/data",
         "//java/believe/map/gui",
         "//java/believe/map/io",
         "//java/believe/map/io:dagger_module",
@@ -89,8 +90,8 @@ java_library(
     deps = [
         ":package-info",
         "//java/believe/action",
-        "//java/believe/app:dagger_module",
         "//java/believe/app:annotations",
+        "//java/believe/app:dagger_module",
         "//java/believe/gamestate",
         "//java/believe/gamestate:impl",
         "//java/believe/gamestate/levelstate/platformingstate",

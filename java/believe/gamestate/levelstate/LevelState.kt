@@ -21,6 +21,7 @@ import believe.map.data.ObjectLayerData
 import believe.map.gui.PlayArea
 import believe.physics.manager.PhysicsManageable
 import believe.physics.manager.PhysicsManager
+import believe.scene.GeneratedMapEntityData
 import org.newdawn.slick.GameContainer
 import org.newdawn.slick.Graphics
 import org.newdawn.slick.Image
@@ -155,14 +156,16 @@ abstract class LevelState(
     private fun initPhysics() {
         physicsManager.reset()
         val mapData = levelData!!.mapData
-        Stream.concat(mapData.tiledMapData().objectLayers().stream()
-            .flatMap { objectLayerData: ObjectLayerData ->
-                objectLayerData.generatedMapEntityData().physicsManageables().stream()
-            }, mapData.tiledMapData().layers().stream().flatMap { layerData: LayerData ->
-            layerData.generatedMapEntityData().physicsManageables().stream()
-        }).forEach { entity: PhysicsManageable ->
-            entity.addToPhysicsManager(physicsManager)
+        val generatedMapEntityDataBuilder = GeneratedMapEntityData.newBuilder()
+        mapData.tiledMapData().objectLayers().stream().forEach { objectLayerData: ObjectLayerData ->
+            objectLayerData.objectFactories()
+                .forEach { it.createAndAddTo(generatedMapEntityDataBuilder) }
         }
+
+        generatedMapEntityDataBuilder.build().physicsManageables()
+            .forEach { entity: PhysicsManageable ->
+                entity.addToPhysicsManager(physicsManager)
+            }
         player!!.addToPhysicsManager(physicsManager)
     }
 

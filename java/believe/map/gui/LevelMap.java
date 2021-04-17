@@ -8,19 +8,18 @@ import believe.gui.ComponentBase;
 import believe.map.data.BackgroundSceneData;
 import believe.map.data.LayerData;
 import believe.map.data.MapData;
+import believe.scene.GeneratedMapEntityData;
 import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
-import javax.annotation.Nullable;
-import javax.inject.Inject;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
-
+import javax.annotation.Nullable;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @AutoFactory
 public class LevelMap extends ComponentBase {
@@ -38,25 +37,15 @@ public class LevelMap extends ComponentBase {
       @Provided MapLayerComponentFactory mapLayerComponentFactory,
       MapData mapData) {
     super(container, 0, 0);
-    renderables =
-        Stream.concat(
-                mapData.tiledMapData().objectLayers().stream()
-                    .flatMap(
-                        objectLayerData ->
-                            objectLayerData.generatedMapEntityData().renderables().stream()),
-                mapData.tiledMapData().layers().stream()
-                    .flatMap(
-                        layerData -> layerData.generatedMapEntityData().renderables().stream()))
-            .collect(Collectors.toSet());
-    updatables =
-        Stream.concat(
-                mapData.tiledMapData().objectLayers().stream()
-                    .flatMap(
-                        objectLayerData ->
-                            objectLayerData.generatedMapEntityData().updatables().stream()),
-                mapData.tiledMapData().layers().stream()
-                    .flatMap(layerData -> layerData.generatedMapEntityData().updatables().stream()))
-            .collect(Collectors.toSet());
+    GeneratedMapEntityData.Builder generatedMapEntityDataBuilder =
+        GeneratedMapEntityData.newBuilder();
+    mapData.tiledMapData().objectLayers().stream()
+        .flatMap(layer -> layer.objectFactories().stream())
+        .forEach(factory -> factory.createAndAddTo(generatedMapEntityDataBuilder));
+    GeneratedMapEntityData generatedMapEntityData = generatedMapEntityDataBuilder.build();
+
+    renderables = generatedMapEntityData.renderables();
+    updatables = generatedMapEntityData.updatables();
     rect =
         mutableRectangle(
             rect.getX(),

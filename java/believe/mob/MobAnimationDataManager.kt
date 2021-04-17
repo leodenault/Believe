@@ -1,6 +1,6 @@
 package believe.mob
 
-import believe.animation.Animation
+import believe.animation.AnimationFactory
 import believe.datamodel.DataManager
 import believe.mob.proto.MobAnimationDataProto.DamageFrame
 import dagger.Reusable
@@ -8,17 +8,17 @@ import javax.inject.Inject
 
 @Reusable
 internal class MobAnimationDataManager @Inject internal constructor(
-    private val spriteSheetManager: DataManager<DataManager<Animation>>,
+    private val spriteSheetManager: DataManager<DataManager<AnimationFactory>>,
     private val mobDataManager: DataManager<DataManager<List<DamageFrame>>>
-) : DataManager<DataManager<MobAnimation>> {
+) : DataManager<DataManager<MobAnimationData>> {
 
-    override fun getDataFor(name: String): DataManager<MobAnimation>? {
+    override fun getDataFor(name: String): DataManager<MobAnimationData>? {
         val animationManager = spriteSheetManager.getDataFor(name) ?: return null
         val damageFrameManager = mobDataManager.getDataFor(name)
-        return object : DataManager<MobAnimation> {
-            override fun getDataFor(name: String): MobAnimation? {
+        return object : DataManager<MobAnimationData> {
+            override fun getDataFor(name: String): MobAnimationData? {
                 val animation = animationManager.getDataFor(name) ?: return null
-                return MobAnimation(
+                return MobAnimationData(
                     animation, damageFrameManager?.getDataFor(name) ?: emptyList()
                 )
             }

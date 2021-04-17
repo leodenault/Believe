@@ -44,12 +44,12 @@ internal class SpriteSheetDataParserTest {
 
     @Test
     fun invoke_correctlyGeneratesAnimationDataManager() {
-        val animationManager: DataManager<Animation> = parse(data)!!
+        val animationManager: DataManager<AnimationFactory> = parse(data)!!
+        val animation1 = animationManager.getDataFor(ANIMATION_1_NAME)!!()
+        val animation2 = animationManager.getDataFor(ANIMATION_2_NAME)!!()
 
-        val animation1Frames =
-            animationManager.getDataFor(ANIMATION_1_NAME)!!.frames(iterations = 1)
-        val animation2Frames =
-            animationManager.getDataFor(ANIMATION_2_NAME)!!.frames(iterations = 1)
+        val animation1Frames = animation1.frames(iterations = 1)
+        val animation2Frames = animation2.frames(iterations = 1)
         assertThat(
             animation1Frames.images()
         ).containsExactlyElementsIn(spriteSheet.imagesBetween(0 until (NUM_FRAMES / 2)))
@@ -93,7 +93,7 @@ internal class SpriteSheetDataParserTest {
     @Test
     @VerifiesLoggingCalls
     fun getDataFor_animationNameIsInvalid_returnsNullAndLogsMessage(logSystem: VerifiableLogSystem) {
-        val animationManager: DataManager<Animation> = parse(data)!!
+        val animationManager: DataManager<AnimationFactory> = parse(data)!!
 
         assertThat(animationManager.getDataFor(INVALID_ANIMATION_NAME)).isNull()
         VerifiableLogSystemSubject.assertThat(logSystem).loggedAtLeastOneMessageThat()
@@ -102,13 +102,13 @@ internal class SpriteSheetDataParserTest {
     }
 
     @Test
-    fun getDataFor_cachesAnimations() {
-        val animationManager: DataManager<Animation> = parse(data)!!
+    fun getDataFor_cachesAnimationFactories() {
+        val animationManager: DataManager<AnimationFactory> = parse(data)!!
 
-        val animation1 = animationManager.getDataFor(ANIMATION_1_NAME)
-        val animation2 = animationManager.getDataFor(ANIMATION_1_NAME)
+        val animationFactory1 = animationManager.getDataFor(ANIMATION_1_NAME)!!
+        val animationFactory2 = animationManager.getDataFor(ANIMATION_1_NAME)!!
 
-        assertThat(animation1).isSameInstanceAs(animation2)
+        assertThat(animationFactory1).isSameInstanceAs(animationFactory2)
     }
 
     companion object {

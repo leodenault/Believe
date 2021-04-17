@@ -1,5 +1,6 @@
 package believe.map.io;
 
+import believe.map.data.EntityType;
 import believe.map.io.InternalQualifiers.EntityTypeProperty;
 import believe.map.io.InternalQualifiers.IsFrontLayerProperty;
 import believe.map.io.InternalQualifiers.IsVisibleProperty;
@@ -11,6 +12,7 @@ import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.Multibinds;
 
+import java.util.Map;
 import java.util.Set;
 
 /** Module containing bindings for map parsers. */
@@ -53,10 +55,7 @@ public abstract class MapParsingDaggerModule {
   }
 
   @Multibinds
-  abstract Set<TileParser> bindTileParsers();
-
-  @Multibinds
-  abstract Set<ObjectParser> bindObjectParsers();
+  abstract Map<EntityType, ObjectParser> bindObjectParsers();
 
   @Binds
   abstract TiledMapLayerParser bindTiledMapLayerParser(

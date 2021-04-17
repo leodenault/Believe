@@ -37,6 +37,8 @@ java_library(
         ":command",
         ":internal_qualifiers",
         ":package-info",
+        "//java/believe/map/data",
+        "//java/believe/map/data:annotations",
         "//java/believe/map/io",
         "//java/believe/physics/collision",
         "//third_party/dagger",

@@ -1,62 +1,51 @@
 package believe.mob
 
-import believe.animation.Animation
+import believe.animation.AnimationFactory
 import believe.datamodel.DataManager
-import believe.map.data.EntityType
-import believe.map.data.GeneratedMapEntityData
+import believe.geometry.FloatPoint
+import believe.geometry.floatPoint
+import believe.map.data.testing.Truth.assertThat
 import believe.map.tiled.testing.TiledFakes.fakeTiledObject
 import believe.physics.damage.DamageBoxCollisionHandler
 import believe.physics.damage.DamageBoxFactory
 import believe.physics.manager.PhysicsManager
+import believe.scene.GeneratedMapEntityData
+import com.google.common.truth.Correspondence
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.jupiter.api.Test
-import javax.xml.crypto.Data
 
 internal class StationaryEnemyParserTest {
-    private val animationManager = mock<DataManager<Animation>>()
-    private val spriteSheetManager = mock<DataManager<DataManager<Animation>>> {
-        on { getDataFor("stationary_enemy") } doReturn animationManager
-    }
-    private val mobAnimationManager = mock<DataManager<MobAnimation>>()
-    private val mobSpriteSheetManager = mock<DataManager<DataManager<MobAnimation>>> {
+    private val animationManager = mock<DataManager<AnimationFactory>>()
+    private val mobAnimationManager = mock<DataManager<MobAnimationData>>()
+    private val mobSpriteSheetManager = mock<DataManager<DataManager<MobAnimationData>>> {
         on { getDataFor("stationary_enemy") } doReturn mobAnimationManager
     }
     private val physicsManager = mock<PhysicsManager>()
-    private val stationaryEnemyFactory = StationaryEnemy.Factory(physicsManager,
+    private val stationaryEnemyFactory = StationaryEnemy.Factory(
+        physicsManager,
         DamageBoxFactory { DamageBoxCollisionHandler(physicsManager) })
-    private val parser =
-        StationaryEnemyParser(spriteSheetManager, mobSpriteSheetManager, stationaryEnemyFactory)
+    private val parser = StationaryEnemyParser(mobSpriteSheetManager, stationaryEnemyFactory)
 
     @Test
     fun parse_addsStationaryEnemyToPhysicsManager() {
-        val generatedMapEntityDataBuilder = GeneratedMapEntityData.newBuilder()
+        val objectFactory = parser.parseObject(fakeTiledObject(x = 123f, y = 234f))
 
-        parser.parseObject(
-            EntityType.ENEMY, fakeTiledObject(x = 123f, y = 234f), generatedMapEntityDataBuilder
-        )
-
-        val generatedMapEntityData = generatedMapEntityDataBuilder.build()
-        assertThat(generatedMapEntityData.sceneElements()).hasSize(1)
-        with(generatedMapEntityData.sceneElements().first()) {
-            assertThat(x).isEqualTo(123f)
-            assertThat(y).isEqualTo(234f)
-        }
+        assertThat(objectFactory).outputSceneElementSet()
+            .comparingElementsUsing(STATIONARY_ENEMY_CORRESPONDENCE).containsExactly(
+                EnemyPositionData(
+                    floatPoint(123f, 234f)
+                )
+            )
     }
 
     @Test
     fun parse_fetchesEnemyAnimations() {
-        parser.parseObject(
-            EntityType.ENEMY,
-            fakeTiledObject(x = 123f, y = 234f),
-            GeneratedMapEntityData.newBuilder()
-        )
+        parser.parseObject(fakeTiledObject(x = 123f, y = 234f))
 
-        verify(spriteSheetManager).getDataFor("stationary_enemy")
         verify(mobSpriteSheetManager).getDataFor("stationary_enemy")
-        verify(animationManager).getDataFor("idle")
         verify(mobAnimationManager).getDataFor("attacking")
     }
 
@@ -64,11 +53,18 @@ internal class StationaryEnemyParserTest {
     fun parse_entityIsNotEnemy_doesNothing() {
         val generatedMapEntityDataBuilder = GeneratedMapEntityData.newBuilder()
 
-        parser.parseObject(
-            EntityType.PLAYER, fakeTiledObject(x = 123f, y = 234f), generatedMapEntityDataBuilder
-        )
+        parser.parseObject(fakeTiledObject(x = 123f, y = 234f))
 
         val generatedMapEntityData = generatedMapEntityDataBuilder.build()
         assertThat(generatedMapEntityData.sceneElements()).isEmpty()
+    }
+
+    private class EnemyPositionData(val coords: FloatPoint)
+
+    companion object {
+        private val STATIONARY_ENEMY_CORRESPONDENCE: Correspondence<StationaryEnemy, EnemyPositionData> =
+            Correspondence.from({ actual, data ->
+                actual?.x == data?.coords?.x && actual?.y == data?.coords?.y
+            }, "")
     }
 }

@@ -19,15 +19,17 @@ java_junit5_test(
 )
 
 java_junit5_test(
-    name = "CollidableTileGeneratorTest",
+    name = "CollidableTileParserTest",
     srcs = ["CollidableTileParserTest.java"],
     deps = [
         "//java/believe/map/collidable/tile",
         "//java/believe/map/data",
+        "//java/believe/map/data/testing",
         "//java/believe/map/tiled",
         "//java/believe/map/tiled:impl",
         "//java/believe/map/tiled/testing",
         "//java/believe/physics/manager",
+        "//java/believe/scene",
         "//java/believe/testing/mockito",
         "//third_party/mockito",
         "//third_party/truth",

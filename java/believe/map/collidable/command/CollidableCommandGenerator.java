@@ -4,16 +4,15 @@ import static believe.geometry.RectangleKt.rectangle;
 
 import believe.command.Command;
 import believe.map.collidable.command.InternalQualifiers.ShouldDespawnParameter;
-import believe.map.data.GeneratedMapEntityData;
+import believe.map.data.ObjectFactory;
 import believe.map.io.ObjectParser;
-import believe.map.data.EntityType;
 import believe.map.tiled.TiledMap;
 import believe.map.tiled.TiledObject;
 import believe.map.tiled.command.TiledCommandParser;
 import dagger.Reusable;
+import org.newdawn.slick.util.Log;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import org.newdawn.slick.util.Log;
 
 /** Generates a {@link Command} from a tile within a {@link TiledMap}. */
 @Reusable
@@ -33,17 +32,10 @@ final class CollidableCommandGenerator implements ObjectParser {
   }
 
   @Override
-  public void parseObject(
-      EntityType entityType,
-      TiledObject tiledObject,
-      GeneratedMapEntityData.Builder generatedMapEntityData) {
-    if (entityType != EntityType.COMMAND) {
-      return;
-    }
-
+  public ObjectFactory parseObject(TiledObject tiledObject) {
     Command command = tiledCommandParser.parseTiledCommand(tiledObject);
     if (command == null) {
-      return;
+      return ObjectFactory.EMPTY;
     }
 
     boolean shouldDespawn;
@@ -55,16 +47,17 @@ final class CollidableCommandGenerator implements ObjectParser {
       shouldDespawn = false;
     }
 
-    generatedMapEntityData.addPhysicsManageable(
-        physicsManager ->
-            physicsManager.addStaticCollidable(
-                collidableCommandFactory.create(
-                    shouldDespawn,
-                    command,
-                    rectangle(
-                        tiledObject.getX(),
-                        tiledObject.getY(),
-                        tiledObject.getWidth(),
-                        tiledObject.getHeight()))));
+    return generatedMapEntityData ->
+        generatedMapEntityData.addPhysicsManageable(
+            physicsManager ->
+                physicsManager.addStaticCollidable(
+                    collidableCommandFactory.create(
+                        shouldDespawn,
+                        command,
+                        rectangle(
+                            tiledObject.getX(),
+                            tiledObject.getY(),
+                            tiledObject.getWidth(),
+                            tiledObject.getHeight()))));
   }
 }

@@ -1,6 +1,6 @@
 package believe.mob
 
-import believe.animation.Animation
+import believe.animation.AnimationFactory
 import believe.animation.proto.AnimationProto.Animation.IterationMode
 import believe.animation.testing.fakeAnimation
 import believe.datamodel.DataManager
@@ -13,7 +13,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.junit.jupiter.api.Test
 
 internal class MobAnimationDataManagerTest {
-    private val spriteSheetManager = mock<DataManager<DataManager<Animation>>>()
+    private val spriteSheetManager = mock<DataManager<DataManager<AnimationFactory>>>()
     private val mobDataManager = mock<DataManager<DataManager<List<DamageFrame>>>>()
     private val manager = MobAnimationDataManager(spriteSheetManager, mobDataManager)
 
@@ -24,8 +24,8 @@ internal class MobAnimationDataManagerTest {
             DamageFrame.newBuilder().setFrameIndex(0).build(),
             DamageFrame.newBuilder().setFrameIndex(1).build()
         )
-        val animationManager = mock<DataManager<Animation>> {
-            on { getDataFor(any()) } doReturn animation
+        val animationManager = mock<DataManager<AnimationFactory>> {
+            on { getDataFor(any()) } doReturn { animation }
         }
         val damageFrameManager = mock<DataManager<List<DamageFrame>>> {
             on { getDataFor(any()) } doReturn damageFrames
@@ -33,11 +33,11 @@ internal class MobAnimationDataManagerTest {
         whenever(spriteSheetManager.getDataFor(any())) doReturn animationManager
         whenever(mobDataManager.getDataFor(any())) doReturn damageFrameManager
 
-        val mobAnimation: MobAnimation =
+        val mobAnimationData: MobAnimationData =
             manager.getDataFor("some sprite sheet")!!.getDataFor("some animation")!!
 
-        assertThat(mobAnimation.animation).isEqualTo(animation)
-        assertThat(mobAnimation.damageFrames).containsExactlyElementsIn(damageFrames)
+        assertThat(mobAnimationData.createAnimation()).isEqualTo(animation)
+        assertThat(mobAnimationData.damageFrames).containsExactlyElementsIn(damageFrames)
     }
 
     @Test
@@ -62,48 +62,48 @@ internal class MobAnimationDataManagerTest {
             DamageFrame.newBuilder().setFrameIndex(0).build(),
             DamageFrame.newBuilder().setFrameIndex(1).build()
         )
-        val animationManager = mock<DataManager<Animation>>()
+        val animationManager = mock<DataManager<AnimationFactory>>()
         val damageFrameManager = mock<DataManager<List<DamageFrame>>> {
             on { getDataFor(any()) } doReturn damageFrames
         }
         whenever(spriteSheetManager.getDataFor(any())) doReturn animationManager
         whenever(mobDataManager.getDataFor(any())) doReturn damageFrameManager
 
-        val mobAnimation: MobAnimation? =
+        val mobAnimationData: MobAnimationData? =
             manager.getDataFor("some sprite sheet")!!.getDataFor("some animation")
 
-        assertThat(mobAnimation).isNull()
+        assertThat(mobAnimationData).isNull()
     }
 
     @Test
     fun getDataFor_damageFrameManagerIsNull_returnsEmptyFrames() {
         val animation = fakeAnimation(IterationMode.PING_PONG, isLooping = true)
-        val animationManager = mock<DataManager<Animation>> {
-            on { getDataFor(any()) } doReturn animation
+        val animationManager = mock<DataManager<AnimationFactory>> {
+            on { getDataFor(any()) } doReturn { animation }
         }
         whenever(spriteSheetManager.getDataFor(any())) doReturn animationManager
 
-        val mobAnimation: MobAnimation =
+        val mobAnimationData: MobAnimationData =
             manager.getDataFor("some sprite sheet")!!.getDataFor("some animation")!!
 
-        assertThat(mobAnimation.animation).isEqualTo(animation)
-        assertThat(mobAnimation.damageFrames).isEmpty()
+        assertThat(mobAnimationData.createAnimation()).isEqualTo(animation)
+        assertThat(mobAnimationData.damageFrames).isEmpty()
     }
 
     @Test
     fun getDataFor_mobAnimationIsNull_returnsEmptyFramesAndLogsError() {
         val animation = fakeAnimation(IterationMode.PING_PONG, isLooping = true)
-        val animationManager = mock<DataManager<Animation>> {
-            on { getDataFor(any()) } doReturn animation
+        val animationManager = mock<DataManager<AnimationFactory>> {
+            on { getDataFor(any()) } doReturn { animation }
         }
         val damageFrameManager = mock<DataManager<List<DamageFrame>>>()
         whenever(spriteSheetManager.getDataFor(any())) doReturn animationManager
         whenever(mobDataManager.getDataFor(any())) doReturn damageFrameManager
 
-        val mobAnimation: MobAnimation =
+        val mobAnimationData: MobAnimationData =
             manager.getDataFor("some sprite sheet")!!.getDataFor("some animation")!!
 
-        assertThat(mobAnimation.animation).isEqualTo(animation)
-        assertThat(mobAnimation.damageFrames).isEmpty()
+        assertThat(mobAnimationData.createAnimation()).isEqualTo(animation)
+        assertThat(mobAnimationData.damageFrames).isEmpty()
     }
 }

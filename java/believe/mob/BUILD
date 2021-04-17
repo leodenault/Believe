@@ -5,7 +5,7 @@ package(default_visibility = ["//:believe_all_pkgs"])
 kt_jvm_library(
     name = "mob",
     srcs = [
-        "MobAnimation.kt",
+        "MobAnimationData.kt",
         "MobAnimationDataManager.kt",
         "MobDataManager.kt",
         "StationaryEnemy.kt",
@@ -31,6 +31,8 @@ java_library(
         ":annotations",
         ":mob",
         "//java/believe/datamodel",
+        "//java/believe/map/data",
+        "//java/believe/map/data:annotations",
         "//java/believe/map/io",
         "//java/believe/mob/proto:mob_animation_data_java_proto",
         "//third_party/dagger",

@@ -25,6 +25,7 @@ java_library(
         "//java/believe/map/io",
         "//java/believe/react",
         "//java/believe/react:impl",
+        "//java/believe/scene",
         "//java/believe/util",
         "//third_party/auto_factory",
         "//third_party/javax:annotations",

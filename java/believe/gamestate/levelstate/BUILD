@@ -154,6 +154,7 @@ java_library(
         "//java/believe/level:dagger_module",
         "//java/believe/level:impl",
         "//java/believe/map/collidable/tile",
+        "//java/believe/map/data",
         "//java/believe/map/io",
         "//java/believe/map/io:dagger_module",
         "//java/believe/map/io:impl",

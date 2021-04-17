@@ -4,7 +4,6 @@ import believe.core.display.Graphics
 import believe.geometry.rectangle
 import believe.gui.testing.FakeImage
 import believe.map.data.BackgroundSceneData
-import believe.map.data.GeneratedMapEntityData
 import believe.map.data.LayerData
 import believe.map.data.MapData
 import believe.map.data.ObjectLayerData
@@ -24,7 +23,6 @@ import org.junit.jupiter.api.Test
 internal class LevelMapTest {
     private val backgroundImage = FakeImage(width = 10, height = 10)
     private val physicsManager = mock<PhysicsManager>()
-    private val layerPhysicsManageable = mock<PhysicsManageable>()
     private val objectPhysicsManageable = mock<PhysicsManageable>()
     private val objectSceneElement = mock<SceneElement>()
     private val visibleFrontLayer = mock<Layer>()
@@ -48,18 +46,12 @@ internal class LevelMapTest {
             ).addLayer(
                 LayerData.newBuilder(
                     invisibleBackLayerWithData
-                ).setIsFrontLayer(false).setIsVisible(false).setGeneratedMapEntityData(
-                    GeneratedMapEntityData.newBuilder().addPhysicsManageable(
-                        layerPhysicsManageable
-                    ).build()
-                ).build()
-            ).addObjectLayer(
-                ObjectLayerData.create(
-                    GeneratedMapEntityData.newBuilder().addPhysicsManageable(
-                        objectPhysicsManageable
-                    ).addSceneElement(objectSceneElement).build()
-                )
-            ).build()
+                ).setIsFrontLayer(false).setIsVisible(false).build()
+            ).addObjectLayer(ObjectLayerData.newBuilder().addObjectFactory {
+                it.addPhysicsManageable(
+                    objectPhysicsManageable
+                ).addSceneElement(objectSceneElement).build()
+            }.build()).build()
         ).addBackgroundScene(
             BackgroundSceneData.create(
                 backgroundImage,
@@ -67,7 +59,7 @@ internal class LevelMapTest {
                     1f
                 ).setHorizontalSpeedMultiplier(1f).build()
             )
-        ).build(), emptyList()
+        ).build(), emptySet()
     )
 
     @Test

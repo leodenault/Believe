@@ -2,12 +2,15 @@ package believe.map.collidable.command;
 
 import believe.map.collidable.command.InternalQualifiers.CommandParameter;
 import believe.map.collidable.command.InternalQualifiers.ShouldDespawnParameter;
+import believe.map.data.EntityType;
+import believe.map.data.EntityTypeKey;
 import believe.map.io.ObjectParser;
 import believe.physics.collision.Collidable;
 import believe.physics.collision.CollisionHandler;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import dagger.multibindings.IntoMap;
 import dagger.multibindings.IntoSet;
 
 import java.util.Set;
@@ -27,7 +30,8 @@ public abstract class CollidableCommandDaggerModule {
   }
 
   @Binds
-  @IntoSet
+  @IntoMap
+  @EntityTypeKey(EntityType.COMMAND)
   abstract ObjectParser bindCommandGenerator(CollidableCommandGenerator collidableCommandGenerator);
 
   @Binds

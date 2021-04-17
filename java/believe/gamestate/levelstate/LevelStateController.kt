@@ -5,6 +5,9 @@ interface LevelStateController {
     /** Navigates to the [RunningGameState]. */
     fun navigateToRunningGameState()
 
+    /** Navigates to the [RunningGameState] while resetting the state of the level. */
+    fun resetAndNavigateToRunningGameState()
+
     /** Navigates to the main menu while properly exiting the [LevelStateV2] context. */
     fun navigateToMainMenu()
 

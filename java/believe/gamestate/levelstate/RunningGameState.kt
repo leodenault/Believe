@@ -43,7 +43,7 @@ class RunningGameState constructor(
 
     override fun enter() {
         val levelMap = levelManager.getLevel(levelName)?.let {
-            levelMapFactory.create(it.mapData, emptyList())
+            levelMapFactory.create(it.mapData, emptySet())
         } ?: throw RuntimeException("Could not load level map.")
         val player: CharacterV2 = playerSupplier.get()
             ?: return Unit.also { Log.error("No player was loaded from the map.") }

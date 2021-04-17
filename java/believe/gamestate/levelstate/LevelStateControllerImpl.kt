@@ -20,6 +20,11 @@ internal class LevelStateControllerImpl @Inject internal constructor(
         )
     }
 
+    override fun resetAndNavigateToRunningGameState() {
+        levelStateRunner.exitCurrentState(EmptyGameStateTransition())
+        navigateToRunningGameState()
+    }
+
     override fun navigateToMainMenu() {
         levelStateRunner.exitCurrentState(EmptyGameStateTransition())
         stateController.navigateToMainMenu()

@@ -1,10 +1,8 @@
 package believe.mob
 
-import believe.animation.Animation
-import believe.animation.emptyAnimation
+import believe.animation.EMPTY_ANIMATION_FACTORY
 import believe.datamodel.DataManager
-import believe.map.data.EntityType
-import believe.map.data.GeneratedMapEntityData
+import believe.map.data.ObjectFactory
 import believe.map.io.ObjectParser
 import believe.map.tiled.TiledObject
 import dagger.Reusable
@@ -12,29 +10,28 @@ import javax.inject.Inject
 
 @Reusable
 internal class StationaryEnemyParser @Inject internal constructor(
-    private val spriteSheetDataManager: DataManager<DataManager<Animation>>,
-    private val mobSpriteSheetManager: DataManager<DataManager<MobAnimation>>,
+    private val mobSpriteSheetManager: DataManager<DataManager<MobAnimationData>>,
     private val stationaryEnemyFactory: StationaryEnemy.Factory
 ) : ObjectParser {
 
-    override fun parseObject(
-        entityType: EntityType,
-        tiledObject: TiledObject,
-        generatedMapEntityDataBuilder: GeneratedMapEntityData.Builder
-    ) {
-        if (entityType != EntityType.ENEMY) return
-
+    override fun parseObject(tiledObject: TiledObject): ObjectFactory {
         val mobAnimationManager = mobSpriteSheetManager.getDataFor("stationary_enemy")
-        val attackAnimation = mobAnimationManager?.getDataFor("attacking")
-        generatedMapEntityDataBuilder.addSceneElement(
-            stationaryEnemyFactory.create(
-                tiledObject.x,
-                tiledObject.y,
-                spriteSheetDataManager.getDataFor("stationary_enemy")?.getDataFor("idle")
-                    ?: emptyAnimation(),
-                attackAnimation?.animation ?: emptyAnimation(),
-                attackAnimation?.damageFrames ?: emptyList()
+        val createIdleAnimation =
+            mobAnimationManager?.getDataFor("idle")?.createAnimation ?: EMPTY_ANIMATION_FACTORY
+        val attackAnimationData = mobAnimationManager?.getDataFor("attacking")
+        val createAttackAnimation = attackAnimationData?.createAnimation ?: EMPTY_ANIMATION_FACTORY
+        val damageFrames = attackAnimationData?.damageFrames ?: emptyList()
+
+        return ObjectFactory {
+            it.addSceneElement(
+                stationaryEnemyFactory.create(
+                    tiledObject.x,
+                    tiledObject.y,
+                    createIdleAnimation(),
+                    createAttackAnimation(),
+                    damageFrames
+                )
             )
-        )
+        }
     }
 }

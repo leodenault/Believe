@@ -4,11 +4,14 @@ import believe.character.proto.CharacterAnimationsProto;
 import believe.datamodel.MutableValue;
 import believe.input.InputAdapter;
 import believe.input.keyboard.KeyboardInputAdapter;
+import believe.map.data.EntityType;
+import believe.map.data.EntityTypeKey;
 import believe.map.io.ObjectParser;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
+import dagger.multibindings.IntoMap;
 import dagger.multibindings.IntoSet;
 import kotlin.jvm.functions.Function1;
 
@@ -39,7 +42,8 @@ public abstract class CharacterDaggerModule {
   abstract Supplier<CharacterV2> bindCharacterSupplier(MutableValue<CharacterV2> impl);
 
   @Binds
-  @IntoSet
+  @IntoMap
+  @EntityTypeKey(EntityType.PLAYER)
   abstract ObjectParser bindPlayerObjectParser(PlayerObjectParser impl);
 
   @Provides

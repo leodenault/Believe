@@ -33,6 +33,8 @@ java_library(
     srcs = ["CollidableTileDaggerModule.java"],
     deps = [
         ":tile",
+        "//java/believe/map/data",
+        "//java/believe/map/data:annotations",
         "//java/believe/map/io",
         "//third_party/dagger",
     ],

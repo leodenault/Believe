@@ -56,28 +56,27 @@ class LevelMap private constructor(
          * above any other [SceneElement] instances generated from [MapData]. These elements will be
          * rendered in order.
          */
-        fun create(mapData: MapData, extraSceneElements: List<SceneElement>): LevelMap {
+        fun create(mapData: MapData, extraSceneElements: Set<SceneElement>): LevelMap {
             val tiledMapData = mapData.tiledMapData()
-            val generatedEntities = tiledMapData.objectLayers().map { it.generatedMapEntityData() }
-            val sceneElements =
-                generatedEntities.flatMap { it.sceneElements() } + extraSceneElements
+            val generatedEntities = GeneratedMapEntityData.newBuilder().apply {
+                tiledMapData.objectLayers().flatMap {
+                    it.objectFactories()
+                }.forEach { it.createAndAddTo(this) }
+            }.build()
+            val sceneElements = (generatedEntities.sceneElements() + extraSceneElements).toList()
 
             val layerData =
                 tiledMapData.layers().filter { it.isVisible }.partition { it.isFrontLayer }
-            val physicsManageables = tiledMapData.layers().flatMap {
-                it.generatedMapEntityData().physicsManageables()
-            } + generatedEntities.flatMap { it.physicsManageables() }
-            physicsManageables.forEach { it.addToPhysicsManager(physicsManager) }
+            generatedEntities.physicsManageables()
+                .forEach { it.addToPhysicsManager(physicsManager) }
 
             val mapHeight = tiledMapData.height()
-            return LevelMap(
-                tiledMapData.width().toFloat(),
+            return LevelMap(tiledMapData.width().toFloat(),
                 mapHeight.toFloat(),
                 mapData.backgroundScenes().map { MapBackground(it, mapHeight) },
                 layerData.second.map { LevelMapLayer(it.layer()) },
                 sceneElements,
-                layerData.first.map { LevelMapLayer(it.layer()) }
-            )
+                layerData.first.map { LevelMapLayer(it.layer()) })
         }
     }
 }

@@ -68,6 +68,7 @@ java_library(
         "//java/believe/map/collidable/command",
         "//java/believe/map/collidable/command:dagger_module",
         "//java/believe/map/collidable/tile",
+        "//java/believe/map/data",
         "//java/believe/map/gui",
         "//java/believe/map/io",
         "//java/believe/map/io:dagger_module",
@@ -99,8 +100,8 @@ java_library(
         ":package-info",
         "//java/believe/action",
         "//java/believe/app",
-        "//java/believe/app:dagger_module",
         "//java/believe/app:annotations",
+        "//java/believe/app:dagger_module",
         "//java/believe/core/io",
         "//java/believe/gamestate",
         "//java/believe/gamestate:impl",
@@ -126,8 +127,8 @@ java_library(
     name = "dagger_module_v2",
     srcs = ["BelieveDaggerModuleV2.java"],
     deps = [
-        "//java/believe/app:app_kt",
         "//java/believe/app:annotations_v2",
+        "//java/believe/app:app_kt",
         "//third_party/dagger",
     ],
 )

@@ -4,6 +4,7 @@ import believe.datamodel.DataManager;
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
+import kotlin.jvm.functions.Function0;
 
 @Module
 public abstract class AnimationDaggerModule {
@@ -16,7 +17,7 @@ public abstract class AnimationDaggerModule {
 
   @Provides
   @Reusable
-  static DataManager<DataManager<Animation>> provideAnimationManagers(
+  static DataManager<DataManager<Function0<Animation>>> provideAnimationManagers(
       SpriteSheetDataManagerFactory factory) {
     return factory.create();
   }

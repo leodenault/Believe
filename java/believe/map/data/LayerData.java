@@ -1,15 +1,12 @@
 package believe.map.data;
 
 import believe.map.tiled.Layer;
-import believe.map.tiled.TiledMap;
+import believe.scene.GeneratedMapEntityData;
 import com.google.auto.value.AutoValue;
 
 /** The data model for representing a layer of tiles on a {@link MapData} instance. */
 @AutoValue
 public abstract class LayerData {
-  /** Generated entities that are part of the map. */
-  public abstract GeneratedMapEntityData generatedMapEntityData();
-
   /** The identifier for this layer within its containing map. */
   public abstract Layer layer();
 
@@ -27,17 +24,12 @@ public abstract class LayerData {
   public static Builder newBuilder(Layer layer) {
     return new AutoValue_LayerData.Builder()
         .setLayer(layer)
-        .setGeneratedMapEntityData(GeneratedMapEntityData.newBuilder().build())
         .setIsFrontLayer(false)
         .setIsVisible(true);
   }
 
   @AutoValue.Builder
   public abstract static class Builder {
-    /** Sets the {@link GeneratedMapEntityData} associated with the map. */
-    public abstract Builder setGeneratedMapEntityData(
-        GeneratedMapEntityData generatedMapEntityData);
-
     /** Sets the identifier for this layer within its containing map. */
     abstract Builder setLayer(Layer layer);
 

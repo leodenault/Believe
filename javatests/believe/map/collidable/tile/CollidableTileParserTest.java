@@ -1,12 +1,16 @@
 package believe.map.collidable.tile;
 
+import static believe.map.data.testing.Truth.assertThat;
 import static believe.map.tiled.testing.TiledFakes.fakeTiledObject;
 import static com.google.common.truth.Truth.assertThat;
 
 import believe.map.data.EntityType;
-import believe.map.data.GeneratedMapEntityData;
+import believe.map.data.ObjectFactory;
+import believe.map.data.testing.Truth;
+import believe.scene.GeneratedMapEntityData;
 import believe.physics.manager.PhysicsManageable;
 import believe.testing.mockito.InstantiateMocksIn;
+import com.google.common.truth.Correspondence;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -28,21 +32,9 @@ final class CollidableTileParserTest {
   }
 
   @Test
-  void parseTile_entityIsNotTile_doesNothing() {
-    generator.parseObject(EntityType.ENEMY, fakeTiledObject(""), generatedMapEntityDataBuilder);
+  void parseTile_generatesValidTile() {
+    ObjectFactory factory = generator.parseObject(fakeTiledObject(""));
 
-    assertThat(generatedMapEntityDataBuilder.build().physicsManageables()).isEmpty();
-  }
-
-  @Test
-  void parseTile_entityIsTile_generatesValidTile() {
-    generator.parseObject(
-        EntityType.COLLIDABLE_TILE, fakeTiledObject(""), generatedMapEntityDataBuilder);
-
-    Set<PhysicsManageable> physicsManageables =
-        generatedMapEntityDataBuilder.build().physicsManageables();
-    assertThat(physicsManageables).hasSize(1);
-    PhysicsManageable physicsManageable = physicsManageables.stream().findFirst().get();
-    assertThat(physicsManageable).isInstanceOf(CollidableTile.class);
+    assertThat(factory).outputPhysicsManageableSet().hasSize(1);
   }
 }

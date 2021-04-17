@@ -1,14 +1,10 @@
 package believe.map.io;
 
-import believe.map.data.EntityType;
-import believe.map.data.GeneratedMapEntityData;
 import believe.map.data.LayerData;
-import believe.map.data.TileData;
 import believe.map.io.InternalQualifiers.EntityTypeProperty;
 import believe.map.io.InternalQualifiers.IsFrontLayerProperty;
 import believe.map.io.InternalQualifiers.IsVisibleProperty;
 import believe.map.tiled.Layer;
-import believe.map.tiled.Tile;
 import dagger.Reusable;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -24,19 +20,13 @@ import java.util.Set;
 final class TiledMapLayerParserImpl implements TiledMapLayerParser {
   private final String isFrontLayerProperty;
   private final String isVisibleProperty;
-  private final String entityTypeProperty;
-  private final Set<TileParser> tileParsers;
 
   @Inject
   TiledMapLayerParserImpl(
       @IsFrontLayerProperty String isFrontLayerProperty,
-      @IsVisibleProperty String isVisibleProperty,
-      @EntityTypeProperty String entityTypeProperty,
-      Set<TileParser> tileParsers) {
+      @IsVisibleProperty String isVisibleProperty) {
     this.isFrontLayerProperty = isFrontLayerProperty;
     this.isVisibleProperty = isVisibleProperty;
-    this.entityTypeProperty = entityTypeProperty;
-    this.tileParsers = tileParsers;
   }
 
   @Override

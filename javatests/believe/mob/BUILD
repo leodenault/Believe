@@ -19,6 +19,7 @@ kt_junit5_test(
     srcs = ["StationaryEnemyParserTest.kt"],
     deps = [
         "//java/believe/map/data",
+        "//java/believe/map/data/testing",
         "//java/believe/map/tiled/testing",
         "//java/believe/mob",
         "//third_party/truth",

@@ -55,6 +55,7 @@ kt_junit5_test(
         "//java/believe/logging/testing",
         "//java/believe/logging/truth",
         "//java/believe/map/data",
+        "//java/believe/map/data/testing",
         "//java/believe/map/tiled/testing",
         "//third_party/mockito:mockito_kotlin",
         "//third_party/truth",

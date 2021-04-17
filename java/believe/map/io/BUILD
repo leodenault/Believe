@@ -8,7 +8,6 @@ java_library(
         "BackgroundSceneParser.java",
         "MapMetadataParser.java",
         "ObjectParser.java",
-        "TileParser.java",
         "TiledMapLayerParser.java",
         "TiledMapObjectLayerParser.java",
     ],
@@ -57,6 +56,7 @@ java_library(
         ":impl",
         ":internal_qualifiers",
         ":io",
+        "//java/believe/map/data",
         "//third_party/dagger",
     ],
 )

@@ -8,6 +8,7 @@ kt_jvm_library(
     name = "animation",
     srcs = [
         "Animation.kt",
+        "AnimationFactory.kt",
         "BidirectionalAnimation.kt",
         "CompoundAnimation.kt",
         "SpriteSheetDataManagerFactory.kt",
@@ -34,6 +35,7 @@ java_library(
         ":internal_qualifiers",
         "//java/believe/datamodel",
         "//third_party/dagger",
+        "//third_party/kotlin",
         "//third_party/slick",
     ],
 )

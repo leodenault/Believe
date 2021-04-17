@@ -1,13 +1,15 @@
 package believe.mob;
 
 import believe.datamodel.DataManager;
+import believe.map.data.EntityType;
+import believe.map.data.EntityTypeKey;
 import believe.map.io.ObjectParser;
 import believe.mob.proto.MobAnimationDataProto.DamageFrame;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
-import dagger.multibindings.IntoSet;
+import dagger.multibindings.IntoMap;
 import java.util.List;
 
 @Module
@@ -20,7 +22,8 @@ public abstract class MobDaggerModule {
   }
 
   @Binds
-  @IntoSet
+  @IntoMap
+  @EntityTypeKey(EntityType.ENEMY)
   abstract ObjectParser bindStationaryEnemyParser(StationaryEnemyParser impl);
 
   @Provides
@@ -31,6 +34,6 @@ public abstract class MobDaggerModule {
   }
 
   @Binds
-  abstract DataManager<DataManager<MobAnimation>> bindMobAnimationDataManager(
+  abstract DataManager<DataManager<MobAnimationData>> bindMobAnimationDataManager(
       MobAnimationDataManager impl);
 }

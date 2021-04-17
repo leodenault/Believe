@@ -23,6 +23,7 @@ class PauseState(
         }
         +menuSelection {
             +"Reset Level"
+            executeSelectionAction = levelStateController::resetAndNavigateToRunningGameState
         }
         +menuSelection {
             +"Exit Level"

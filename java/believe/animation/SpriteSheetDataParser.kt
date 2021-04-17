@@ -12,9 +12,9 @@ import javax.inject.Inject
 internal class SpriteSheetDataParser private constructor(
     private val supplyImage: (String) -> Image?,
     private val supplySpriteSheet: (Image, Int, Int) -> SpriteSheet
-) : (AnimationProto.SpriteSheet) -> DataManager<Animation>? {
+) : (AnimationProto.SpriteSheet) -> DataManager<AnimationFactory>? {
 
-    override fun invoke(data: AnimationProto.SpriteSheet): DataManager<Animation>? =
+    override fun invoke(data: AnimationProto.SpriteSheet): DataManager<AnimationFactory>? =
         supplyImage(data.fileLocation).whenNull {
             Log.error("Failed to load sprite sheet at ${data.fileLocation}.")
         }?.let { spriteSheetImage ->
@@ -30,21 +30,23 @@ internal class SpriteSheetDataParser private constructor(
     private class AnimationManager(
         private val spriteSheet: SpriteSheet,
         private val animationData: Map<String, AnimationProto.Animation>
-    ) : DataManager<Animation> {
+    ) : DataManager<AnimationFactory> {
 
-        private val loadedAnimations: MutableMap<String, Animation> = mutableMapOf()
+        private val loadedAnimations: MutableMap<String, AnimationFactory> = mutableMapOf()
 
-        override fun getDataFor(name: String): Animation? {
+        override fun getDataFor(name: String): AnimationFactory? {
             return loadedAnimations[name] ?: animationData[name].whenNull {
                 Log.error("Animation data does not exist for name '$name'.")
             }?.let { animationData ->
-                animation(
-                    spriteSheet,
-                    frameRange = animationData.startFrame..animationData.endFrame,
-                    frameDuration = animationData.duration,
-                    iterationMode = animationData.iterationMode,
-                    isLooping = animationData.isLooping
-                )
+                {
+                    animation(
+                        spriteSheet,
+                        frameRange = animationData.startFrame..animationData.endFrame,
+                        frameDuration = animationData.duration,
+                        iterationMode = animationData.iterationMode,
+                        isLooping = animationData.isLooping
+                    )
+                }
             }?.also { loadedAnimations[name] = it }
         }
     }
