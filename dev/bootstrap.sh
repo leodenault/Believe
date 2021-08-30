@@ -10,10 +10,8 @@ log() {
 }
 
 install_hooks() {
-  git diff --quiet $1 $2 './dev/hooks' 2> /dev/null || {
-    rm -rf ./.git/hooks
-    cp -r ./dev/hooks ./.git/hooks
-  }
+  rm -rf ./.git/hooks
+  ln -s ../dev/hooks ./.git/hooks
 }
 
 log 're/configuring hooks...'
