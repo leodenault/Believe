@@ -1,6 +1,8 @@
 #!/bin/bash
 # An exit status of 1 means that tests failed to run.
 
+echo "Running all tests..."
+echo "-------------------------------------------------------------------------------"
 $(git rev-parse --show-toplevel)/dev/run_all_tests.sh || {
   echo "-------------------------------------------------------------------------------"
   echo "Push halted due to test failures."
