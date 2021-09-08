@@ -43,9 +43,11 @@ bazel-*
 *.iml
 .ijwb
 
+# Ubuntu
+.fuse_hidden*
+
 # Tiled
 **/*.tiled-session
 
 # Python
 __pycache__
-dev/lint.py

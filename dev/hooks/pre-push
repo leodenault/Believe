@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import subprocess
+import sys
 
 SEPARATOR = """
 -------------------------------------------------------------------------------
@@ -21,4 +22,18 @@ if test_result != 0:
 print(SEPARATOR)
 
 print("Running linter...")
-exit(1)
+git_refs = sys.stdin.readlines()
+for line in git_refs:
+    tokens = line.strip().split(" ")
+    base_rev = tokens[3]
+    lint_result = subprocess.run(
+        "dev/lint_from.py {base_rev}".format(
+            base_rev=base_rev
+        ),
+        shell=True
+    )
+
+print(SEPARATOR)
+if lint_result.returncode != 0:
+    print("Please fix lint errors before pushing code.")
+    exit(1)
