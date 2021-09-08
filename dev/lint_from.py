@@ -4,13 +4,12 @@ from pathlib import Path
 import subprocess
 import sys
 
-if len(sys.argv) < 2:
-    print(
-        "Please provide the base revision number from which to start linting.")
-    exit(1)
+base_rev = "origin/master"
+if len(sys.argv) > 1:
+    base_rev = sys.argv[1]
+    print("Rebasing from revision {}.".format(base_rev))
 
 out_file = "lint.out"
-base_rev = sys.argv[1]
 fix_errors = ""
 if len(sys.argv) > 2 and sys.argv[2] == "-f":
     fix_errors = "-f"

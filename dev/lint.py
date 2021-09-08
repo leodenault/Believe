@@ -88,7 +88,6 @@ for extension, lint in LINTERS_BY_FILE_EXTENSION.items():
     if not files_with_extension:
         continue
     returncode = lint(files_with_extension, fix_errors=fix_errors)
-    print("{} -> {}".format(extension, returncode))
     if returncode and output_file:
         with open(output_file, "w") as o:
             o.writelines("")
