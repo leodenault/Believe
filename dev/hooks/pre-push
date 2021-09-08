@@ -8,3 +8,6 @@ $(git rev-parse --show-toplevel)/dev/run_all_tests.sh || {
   echo "Push halted due to test failures."
   exit 1
 }
+
+echo "Running linter..."
+exit 1
