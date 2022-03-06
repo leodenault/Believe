@@ -1,4 +1,4 @@
-load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kt_jvm_library")
+load("@io_bazel_rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
 
 package(
     default_testonly = 1,
@@ -30,8 +30,8 @@ java_library(
         ":testing",
         "//java/believe/audio",
         "//java/believe/audio/testing",
-        "//java/believe/gui:gui_v2",
         "//java/believe/gui:annotations",
+        "//java/believe/gui:gui_v2",
         "//java/believe/input",
         "//java/believe/input/testing",
         "//third_party/dagger",
