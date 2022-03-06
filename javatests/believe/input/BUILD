@@ -8,9 +8,8 @@ package(
 kt_junit5_test(
     name = "InputAdapterImplTest",
     srcs = ["InputAdapterImplTest.kt"],
-    friends = ["//java/believe/input:impl"],
+    associates = ["//java/believe/input:impl"],
     deps = [
-        "//java/believe/input:impl",
         "//third_party/mockito:mockito_kotlin",
         "//third_party/truth",
     ],

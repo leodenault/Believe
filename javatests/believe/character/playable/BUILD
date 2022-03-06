@@ -23,7 +23,7 @@ java_test(
 kt_junit5_test(
     name = "PlayableCharacterMovementCommandParserTest",
     srcs = ["PlayableCharacterMovementCommandParserTest.kt"],
-    friends = [],
+    associates = [],
     deps = [
         "//java/believe/character/playable",
         "//java/believe/character/proto:playable_character_movement_command_java_proto",

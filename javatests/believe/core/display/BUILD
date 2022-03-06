@@ -3,7 +3,7 @@ load("//bazel/bzl:rules.bzl", "kt_junit5_test")
 kt_junit5_test(
     name = "GraphicsTest",
     srcs = ["GraphicsTest.kt"],
-    friends = [],
+    associates = [],
     deps = [
         "//java/believe/animation/testing",
         "//java/believe/core/display:display_v2",

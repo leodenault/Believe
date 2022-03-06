@@ -36,8 +36,8 @@ kt_junit5_test(
 kt_junit5_test(
     name = "SpriteSheetDataParserTest",
     srcs = ["SpriteSheetDataParserTest.kt"],
+    associates = ["//java/believe/animation"],
     deps = [
-        "//java/believe/animation",
         "//java/believe/animation/proto:animation_java_proto",
         "//java/believe/animation/testing",
         "//java/believe/datamodel",

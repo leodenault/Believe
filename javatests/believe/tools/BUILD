@@ -8,14 +8,13 @@ package(
 kt_junit5_test(
     name = "ProtoFileSerializerTest",
     srcs = ["ProtoFileSerializerTest.kt"],
-    friends = ["//java/believe/tools:proto_file_serializer"],
+    associates = ["//java/believe/tools:proto_file_serializer"],
     deps = [
         "//java/believe/logging/testing",
         "//java/believe/logging/truth",
         "//java/believe/proto/testing",
         "//java/believe/testing/proto:test_java_proto",
         "//java/believe/testing/temporaryfolder",
-        "//java/believe/tools:proto_file_serializer",
         "//third_party/mockito:mockito_kotlin",
         "//third_party/proto",
         "//third_party/truth",

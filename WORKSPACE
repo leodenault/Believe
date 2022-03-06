@@ -1,7 +1,67 @@
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
+#############################################################
+# Protobuf
+#############################################################
+
+protobuf_version = "3.19.1"
+
+http_archive(
+    name = "com_google_protobuf",
+    sha256 = "c10405fb99b361388d8dbfbe5fe43ef3c53a06dfd6a9fa8c33e70c34d243b044",
+    strip_prefix = "protobuf-%s" % protobuf_version,
+    urls = [
+        "https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protobuf-java-%s.tar.gz" % protobuf_version,
+    ],
+)
+
+load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
+
+protobuf_deps()
+
+#############################################################
+# Bazel proto rules
+#############################################################
+
+http_archive(
+    name = "rules_java",
+    sha256 = "ccf00372878d141f7d5568cedc4c42ad4811ba367ea3e26bc7c43445bbc52895",
+    strip_prefix = "rules_java-d7bf804c8731edd232cb061cb2a9fe003a85d8ee",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_java/archive/d7bf804c8731edd232cb061cb2a9fe003a85d8ee.tar.gz",
+        "https://github.com/bazelbuild/rules_java/archive/d7bf804c8731edd232cb061cb2a9fe003a85d8ee.tar.gz",
+    ],
+)
+
+http_archive(
+    name = "rules_proto",
+    sha256 = "2490dca4f249b8a9a3ab07bd1ba6eca085aaf8e45a734af92aad0c42d9dc7aaf",
+    strip_prefix = "rules_proto-218ffa7dfa5408492dc86c01ee637614f8695c45",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_proto/archive/218ffa7dfa5408492dc86c01ee637614f8695c45.tar.gz",
+        "https://github.com/bazelbuild/rules_proto/archive/218ffa7dfa5408492dc86c01ee637614f8695c45.tar.gz",
+    ],
+)
+
+load("@rules_java//java:repositories.bzl", "rules_java_dependencies", "rules_java_toolchains")
+
+rules_java_dependencies()
+
+rules_java_toolchains()
+
+load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
+
+rules_proto_dependencies()
+
+rules_proto_toolchains()
+
+#############################################################
 # Load common Bazel targets defined by Google.
+#
+# MAKE SURE TO LOAD ANY CONFLICTING LIBRARIES BEFORE THIS OR
+# ELSE VERY CONFUSING ERRORS WILL OCCUR.
+#############################################################
 http_archive(
     name = "google_bazel_common",
     strip_prefix = "bazel-common-76d25d1921c2534c7654aebb2e7cf687cfb469aa",
@@ -11,20 +71,6 @@ http_archive(
 load("@google_bazel_common//:workspace_defs.bzl", "google_common_workspace_rules")
 
 google_common_workspace_rules()
-
-#############################################################
-# Protobuf
-#############################################################
-
-http_archive(
-    name = "com_google_protobuf",
-    strip_prefix = "protobuf-master",
-    urls = ["https://github.com/protocolbuffers/protobuf/archive/master.zip"],
-)
-
-load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
-
-protobuf_deps()
 
 #############################################################
 # Maven Dependencies
@@ -87,20 +133,17 @@ http_archive(
 #############################################################
 # Kotlin
 #############################################################
-rules_kotlin_version = "legacy-1.3.0-rc4"
-
-rules_kotlin_sha = "fe32ced5273bcc2f9e41cea65a28a9184a77f3bc30fea8a5c47b3d3bfc801dff"
+rules_kotlin_version = "1.5.0"
 
 http_archive(
     name = "io_bazel_rules_kotlin",
-    sha256 = rules_kotlin_sha,
-    strip_prefix = "rules_kotlin-%s" % rules_kotlin_version,
-    type = "zip",
-    urls = ["https://github.com/bazelbuild/rules_kotlin/archive/%s.zip" % rules_kotlin_version],
+    urls = ["https://github.com/bazelbuild/rules_kotlin/releases/download/v%s/rules_kotlin_release.tgz" % rules_kotlin_version],
 )
 
-load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kotlin_repositories", "kt_register_toolchains")
+load("@io_bazel_rules_kotlin//kotlin:repositories.bzl", "kotlin_repositories")
 
-kotlin_repositories()  # if you want the default. Otherwise see custom kotlinc distribution below
+kotlin_repositories()
 
-kt_register_toolchains()  # to use the default toolchain, otherwise see toolchains below
+load("@io_bazel_rules_kotlin//kotlin:core.bzl", "kt_register_toolchains")
+
+kt_register_toolchains()

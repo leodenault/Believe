@@ -8,9 +8,8 @@ package(
 kt_junit5_test(
     name = "CommandGeneratorImplTest",
     srcs = ["CommandGeneratorImplTest.kt"],
-    friends = ["//java/believe/command:impl"],
+    associates = ["//java/believe/command:impl"],
     deps = [
-        "//java/believe/command:impl",
         "//java/believe/command/proto:command_java_proto",
         "//java/believe/command/testing/proto:fake_command_java_proto",
         "//java/believe/logging/testing",
@@ -23,10 +22,9 @@ kt_junit5_test(
 kt_junit5_test(
     name = "CommandSequenceParserTest",
     srcs = ["CommandSequenceParserTest.kt"],
-    friends = ["//java/believe/command:impl"],
+    associates = ["//java/believe/command:impl"],
     deps = [
         "//java/believe/command",
-        "//java/believe/command:impl",
         "//java/believe/command/proto:command_java_proto",
         "//third_party/dagger",
         "//third_party/truth",

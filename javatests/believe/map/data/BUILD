@@ -8,7 +8,7 @@ package(
 kt_junit5_test(
     name = "EntityTypeTest",
     srcs = ["EntityTypeTest.kt"],
-    friends = [],
+    associates = [],
     deps = [
         "//java/believe/map/data",
         "//third_party/truth",

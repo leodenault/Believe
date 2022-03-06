@@ -9,7 +9,7 @@ package(
 kt_junit5_test(
     name = "ElementParserTest",
     srcs = ["ElementParserTest.kt"],
-    friends = ["//java/believe/map/tiled:impl"],
+    associates = ["//java/believe/map/tiled:impl"],
     deps = [
         "//java/believe/map/tiled",
         "//java/believe/map/tiled/testing",
@@ -20,7 +20,7 @@ kt_junit5_test(
 kt_junit5_test(
     name = "ObjectTemplateManagerTest",
     srcs = ["ObjectTemplateManagerTest.kt"],
-    friends = ["//java/believe/map/tiled:impl"],
+    associates = ["//java/believe/map/tiled:impl"],
     deps = [
         "//java/believe/io",
         "//java/believe/logging/testing",
@@ -34,7 +34,7 @@ kt_junit5_test(
 kt_junit5_test(
     name = "PartialTiledObjectTest",
     srcs = ["PartialTiledObjectTest.kt"],
-    friends = ["//java/believe/map/tiled:impl"],
+    associates = ["//java/believe/map/tiled:impl"],
     deps = [
         "//java/believe/map/tiled/testing",
         "//third_party/truth",
@@ -44,7 +44,7 @@ kt_junit5_test(
 kt_junit5_test(
     name = "PartialTileSetTest",
     srcs = ["PartialTileSetTest.kt"],
-    friends = ["//java/believe/map/tiled:impl"],
+    associates = ["//java/believe/map/tiled:impl"],
     deps = [
         "//java/believe/gui/testing",
         "//java/believe/map/tiled/testing",
@@ -55,7 +55,7 @@ kt_junit5_test(
 kt_junit5_test(
     name = "PropertiesTest",
     srcs = ["PropertiesTest.kt"],
-    friends = ["//java/believe/map/tiled:impl"],
+    associates = ["//java/believe/map/tiled:impl"],
     deps = [
         "//java/believe/logging/testing",
         "//java/believe/logging/truth",
@@ -68,7 +68,7 @@ kt_junit5_test(
 kt_junit5_test(
     name = "TiledObjectGroupTest",
     srcs = ["TiledObjectGroupTest.kt"],
-    friends = ["//java/believe/map/tiled:impl"],
+    associates = ["//java/believe/map/tiled:impl"],
     deps = [
         "//java/believe/map/tiled",
         "//java/believe/map/tiled/testing",
@@ -80,7 +80,7 @@ kt_junit5_test(
 kt_junit5_test(
     name = "TiledObjectTest",
     srcs = ["TiledObjectTest.kt"],
-    friends = ["//java/believe/map/tiled:impl"],
+    associates = ["//java/believe/map/tiled:impl"],
     deps = [
         "//java/believe/io",
         "//java/believe/map/tiled",
@@ -93,7 +93,7 @@ kt_junit5_test(
 kt_junit5_test(
     name = "TileSetGroupTest",
     srcs = ["TileSetGroupTest.kt"],
-    friends = ["//java/believe/map/tiled:impl"],
+    associates = ["//java/believe/map/tiled:impl"],
     deps = [
         "//java/believe/logging/testing",
         "//java/believe/logging/truth",
@@ -106,7 +106,7 @@ kt_junit5_test(
 kt_junit5_test(
     name = "TileSetManagerTest",
     srcs = ["TileSetManagerTest.kt"],
-    friends = ["//java/believe/map/tiled:impl"],
+    associates = ["//java/believe/map/tiled:impl"],
     deps = [
         "//java/believe/datamodel",
         "//java/believe/logging/testing",
@@ -120,7 +120,7 @@ kt_junit5_test(
 kt_junit5_test(
     name = "TileSetTest",
     srcs = ["TileSetTest.kt"],
-    friends = ["//java/believe/map/tiled:impl"],
+    associates = ["//java/believe/map/tiled:impl"],
     deps = [
         "//java/believe/datamodel",
         "//java/believe/map/tiled/testing",
@@ -132,12 +132,11 @@ kt_junit5_test(
 kt_junit5_test(
     name = "TileTest",
     srcs = ["TileTest.kt"],
-    friends = ["//java/believe/map/tiled:impl"],
+    associates = ["//java/believe/map/tiled:impl"],
     deps = [
         "//java/believe/gui/testing",
         "//java/believe/logging/testing",
         "//java/believe/logging/truth",
-        "//java/believe/map/tiled:impl",
         "//java/believe/map/tiled/testing",
         "//third_party/mockito:mockito_kotlin",
         "//third_party/truth",

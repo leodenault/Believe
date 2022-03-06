@@ -45,7 +45,7 @@ interface PartialTileSet : TileSet {
                 }
             }
 
-            val tileSetProperties = TileSetProperties(name, tilesById.keys.max() ?: 0, tilesById)
+            val tileSetProperties = TileSetProperties(name, tilesById.keys.maxOrNull() ?: 0, tilesById)
             return if (isHeadless) HeadlessTileSet(tileSetProperties) else TileSetBase(
                 tileSetProperties, render
             )

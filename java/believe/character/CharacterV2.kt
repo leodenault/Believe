@@ -49,7 +49,10 @@ interface CharacterV2 : SceneElement, TileCollidable<CharacterV2>, DamageBoxColl
                     verticalMovementHandlerFactory.create(
                         stateMachine, INITIAL_JUMP_VELOCITY, LANDED_VERTICAL_VELOCITY_TOLERANCE
                     ),
-                    setOf(collidableTileCollisionHandler, damageBoxCollisionHandler),
+                    setOf<CollisionHandler<out Collidable<*>, in CharacterV2>>(
+                      collidableTileCollisionHandler,
+                      damageBoxCollisionHandler
+                    ),
                     x,
                     y,
                     faction

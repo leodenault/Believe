@@ -16,7 +16,7 @@ kt_junit5_test(
 kt_junit5_test(
     name = "LevelMapTest",
     srcs = ["LevelMapTest.kt"],
-    friends = ["//java/believe/scene:impl"],
+    associates = ["//java/believe/scene:impl"],
     deps = [
         "//java/believe/core/display",
         "//java/believe/geometry",
@@ -24,7 +24,6 @@ kt_junit5_test(
         "//java/believe/map/data",
         "//java/believe/map/data/proto:map_metadata_java_proto",
         "//java/believe/physics/manager",
-        "//java/believe/scene:impl",
         "//third_party/mockito:mockito_kotlin",
     ],
 )
@@ -32,14 +31,13 @@ kt_junit5_test(
 kt_junit5_test(
     name = "MapBackgroundTest",
     srcs = ["MapBackgroundTest.kt"],
-    friends = ["//java/believe/scene:impl"],
+    associates = ["//java/believe/scene:impl"],
     deps = [
         "//java/believe/core/display",
         "//java/believe/geometry",
         "//java/believe/gui/testing",
         "//java/believe/map/data",
         "//java/believe/map/data/proto:map_metadata_java_proto",
-        "//java/believe/scene:impl",
         "//third_party/mockito:mockito_kotlin",
     ],
 )

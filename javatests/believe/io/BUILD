@@ -8,9 +8,8 @@ package(
 kt_junit5_test(
     name = "ResourceManagerImplTest",
     srcs = ["ResourceManagerImplTest.kt"],
-    friends = ["//java/believe/io:impl"],
+    associates = ["//java/believe/io:impl"],
     deps = [
-        "//java/believe/io:impl",
         "//java/believe/logging/testing",
         "//java/believe/logging/truth",
         "//java/believe/testing/temporaryfolder",

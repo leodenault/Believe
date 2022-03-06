@@ -3,9 +3,8 @@ load("//bazel/bzl:rules.bzl", "kt_junit5_test")
 kt_junit5_test(
     name = "GameTest",
     srcs = ["GameTest.kt"],
-    friends = ["//java/believe/app:app_kt"],
+    associates = ["//java/believe/app:app_kt"],
     deps = [
-        "//java/believe/app:app_kt",
         "//java/believe/gamestate:gamestate_kt",
         "//java/believe/testing",
         "//third_party/mockito:mockito_kotlin",

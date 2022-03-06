@@ -1,6 +1,6 @@
-load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kt_jvm_test")
+load("@io_bazel_rules_kotlin//kotlin:jvm.bzl", "kt_jvm_test")
 
-_NO_FRIENDS = ["no_friends"]
+_NO_ASSOCIATES = ["no_associates"]
 
 def _find_junit5_test_class(srcs, test_class, file_suffix):
     if len(srcs) != 1 or test_class != "":
@@ -37,18 +37,15 @@ def kt_junit5_test(
         name = "",
         srcs = [],
         data = [],
-        friends = _NO_FRIENDS,
+        associates = [],
         test_class = "",
         deps = []):
     computed_test_class = _find_junit5_test_class(srcs, test_class, ".kt")
 
-    if (friends == _NO_FRIENDS):
-        friends = ["//" + native.package_name().replace("javatests", "java")]
-
     kt_jvm_test(
         name = name,
         srcs = srcs,
-        friends = friends,
+        associates = associates,
         args = [
             "--select-class",
             computed_test_class,

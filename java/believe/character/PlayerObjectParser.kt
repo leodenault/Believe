@@ -20,7 +20,7 @@ internal class PlayerObjectParser @Inject internal constructor(
 ) : ObjectParser {
 
     override fun parseObject(tiledObject: TiledObject): ObjectFactory {
-        val playerName = tiledObject.name?.toLowerCase() ?: return ObjectFactory.EMPTY.also {
+        val playerName = tiledObject.name?.lowercase() ?: return ObjectFactory.EMPTY.also {
             Log.error("Expected player object to have a name.")
         }
         val animationData =

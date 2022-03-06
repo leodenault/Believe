@@ -8,8 +8,8 @@ package(
 kt_junit5_test(
     name = "BinaryProtoFileManagerTest",
     srcs = ["BinaryProtoFileManagerTest.kt"],
+    associates = ["//java/believe/datamodel/protodata"],
     deps = [
-        "//java/believe/datamodel/protodata",
         "//java/believe/datamodel/protodata/testing",
         "//java/believe/logging/testing",
         "//java/believe/logging/truth",
@@ -22,8 +22,8 @@ kt_junit5_test(
 kt_junit5_test(
     name = "BinaryProtoFileTest",
     srcs = ["BinaryProtoFileTest.kt"],
+    associates = ["//java/believe/datamodel/protodata"],
     deps = [
-        "//java/believe/datamodel/protodata",
         "//java/believe/io/testing",
         "//java/believe/logging/testing",
         "//java/believe/logging/truth",

@@ -8,9 +8,9 @@ package(
 kt_junit5_test(
     name = "KeyboardInputAdapterTest",
     srcs = ["KeyboardInputAdapterTest.kt"],
+    associates = ["//java/believe/input/keyboard"],
     deps = [
         "//java/believe/input",
-        "//java/believe/input/keyboard",
         "//third_party/mockito:mockito_kotlin",
         "//third_party/slick",
         "//third_party/truth",
