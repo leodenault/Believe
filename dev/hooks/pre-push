@@ -1,13 +1,24 @@
-#!/bin/bash
-# An exit status of 1 means that tests failed to run.
+#!/usr/bin/python
 
-echo "Running all tests..."
-echo "-------------------------------------------------------------------------------"
-$(git rev-parse --show-toplevel)/dev/run_all_tests.sh || {
-  echo "-------------------------------------------------------------------------------"
-  echo "Push halted due to test failures."
-  exit 1
-}
+import subprocess
 
-echo "Running linter..."
-exit 1
+SEPARATOR = """
+-------------------------------------------------------------------------------
+"""
+
+top_level_dir = subprocess.run(
+    ["git", "rev-parse", "--show-toplevel"],
+    capture_output=True,
+    text=True
+).stdout.strip()
+
+print("Running all tests...\n" + SEPARATOR)
+test_result = subprocess.call([top_level_dir + "/dev/run_all_tests.sh"])
+if test_result != 0:
+    print(SEPARATOR + "\nPush halted due to test failures.")
+    exit(1)
+
+print(SEPARATOR)
+
+print("Running linter...")
+exit(1)

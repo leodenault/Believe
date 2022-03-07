@@ -48,3 +48,4 @@ bazel-*
 
 # Python
 __pycache__
+dev/lint.py
