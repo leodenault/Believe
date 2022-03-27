@@ -45,3 +45,6 @@ bazel-*
 
 # Tiled
 **/*.tiled-session
+
+# Python
+__pycache__
