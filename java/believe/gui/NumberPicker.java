@@ -1,19 +1,17 @@
 package believe.gui;
 
+import believe.audio.LoadableSound;
 import believe.audio.Sound;
-import believe.audio.SoundImpl;
+import java.util.Timer;
+import java.util.TimerTask;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.gui.GUIContext;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class NumberPicker extends MenuSelection {
 
@@ -31,6 +29,7 @@ public class NumberPicker extends MenuSelection {
   private static final Color ARROW_PRESSED = new Color(0x999999);
   private static final int PRESS_DELAY = 100;
   private static final String DEFAULT_PRESS_SOUND = "res/sfx/tick.ogg";
+  private static final LoadableSound.Factory LOADABLE_SOUND_FACTORY = new LoadableSound.Factory();
 
   private boolean activated;
   private boolean leftPressed;
@@ -76,7 +75,7 @@ public class NumberPicker extends MenuSelection {
     this.activated = false;
     this.min = min;
     this.max = max;
-    this.pressSound = new SoundImpl(DEFAULT_PRESS_SOUND);
+    this.pressSound = LOADABLE_SOUND_FACTORY.create(DEFAULT_PRESS_SOUND).load();
   }
 
   /** Used for testing. */

@@ -1,7 +1,7 @@
 package believe.gui;
 
+import believe.audio.LoadableSound;
 import believe.audio.Sound;
-import believe.audio.SoundImpl;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.GUIContext;
@@ -12,6 +12,7 @@ public class MenuSelection extends TextComponent {
   private static final ColorSet ACTIVE = new ColorSet(0xff0000, 0xffffff, 0xffffff);
   private static final String DEFAULT_SELECTION_SOUND = "res/sfx/selection.ogg";
   private static final String DEFAULT_ACTIVATION_SOUND = "res/sfx/selection_picked.ogg";
+  private static final LoadableSound.Factory LOADABLE_SOUND_FACTORY = new LoadableSound.Factory();
 
   private Sound selectionSound;
 
@@ -31,8 +32,8 @@ public class MenuSelection extends TextComponent {
         width,
         height,
         text,
-        new SoundImpl(DEFAULT_SELECTION_SOUND),
-        new SoundImpl(DEFAULT_ACTIVATION_SOUND));
+        LOADABLE_SOUND_FACTORY.create(DEFAULT_SELECTION_SOUND).load(),
+        LOADABLE_SOUND_FACTORY.create(DEFAULT_ACTIVATION_SOUND).load());
   }
 
   /** Used for testing. */

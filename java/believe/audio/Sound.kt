@@ -4,4 +4,10 @@ package believe.audio
 interface Sound {
     /** Plays back the sound represented by this instance. */
     fun play()
+
+    companion object {
+        val EMPTY = object : Sound {
+            override fun play() {}
+        }
+    }
 }

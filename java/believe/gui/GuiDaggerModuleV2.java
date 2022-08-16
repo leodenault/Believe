@@ -2,17 +2,16 @@ package believe.gui;
 
 import static believe.util.Util.hashSetOf;
 
+import believe.audio.LoadableSound;
 import believe.audio.Sound;
-import believe.audio.SoundImpl;
 import believe.core.io.FontLoader;
 import believe.input.InputAdapter;
 import believe.input.keyboard.KeyboardInputAdapter;
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
-import org.newdawn.slick.Font;
-
 import java.util.Set;
+import org.newdawn.slick.Font;
 
 @Module
 public abstract class GuiDaggerModuleV2 {
@@ -32,26 +31,26 @@ public abstract class GuiDaggerModuleV2 {
 
   @Provides
   @FocusSound
-  static Sound provideFocusSound() {
-    return new SoundImpl("res/sfx/selection.ogg");
+  static Sound provideFocusSound(LoadableSound.Factory soundFactory) {
+    return soundFactory.create("res/sfx/selection.ogg").load();
   }
 
   @Provides
   @SelectedSound
-  static Sound provideSelectedSound() {
-    return new SoundImpl("res/sfx/selection_picked.ogg");
+  static Sound provideSelectedSound(LoadableSound.Factory soundFactory) {
+    return soundFactory.create("res/sfx/selection_picked.ogg").load();
   }
 
   @Provides
   @ArrowPressedSound
-  static Sound provideArrowPressedSound() {
-    return new SoundImpl("res/sfx/tick.ogg");
+  static Sound provideArrowPressedSound(LoadableSound.Factory soundFactory) {
+    return soundFactory.create("res/sfx/tick.ogg").load();
   }
 
   @Provides
   @ArrowDepressedSound
-  static Sound provideArrowDepressedSound() {
-    return new SoundImpl("res/sfx/uptick.ogg");
+  static Sound provideArrowDepressedSound(LoadableSound.Factory soundFactory) {
+    return soundFactory.create("res/sfx/uptick.ogg").load();
   }
 
   @Provides

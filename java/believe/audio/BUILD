@@ -7,19 +7,14 @@ package(
 kt_jvm_library(
     name = "audio",
     srcs = [
+        "LoadableSound.kt",
         "Music.kt",
         "Sound.kt",
     ],
     deps = [
-        "//third_party/slick",
-    ],
-)
-
-kt_jvm_library(
-    name = "impl",
-    srcs = ["SoundImpl.kt"],
-    deps = [
-        ":audio",
+        "//java/believe/datamodel",
+        "//third_party/dagger",
+        "//third_party/javax:annotations",
         "//third_party/slick",
     ],
 )
