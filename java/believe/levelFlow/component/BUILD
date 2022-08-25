@@ -6,6 +6,7 @@ java_library(
     name = "component",
     srcs = glob(["*.java"]),
     deps = [
+        "//java/believe/audio",
         "//java/believe/core",
         "//java/believe/core/display",
         "//java/believe/core/io",

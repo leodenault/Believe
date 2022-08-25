@@ -2,6 +2,7 @@ java_test(
     name = "ComboSyncherTest",
     srcs = ["ComboSyncherTest.java"],
     deps = [
+        "//java/believe/audio",
         "//java/believe/core",
         "//java/believe/levelFlow/component",
         "//third_party/junit",

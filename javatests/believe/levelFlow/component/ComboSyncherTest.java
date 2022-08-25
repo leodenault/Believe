@@ -5,12 +5,12 @@ import static believe.levelFlow.component.ComboSyncher.ERROR_LENGTH;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+import believe.audio.Music;
 import believe.core.SynchedComboPattern;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.Music;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.gui.GUIContext;
 
@@ -22,8 +22,6 @@ public class ComboSyncherTest {
   private static final float SECONDS_IN_BEAT = 60.0f / BPM;
   private static final char FIRST_KEY = 'd';
   private static final char SECOND_KEY = 't';
-
-
 
   private ComboSyncher combo;
   private SynchedComboPattern pattern;
@@ -48,7 +46,8 @@ public class ComboSyncherTest {
 
   private float computeUpToBeat(float musicPosition, float beat) {
     return -(musicPosition + BUFFER_TIME) % (SECONDS_IN_BEAT)
-        + BUFFER_TIME + (beat * SECONDS_IN_BEAT);
+        + BUFFER_TIME
+        + (beat * SECONDS_IN_BEAT);
   }
 
   @Test
@@ -59,7 +58,6 @@ public class ComboSyncherTest {
     when(music.getPosition()).thenReturn(musicStart + comboLength);
     combo.start(music);
     combo.update();
-
   }
 
   @Test

@@ -1,8 +1,8 @@
 package believe.gui;
 
+import static believe.audio.AudioKt.soundFrom;
 import static believe.util.Util.hashSetOf;
 
-import believe.audio.LoadableSound;
 import believe.audio.Sound;
 import believe.core.io.FontLoader;
 import believe.input.InputAdapter;
@@ -31,26 +31,26 @@ public abstract class GuiDaggerModuleV2 {
 
   @Provides
   @FocusSound
-  static Sound provideFocusSound(LoadableSound.Factory soundFactory) {
-    return soundFactory.create("res/sfx/selection.ogg").load();
+  static Sound provideFocusSound() {
+    return soundFrom("res/sfx/selection.ogg").load();
   }
 
   @Provides
   @SelectedSound
-  static Sound provideSelectedSound(LoadableSound.Factory soundFactory) {
-    return soundFactory.create("res/sfx/selection_picked.ogg").load();
+  static Sound provideSelectedSound() {
+    return soundFrom("res/sfx/selection_picked.ogg").load();
   }
 
   @Provides
   @ArrowPressedSound
-  static Sound provideArrowPressedSound(LoadableSound.Factory soundFactory) {
-    return soundFactory.create("res/sfx/tick.ogg").load();
+  static Sound provideArrowPressedSound() {
+    return soundFrom("res/sfx/tick.ogg").load();
   }
 
   @Provides
   @ArrowDepressedSound
-  static Sound provideArrowDepressedSound(LoadableSound.Factory soundFactory) {
-    return soundFactory.create("res/sfx/uptick.ogg").load();
+  static Sound provideArrowDepressedSound() {
+    return soundFrom("res/sfx/uptick.ogg").load();
   }
 
   @Provides

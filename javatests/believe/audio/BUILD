@@ -6,8 +6,8 @@ package(
 )
 
 kt_junit5_test(
-    name = "LoadableSoundTest",
-    srcs = ["LoadableSoundTest.kt"],
+    name = "AudioTest",
+    srcs = ["AudioTest.kt"],
     associates = ["//java/believe/audio"],
     deps = [
         "//java/believe/logging/testing",

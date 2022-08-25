@@ -1,6 +1,7 @@
 package believe.gui;
 
-import believe.audio.LoadableSound;
+import static believe.audio.AudioKt.soundFrom;
+
 import believe.audio.Sound;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -29,7 +30,6 @@ public class NumberPicker extends MenuSelection {
   private static final Color ARROW_PRESSED = new Color(0x999999);
   private static final int PRESS_DELAY = 100;
   private static final String DEFAULT_PRESS_SOUND = "res/sfx/tick.ogg";
-  private static final LoadableSound.Factory LOADABLE_SOUND_FACTORY = new LoadableSound.Factory();
 
   private boolean activated;
   private boolean leftPressed;
@@ -75,7 +75,7 @@ public class NumberPicker extends MenuSelection {
     this.activated = false;
     this.min = min;
     this.max = max;
-    this.pressSound = LOADABLE_SOUND_FACTORY.create(DEFAULT_PRESS_SOUND).load();
+    this.pressSound = soundFrom(DEFAULT_PRESS_SOUND).load();
   }
 
   /** Used for testing. */

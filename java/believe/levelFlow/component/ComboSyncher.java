@@ -1,19 +1,18 @@
 package believe.levelFlow.component;
 
+import believe.audio.Music;
 import believe.core.SynchedComboPattern;
 import believe.core.SynchedComboPattern.TimeKeyPair;
 import believe.gui.ComponentBase;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Music;
-import org.newdawn.slick.geom.Line;
-import org.newdawn.slick.gui.GUIContext;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.gui.GUIContext;
 
 public class ComboSyncher extends ComponentBase {
   private static final Color NOT_ACTIVATED = new Color(0xffffff);

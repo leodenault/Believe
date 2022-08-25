@@ -7,7 +7,7 @@ package(
 kt_jvm_library(
     name = "audio",
     srcs = [
-        "LoadableSound.kt",
+        "Audio.kt",
         "Music.kt",
         "Sound.kt",
     ],

@@ -1,5 +1,7 @@
 package believe.gamestate.levelstate.platformingstate;
 
+import static believe.audio.AudioKt.musicFrom;
+
 import believe.audio.Music;
 import believe.character.playable.PlayableCharacter;
 import believe.character.playable.PlayableCharacter.SynchedComboListener;
@@ -14,15 +16,14 @@ import believe.map.data.MapData;
 import believe.map.gui.PlayArea;
 import believe.map.gui.PlayAreaFactory;
 import believe.physics.manager.PhysicsManager;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 import javax.inject.Inject;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
-
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
 
 public class PlatformingState extends LevelState implements SynchedComboListener {
 
@@ -67,9 +68,9 @@ public class PlatformingState extends LevelState implements SynchedComboListener
     super.update(container, game, delta);
 
     comboSyncher.update();
-    if (music.paused()) {
+    if (music.isPaused()) {
       music.resume();
-    } else if (!music.playing()) {
+    } else if (!music.isPlaying()) {
       music.loop();
     }
     getPlayer().heal(delta * FOCUS_DRAIN_RATE);
@@ -92,7 +93,7 @@ public class PlatformingState extends LevelState implements SynchedComboListener
 
   @Override
   public void levelEnter(GameContainer container, StateBasedGame game) throws SlickException {
-    music = new Music(getMusicLocation(), BPM);
+    music = musicFrom(getMusicLocation()).load();
     getPlayArea().attachHudChildToFocus(comboSyncher, 0.05f, -0.08f, 0.3f, 0.05f);
     getPlayer().addComboListener(this);
     music.stop();
