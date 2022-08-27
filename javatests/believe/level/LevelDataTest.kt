@@ -1,8 +1,10 @@
 package believe.level
 
+import believe.audio.Music
 import believe.command.Command
 import believe.command.CommandGenerator
 import believe.command.proto.CommandProto
+import believe.datamodel.loadableDataOf
 import believe.level.LevelData.Parser
 import believe.level.proto.LevelProto.Level
 import believe.map.data.MapData
@@ -17,24 +19,37 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.jupiter.api.Test
-import java.util.*
+import java.util.Optional
 
 internal class LevelDataTest {
-    private var commandGenerator: CommandGenerator = mock() {
+    private var commandGenerator: CommandGenerator = mock {
         on { generateCommand(any()) } doReturn COMMAND
     }
     private var mapMetadataParser: MapMetadataParser = MapMetadataParser { Optional.of(MAP_DATA) }
-    private val parser: Parser by lazy { Parser(commandGenerator, mapMetadataParser) }
+    private val backgroundMusic = loadableDataOf(mock<Music>())
+    private val parser: Parser by lazy {
+        Parser(
+            commandGenerator,
+            mapMetadataParser,
+            { backgroundMusic }
+        )
+    }
 
     @Test
     internal fun parse_returnsValidLevelData() {
-        assertThat(parser.parseLevel(LEVEL)).isEqualTo(LevelData(MAP_DATA, COMMAND))
+        assertThat(parser.parseLevel(LEVEL)).isEqualTo(
+            LevelData(
+                MAP_DATA,
+                COMMAND,
+                backgroundMusic
+            )
+        )
     }
 
     @Test
     internal fun parse_commandDoesNotExist_doesNotInvokeCommandGeneratorAndReturnsEmptyCommand() {
         assertThat(parser.parseLevel(LEVEL_WITHOUT_COMMAND)).isEqualTo(
-            LevelData(MAP_DATA, Command.EMPTY)
+            LevelData(MAP_DATA, Command.EMPTY, backgroundMusic)
         )
         verify(commandGenerator, never()).generateCommand(any())
     }
@@ -57,12 +72,14 @@ internal class LevelDataTest {
         val COMMAND: Command = object : Command {
             override fun execute() {}
         }
+        private const val BACKGROUND_MUSIC_LOCATION = "some music location"
         val LEVEL_WITHOUT_COMMAND: Level =
             Level.newBuilder().setMapMetadata(MapMetadataProto.MapMetadata.getDefaultInstance())
-                .build()
+                .setBackgroundMusicLocation(BACKGROUND_MUSIC_LOCATION).build()
         val LEVEL: Level =
             Level.newBuilder().setMapMetadata(MapMetadataProto.MapMetadata.getDefaultInstance())
-                .setInitialCommand(CommandProto.Command.getDefaultInstance()).build()
+                .setInitialCommand(CommandProto.Command.getDefaultInstance())
+                .setBackgroundMusicLocation(BACKGROUND_MUSIC_LOCATION).build()
         val MAP_DATA: MapData = MapData.newBuilder(
             TiledMapData.newBuilder(
                 1, 2, 3, 4

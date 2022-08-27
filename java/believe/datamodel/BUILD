@@ -9,6 +9,7 @@ kt_jvm_library(
     srcs = [
         "DataCommitter.kt",
         "DataManager.kt",
+        "DataModel.kt",
         "LoadableData.kt",
         "MutableData.kt",
     ],

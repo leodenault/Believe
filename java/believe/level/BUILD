@@ -12,6 +12,7 @@ kt_jvm_library(
         "LevelParser.kt",
     ],
     deps = [
+        "//java/believe/audio",
         "//java/believe/command",
         "//java/believe/level/proto:level_java_proto",
         "//java/believe/map/data",

@@ -14,4 +14,6 @@ message Level {
   optional believe.map.data.proto.MapMetadata map_metadata = 1;
   // The command which should be run at the beginning of a level.
   optional believe.command.proto.Command initial_command = 2;
+  // The location of the file used for playing background music.
+  optional string background_music_location = 3;
 }

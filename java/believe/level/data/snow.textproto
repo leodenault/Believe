@@ -1,3 +1,4 @@
+background_music_location: "/res/music/Passepied.ogg"
 map_metadata {
   map_location: "/res/maps/snow.tmx"
   tile_sets_location: "/res/maps/tilesets"

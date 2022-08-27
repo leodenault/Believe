@@ -1,8 +1,9 @@
 package believe.level
 
+import believe.audio.Music
 import believe.command.Command
 import believe.command.proto.CommandProto
-import believe.command.proto.CommandProto.CommandSequence
+import believe.datamodel.loadableDataOf
 import believe.datamodel.protodata.BinaryProtoFile.BinaryProtoFileFactory
 import believe.datamodel.protodata.testing.FakeBinaryProtoFileFactory
 import believe.level.proto.LevelProto.Level
@@ -45,7 +46,8 @@ internal class LevelManagerImplTest {
         ).isNull()
         VerifiableLogSystemSubject.assertThat(logSystem).loggedAtLeastOneMessageThat()
             .hasSeverity(LogSeverity.ERROR).hasPattern(
-                "Failed to parse level at '$LEVEL_DIRECTORY/level_cannot_be_parsed.pb' into LevelData instance."
+                "Failed to parse level at '$LEVEL_DIRECTORY/level_cannot_be_parsed.pb' into" +
+                    " LevelData instance."
             )
     }
 
@@ -70,12 +72,15 @@ internal class LevelManagerImplTest {
     }
 
     private fun levelManagerImpl(
-        binaryProtoFileFactory: BinaryProtoFileFactory, levelParser: (Level) -> LevelData?
+        binaryProtoFileFactory: BinaryProtoFileFactory,
+        levelParser: (Level) -> LevelData?
     ): LevelManagerImpl {
         return LevelManagerImpl(
-            binaryProtoFileFactory, object : LevelParser {
+            binaryProtoFileFactory,
+            object : LevelParser {
                 override fun parseLevel(level: Level): LevelData? = levelParser(level)
-            }, LEVEL_DIRECTORY
+            },
+            LEVEL_DIRECTORY
         )
     }
 
@@ -84,10 +89,13 @@ internal class LevelManagerImplTest {
         private val LEVEL: Level =
             Level.newBuilder().setInitialCommand(CommandProto.Command.getDefaultInstance()).build()
         private val EXPECTED_LEVEL_DATA: LevelData =
-            LevelData(MapData.newBuilder(TiledMapData.newBuilder(0, 0, 0, 0).build()).build(),
+            LevelData(
+                MapData.newBuilder(TiledMapData.newBuilder(0, 0, 0, 0).build()).build(),
                 object : Command {
                     override fun execute() {}
-                })
+                },
+                loadableDataOf(Music.EMPTY)
+            )
         private val FAKE_LEVEL_PARSER = object : (Level) -> LevelData? {
             var calls = 0
 
