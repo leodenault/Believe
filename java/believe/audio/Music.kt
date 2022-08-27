@@ -28,4 +28,24 @@ interface Music : Sound {
 
     /** Returns whether the music is currently playing audio. */
     fun isPlaying(): Boolean
+
+    companion object {
+        val EMPTY = object : Music {
+            override val position: Float = 0f
+
+            override fun loop() {}
+
+            override fun stop() {}
+
+            override fun pause() {}
+
+            override fun resume() {}
+
+            override fun isPaused(): Boolean = false
+
+            override fun isPlaying(): Boolean = false
+
+            override fun play() {}
+        }
+    }
 }

@@ -3,6 +3,7 @@ package believe.audio
 import believe.datamodel.LoadableData
 import org.newdawn.slick.SlickException
 import org.newdawn.slick.util.Log
+import kotlin.math.abs
 
 @JvmOverloads
 fun soundFrom(
@@ -42,7 +43,9 @@ fun musicFrom(
 
             override fun resume() = slickMusic.resume()
 
-            override fun isPaused(): Boolean = !slickMusic.playing() && slickMusic.position > 0
+            override fun isPaused(): Boolean =
+                !slickMusic.playing() &&
+                    abs(slickMusic.position) + POSITION_EPSILON > POSITION_EPSILON
 
             override fun play() = slickMusic.play()
 
@@ -53,3 +56,5 @@ fun musicFrom(
         null
     }
 }
+
+private const val POSITION_EPSILON = 1e-6f
