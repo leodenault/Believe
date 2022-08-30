@@ -30,3 +30,6 @@ damage_frames_by_animation {
     }
   }
 }
+damage_frames_by_animation {
+  key: "idle"
+}
