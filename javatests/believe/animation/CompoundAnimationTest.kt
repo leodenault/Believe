@@ -1,16 +1,14 @@
 package believe.animation
 
 import believe.animation.proto.AnimationProto.Animation.IterationMode
-import believe.animation.testing.*
+import believe.animation.testing.FakeSpriteSheet
 import believe.animation.testing.assertThat
+import believe.animation.testing.durations
+import believe.animation.testing.frames
+import believe.animation.testing.images
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.lang.IndexOutOfBoundsException
 
 internal class CompoundAnimationTest {
     private val animation1 = animation(
@@ -91,84 +89,108 @@ internal class CompoundAnimationTest {
             animation2StartIndex + animation2ForTesting.frames(NUM_ITERATIONS_2).size - 1
         val animation3StartIndex = animation2EndIndex + 1
         val animation3EndIndex = compoundAnimation.frames().count() - 1
-        val animation1FirstFrameListener = mock<() -> Unit>()
-        val animation1LastFrameListener = mock<() -> Unit>()
-        val animation2FirstFrameListener = mock<() -> Unit>()
-        val animation2LastFrameListener = mock<() -> Unit>()
-        val animation3FirstFrameListener = mock<() -> Unit>()
-        val animation3LastFrameListener = mock<() -> Unit>()
-        compoundAnimation.addFrameListener(animation1, 0, animation1FirstFrameListener)
+        val animation1FirstFrameListener = FakeFrameListener()
+        val animation1LastFrameListener = FakeFrameListener()
+        val animation2FirstFrameListener = FakeFrameListener()
+        val animation2LastFrameListener = FakeFrameListener()
+        val animation3FirstFrameListener = FakeFrameListener()
+        val animation3LastFrameListener = FakeFrameListener()
         compoundAnimation.addFrameListener(
-            animation1, animation1.numFrames - 1, animation1LastFrameListener
+            animation1,
+            0,
+            animation1FirstFrameListener.configureListeners()
         )
-        compoundAnimation.addFrameListener(animation2, 0, animation2FirstFrameListener)
         compoundAnimation.addFrameListener(
-            animation2, animation2.numFrames - 1, animation2LastFrameListener
+            animation1, animation1.numFrames - 1, animation1LastFrameListener.configureListeners()
         )
-        compoundAnimation.addFrameListener(animation3, 0, animation3FirstFrameListener)
         compoundAnimation.addFrameListener(
-            animation3, animation3.numFrames - 1, animation3LastFrameListener
+            animation2,
+            0,
+            animation2FirstFrameListener.configureListeners()
+        )
+        compoundAnimation.addFrameListener(
+            animation2, animation2.numFrames - 1, animation2LastFrameListener.configureListeners()
+        )
+        compoundAnimation.addFrameListener(
+            animation3,
+            0,
+            animation3FirstFrameListener.configureListeners()
+        )
+        compoundAnimation.addFrameListener(
+            animation3, animation3.numFrames - 1, animation3LastFrameListener.configureListeners()
         )
 
         // 0  1  2  3  0  1  2  3  |  0  1  0  1  0  1  0  |  0  1  2  3  4  5
         // 0  1  2  3  4  5  6  7     8  9  10 11 12 13 14    15 16 17 18 19 20
-        // o--^
+        // o-^
         compoundAnimation.update(frames[animation1StartIndex].duration.toLong())
-        verify(animation1FirstFrameListener, never()).invoke()
+        assertThat(animation1FirstFrameListener.enters).isEqualTo(1)
+        assertThat(animation1FirstFrameListener.leaves).isEqualTo(1)
 
         // 0  1  2  3  0  1  2  3  |  0  1  0  1  0  1  0  |  0  1  2  3  4  5
         // 0  1  2  3  4  5  6  7     8  9  10 11 12 13 14    15 16 17 18 19 20
-        //    o-----------------^
+        //    o----------------^
         compoundAnimation.update(
             frames.slice(animation1StartIndex + 1 until animation1EndIndex).durations().sum()
                 .toLong()
         )
-        verify(animation1FirstFrameListener, times(1)).invoke()
-        verify(animation1LastFrameListener, times(2)).invoke()
+        assertThat(animation1FirstFrameListener.enters).isEqualTo(2)
+        assertThat(animation1FirstFrameListener.leaves).isEqualTo(2)
+        assertThat(animation1LastFrameListener.enters).isEqualTo(2)
+        assertThat(animation1LastFrameListener.leaves).isEqualTo(1)
 
         // 0  1  2  3  0  1  2  3  |  0  1  0  1  0  1  0  |  0  1  2  3  4  5
         // 0  1  2  3  4  5  6  7     8  9  10 11 12 13 14    15 16 17 18 19 20
-        //                      o-----^
+        //                      o----^
         compoundAnimation.update(
             frames.slice(animation1EndIndex until animation2StartIndex).durations().sum().toLong()
         )
-        verify(animation2FirstFrameListener, times(1)).invoke()
+        assertThat(animation1LastFrameListener.leaves).isEqualTo(2)
+        assertThat(animation2FirstFrameListener.enters).isEqualTo(1)
+        assertThat(animation2FirstFrameListener.leaves).isEqualTo(0)
 
         // 0  1  2  3  0  1  2  3  |  0  1  0  1  0  1  0  |  0  1  2  3  4  5
         // 0  1  2  3  4  5  6  7     8  9  10 11 12 13 14    15 16 17 18 19 20
-        //                            o-----------------^
+        //                            o----------------^
         compoundAnimation.update(
             frames.slice(animation2StartIndex until animation2EndIndex).durations().sum().toLong()
         )
-        verify(animation2FirstFrameListener, times(4)).invoke()
-        verify(animation2LastFrameListener, times(3)).invoke()
+        assertThat(animation2FirstFrameListener.enters).isEqualTo(4)
+        assertThat(animation2FirstFrameListener.leaves).isEqualTo(3)
+        assertThat(animation2LastFrameListener.enters).isEqualTo(3)
+        assertThat(animation2LastFrameListener.leaves).isEqualTo(3)
 
         // 0  1  2  3  0  1  2  3  |  0  1  0  1  0  1  0  |  0  1  2  3  4  5
         // 0  1  2  3  4  5  6  7     8  9  10 11 12 13 14    15 16 17 18 19 20
-        //                                              o-----^
+        //                                              o----^
         compoundAnimation.update(
             frames.slice(animation2EndIndex until animation3StartIndex).durations().sum().toLong()
         )
-        verify(animation3FirstFrameListener, times(1)).invoke()
+        assertThat(animation2FirstFrameListener.leaves).isEqualTo(4)
+        assertThat(animation3FirstFrameListener.enters).isEqualTo(1)
+        assertThat(animation3FirstFrameListener.leaves).isEqualTo(0)
 
         // 0  1  2  3  0  1  2  3  |  0  1  0  1  0  1  0  |  0  1  2  3  4  5
         // 0  1  2  3  4  5  6  7     8  9  10 11 12 13 14    15 16 17 18 19 20
-        //                                                    o--------------^
+        //                                                    o-------------^
         compoundAnimation.update(
             frames.slice(animation3StartIndex until animation3EndIndex).durations().sum().toLong()
         )
-        verify(animation3LastFrameListener, times(1)).invoke()
+        assertThat(animation3FirstFrameListener.leaves).isEqualTo(1)
+        assertThat(animation3LastFrameListener.enters).isEqualTo(1)
+        assertThat(animation3LastFrameListener.leaves).isEqualTo(0)
 
-        // 0  1  2  3  0  1  2  3  |  0  1  0  1  0  1  0  |  0  1  2  3  4
-        // 0  1  2  3  4  5  6  7     8  9  10 11 12 13 14    15 16 17 18 19
-        // ^                                                              o---
-        // |_________________________________________________________________|
+        // 0  1  2  3  0  1  2  3  |  0  1  0  1  0  1  0  |  0  1  2  3  4  5
+        // 0  1  2  3  4  5  6  7     8  9  10 11 12 13 14    15 16 17 18 19 20
+        // ^                                                                 o---
+        // |____________________________________________________________________|
         compoundAnimation.update(frames[animation3EndIndex].duration.toLong())
-        verify(animation1FirstFrameListener, times(2)).invoke()
+        assertThat(animation3FirstFrameListener.leaves).isEqualTo(1)
+        assertThat(animation1FirstFrameListener.enters).isEqualTo(3)
     }
 
     @Test
-    fun addFrameListener_withSubAnimation_indexOutOfBoundsForAnimation_throwsIndexOutOfBoundsException() {
+    fun addFrameListener_withSubAnimation_indexOutOfBounds_throwsIndexOutOfBoundsException() {
         assertThrows<IndexOutOfBoundsException> {
             compoundAnimation.addFrameListener(animation1, -1) {}
         }
@@ -200,5 +222,15 @@ internal class CompoundAnimationTest {
         private const val NUM_ITERATIONS_1 = 2
         private const val NUM_ITERATIONS_2 = 3
         private const val NUM_ITERATIONS_3 = 1
+    }
+
+    private class FakeFrameListener {
+        var enters = 0
+        var leaves = 0
+
+        fun configureListeners(): FrameListener.Builder.() -> Unit = {
+            enterFrame = { enters++ }
+            leaveFrame = { leaves++ }
+        }
     }
 }

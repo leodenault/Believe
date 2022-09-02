@@ -14,7 +14,12 @@ import believe.physics.damage.DamageBox
 import believe.physics.damage.DamageBoxCollisionHandler
 import believe.physics.damage.DamageBoxFactory
 import believe.physics.manager.PhysicsManager
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argForWhich
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -35,7 +40,8 @@ internal class StationaryEnemyTest {
     )
 
     private val enemy = StationaryEnemy.Factory(physicsManager, damageBoxFactory).create(
-        ANIMATION_X, ANIMATION_Y, idleAnimation, attackAnimation, listOf(
+        ANIMATION_X, ANIMATION_Y, idleAnimation, attackAnimation,
+        listOf(
             DamageFrame.newBuilder().setFrameIndex(0).setDimensions(DAMAGE_BOX_1).build(),
             DamageFrame.newBuilder().setFrameIndex(2).setDimensions(DAMAGE_BOX_2).build()
         )
@@ -62,45 +68,59 @@ internal class StationaryEnemyTest {
         val idleAnimationTime = idleAnimation.frames(iterations = 2).durations().sum().toLong()
         val attackFrameDurations = attackAnimation.frames().durations().map { it.toLong() }
 
-        // Update in two parts, otherwise all of the delta is attributed to the first animation. It
-        // might be worth addressing this issue by creating a compound animation concept.
         verify(physicsManager, never()).addCollidable(any())
 
         enemy.update(idleAnimationTime)
-        verify(physicsManager).addCollidable(argForWhich<DamageBox> {
-            rect() == POSITIONED_DAMAGE_BOX_1
-        })
+        verify(physicsManager).addCollidable(
+            argForWhich<DamageBox> {
+                rect() == POSITIONED_DAMAGE_BOX_1
+            }
+        )
 
         enemy.update(attackFrameDurations[0])
-        verify(physicsManager).removeCollidable(argForWhich<DamageBox> {
-            rect() == POSITIONED_DAMAGE_BOX_1
-        })
-        verify(physicsManager, never()).addCollidable(argForWhich<DamageBox> {
-            rect() == POSITIONED_DAMAGE_BOX_2
-        })
+        verify(physicsManager).removeCollidable(
+            argForWhich<DamageBox> {
+                rect() == POSITIONED_DAMAGE_BOX_1
+            }
+        )
+        verify(physicsManager, never()).addCollidable(
+            argForWhich<DamageBox> {
+                rect() == POSITIONED_DAMAGE_BOX_2
+            }
+        )
 
         enemy.update(attackFrameDurations[1])
-        verify(physicsManager).addCollidable(argForWhich<DamageBox> {
-            rect() == POSITIONED_DAMAGE_BOX_2
-        })
+        verify(physicsManager).addCollidable(
+            argForWhich<DamageBox> {
+                rect() == POSITIONED_DAMAGE_BOX_2
+            }
+        )
 
         enemy.update(attackFrameDurations[2])
-        verify(physicsManager, times(1)).addCollidable(argForWhich<DamageBox> {
-            rect() == POSITIONED_DAMAGE_BOX_1
-        })
-        verify(physicsManager).removeCollidable(argForWhich<DamageBox> {
-            rect() == POSITIONED_DAMAGE_BOX_2
-        })
+        verify(physicsManager, times(1)).addCollidable(
+            argForWhich<DamageBox> {
+                rect() == POSITIONED_DAMAGE_BOX_1
+            }
+        )
+        verify(physicsManager).removeCollidable(
+            argForWhich<DamageBox> {
+                rect() == POSITIONED_DAMAGE_BOX_2
+            }
+        )
 
         enemy.update(attackFrameDurations[1])
-        verify(physicsManager, times(2)).addCollidable(argForWhich<DamageBox> {
-            rect() == POSITIONED_DAMAGE_BOX_1
-        })
+        verify(physicsManager, times(2)).addCollidable(
+            argForWhich<DamageBox> {
+                rect() == POSITIONED_DAMAGE_BOX_1
+            }
+        )
 
         enemy.update(attackFrameDurations[0])
-        verify(physicsManager, times(2)).removeCollidable(argForWhich<DamageBox> {
-            rect() == POSITIONED_DAMAGE_BOX_1
-        })
+        verify(physicsManager, times(2)).removeCollidable(
+            argForWhich<DamageBox> {
+                rect() == POSITIONED_DAMAGE_BOX_1
+            }
+        )
     }
 
     companion object {

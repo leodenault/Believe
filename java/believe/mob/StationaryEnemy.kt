@@ -5,14 +5,11 @@ import believe.animation.CompoundAnimation
 import believe.animation.compoundAnimation
 import believe.character.Faction
 import believe.core.display.Graphics
-import believe.mob.proto.MobAnimationDataProto
 import believe.mob.proto.MobAnimationDataProto.DamageFrame
-import believe.physics.damage.DamageBox
 import believe.physics.damage.DamageBoxFactory
 import believe.physics.manager.PhysicsManager
 import believe.scene.SceneElement
 import dagger.Reusable
-import org.newdawn.slick.Color
 import javax.inject.Inject
 
 internal class StationaryEnemy private constructor(
@@ -30,7 +27,7 @@ internal class StationaryEnemy private constructor(
 
     override fun bind() {
         attackDamageFrames.map {
-            it to with(it.dimensions) {
+            it.frameIndex to with(it.dimensions) {
                 damageBoxFactory.create(
                     Faction.BAD,
                     this@StationaryEnemy.x.toInt() + x,
@@ -41,14 +38,10 @@ internal class StationaryEnemy private constructor(
                 )
             }
         }.forEach { pair ->
-            val (damageFrame, damageBox) = pair
-            animation.addFrameListener(attackAnimation, damageFrame.frameIndex) {
-                physicsManager.addCollidable(damageBox)
-            }
-            animation.addFrameListener(
-                attackAnimation, (damageFrame.frameIndex + 1) % attackAnimation.numFrames
-            ) {
-                physicsManager.removeCollidable(damageBox)
+            val (frameIndex, damageBox) = pair
+            animation.addFrameListener(attackAnimation, frameIndex) {
+                enterFrame = { physicsManager.addCollidable(damageBox) }
+                leaveFrame = { physicsManager.removeCollidable(damageBox) }
             }
         }
     }
@@ -61,7 +54,8 @@ internal class StationaryEnemy private constructor(
 
     @Reusable
     class Factory @Inject internal constructor(
-        private val physicsManager: PhysicsManager, private val damageBoxFactory: DamageBoxFactory
+        private val physicsManager: PhysicsManager,
+        private val damageBoxFactory: DamageBoxFactory
     ) {
         fun create(
             x: Float,

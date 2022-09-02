@@ -8,14 +8,15 @@ import java.lang.IndexOutOfBoundsException
 
 interface CompoundAnimation : Animation {
     /**
-     * Adds [frameReached] so it can be executed once the frame corresponding to [frameIndex] is
-     * reached, where [frameIndex] is the index of a frame belonging to [subAnimation], one of the
-     * animations composing this [CompoundAnimation].
-     *
-     * **Note**: Since the first frame has index 0, it isn't actually reached until either the
-     * animation ends or it loops around.
+     * Adds [configureListeners] so its methods can be executed once the frame corresponding to
+     * [frameIndex] is reached and left, where [frameIndex] is the index of a frame belonging to
+     * [subAnimation], one of the animations composing this [CompoundAnimation].
      */
-    fun addFrameListener(subAnimation: Animation, frameIndex: Int, frameReached: () -> Unit)
+    fun addFrameListener(
+        subAnimation: Animation,
+        frameIndex: Int,
+        configureListeners: FrameListener.Builder.() -> Unit
+    )
 }
 
 private class CompoundAnimationImpl(
@@ -24,16 +25,20 @@ private class CompoundAnimationImpl(
 ) : CompoundAnimation, Animation by internalAnimation {
 
     override fun addFrameListener(
-        subAnimation: Animation, frameIndex: Int, frameReached: () -> Unit
+        subAnimation: Animation,
+        frameIndex: Int,
+        configureListeners: FrameListener.Builder.() -> Unit
     ) {
-        if (!(0 until subAnimation.numFrames).contains(frameIndex)) throw IndexOutOfBoundsException()
+        if (!(0 until subAnimation.numFrames).contains(frameIndex)) {
+            throw IndexOutOfBoundsException()
+        }
 
         val fetchIndices = subAnimationsToIndexFetchers[subAnimation] ?: return Unit.also {
             Log.warn("Could not find index fetcher for sub-animation.")
         }
 
         fetchIndices(frameIndex).forEach {
-            addFrameListener(it, frameReached)
+            addFrameListener(it, configureListeners)
         }
     }
 }
@@ -42,7 +47,8 @@ private class DurationAndImage(val duration: Int, val image: Image)
 
 /** Creates a [CompoundAnimation]. */
 fun compoundAnimation(
-    isLooping: Boolean, vararg iterationsAndAnimations: Pair<Int, Animation>
+    isLooping: Boolean,
+    vararg iterationsAndAnimations: Pair<Int, Animation>
 ): CompoundAnimation {
     val durationsAndImages = generateDurationsAndImages(iterationsAndAnimations)
     val internalAnimation = animation(
@@ -60,7 +66,7 @@ private fun generateDurationsAndImages(
 ): List<DurationAndImage> = animationsAndIterations.flatMap {
     val (iterations, animation) = it
     if (iterations < 1) throw IllegalArgumentException(
-        "Each animation in a CompundAnimation must be iterated at least once."
+        "Each animation in a CompoundAnimation must be iterated at least once."
     )
 
     val frames: List<DurationAndImage> = animation.frames()
@@ -121,7 +127,8 @@ private fun generateIndexRanges(
                             val firstIndexInIteration = iteration * numFramesInIteration
                             listOf(
                                 firstIndexInIteration + index + finalCurrentAnimationStartIndex,
-                                firstIndexInIteration + mirrorIndex + finalCurrentAnimationStartIndex
+                                firstIndexInIteration + mirrorIndex +
+                                    finalCurrentAnimationStartIndex
                             )
                         }
                     }
@@ -136,4 +143,3 @@ private fun generateIndexRanges(
     }
     return subAnimationsToIndexFetchers
 }
-
